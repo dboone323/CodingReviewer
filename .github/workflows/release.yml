@@ -1,0 +1,88 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
+
+jobs:
+  build-and-release:
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Select Xcode
+      run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+    
+    - name: Get the version
+      id: get_version
+      run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
+    
+    - name: Build for Release
+      run: |
+        xcodebuild -project CodingReviewer.xcodeproj \
+                   -scheme CodingReviewer \
+                   -destination 'platform=macOS' \
+                   -configuration Release \
+                   -archivePath CodingReviewer.xcarchive \
+                   archive
+    
+    - name: Export Archive
+      run: |
+        xcodebuild -exportArchive \
+                   -archivePath CodingReviewer.xcarchive \
+                   -exportPath Export \
+                   -exportOptionsPlist ExportOptions.plist
+    
+    - name: Create DMG
+      run: |
+        hdiutil create -volname "CodeReviewer" \
+                       -srcfolder Export \
+                       -ov -format UDZO \
+                       CodeReviewer-${{ steps.get_version.outputs.VERSION }}.dmg
+    
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ steps.get_version.outputs.VERSION }}
+        draft: false
+        prerelease: false
+        body: |
+          ## What's New in ${{ steps.get_version.outputs.VERSION }}
+          
+          ### Features
+          - New feature descriptions will be added here
+          
+          ### Bug Fixes
+          - Bug fix descriptions will be added here
+          
+          ### Improvements
+          - Improvement descriptions will be added here
+          
+          ## Installation
+          
+          1. Download the DMG file below
+          2. Open the DMG and drag CodeReviewer to Applications
+          3. Launch CodeReviewer from Applications folder
+          
+          ## System Requirements
+          
+          - macOS 13.0 or later
+          - Xcode 14.0 or later (for development)
+    
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./CodeReviewer-${{ steps.get_version.outputs.VERSION }}.dmg
+        asset_name: CodeReviewer-${{ steps.get_version.outputs.VERSION }}.dmg
+        asset_content_type: application/x-apple-diskimage
