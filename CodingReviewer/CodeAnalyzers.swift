@@ -17,6 +17,15 @@ struct AnalysisResult {
         case security
         case suggestion
         case performance
+        
+        var rawValue: String {
+            switch self {
+            case .quality: return "quality"
+            case .security: return "security"
+            case .suggestion: return "suggestion"
+            case .performance: return "performance"
+            }
+        }
     }
     
     enum Severity {
@@ -24,6 +33,15 @@ struct AnalysisResult {
         case medium
         case high
         case critical
+        
+        var rawValue: String {
+            switch self {
+            case .low: return "low"
+            case .medium: return "medium"
+            case .high: return "high"
+            case .critical: return "critical"
+            }
+        }
     }
 }
 

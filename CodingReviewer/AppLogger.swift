@@ -10,22 +10,47 @@ enum LogLevel: String, CaseIterable {
     case critical = "CRITICAL"
 }
 
-/// Application logger with proper categorization
+/// Log categories for better organization
+enum LogCategory: String, CaseIterable {
+    case general = "General"
+    case analysis = "Analysis"
+    case performance = "Performance"
+    case security = "Security"
+    case ui = "UI"
+    case ai = "AI"
+    case network = "Network"
+    
+    var emoji: String {
+        switch self {
+        case .general: return "📝"
+        case .analysis: return "🔍"
+        case .performance: return "⚡"
+        case .security: return "🔒"
+        case .ui: return "🖥️"
+        case .ai: return "🤖"
+        case .network: return "🌐"
+        }
+    }
+}
+
+/// Enhanced application logger with categorization and performance tracking
 final class AppLogger {
     private let logger = Logger(subsystem: "com.DanielStevens.CodingReviewer", category: "CodeAnalysis")
+    private var performanceMetrics: [String: Date] = [:]
     
     static let shared = AppLogger()
     private init() {}
     
     func log(
         _ message: String, 
-        level: LogLevel = .info, 
+        level: LogLevel = .info,
+        category: LogCategory = .general,
         file: String = #file, 
         function: String = #function, 
         line: Int = #line
     ) {
         let filename = (file as NSString).lastPathComponent
-        let logMessage = "\(level.rawValue) [\(filename):\(line)] \(function) - \(message)"
+        let logMessage = "\(category.emoji) \(level.rawValue) [\(filename):\(line)] \(function) - \(message)"
         
         switch level {
         case .debug:
@@ -41,16 +66,41 @@ final class AppLogger {
         }
     }
     
+    func startMeasurement(for operation: String) -> Date {
+        let startTime = Date()
+        performanceMetrics[operation] = startTime
+        log("Started measuring: \(operation)", level: .debug, category: .performance)
+        return startTime
+    }
+    
+    func endMeasurement(for operation: String, startTime: Date) {
+        let duration = Date().timeIntervalSince(startTime)
+        performanceMetrics.removeValue(forKey: operation)
+        log("Completed \(operation) in \(String(format: "%.3f", duration))s", 
+            level: .info, category: .performance)
+    }
+    
     func logAnalysisStart(codeLength: Int) {
-        log("Starting code analysis for \(codeLength) characters", level: .info)
+        log("Starting code analysis for \(codeLength) characters", level: .info, category: .analysis)
     }
     
     func logAnalysisComplete(resultsCount: Int, duration: TimeInterval) {
-        log("Analysis completed: \(resultsCount) results in \(String(format: "%.2f", duration))s", level: .info)
+        log("Analysis completed: \(resultsCount) results in \(String(format: "%.2f", duration))s", 
+            level: .info, category: .analysis)
     }
     
-    func logError(_ error: Error, context: String) {
-        log("Error in \(context): \(error.localizedDescription)", level: .error)
+    func logError(_ error: Error, context: String, category: LogCategory = .general) {
+        log("Error in \(context): \(error.localizedDescription)", level: .error, category: category)
+    }
+    
+    func logAIRequest(type: String, tokenCount: Int) {
+        log("AI \(type) request - \(tokenCount) tokens", level: .info, category: .ai)
+    }
+    
+    func logAIResponse(type: String, success: Bool, duration: TimeInterval) {
+        let status = success ? "successful" : "failed"
+        log("AI \(type) response \(status) in \(String(format: "%.2f", duration))s", 
+            level: success ? .info : .warning, category: .ai)
     }
 }
 

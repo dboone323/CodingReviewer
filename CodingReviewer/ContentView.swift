@@ -1,431 +1,568 @@
-//
-//  ContentView.swift
-//  CodingReviewer
-//
-//  Created by Daniel Stevens on 7/16/25.
-//
-
 import SwiftUI
-
-/// Accessibility helper for improved VoiceOver support
-struct AccessibilityHelper {
-    static func announceAnalysisComplete(_ result: String) {
-        #if canImport(AppKit)
-        let announcement = "Analysis completed. Found \(result.components(separatedBy: "\n").count) results."
-        NSAccessibility.post(
-            element: NSApp.mainWindow ?? NSApp,
-            notification: .announcementRequested,
-            userInfo: [.announcement: announcement]
-        )
-        #endif
-    }
-    
-    static func announceAnalysisStarted() {
-        #if canImport(AppKit)
-        let announcement = "Starting code analysis..."
-        NSAccessibility.post(
-            element: NSApp.mainWindow ?? NSApp,
-            notification: .announcementRequested,
-            userInfo: [.announcement: announcement]
-        )
-        #endif
-    }
-}
+import os
 
 struct ContentView: View {
-    @StateObject private var viewModel = CodeReviewViewModel()
-    @State private var codeInput: String = ""
-    @State private var showingClearAlert = false
-    @State private var showingAbout = false
+    @StateObject private var keyManager: APIKeyManager
+    @StateObject private var viewModel: CodeReviewViewModel
+    @State private var selectedTab: Tab = .analysis
+    
+    init() {
+        let keyManager = APIKeyManager()
+        self._keyManager = StateObject(wrappedValue: keyManager)
+        self._viewModel = StateObject(wrappedValue: CodeReviewViewModel(keyManager: keyManager))
+    }
+    
+    enum Tab: String, CaseIterable {
+        case analysis = "Analysis"
+        case files = "Files"
+        case ai = "AI Insights"
+        case settings = "Settings"
+        
+        var systemImage: String {
+            switch self {
+            case .analysis: return "magnifyingglass.circle"
+            case .files: return "folder.badge.plus"
+            case .ai: return "brain.head.profile"
+            case .settings: return "gear"
+            }
+        }
+    }
     
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Header Section
-                headerSection
-                
-                // Main Content
-                mainContent
-                
-                // Status Bar
-                statusBar
-            }
-            .navigationTitle("CodeReviewer")
-            .toolbar {
-                ToolbarItemGroup(placement: .primaryAction) {
-                    Button("About") {
-                        showingAbout = true
+                // Header
+                VStack(spacing: 8) {
+                    HStack {
+                        Text("CodeReviewer")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                        
+                        Spacer()
+                        
+                        if viewModel.aiEnabled {
+                            Label("AI Enabled", systemImage: "brain.head.profile")
+                                .font(.caption)
+                                .foregroundColor(.green)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(Color.green.opacity(0.1))
+                                .cornerRadius(6)
+                        }
                     }
-                    .accessibilityLabel("About CodeReviewer")
-                }
-            }
-            .sheet(isPresented: $showingAbout) {
-                AboutView()
-            }
-        }
-        .frame(minWidth: 900, minHeight: 700)
-        .onAppear {
-            setupSampleCode()
-        }
-        .alert("Clear Code", isPresented: $showingClearAlert) {
-            Button("Cancel", role: .cancel) { }
-            Button("Clear", role: .destructive) {
-                clearAll()
-            }
-        } message: {
-            Text("Are you sure you want to clear the code input and results?")
-        }
-    }
-    
-    // MARK: - View Components
-    
-    @ViewBuilder
-    private var headerSection: some View {
-        VStack(spacing: 16) {
-            HStack {
-                Image(systemName: "doc.text.magnifyingglass")
-                    .font(.title)
-                    .foregroundColor(.blue)
-                    .accessibilityHidden(true)
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("CodeReviewer")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
                     
-                    Text("Analyze Swift code for quality, security, and performance issues")
+                    Text("Intelligent Code Analysis & Review")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
+                .padding()
+                .background(Color(.controlBackgroundColor))
                 
-                Spacer()
-            }
-            .padding(.horizontal, 24)
-            .padding(.top, 16)
-            
-            Divider()
-        }
-    }
-    
-    @ViewBuilder
-    private var mainContent: some View {
-        HSplitView {
-            // Input Section
-            inputSection
-            
-            // Results Section
-            resultsSection
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-    
-    @ViewBuilder
-    private var inputSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // Input Header
-            HStack {
-                Label("Swift Code Input", systemImage: "curlybraces")
-                    .font(.headline)
-                    .accessibilityLabel("Code input section")
-                
-                Spacer()
-                
-                Text("\(codeInput.count) characters")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .accessibilityLabel("Character count: \(codeInput.count)")
-            }
-            
-            // Text Editor
-            ZStack(alignment: .topLeading) {
-                TextEditor(text: $codeInput)
-                    .font(.system(.body, design: .monospaced))
-                    .padding(12)
-                    .background(Color(.textBackgroundColor))
-                    .cornerRadius(8)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(viewModel.errorMessage != nil ? .red : .gray.opacity(0.3), lineWidth: 1)
-                    )
-                    .accessibilityLabel("Code input text editor")
-                    .accessibilityHint("Enter Swift code here for analysis")
-                
-                if codeInput.isEmpty {
-                    Text("Paste your Swift code here...")
-                        .foregroundColor(.secondary)
-                        .font(.system(.body, design: .monospaced))
-                        .padding(20)
-                        .allowsHitTesting(false)
-                        .accessibilityHidden(true)
-                }
-            }
-            .frame(maxHeight: .infinity)
-            
-            // Action Buttons
-            HStack(spacing: 12) {
-                Button("Clear") {
-                    showingClearAlert = true
-                }
-                .buttonStyle(.bordered)
-                .disabled(codeInput.isEmpty)
-                .accessibilityLabel("Clear code input")
-                .accessibilityHint("Clears the code input and analysis results")
-                
-                Button("Sample Code") {
-                    setupSampleCode()
-                }
-                .buttonStyle(.bordered)
-                .accessibilityLabel("Load sample code")
-                .accessibilityHint("Loads sample Swift code for demonstration")
-                
-                Spacer()
-                
-                Button {
-                    AccessibilityHelper.announceAnalysisStarted()
-                    viewModel.analyze(codeInput)
-                } label: {
-                    HStack {
-                        if viewModel.isAnalyzing {
-                            ProgressView()
-                                .scaleEffect(0.8)
-                                .progressViewStyle(CircularProgressViewStyle())
-                            Text("Analyzing...")
-                        } else {
-                            Image(systemName: "play.circle.fill")
-                            Text("Analyze Code")
-                        }
+                // Tab Selection
+                Picker("View", selection: $selectedTab) {
+                    ForEach(Tab.allCases, id: \.self) { tab in
+                        Label(tab.rawValue, systemImage: tab.systemImage)
+                            .tag(tab)
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 8)
                 }
-                .buttonStyle(.borderedProminent)
-                .disabled(codeInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || viewModel.isAnalyzing)
-                .accessibilityLabel(viewModel.isAnalyzing ? "Analyzing code" : "Analyze code")
-                .accessibilityHint("Starts code analysis for quality, security, and performance issues")
-            }
-            
-            // Error Message
-            if let errorMessage = viewModel.errorMessage {
-                Text(errorMessage)
-                    .foregroundColor(.red)
-                    .font(.caption)
-                    .padding(.horizontal, 4)
-                    .accessibilityLabel("Error: \(errorMessage)")
-            }
-        }
-        .padding(24)
-        .frame(minWidth: 400)
-    }
-    
-    @ViewBuilder
-    private var resultsSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // Results Header
-            HStack {
-                Label("Analysis Results", systemImage: "doc.text.below.ecg")
-                    .font(.headline)
-                    .accessibilityLabel("Analysis results section")
+                .pickerStyle(.segmented)
+                .padding(.horizontal)
+                .padding(.top)
                 
-                Spacer()
-                
-                if !viewModel.analysisResult.isEmpty {
-                    Button("Copy Results") {
-                        copyResults()
-                    }
-                    .font(.caption)
-                    .buttonStyle(.borderless)
-                    .accessibilityLabel("Copy analysis results")
-                    .accessibilityHint("Copies the analysis results to clipboard")
+                // Content
+                TabView(selection: $selectedTab) {
+                    AnalysisView(viewModel: viewModel)
+                        .tag(Tab.analysis)
                     
-                    Button("Clear Results") {
-                        viewModel.clearResults()
-                    }
-                    .font(.caption)
-                    .buttonStyle(.borderless)
-                    .accessibilityLabel("Clear analysis results")
+                    FileUploadView()
+                        .tag(Tab.files)
+                    
+                    AIInsightsView(viewModel: viewModel, keyManager: keyManager)
+                        .tag(Tab.ai)
+                    
+                    SettingsView(keyManager: keyManager, viewModel: viewModel)
+                        .tag(Tab.settings)
                 }
             }
-            
-            // Results Content
-            ScrollView {
-                if viewModel.analysisResult.isEmpty {
-                    emptyResultsView
-                } else {
-                    resultsContentView
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.textBackgroundColor))
-            .cornerRadius(8)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-            )
         }
-        .padding(24)
-        .frame(minWidth: 400)
-    }
-    
-    @ViewBuilder
-    private var emptyResultsView: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "doc.text.magnifyingglass")
-                .font(.system(size: 64))
-                .foregroundColor(.gray.opacity(0.5))
-                .accessibilityHidden(true)
-            
-            VStack(spacing: 8) {
-                Text("No analysis results yet")
-                    .font(.title2)
-                    .foregroundColor(.secondary)
-                
-                Text("Enter Swift code and click 'Analyze Code' to get started")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-            }
+        .navigationTitle("")
+        .sheet(isPresented: $keyManager.showingKeySetup) {
+            APIKeySetupView(keyManager: keyManager)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(40)
-        .accessibilityLabel("No analysis results available")
-        .accessibilityHint("Enter code and click analyze to see results")
-    }
-    
-    @ViewBuilder
-    private var resultsContentView: some View {
-        HStack {
-            Text(viewModel.analysisResult)
-                .font(.system(.body, design: .monospaced))
-                .textSelection(.enabled)
-                .padding(16)
-                .accessibilityLabel("Analysis results")
-                .accessibilityValue(viewModel.analysisResult)
-            
-            Spacer()
-        }
-    }
-    
-    @ViewBuilder
-    private var statusBar: some View {
-        HStack {
-            if viewModel.isAnalyzing {
-                HStack(spacing: 8) {
-                    ProgressView()
-                        .scaleEffect(0.7)
-                        .progressViewStyle(CircularProgressViewStyle())
-                    Text("Analyzing code...")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                .accessibilityLabel("Analysis in progress")
-            } else {
-                Text("Ready")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .accessibilityLabel("Ready for analysis")
-            }
-            
-            Spacer()
-            
-            Text("CodeReviewer v1.0")
-                .font(.caption)
-                .foregroundColor(.secondary)
-                .accessibilityHidden(true)
-        }
-        .padding(.horizontal, 24)
-        .padding(.vertical, 8)
-        .background(Color(.controlBackgroundColor))
-        .overlay(
-            Divider(), alignment: .top
-        )
-    }
-    
-    // MARK: - Helper Methods
-    
-    private func setupSampleCode() {
-        codeInput = """
-        import Foundation
-        
-        class UserManager {
-            var users: [String] = []
-            
-            func addUser(_ name: String) {
-                users.append(name)
-            }
-            
-            func getUser(at index: Int) -> String {
-                return users[index]  // Potential crash - no bounds checking
-            }
-            
-            func authenticateUser(password: String) -> Bool {
-                let hardcodedPassword = "password123"  // Security issue
-                return password == hardcodedPassword
-            }
-        }
-        
-        // TODO: Add proper error handling
-        let manager = UserManager()
-        manager.addUser("John")
-        let user = manager.getUser(at: 0)  // Force unwrapping equivalent
-        """
-    }
-    
-    private func clearAll() {
-        codeInput = ""
-        viewModel.clearResults()
-    }
-    
-    private func copyResults() {
-        #if canImport(AppKit)
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(viewModel.analysisResult, forType: .string)
-        #endif
+        .frame(minWidth: 900, minHeight: 700)
     }
 }
 
-// MARK: - About View
+// MARK: - Analysis View
 
-struct AboutView: View {
+struct AnalysisView: View {
+    @ObservedObject var viewModel: CodeReviewViewModel
+    @State private var showingLanguagePicker = false
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            // Language Selection
+            HStack {
+                Text("Language:")
+                    .font(.headline)
+                
+                Button(viewModel.selectedLanguage.displayName) {
+                    showingLanguagePicker = true
+                }
+                .buttonStyle(.bordered)
+                
+                Spacer()
+                
+                Button("Clear") {
+                    viewModel.clearResults()
+                    viewModel.codeInput = ""
+                }
+                .buttonStyle(.bordered)
+            }
+            .padding(.horizontal)
+            
+            // Code Input
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Code to Analyze")
+                    .font(.headline)
+                
+                ScrollView {
+                    TextEditor(text: $viewModel.codeInput)
+                        .font(.system(.body, design: .monospaced))
+                        .frame(minHeight: 200)
+                }
+                .border(Color.gray.opacity(0.3))
+            }
+            .padding(.horizontal)
+            
+            // Action Buttons
+            HStack(spacing: 12) {
+                Button("Analyze Code") {
+                    Task {
+                        await viewModel.analyzeCode()
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(viewModel.codeInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || viewModel.isAnalyzing)
+                
+                if viewModel.aiEnabled {
+                    Button("AI Documentation") {
+                        Task {
+                            await viewModel.generateDocumentation()
+                        }
+                    }
+                    .buttonStyle(.bordered)
+                    .disabled(viewModel.codeInput.isEmpty)
+                }
+            }
+            
+            // Loading Indicator
+            if viewModel.isAnalyzing || viewModel.isAIAnalyzing {
+                HStack {
+                    ProgressView()
+                        .scaleEffect(0.8)
+                    
+                    Text(viewModel.isAIAnalyzing ? "AI analyzing..." : "Analyzing...")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding()
+            }
+            
+            // Results
+            if viewModel.showingResults {
+                ContentAnalysisResultsView(viewModel: viewModel)
+            }
+            
+            Spacer()
+        }
+        .sheet(isPresented: $showingLanguagePicker) {
+            LanguagePickerView(selectedLanguage: $viewModel.selectedLanguage)
+        }
+    }
+}
+
+// MARK: - AI Insights View
+
+struct AIInsightsView: View {
+    @ObservedObject var viewModel: CodeReviewViewModel
+    @ObservedObject var keyManager: APIKeyManager
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            if !viewModel.aiEnabled {
+                AINotEnabledView(viewModel: viewModel, keyManager: keyManager)
+            } else if let aiResult = viewModel.aiAnalysisResult {
+                AIAnalysisResultView(aiResult: aiResult, viewModel: viewModel)
+            } else {
+                EmptyAIStateView()
+            }
+            
+            Spacer()
+        }
+        .padding()
+    }
+}
+
+// MARK: - Analysis Results View (ContentView specific)
+
+struct ContentAnalysisResultsView: View {
+    @ObservedObject var viewModel: CodeReviewViewModel
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                // Traditional Analysis Results
+                if !viewModel.analysisResults.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Analysis Results")
+                            .font(.headline)
+                        
+                        ForEach(viewModel.analysisResults, id: \.message) { result in
+                            AnalysisResultRow(result: result, viewModel: viewModel)
+                        }
+                    }
+                }
+                
+                // Available Fixes
+                if !viewModel.availableFixes.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("AI-Suggested Fixes")
+                            .font(.headline)
+                        
+                        ForEach(viewModel.availableFixes, id: \.id) { fix in
+                            AIFixRow(fix: fix, viewModel: viewModel)
+                        }
+                    }
+                }
+                
+                // Legacy Text Results
+                if !viewModel.analysisResult.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Detailed Report")
+                            .font(.headline)
+                        
+                        Text(viewModel.analysisResult)
+                            .font(.system(.body, design: .monospaced))
+                            .padding()
+                            .background(Color(.textBackgroundColor))
+                            .cornerRadius(8)
+                    }
+                }
+            }
+            .padding()
+        }
+    }
+}
+
+// MARK: - Individual Result Views
+
+struct AnalysisResultRow: View {
+    let result: AnalysisResult
+    @ObservedObject var viewModel: CodeReviewViewModel
+    
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                HStack {
+                    severityIcon
+                    Text(result.message)
+                        .font(.subheadline)
+                }
+                
+                Text(result.type.displayName)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            
+            Spacer()
+            
+            if viewModel.aiEnabled {
+                Button("Explain") {
+                    Task {
+                        await viewModel.explainIssue(result)
+                    }
+                }
+                .buttonStyle(.bordered)
+                .font(.caption)
+            }
+        }
+        .padding()
+        .background(result.severity.color.opacity(0.1))
+        .cornerRadius(8)
+    }
+    
+    private var severityIcon: some View {
+        Image(systemName: result.severity.systemImage)
+            .foregroundColor(result.severity.color)
+    }
+}
+
+struct AIFixRow: View {
+    let fix: CodeFix
+    @ObservedObject var viewModel: CodeReviewViewModel
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text(fix.title)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                
+                Spacer()
+                
+                Text("\(Int(fix.confidence * 100))% confident")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                
+                Button("Apply") {
+                    viewModel.applyFix(fix)
+                }
+                .buttonStyle(.borderedProminent)
+                .font(.caption)
+            }
+            
+            Text(fix.description)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .padding()
+        .background(Color.blue.opacity(0.1))
+        .cornerRadius(8)
+    }
+}
+
+// MARK: - AI-specific Views
+
+struct AINotEnabledView: View {
+    @ObservedObject var viewModel: CodeReviewViewModel
+    @ObservedObject var keyManager: APIKeyManager
+    
+    private let logger = Logger(subsystem: "com.DanielStevens.CodingReviewer", category: "APIKeySetup")
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "brain.head.profile")
+                .font(.system(size: 48))
+                .foregroundColor(.gray)
+            
+            Text("AI Features Not Available")
+                .font(.title2)
+                .fontWeight(.semibold)
+            
+            Text("Configure your OpenAI API key to enable AI-powered code analysis, suggestions, and fixes.")
+                .multilineTextAlignment(.center)
+                .foregroundColor(.secondary)
+            
+            Button("Setup API Key") {
+                viewModel.showAPIKeySetup()
+            }
+            .buttonStyle(.borderedProminent)
+        }
+        .padding()
+    }
+}
+
+struct AIAnalysisResultView: View {
+    let aiResult: AIAnalysisResult
+    @ObservedObject var viewModel: CodeReviewViewModel
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // Complexity Metrics
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Code Complexity")
+                    .font(.headline)
+                
+                HStack {
+                    MetricCard(title: "Cyclomatic", value: "\(aiResult.complexity.cyclomatic)")
+                    MetricCard(title: "Cognitive", value: "\(aiResult.complexity.cognitive)")
+                    MetricCard(title: "Maintainability", value: String(format: "%.2f", aiResult.maintainability.index))
+                }
+            }
+            
+            // AI Suggestions
+            if !aiResult.suggestions.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("AI Suggestions")
+                        .font(.headline)
+                    
+                    ForEach(aiResult.suggestions, id: \.id) { suggestion in
+                        AISuggestionRow(suggestion: suggestion)
+                    }
+                }
+            }
+            
+            // AI Explanation
+            if !aiResult.explanation.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("AI Assessment")
+                        .font(.headline)
+                    
+                    Text(aiResult.explanation)
+                        .padding()
+                        .background(Color(.textBackgroundColor))
+                        .cornerRadius(8)
+                }
+            }
+        }
+    }
+}
+
+struct AISuggestionRow: View {
+    let suggestion: AISuggestion
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text(suggestion.title)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                
+                Spacer()
+                
+                Text("\(Int(suggestion.confidence * 100))%")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            
+            Text(suggestion.description)
+                .font(.caption)
+                .foregroundColor(.secondary)
+            
+            if let fix = suggestion.suggestedFix {
+                Text("Suggested fix: \(fix)")
+                    .font(.caption)
+                    .foregroundColor(.blue)
+                    .italic()
+            }
+        }
+        .padding()
+        .background(suggestion.severity.color.opacity(0.1))
+        .cornerRadius(8)
+    }
+}
+
+struct MetricCard: View {
+    let title: String
+    let value: String
+    
+    var body: some View {
+        VStack {
+            Text(value)
+                .font(.title2)
+                .fontWeight(.bold)
+            
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(Color(.controlBackgroundColor))
+        .cornerRadius(8)
+    }
+}
+
+struct EmptyAIStateView: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "sparkles")
+                .font(.system(size: 48))
+                .foregroundColor(.gray)
+            
+            Text("No AI Analysis Yet")
+                .font(.title2)
+                .fontWeight(.semibold)
+            
+            Text("Run a code analysis to see AI-powered insights and suggestions.")
+                .multilineTextAlignment(.center)
+                .foregroundColor(.secondary)
+        }
+        .padding()
+    }
+}
+
+// MARK: - Extensions
+
+// MARK: - Settings View
+
+struct SettingsView: View {
+    @ObservedObject var keyManager: APIKeyManager
+    @ObservedObject var viewModel: CodeReviewViewModel
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            Text("Settings")
+                .font(.title)
+                .fontWeight(.bold)
+            
+            // AI Configuration
+            VStack(alignment: .leading, spacing: 12) {
+                Text("AI Configuration")
+                    .font(.headline)
+                
+                HStack {
+                    Text("Status:")
+                    Text(viewModel.aiEnabled ? "✅ Enabled" : "❌ Disabled")
+                        .foregroundColor(viewModel.aiEnabled ? .green : .red)
+                    
+                    Spacer()
+                    
+                    Button(keyManager.hasValidKey ? "Update API Key" : "Setup API Key") {
+                        keyManager.showKeySetup()
+                    }
+                    .buttonStyle(.bordered)
+                }
+                
+                if keyManager.hasValidKey {
+                    Button("Remove API Key") {
+                        do {
+                            try keyManager.removeOpenAIKey()
+                        } catch {
+                            // Handle error
+                        }
+                    }
+                    .buttonStyle(.bordered)
+                    .foregroundColor(.red)
+                }
+            }
+            .padding()
+            .background(Color(.controlBackgroundColor))
+            .cornerRadius(8)
+            
+            Spacer()
+        }
+        .padding()
+    }
+}
+
+// MARK: - Language Picker
+
+struct LanguagePickerView: View {
+    @Binding var selectedLanguage: CodeLanguage
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 20) {
-                Image(systemName: "doc.text.magnifyingglass")
-                    .font(.system(size: 64))
-                    .foregroundColor(.blue)
-                
-                VStack(spacing: 8) {
-                    Text("CodeReviewer")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
+            List(CodeLanguage.allCases, id: \.self) { language in
+                HStack {
+                    Text(language.displayName)
                     
-                    Text("Version 1.0")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
-                
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Features:")
-                        .font(.headline)
+                    Spacer()
                     
-                    VStack(alignment: .leading, spacing: 8) {
-                        Label("Code quality analysis", systemImage: "checkmark.circle")
-                        Label("Security vulnerability detection", systemImage: "lock.shield")
-                        Label("Performance optimization suggestions", systemImage: "speedometer")
-                        Label("Swift best practices validation", systemImage: "swift")
+                    if language == selectedLanguage {
+                        Image(systemName: "checkmark")
+                            .foregroundColor(.blue)
                     }
-                    .font(.subheadline)
                 }
-                
-                Spacer()
-                
-                Text("Built with SwiftUI for macOS")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    selectedLanguage = language
+                    dismiss()
+                }
             }
-            .padding(40)
-            .navigationTitle("About")
+            .navigationTitle("Select Language")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") {
@@ -434,11 +571,42 @@ struct AboutView: View {
                 }
             }
         }
-        .frame(width: 400, height: 500)
+    }
+}
+
+// MARK: - Extensions
+
+extension AnalysisResult.ResultType {
+    var displayName: String {
+        switch self {
+        case .quality: return "Quality"
+        case .security: return "Security"
+        case .suggestion: return "Suggestion"
+        case .performance: return "Performance"
+        }
+    }
+}
+
+extension AnalysisResult.Severity {
+    var color: Color {
+        switch self {
+        case .low: return .blue
+        case .medium: return .orange
+        case .high: return .red
+        case .critical: return .purple
+        }
+    }
+    
+    var systemImage: String {
+        switch self {
+        case .low: return "info.circle"
+        case .medium: return "exclamationmark.triangle"
+        case .high: return "exclamationmark.circle"
+        case .critical: return "exclamationmark.octagon"
+        }
     }
 }
 
 #Preview {
     ContentView()
-        .frame(width: 900, height: 700)
 }

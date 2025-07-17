@@ -1,6 +1,7 @@
 import SwiftUI
 import Foundation
 import Combine
+import os
 
 /// Protocol for code review functionality to enable better testability
 protocol CodeReviewService {
@@ -55,72 +56,215 @@ struct CodeMetrics {
     let analysisTime: TimeInterval
 }
 
-/// Enhanced ViewModel with better architecture and error handling
+/// Enhanced ViewModel with AI integration and better architecture
+@MainActor
 final class CodeReviewViewModel: ObservableObject {
     
     // MARK: - Published Properties
-    @Published var analysisResult: String = ""
+    
+    @Published var codeInput: String = ""
+    @Published var analysisResults: [AnalysisResult] = []
+    @Published var aiAnalysisResult: AIAnalysisResult?
+    @Published var aiSuggestions: [AISuggestion] = []
+    @Published var availableFixes: [CodeFix] = []
     @Published var isAnalyzing: Bool = false
+    @Published var isAIAnalyzing: Bool = false
     @Published var errorMessage: String?
+    @Published var showingResults: Bool = false
+    @Published var selectedLanguage: CodeLanguage = .swift
+    @Published var aiEnabled: Bool = false
+    @Published var analysisReport: CodeAnalysisReport?
+    
+    // For legacy support
+    @Published var analysisResult: String = ""
     
     // MARK: - Private Properties
+    
     private let codeReviewService: CodeReviewService
+    private var aiService: OpenAICodeReviewService?
+    private let keyManager: APIKeyManager
     private var cancellables = Set<AnyCancellable>()
     private let debouncer = AnalysisDebouncer()
+    private let logger = AppLogger.shared
+    private let osLogger = Logger(subsystem: "com.DanielStevens.CodingReviewer", category: "CodeReviewViewModel")
     
     // MARK: - Initialization
-    init(codeReviewService: CodeReviewService = DefaultCodeReviewService()) {
+    
+    @MainActor
+    init(codeReviewService: CodeReviewService = DefaultCodeReviewService(), keyManager: APIKeyManager) {
         self.codeReviewService = codeReviewService
+        self.keyManager = keyManager
+        setupAIService()
+        observeKeyManager()
     }
     
     // MARK: - Public Methods
     
-    /// Analyzes the provided Swift code string and updates the analysisResult.
-    /// - Parameter code: The Swift source code string to analyze.
-    @MainActor
-    public func analyze(_ code: String) {
-        guard !code.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            analysisResult = "❌ Error: No code provided for analysis."
-            AppLogger.shared.log("Analysis failed: No code provided", level: .warning)
+    /// Performs comprehensive code analysis including AI if enabled
+    func analyzeCode() async {
+        guard !codeInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            errorMessage = "No code provided for analysis"
             return
         }
         
-        // Validate input size
-        guard code.count < 100000 else {
-            analysisResult = "❌ Error: Code too large (max 100,000 characters)"
-            AppLogger.shared.log("Analysis failed: Code too large (\(code.count) characters)", level: .warning)
+        guard codeInput.count < 100000 else {
+            errorMessage = "Code too large (max 100,000 characters)"
             return
         }
         
         // Debounce analysis requests
-        Task {
-            if await debouncer.shouldAnalyze() {
-                isAnalyzing = true
-                errorMessage = nil
+        if await debouncer.shouldAnalyze() {
+            isAnalyzing = true
+            errorMessage = nil
+            showingResults = false
+            
+            logger.logAnalysisStart(codeLength: codeInput.count)
+            let startTime = Date()
+            
+            do {
+                // Run traditional analysis
+                let report = await codeReviewService.analyzeCode(codeInput)
+                analysisResults = report.results
+                analysisReport = report
+                analysisResult = generateReportString(from: report) // Legacy support
                 
-                AppLogger.shared.logAnalysisStart(codeLength: code.count)
-                let startTime = Date()
-                
-                let report = await codeReviewService.analyzeCode(code)
-                let duration = Date().timeIntervalSince(startTime)
-                
-                await MainActor.run {
-                    self.analysisResult = self.generateReportString(from: report)
-                    self.isAnalyzing = false
-                    AppLogger.shared.logAnalysisComplete(resultsCount: report.results.count, duration: duration)
-                    AccessibilityHelper.announceAnalysisComplete(self.analysisResult)
+                // Run AI analysis if enabled
+                if aiEnabled, let aiService = aiService {
+                    isAIAnalyzing = true
+                    let aiResult = try await aiService.analyzeWithAI(codeInput, language: selectedLanguage)
+                    aiAnalysisResult = aiResult
+                    aiSuggestions = aiResult.suggestions
+                    
+                    // Generate fixes for critical issues
+                    let criticalIssues = analysisResults.filter { $0.severity == .critical || $0.severity == .high }
+                    if !criticalIssues.isEmpty {
+                        let fixes = try await aiService.generateFixes(for: criticalIssues)
+                        availableFixes = fixes
+                    }
+                    
+                    isAIAnalyzing = false
                 }
+                
+                showingResults = true
+                let duration = Date().timeIntervalSince(startTime)
+                logger.logAnalysisComplete(resultsCount: report.results.count, duration: duration)
+                
+            } catch {
+                errorMessage = error.localizedDescription
+                logger.log("Analysis failed: \(error)", level: .error, category: .analysis)
             }
+            
+            isAnalyzing = false
         }
     }
     
-    /// Clears the current analysis results.
+    /// Legacy analyze method for backward compatibility
+    @MainActor
+    public func analyze(_ code: String) {
+        codeInput = code
+        Task {
+            await analyzeCode()
+        }
+    }
+    
+    /// Applies an AI-generated fix to the code
+    func applyFix(_ fix: CodeFix) {
+        let originalRange = fix.range
+        guard originalRange.location >= 0 && 
+              originalRange.location + originalRange.length <= codeInput.count else {
+            errorMessage = "Cannot apply fix: invalid range"
+            return
+        }
+        
+        let startIndex = codeInput.index(codeInput.startIndex, offsetBy: originalRange.location)
+        let endIndex = codeInput.index(startIndex, offsetBy: originalRange.length)
+        
+        codeInput.replaceSubrange(startIndex..<endIndex, with: fix.fixedCode)
+        
+        logger.log("Applied AI fix: \(fix.title)", level: .info, category: .ai)
+        
+        // Re-analyze after applying fix
+        Task {
+            await analyzeCode()
+        }
+    }
+    
+    /// Explains a specific issue using AI
+    func explainIssue(_ issue: AnalysisResult) async {
+        guard let aiService = aiService else { return }
+        
+        do {
+            let explanation = try await aiService.explainIssue(issue)
+            // Could show this in a popup or detail view
+            logger.log("AI explanation generated for issue: \(issue.message)", level: .info, category: .ai)
+        } catch {
+            logger.log("Failed to generate AI explanation: \(error)", level: .error, category: .ai)
+        }
+    }
+    
+    /// Generates documentation for the current code
+    func generateDocumentation() async {
+        guard let aiService = aiService, !codeInput.isEmpty else { return }
+        
+        do {
+            let documentation = try await aiService.generateDocumentation(for: codeInput)
+            // Could populate a documentation view or copy to clipboard
+            logger.log("AI documentation generated", level: .info, category: .ai)
+        } catch {
+            logger.log("Failed to generate AI documentation: \(error)", level: .error, category: .ai)
+        }
+    }
+    
+    /// Shows the API key setup screen
+    func showAPIKeySetup() {
+        print("🧠 [DEBUG] CodeReviewViewModel.showAPIKeySetup() called")
+        print("🧠 [DEBUG] About to call keyManager.showKeySetup()")
+        osLogger.info("🧠 CodeReviewViewModel showAPIKeySetup called")
+        keyManager.showKeySetup()
+        print("🧠 [DEBUG] Completed call to keyManager.showKeySetup()")
+        osLogger.info("🧠 CodeReviewViewModel showAPIKeySetup completed")
+    }
+    
+    /// Clears all analysis results
     public func clearResults() {
         analysisResult = ""
+        analysisResults.removeAll()
+        aiAnalysisResult = nil
+        aiSuggestions.removeAll()
+        availableFixes.removeAll()
         errorMessage = nil
+        showingResults = false
     }
     
     // MARK: - Private Methods
+    
+    private func setupAIService() {
+        do {
+            aiService = try OpenAICodeReviewService()
+            aiEnabled = true
+            logger.log("AI service initialized successfully", level: .info, category: .ai)
+        } catch {
+            logger.log("Failed to initialize AI service: \(error)", level: .warning, category: .ai)
+            aiEnabled = false
+        }
+    }
+    
+    private func observeKeyManager() {
+        keyManager.$hasValidKey
+            .sink { [weak self] hasKey in
+                self?.updateAIStatus(hasKey: hasKey)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func updateAIStatus(hasKey: Bool) {
+        if hasKey && aiService == nil {
+            setupAIService()
+        } else if !hasKey {
+            aiService = nil
+            aiEnabled = false
+        }
+    }
     
     private func generateReportString(from report: CodeAnalysisReport) -> String {
         var reportString = "📊 Code Analysis Report\n"
@@ -185,6 +329,17 @@ final class CodeReviewViewModel: ObservableObject {
         
         // Overall rating
         reportString += "📊 Overall Rating: \(report.overallRating.description)\n"
+        
+        // AI Analysis if available
+        if let aiResult = aiAnalysisResult {
+            reportString += "\n🤖 AI Analysis:\n"
+            reportString += "• Complexity Score: \(aiResult.complexity.cyclomatic)\n"
+            reportString += "• Maintainability: \(String(format: "%.2f", aiResult.maintainability.index))\n"
+            reportString += "• AI Suggestions: \(aiResult.suggestions.count)\n"
+            if !aiResult.explanation.isEmpty {
+                reportString += "\n💬 AI Assessment:\n\(aiResult.explanation)\n"
+            }
+        }
         
         return reportString
     }
