@@ -16,6 +16,7 @@ struct ContentView: View {
         case analysis = "Analysis"
         case files = "Files"
         case ai = "AI Insights"
+        case patterns = "Patterns"
         case settings = "Settings"
         
         var systemImage: String {
@@ -23,6 +24,7 @@ struct ContentView: View {
             case .analysis: return "magnifyingglass.circle"
             case .files: return "folder.badge.plus"
             case .ai: return "brain.head.profile"
+            case .patterns: return "brain"
             case .settings: return "gear"
             }
         }
@@ -77,8 +79,11 @@ struct ContentView: View {
                     FileUploadView()
                         .tag(Tab.files)
                     
-                    AIInsightsView(viewModel: viewModel, keyManager: keyManager)
+                    AIInsightsView()
                         .tag(Tab.ai)
+                    
+                    PatternAnalysisView(viewModel: viewModel)
+                        .tag(Tab.patterns)
                     
                     SettingsView(keyManager: keyManager, viewModel: viewModel)
                         .tag(Tab.settings)
@@ -87,7 +92,7 @@ struct ContentView: View {
         }
         .navigationTitle("")
         .sheet(isPresented: $keyManager.showingKeySetup) {
-            APIKeySetupView(keyManager: keyManager)
+            APIKeySetupView()
         }
         .frame(minWidth: 900, minHeight: 700)
     }
@@ -182,25 +187,84 @@ struct AnalysisView: View {
     }
 }
 
-// MARK: - AI Insights View
+// MARK: - AI Suggestion Row
 
-struct AIInsightsView: View {
-    @ObservedObject var viewModel: CodeReviewViewModel
-    @ObservedObject var keyManager: APIKeyManager
+struct AISuggestionRow: View {
+    let suggestion: AISuggestion
+    @State private var isExpanded = false
     
     var body: some View {
-        VStack(spacing: 16) {
-            if !viewModel.aiEnabled {
-                AINotEnabledView(viewModel: viewModel, keyManager: keyManager)
-            } else if let aiResult = viewModel.aiAnalysisResult {
-                AIAnalysisResultView(aiResult: aiResult, viewModel: viewModel)
-            } else {
-                EmptyAIStateView()
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                // Severity indicator
+                Circle()
+                    .fill(severityColor)
+                    .frame(width: 8, height: 8)
+                
+                Text(suggestion.title)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                
+                Spacer()
+                
+                // Confidence badge
+                Text("\(Int(suggestion.confidence * 100))%")
+                    .font(.caption)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(4)
+                
+                Button(action: { isExpanded.toggle() }) {
+                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                        .font(.caption)
+                }
+                .buttonStyle(.borderless)
             }
             
-            Spacer()
+            if isExpanded {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(suggestion.description)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    HStack {
+                        Label(suggestion.type.rawValue, systemImage: typeIcon)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        
+                        Spacer()
+                        
+                        Label(suggestion.severity.rawValue, systemImage: "exclamationmark.triangle")
+                            .font(.caption)
+                            .foregroundColor(severityColor)
+                    }
+                }
+            }
         }
         .padding()
+        .background(Color(.controlBackgroundColor))
+        .cornerRadius(8)
+    }
+    
+    private var severityColor: Color {
+        switch suggestion.severity {
+        case .info: return .blue
+        case .warning: return .orange
+        case .error: return .red
+        case .critical: return .purple
+        }
+    }
+    
+    private var typeIcon: String {
+        switch suggestion.type {
+        case .codeQuality: return "checkmark.seal"
+        case .security: return "lock.shield"
+        case .performance: return "speedometer"
+        case .bestPractice: return "star"
+        case .refactoring: return "arrow.triangle.2.circlepath"
+        case .documentation: return "doc.text"
+        }
     }
 }
 
@@ -335,36 +399,90 @@ struct AIFixRow: View {
 // MARK: - AI-specific Views
 
 struct AINotEnabledView: View {
-    @ObservedObject var viewModel: CodeReviewViewModel
     @ObservedObject var keyManager: APIKeyManager
-    
-    private let logger = Logger(subsystem: "com.DanielStevens.CodingReviewer", category: "APIKeySetup")
+    @State private var showingSettings = false
     
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 20) {
             Image(systemName: "brain.head.profile")
                 .font(.system(size: 48))
                 .foregroundColor(.gray)
             
-            Text("AI Features Not Available")
-                .font(.title2)
-                .fontWeight(.semibold)
-            
-            Text("Configure your OpenAI API key to enable AI-powered code analysis, suggestions, and fixes.")
-                .multilineTextAlignment(.center)
-                .foregroundColor(.secondary)
-            
-            Button("Setup API Key") {
-                viewModel.showAPIKeySetup()
+            VStack(spacing: 8) {
+                Text("AI Features Not Available")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                
+                Text("Configure your OpenAI API key to enable AI-powered code analysis, suggestions, and documentation generation.")
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal)
             }
-            .buttonStyle(.borderedProminent)
+            
+            VStack(spacing: 12) {
+                Button("Setup API Key") {
+                    showingSettings = true
+                }
+                .buttonStyle(.borderedProminent)
+                
+                Button("Learn More") {
+                    if let url = URL(string: "https://openai.com/api/") {
+                        NSWorkspace.shared.open(url)
+                    }
+                }
+                .buttonStyle(.bordered)
+            }
+            
+            // Feature Preview
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Available AI Features:")
+                    .font(.headline)
+                    .padding(.top)
+                
+                FeaturePreviewRow(icon: "brain", title: "Intelligent Code Analysis", description: "Get smart insights about your code quality")
+                FeaturePreviewRow(icon: "lightbulb", title: "Refactoring Suggestions", description: "Receive AI-powered improvement recommendations")
+                FeaturePreviewRow(icon: "doc.text", title: "Auto Documentation", description: "Generate comprehensive code documentation")
+                FeaturePreviewRow(icon: "text.bubble", title: "Code Explanations", description: "Understand complex code with AI explanations")
+            }
+            .padding(.top)
         }
         .padding()
+        .sheet(isPresented: $showingSettings) {
+            AISettingsView()
+        }
+    }
+}
+
+struct FeaturePreviewRow: View {
+    let icon: String
+    let title: String
+    let description: String
+    
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.title3)
+                .foregroundColor(.secondary)
+                .frame(width: 24)
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                
+                Text(description)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            
+            Spacer()
+        }
+        .padding(.vertical, 4)
     }
 }
 
 struct AIAnalysisResultView: View {
-    let aiResult: AIAnalysisResult
+    let aiResult: AIAnalysisResponse
     @ObservedObject var viewModel: CodeReviewViewModel
     
     var body: some View {
@@ -375,9 +493,9 @@ struct AIAnalysisResultView: View {
                     .font(.headline)
                 
                 HStack {
-                    MetricCard(title: "Cyclomatic", value: "\(aiResult.complexity.cyclomatic)")
-                    MetricCard(title: "Cognitive", value: "\(aiResult.complexity.cognitive)")
-                    MetricCard(title: "Maintainability", value: String(format: "%.2f", aiResult.maintainability.index))
+                    MetricCard(title: "Cyclomatic", value: "\(aiResult.complexity?.cyclomaticComplexity ?? 0)", color: Color.blue)
+                    MetricCard(title: "Cognitive", value: "N/A", color: Color.orange)
+                    MetricCard(title: "Maintainability", value: String(format: "%.2f", aiResult.maintainability?.score ?? 0.0), color: Color.green)
                 }
             }
             
@@ -394,73 +512,18 @@ struct AIAnalysisResultView: View {
             }
             
             // AI Explanation
-            if !aiResult.explanation.isEmpty {
+            if let documentation = aiResult.documentation, !documentation.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("AI Assessment")
                         .font(.headline)
                     
-                    Text(aiResult.explanation)
+                    Text(documentation)
                         .padding()
                         .background(Color(.textBackgroundColor))
                         .cornerRadius(8)
                 }
             }
         }
-    }
-}
-
-struct AISuggestionRow: View {
-    let suggestion: AISuggestion
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                Text(suggestion.title)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                
-                Spacer()
-                
-                Text("\(Int(suggestion.confidence * 100))%")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            
-            Text(suggestion.description)
-                .font(.caption)
-                .foregroundColor(.secondary)
-            
-            if let fix = suggestion.suggestedFix {
-                Text("Suggested fix: \(fix)")
-                    .font(.caption)
-                    .foregroundColor(.blue)
-                    .italic()
-            }
-        }
-        .padding()
-        .background(suggestion.severity.color.opacity(0.1))
-        .cornerRadius(8)
-    }
-}
-
-struct MetricCard: View {
-    let title: String
-    let value: String
-    
-    var body: some View {
-        VStack {
-            Text(value)
-                .font(.title2)
-                .fontWeight(.bold)
-            
-            Text(title)
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(Color(.controlBackgroundColor))
-        .cornerRadius(8)
     }
 }
 
@@ -490,12 +553,47 @@ struct EmptyAIStateView: View {
 struct SettingsView: View {
     @ObservedObject var keyManager: APIKeyManager
     @ObservedObject var viewModel: CodeReviewViewModel
+    @State private var selectedAIProvider = "OpenAI"
+    @State private var showingProviderPicker = false
+    @State private var showingGeminiKeyInput = false
+    @State private var tempGeminiKey = ""
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             Text("Settings")
                 .font(.title)
                 .fontWeight(.bold)
+            
+            // AI Provider Selection
+            VStack(alignment: .leading, spacing: 12) {
+                Text("AI Provider")
+                    .font(.headline)
+                
+                HStack {
+                    Text("Provider:")
+                    
+                    Button(selectedAIProvider) {
+                        showingProviderPicker = true
+                    }
+                    .buttonStyle(.bordered)
+                    
+                    Spacer()
+                }
+                .sheet(isPresented: $showingProviderPicker) {
+                    AIProviderPickerView(selectedProvider: $selectedAIProvider)
+                        .onDisappear {
+                            // Save provider selection
+                            UserDefaults.standard.set(selectedAIProvider, forKey: "selected_ai_provider")
+                        }
+                }
+                
+                Text("Select between OpenAI and Google Gemini for AI-powered code analysis")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding()
+            .background(Color(.controlBackgroundColor))
+            .cornerRadius(8)
             
             // AI Configuration
             VStack(alignment: .leading, spacing: 12) {
@@ -515,10 +613,40 @@ struct SettingsView: View {
                     .buttonStyle(.bordered)
                 }
                 
-                if keyManager.hasValidKey {
-                    Button("Remove API Key") {
+                if selectedAIProvider == "Google Gemini" {
+                    HStack {
+                        Text("Gemini Key:")
+                        Text(keyManager.hasValidGeminiKey ? "✅ Configured" : "❌ Not set")
+                            .foregroundColor(keyManager.hasValidGeminiKey ? .green : .red)
+                        
+                        Spacer()
+                        
+                        Button(keyManager.hasValidGeminiKey ? "Update Gemini Key" : "Add Gemini Key") {
+                            showingGeminiKeyInput = true
+                        }
+                        .buttonStyle(.bordered)
+                    }
+                    .sheet(isPresented: $showingGeminiKeyInput) {
+                        GeminiKeyInputView(tempKey: $tempGeminiKey, keyManager: keyManager)
+                    }
+                }
+                
+                if keyManager.hasValidKey && selectedAIProvider == "OpenAI" {
+                    Button("Remove OpenAI API Key") {
                         do {
                             try keyManager.removeOpenAIKey()
+                        } catch {
+                            // Handle error
+                        }
+                    }
+                    .buttonStyle(.bordered)
+                    .foregroundColor(.red)
+                }
+                
+                if keyManager.hasValidGeminiKey && selectedAIProvider == "Google Gemini" {
+                    Button("Remove Gemini API Key") {
+                        do {
+                            try keyManager.removeGeminiKey()
                         } catch {
                             // Handle error
                         }
@@ -534,6 +662,142 @@ struct SettingsView: View {
             Spacer()
         }
         .padding()
+        .onAppear {
+            // Load saved provider selection
+            selectedAIProvider = UserDefaults.standard.string(forKey: "selected_ai_provider") ?? "OpenAI"
+        }
+    }
+}
+
+// MARK: - Gemini Key Input View
+
+struct GeminiKeyInputView: View {
+    @Binding var tempKey: String
+    @ObservedObject var keyManager: APIKeyManager
+    @Environment(\.dismiss) private var dismiss
+    @State private var isValidating = false
+    @State private var validationResult: String? = nil
+    
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 20) {
+                Text("Enter your Google Gemini API Key")
+                    .font(.headline)
+                    .multilineTextAlignment(.center)
+                
+                Text("Get your API key from https://makersuite.google.com/app/apikey")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                
+                SecureField("Gemini API Key (starts with 'AI')", text: $tempKey)
+                    .textFieldStyle(.roundedBorder)
+                    .font(.system(.body, design: .monospaced))
+                
+                if let result = validationResult {
+                    Text(result)
+                        .font(.caption)
+                        .foregroundColor(result.contains("✅") ? .green : .red)
+                }
+                
+                HStack(spacing: 16) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                    .buttonStyle(.bordered)
+                    
+                    Button("Test Key") {
+                        Task {
+                            await validateKey()
+                        }
+                    }
+                    .disabled(tempKey.isEmpty || isValidating)
+                    .buttonStyle(.bordered)
+                    
+                    Button("Save") {
+                        saveKey()
+                    }
+                    .disabled(tempKey.isEmpty)
+                    .buttonStyle(.borderedProminent)
+                }
+                
+                Spacer()
+            }
+            .padding()
+            .navigationTitle("Gemini API Key")
+            #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
+            #endif
+        }
+    }
+    
+    private func validateKey() async {
+        isValidating = true
+        validationResult = "Validating..."
+        
+        let isValid = await keyManager.validateGeminiKey(tempKey)
+        
+        DispatchQueue.main.async {
+            self.isValidating = false
+            self.validationResult = isValid ? "✅ Valid API key" : "❌ Invalid API key"
+        }
+    }
+    
+    private func saveKey() {
+        do {
+            try keyManager.setGeminiKey(tempKey)
+            UserDefaults.standard.set(tempKey, forKey: "gemini_api_key")
+            dismiss()
+        } catch {
+            validationResult = "❌ Error saving key: \(error.localizedDescription)"
+        }
+    }
+}
+
+// MARK: - AI Provider Picker
+
+struct AIProviderPickerView: View {
+    @Binding var selectedProvider: String
+    @Environment(\.dismiss) private var dismiss
+    
+    let providers = ["OpenAI", "Google Gemini"]
+    
+    var body: some View {
+        NavigationView {
+            List(providers, id: \.self) { provider in
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(provider)
+                            .font(.headline)
+                        
+                        Text(provider == "OpenAI" ? "GPT models for code analysis" : "Google's Gemini AI for code analysis")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    Spacer()
+                    
+                    if provider == selectedProvider {
+                        Image(systemName: "checkmark")
+                            .foregroundColor(.blue)
+                    }
+                }
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    selectedProvider = provider
+                    dismiss()
+                }
+            }
+            .navigationTitle("Select AI Provider")
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+        .frame(minWidth: 400, minHeight: 300)
     }
 }
 
@@ -583,26 +847,6 @@ extension AnalysisResult.ResultType {
         case .security: return "Security"
         case .suggestion: return "Suggestion"
         case .performance: return "Performance"
-        }
-    }
-}
-
-extension AnalysisResult.Severity {
-    var color: Color {
-        switch self {
-        case .low: return .blue
-        case .medium: return .orange
-        case .high: return .red
-        case .critical: return .purple
-        }
-    }
-    
-    var systemImage: String {
-        switch self {
-        case .low: return "info.circle"
-        case .medium: return "exclamationmark.triangle"
-        case .high: return "exclamationmark.circle"
-        case .critical: return "exclamationmark.octagon"
         }
     }
 }

@@ -158,24 +158,24 @@ struct EnhancedAnalysisRecordRow_Previews: PreviewProvider {
         )
         
         let sampleAnalysisResults = [
-            AnalysisResult(
-                type: .quality,
+            EnhancedAnalysisItem(
                 message: "Variable 'unused' is declared but never used",
-                line: 15,
-                severity: .medium
+                severity: "medium",
+                lineNumber: 15,
+                type: "quality"
             ),
-            AnalysisResult(
-                type: .security,
+            EnhancedAnalysisItem(
                 message: "Force unwrapping may cause runtime crash",
-                line: 23,
-                severity: .high
+                severity: "high",
+                lineNumber: 23,
+                type: "security"
             )
         ]
         
-        let sampleRecord = FileAnalysisRecord(
+        // Create FileAnalysisRecord using the correct initializer
+        var sampleRecord = FileAnalysisRecord(
             file: sampleFile,
             analysisResults: sampleAnalysisResults,
-            aiAnalysisResult: nil,
             duration: 0.5
         )
         
