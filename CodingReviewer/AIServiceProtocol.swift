@@ -7,6 +7,9 @@
 
 import Foundation
 
+// Import our centralized shared types
+// This provides access to CodeLanguage and other shared enums
+
 // MARK: - AI Analysis Request
 
 struct AIAnalysisRequest {

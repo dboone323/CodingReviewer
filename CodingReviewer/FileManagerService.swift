@@ -12,6 +12,8 @@ import Combine
 import CryptoKit
 
 // MARK: - File Models
+// Note: CodeLanguage enum is now defined in Services/LanguageDetectionService.swift
+// Importing it here for compatibility during transition
 
 enum CodeLanguage: String, CaseIterable, Codable {
     case swift = "swift"
@@ -34,6 +36,55 @@ enum CodeLanguage: String, CaseIterable, Codable {
     case php = "php"
     case ruby = "ruby"
     case unknown = "unknown"
+}
+
+extension CodeLanguage {
+    var displayName: String {
+        switch self {
+        case .swift: return "Swift"
+        case .python: return "Python"
+        case .javascript: return "JavaScript"
+        case .typescript: return "TypeScript"
+        case .java: return "Java"
+        case .kotlin: return "Kotlin"
+        case .csharp: return "C#"
+        case .cpp: return "C++"
+        case .c: return "C"
+        case .go: return "Go"
+        case .rust: return "Rust"
+        case .php: return "PHP"
+        case .ruby: return "Ruby"
+        case .html: return "HTML"
+        case .css: return "CSS"
+        case .xml: return "XML"
+        case .json: return "JSON"
+        case .yaml: return "YAML"
+        case .markdown: return "Markdown"
+        case .unknown: return "Unknown"
+        }
+    }
+    
+    var iconName: String {
+        switch self {
+        case .swift: return "swift"
+        case .python: return "snake.circle"
+        case .javascript, .typescript: return "js.circle"
+        case .java, .kotlin: return "cup.and.saucer"
+        case .csharp: return "sharp.circle"
+        case .cpp, .c: return "c.circle"
+        case .go: return "goforward"
+        case .rust: return "gear"
+        case .php: return "network"
+        case .ruby: return "gem"
+        case .html: return "globe"
+        case .css: return "paintbrush"
+        case .xml: return "doc.text"
+        case .json: return "curlybraces"
+        case .yaml: return "list.bullet"
+        case .markdown: return "doc.richtext"
+        case .unknown: return "questionmark.circle"
+        }
+    }
 }
 
 struct CodeFile: Identifiable, Hashable, Codable {
@@ -307,66 +358,57 @@ final class FileManagerService: ObservableObject {
     @Published var showingAIInsights = false
     @Published var lastAIAnalysis: String?
     
-    private let maxFileSize: Int = 10 * 1024 * 1024 // 10MB
-    private let maxFilesPerUpload: Int = 100
-    private let supportedFileTypes: Set<String> = [
-        "swift", "py", "js", "ts", "java", "cpp", "c", "h", "hpp",
-        "go", "rs", "php", "rb", "cs", "kt", "scala", "m", "mm",
-        "html", "css", "scss", "less", "xml", "json", "yaml", "yml",
-        "md", "txt", "sh", "bash", "zsh", "fish", "ps1", "bat"
-    ]
-    
     private let logger = FileManagerLogger()
+    
+    // MARK: - Extracted Services
+    private let fileUploadManager = FileUploadManager()
+    // TODO: Add FileAnalysisService integration in Phase 4 continuation
+    // private let fileAnalysisService = FileAnalysisService()
+    // TODO: Add language detection service integration
+    // private let languageDetectionService = LanguageDetectionService()
     
     init() {
         loadPersistedData()
+        setupFileUploadBinding()
+    }
+    
+    // MARK: - Service Setup
+    
+    private func setupFileUploadBinding() {
+        // Bind FileUploadManager state to FileManagerService state
+        // This allows the UI to track upload progress through FileManagerService
+        fileUploadManager.$isUploading.assign(to: &$isUploading)
+        fileUploadManager.$uploadProgress.assign(to: &$uploadProgress)
+        fileUploadManager.$errorMessage.assign(to: &$errorMessage)
     }
     
     // MARK: - File Upload
     
     func uploadFiles(from urls: [URL]) async throws -> FileUploadResult {
-        logger.log("📁 Starting file upload for \(urls.count) items")
+        logger.log("📁 Starting file upload for \(urls.count) items using FileUploadManager")
         
-        isUploading = true
-        uploadProgress = 0.0
-        errorMessage = nil
+        // Use FileUploadManager for the actual upload work
+        let uploadResult = try await fileUploadManager.uploadFiles(from: urls)
         
-        defer {
-            isUploading = false
-            uploadProgress = 0.0
-        }
-        
+        // Convert FileData results to CodeFile format for compatibility
         var successfulFiles: [CodeFile] = []
-        var failedFiles: [(String, Error)] = []
-        var warnings: [String] = []
         
-        let totalFiles = urls.count
-        
-        for (index, url) in urls.enumerated() {
-            do {
-                // Check if it's a directory
-                let resourceValues = try url.resourceValues(forKeys: [.isDirectoryKey])
-                
-                if resourceValues.isDirectory == true {
-                    // Handle directory upload
-                    let directoryResult = try await uploadDirectory(at: url)
-                    successfulFiles.append(contentsOf: directoryResult.successfulFiles)
-                    failedFiles.append(contentsOf: directoryResult.failedFiles)
-                    warnings.append(contentsOf: directoryResult.warnings)
-                } else {
-                    // Handle single file upload
-                    let file = try await uploadSingleFile(from: url)
-                    successfulFiles.append(file)
-                }
-            } catch {
-                failedFiles.append((url.lastPathComponent, error))
-                logger.log("❌ Failed to upload \(url.lastPathComponent): \(error)")
-            }
+        for fileData in uploadResult.successfulFiles {
+            // Detect language for each file
+            let language = detectLanguage(from: fileData.content, filename: fileData.name)
             
-            uploadProgress = Double(index + 1) / Double(totalFiles)
+            // Create CodeFile from FileData
+            let codeFile = CodeFile(
+                name: fileData.name,
+                path: fileData.path,
+                content: fileData.content,
+                language: language
+            )
+            
+            successfulFiles.append(codeFile)
         }
         
-        // Update uploaded files
+        // Update uploaded files (avoid duplicates)
         let newFiles = successfulFiles.filter { newFile in
             !uploadedFiles.contains { $0.checksum == newFile.checksum }
         }
@@ -375,201 +417,18 @@ final class FileManagerService: ObservableObject {
         updateRecentFiles(with: newFiles)
         savePersistedData()
         
+        // Return result in expected format
         let result = FileUploadResult(
             successfulFiles: successfulFiles,
-            failedFiles: failedFiles,
-            warnings: warnings
+            failedFiles: uploadResult.failedFiles,
+            warnings: uploadResult.warnings
         )
         
-        logger.log("📁 Upload completed: \(successfulFiles.count) successful, \(failedFiles.count) failed")
+        logger.log("📁 Upload completed via FileUploadManager: \(successfulFiles.count) successful, \(uploadResult.failedFiles.count) failed")
         
         return result
     }
     
-    private func uploadSingleFile(from url: URL) async throws -> CodeFile {
-        // Check file access - be more lenient with security scoped resource access
-        let canAccess = url.startAccessingSecurityScopedResource()
-        defer {
-            if canAccess {
-                url.stopAccessingSecurityScopedResource()
-            }
-        }
-        
-        // Validate file
-        try validateFile(at: url)
-        
-        // Read file content with multiple encoding attempts
-        var content: String
-        
-        // Try UTF-8 first
-        do {
-            content = try String(contentsOf: url, encoding: .utf8)
-        } catch {
-            // Try other encodings
-            do {
-                content = try String(contentsOf: url, encoding: .ascii)
-            } catch {
-                do {
-                    content = try String(contentsOf: url, encoding: .utf16)
-                } catch {
-                    // Last resort: read as data and convert what we can
-                    let data = try Data(contentsOf: url)
-                    content = String(data: data, encoding: .utf8) ??
-                             String(data: data, encoding: .ascii) ??
-                             "// Unable to decode file content"
-                    
-                    if content == "// Unable to decode file content" {
-                        throw FileManagerError.encodingError(url.lastPathComponent)
-                    }
-                }
-            }
-        }
-        
-        // Detect language
-        let language = detectLanguage(from: content, filename: url.lastPathComponent)
-        
-        // Create CodeFile
-        let file = CodeFile(
-            name: url.lastPathComponent,
-            path: url.path,
-            content: content,
-            language: language
-        )
-        
-        logger.log("📄 Uploaded file: \(file.name) (\(file.displaySize), \(language.displayName))")
-        
-        return file
-    }
-    
-    private func uploadDirectory(at url: URL) async throws -> FileUploadResult {
-        logger.log("📁 Scanning directory: \(url.lastPathComponent)")
-        
-        var successfulFiles: [CodeFile] = []
-        var failedFiles: [(String, Error)] = []
-        var warnings: [String] = []
-        
-        let fileManager = Foundation.FileManager.default
-        
-        // First, try to access the security scoped resource
-        let canAccess = url.startAccessingSecurityScopedResource()
-        defer {
-            if canAccess {
-                url.stopAccessingSecurityScopedResource()
-            }
-        }
-        
-        // Try different enumeration approaches
-        let enumerator = fileManager.enumerator(
-            at: url,
-            includingPropertiesForKeys: [.isRegularFileKey, .fileSizeKey, .isDirectoryKey],
-            options: [.skipsHiddenFiles, .skipsPackageDescendants],
-            errorHandler: { [self] fileURL, error in
-                logger.log("⚠️ Enumeration error for \(fileURL.lastPathComponent): \(error)")
-                failedFiles.append((fileURL.lastPathComponent, error))
-                return true // Continue enumeration
-            }
-        )
-        
-        guard let enumerator = enumerator else {
-            // Fallback: try direct directory reading
-            do {
-                let contents = try fileManager.contentsOfDirectory(at: url, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles])
-                for fileURL in contents {
-                    do {
-                        let resourceValues = try fileURL.resourceValues(forKeys: [.isRegularFileKey])
-                        if resourceValues.isRegularFile == true {
-                            let file = try await uploadSingleFile(from: fileURL)
-                            successfulFiles.append(file)
-                        }
-                    } catch {
-                        failedFiles.append((fileURL.lastPathComponent, error))
-                    }
-                }
-            } catch {
-                throw FileManagerError.directoryEnumerationFailed(url.path)
-            }
-            
-            return FileUploadResult(
-                successfulFiles: successfulFiles,
-                failedFiles: failedFiles,
-                warnings: warnings
-            )
-        }
-        
-        var fileCount = 0
-        
-        // Convert enumerator to array first to avoid async iteration issues
-        var allFiles: [URL] = []
-        while let fileURL = enumerator.nextObject() as? URL {
-            allFiles.append(fileURL)
-        }
-        
-        for fileURL in allFiles {
-            // Check limits
-            if fileCount >= maxFilesPerUpload {
-                warnings.append("Maximum file limit (\(maxFilesPerUpload)) reached. Some files were skipped.")
-                break
-            }
-            
-            do {
-                let resourceValues = try fileURL.resourceValues(forKeys: [.isRegularFileKey])
-                
-                if resourceValues.isRegularFile == true {
-                    // Validate and upload file
-                    try validateFile(at: fileURL)
-                    let file = try await uploadSingleFile(from: fileURL)
-                    successfulFiles.append(file)
-                    fileCount += 1
-                }
-            } catch {
-                failedFiles.append((fileURL.lastPathComponent, error))
-                logger.log("⚠️ Failed to process file \(fileURL.lastPathComponent): \(error)")
-            }
-        }
-        
-        // Create project structure if we have files
-        if !successfulFiles.isEmpty {
-            let project = ProjectStructure(
-                name: url.lastPathComponent,
-                rootPath: url.path,
-                files: successfulFiles
-            )
-            projects.append(project)
-        }
-        
-        return FileUploadResult(
-            successfulFiles: successfulFiles,
-            failedFiles: failedFiles,
-            warnings: warnings
-        )
-    }
-    
-    // MARK: - File Validation
-    
-    private func validateFile(at url: URL) throws {
-        let resourceValues = try url.resourceValues(forKeys: [.fileSizeKey, .isRegularFileKey])
-        
-        // Check if it's a regular file
-        guard resourceValues.isRegularFile == true else {
-            throw FileManagerError.notARegularFile(url.lastPathComponent)
-        }
-        
-        // Check file size
-        if let fileSize = resourceValues.fileSize, fileSize > maxFileSize {
-            throw FileManagerError.fileTooLarge(url.lastPathComponent, fileSize, maxFileSize)
-        }
-        
-        // Check file extension
-        let fileExtension = url.pathExtension.lowercased()
-        guard supportedFileTypes.contains(fileExtension) else {
-            throw FileManagerError.unsupportedFileType(fileExtension)
-        }
-        
-        // Check if file is readable
-        guard Foundation.FileManager.default.isReadableFile(atPath: url.path) else {
-            throw FileManagerError.fileNotReadable(url.lastPathComponent)
-        }
-    }
     
     // MARK: - Enhanced Language Detection
     
@@ -1419,55 +1278,6 @@ enum FileManagerError: LocalizedError {
 }
 
 // MARK: - Extensions
-
-extension CodeLanguage {
-    var displayName: String {
-        switch self {
-        case .swift: return "Swift"
-        case .python: return "Python"
-        case .javascript: return "JavaScript"
-        case .typescript: return "TypeScript"
-        case .java: return "Java"
-        case .kotlin: return "Kotlin"
-        case .csharp: return "C#"
-        case .cpp: return "C++"
-        case .c: return "C"
-        case .go: return "Go"
-        case .rust: return "Rust"
-        case .php: return "PHP"
-        case .ruby: return "Ruby"
-        case .html: return "HTML"
-        case .css: return "CSS"
-        case .xml: return "XML"
-        case .json: return "JSON"
-        case .yaml: return "YAML"
-        case .markdown: return "Markdown"
-        case .unknown: return "Unknown"
-        }
-    }
-    
-    var iconName: String {
-        switch self {
-        case .swift: return "swift"
-        case .python: return "snake.circle"
-        case .javascript, .typescript: return "js.circle"
-        case .java, .kotlin: return "cup.and.saucer"
-        case .csharp: return "sharp.circle"
-        case .cpp, .c: return "c.circle"
-        case .go: return "goforward"
-        case .rust: return "gear"
-        case .php: return "network"
-        case .ruby: return "gem"
-        case .html: return "globe"
-        case .css: return "paintbrush"
-        case .xml: return "doc.text"
-        case .json: return "curlybraces"
-        case .yaml: return "list.bullet"
-        case .markdown: return "doc.richtext"
-        case .unknown: return "questionmark.circle"
-        }
-    }
-}
 
 extension Data {
     var sha256: String {
