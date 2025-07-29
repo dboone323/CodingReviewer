@@ -5,20 +5,20 @@ struct ContentView: View {
     @StateObject private var keyManager: APIKeyManager
     @StateObject private var viewModel: CodeReviewViewModel
     @State private var selectedTab: Tab = .analysis
-    
+
     init() {
         let keyManager = APIKeyManager()
         self._keyManager = StateObject(wrappedValue: keyManager)
         self._viewModel = StateObject(wrappedValue: CodeReviewViewModel(keyManager: keyManager))
     }
-    
+
     enum Tab: String, CaseIterable {
         case analysis = "Analysis"
         case files = "Files"
         case ai = "AI Insights"
         case patterns = "Patterns"
         case settings = "Settings"
-        
+
         var systemImage: String {
             switch self {
             case .analysis: return "magnifyingglass.circle"
@@ -29,7 +29,7 @@ struct ContentView: View {
             }
         }
     }
-    
+
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -39,9 +39,9 @@ struct ContentView: View {
                         Text("CodeReviewer")
                             .font(.largeTitle)
                             .fontWeight(.bold)
-                        
+
                         Spacer()
-                        
+
                         if viewModel.aiEnabled {
                             Label("AI Enabled", systemImage: "brain.head.profile")
                                 .font(.caption)
@@ -52,14 +52,14 @@ struct ContentView: View {
                                 .cornerRadius(6)
                         }
                     }
-                    
+
                     Text("Intelligent Code Analysis & Review")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
                 .padding()
                 .background(Color(.controlBackgroundColor))
-                
+
                 // Tab Selection
                 Picker("View", selection: $selectedTab) {
                     ForEach(Tab.allCases, id: \.self) { tab in
@@ -70,21 +70,21 @@ struct ContentView: View {
                 .pickerStyle(.segmented)
                 .padding(.horizontal)
                 .padding(.top)
-                
+
                 // Content
                 TabView(selection: $selectedTab) {
                     AnalysisView(viewModel: viewModel)
                         .tag(Tab.analysis)
-                    
+
                     FileUploadView()
                         .tag(Tab.files)
-                    
+
                     AIInsightsView()
                         .tag(Tab.ai)
-                    
+
                     PatternAnalysisView(viewModel: viewModel)
                         .tag(Tab.patterns)
-                    
+
                     SettingsView(keyManager: keyManager, viewModel: viewModel)
                         .tag(Tab.settings)
                 }
@@ -103,21 +103,21 @@ struct ContentView: View {
 struct AnalysisView: View {
     @ObservedObject var viewModel: CodeReviewViewModel
     @State private var showingLanguagePicker = false
-    
+
     var body: some View {
         VStack(spacing: 16) {
             // Language Selection
             HStack {
                 Text("Language:")
                     .font(.headline)
-                
+
                 Button(viewModel.selectedLanguage.displayName) {
                     showingLanguagePicker = true
                 }
                 .buttonStyle(.bordered)
-                
+
                 Spacer()
-                
+
                 Button("Clear") {
                     viewModel.clearResults()
                     viewModel.codeInput = ""
@@ -125,12 +125,12 @@ struct AnalysisView: View {
                 .buttonStyle(.bordered)
             }
             .padding(.horizontal)
-            
+
             // Code Input
             VStack(alignment: .leading, spacing: 8) {
                 Text("Code to Analyze")
                     .font(.headline)
-                
+
                 ScrollView {
                     TextEditor(text: $viewModel.codeInput)
                         .font(.system(.body, design: .monospaced))
@@ -139,7 +139,7 @@ struct AnalysisView: View {
                 .border(Color.gray.opacity(0.3))
             }
             .padding(.horizontal)
-            
+
             // Action Buttons
             HStack(spacing: 12) {
                 Button("Analyze Code") {
@@ -149,7 +149,7 @@ struct AnalysisView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(viewModel.codeInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || viewModel.isAnalyzing)
-                
+
                 if viewModel.aiEnabled {
                     Button("AI Documentation") {
                         Task {
@@ -160,25 +160,25 @@ struct AnalysisView: View {
                     .disabled(viewModel.codeInput.isEmpty)
                 }
             }
-            
+
             // Loading Indicator
             if viewModel.isAnalyzing || viewModel.isAIAnalyzing {
                 HStack {
                     ProgressView()
                         .scaleEffect(0.8)
-                    
+
                     Text(viewModel.isAIAnalyzing ? "AI analyzing..." : "Analyzing...")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
                 .padding()
             }
-            
+
             // Results
             if viewModel.showingResults {
                 ContentAnalysisResultsView(viewModel: viewModel)
             }
-            
+
             Spacer()
         }
         .sheet(isPresented: $showingLanguagePicker) {
@@ -192,7 +192,7 @@ struct AnalysisView: View {
 struct AISuggestionRow: View {
     let suggestion: AISuggestion
     @State private var isExpanded = false
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -200,13 +200,13 @@ struct AISuggestionRow: View {
                 Circle()
                     .fill(severityColor)
                     .frame(width: 8, height: 8)
-                
+
                 Text(suggestion.title)
                     .font(.subheadline)
                     .fontWeight(.medium)
-                
+
                 Spacer()
-                
+
                 // Confidence badge
                 Text("\(Int(suggestion.confidence * 100))%")
                     .font(.caption)
@@ -214,27 +214,27 @@ struct AISuggestionRow: View {
                     .padding(.vertical, 2)
                     .background(Color.gray.opacity(0.2))
                     .cornerRadius(4)
-                
+
                 Button(action: { isExpanded.toggle() }) {
                     Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                         .font(.caption)
                 }
                 .buttonStyle(.borderless)
             }
-            
+
             if isExpanded {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(suggestion.description)
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     HStack {
                         Label(suggestion.type.rawValue, systemImage: typeIcon)
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        
+
                         Spacer()
-                        
+
                         Label(suggestion.severity.rawValue, systemImage: "exclamationmark.triangle")
                             .font(.caption)
                             .foregroundColor(severityColor)
@@ -246,7 +246,7 @@ struct AISuggestionRow: View {
         .background(Color(.controlBackgroundColor))
         .cornerRadius(8)
     }
-    
+
     private var severityColor: Color {
         switch suggestion.severity {
         case .info: return .blue
@@ -255,7 +255,7 @@ struct AISuggestionRow: View {
         case .critical: return .purple
         }
     }
-    
+
     private var typeIcon: String {
         switch suggestion.type {
         case .codeQuality: return "checkmark.seal"
@@ -272,7 +272,7 @@ struct AISuggestionRow: View {
 
 struct ContentAnalysisResultsView: View {
     @ObservedObject var viewModel: CodeReviewViewModel
-    
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
@@ -281,31 +281,31 @@ struct ContentAnalysisResultsView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Analysis Results")
                             .font(.headline)
-                        
+
                         ForEach(viewModel.analysisResults, id: \.message) { result in
                             AnalysisResultRow(result: result, viewModel: viewModel)
                         }
                     }
                 }
-                
+
                 // Available Fixes
                 if !viewModel.availableFixes.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("AI-Suggested Fixes")
                             .font(.headline)
-                        
+
                         ForEach(viewModel.availableFixes, id: \.id) { fix in
                             AIFixRow(fix: fix, viewModel: viewModel)
                         }
                     }
                 }
-                
+
                 // Legacy Text Results
                 if !viewModel.analysisResult.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Detailed Report")
                             .font(.headline)
-                        
+
                         Text(viewModel.analysisResult)
                             .font(.system(.body, design: .monospaced))
                             .padding()
@@ -324,7 +324,7 @@ struct ContentAnalysisResultsView: View {
 struct AnalysisResultRow: View {
     let result: AnalysisResult
     @ObservedObject var viewModel: CodeReviewViewModel
-    
+
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
@@ -333,14 +333,14 @@ struct AnalysisResultRow: View {
                     Text(result.message)
                         .font(.subheadline)
                 }
-                
+
                 Text(result.type.displayName)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            
+
             Spacer()
-            
+
             if viewModel.aiEnabled {
                 Button("Explain") {
                     Task {
@@ -355,7 +355,7 @@ struct AnalysisResultRow: View {
         .background(result.severity.color.opacity(0.1))
         .cornerRadius(8)
     }
-    
+
     private var severityIcon: some View {
         Image(systemName: result.severity.systemImage)
             .foregroundColor(result.severity.color)
@@ -365,27 +365,27 @@ struct AnalysisResultRow: View {
 struct AIFixRow: View {
     let fix: CodeFix
     @ObservedObject var viewModel: CodeReviewViewModel
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text(fix.title)
                     .font(.subheadline)
                     .fontWeight(.medium)
-                
+
                 Spacer()
-                
+
                 Text("\(Int(fix.confidence * 100))% confident")
                     .font(.caption)
                     .foregroundColor(.secondary)
-                
+
                 Button("Apply") {
                     viewModel.applyFix(fix)
                 }
                 .buttonStyle(.borderedProminent)
                 .font(.caption)
             }
-            
+
             Text(fix.description)
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -401,30 +401,30 @@ struct AIFixRow: View {
 struct AINotEnabledView: View {
     @ObservedObject var keyManager: APIKeyManager
     @State private var showingSettings = false
-    
+
     var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "brain.head.profile")
                 .font(.system(size: 48))
                 .foregroundColor(.gray)
-            
+
             VStack(spacing: 8) {
                 Text("AI Features Not Available")
                     .font(.title2)
                     .fontWeight(.semibold)
-                
+
                 Text("Configure your OpenAI API key to enable AI-powered code analysis, suggestions, and documentation generation.")
                     .multilineTextAlignment(.center)
                     .foregroundColor(.secondary)
                     .padding(.horizontal)
             }
-            
+
             VStack(spacing: 12) {
                 Button("Setup API Key") {
                     showingSettings = true
                 }
                 .buttonStyle(.borderedProminent)
-                
+
                 Button("Learn More") {
                     if let url = URL(string: "https://openai.com/api/") {
                         NSWorkspace.shared.open(url)
@@ -432,13 +432,13 @@ struct AINotEnabledView: View {
                 }
                 .buttonStyle(.bordered)
             }
-            
+
             // Feature Preview
             VStack(alignment: .leading, spacing: 8) {
                 Text("Available AI Features:")
                     .font(.headline)
                     .padding(.top)
-                
+
                 FeaturePreviewRow(icon: "brain", title: "Intelligent Code Analysis", description: "Get smart insights about your code quality")
                 FeaturePreviewRow(icon: "lightbulb", title: "Refactoring Suggestions", description: "Receive AI-powered improvement recommendations")
                 FeaturePreviewRow(icon: "doc.text", title: "Auto Documentation", description: "Generate comprehensive code documentation")
@@ -457,24 +457,24 @@ struct FeaturePreviewRow: View {
     let icon: String
     let title: String
     let description: String
-    
+
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .font(.title3)
                 .foregroundColor(.secondary)
                 .frame(width: 24)
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(.subheadline)
                     .fontWeight(.medium)
-                
+
                 Text(description)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            
+
             Spacer()
         }
         .padding(.vertical, 4)
@@ -484,39 +484,39 @@ struct FeaturePreviewRow: View {
 struct AIAnalysisResultView: View {
     let aiResult: AIAnalysisResponse
     @ObservedObject var viewModel: CodeReviewViewModel
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             // Complexity Metrics
             VStack(alignment: .leading, spacing: 8) {
                 Text("Code Complexity")
                     .font(.headline)
-                
+
                 HStack {
                     MetricCard(title: "Cyclomatic", value: "\(aiResult.complexity?.cyclomaticComplexity ?? 0)", color: Color.blue)
                     MetricCard(title: "Cognitive", value: "N/A", color: Color.orange)
                     MetricCard(title: "Maintainability", value: String(format: "%.2f", aiResult.maintainability?.score ?? 0.0), color: Color.green)
                 }
             }
-            
+
             // AI Suggestions
             if !aiResult.suggestions.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("AI Suggestions")
                         .font(.headline)
-                    
+
                     ForEach(aiResult.suggestions, id: \.id) { suggestion in
                         AISuggestionRow(suggestion: suggestion)
                     }
                 }
             }
-            
+
             // AI Explanation
             if let documentation = aiResult.documentation, !documentation.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("AI Assessment")
                         .font(.headline)
-                    
+
                     Text(documentation)
                         .padding()
                         .background(Color(.textBackgroundColor))
@@ -533,11 +533,11 @@ struct EmptyAIStateView: View {
             Image(systemName: "sparkles")
                 .font(.system(size: 48))
                 .foregroundColor(.gray)
-            
+
             Text("No AI Analysis Yet")
                 .font(.title2)
                 .fontWeight(.semibold)
-            
+
             Text("Run a code analysis to see AI-powered insights and suggestions.")
                 .multilineTextAlignment(.center)
                 .foregroundColor(.secondary)
@@ -557,26 +557,26 @@ struct SettingsView: View {
     @State private var showingProviderPicker = false
     @State private var showingGeminiKeyInput = false
     @State private var tempGeminiKey = ""
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             Text("Settings")
                 .font(.title)
                 .fontWeight(.bold)
-            
+
             // AI Provider Selection
             VStack(alignment: .leading, spacing: 12) {
                 Text("AI Provider")
                     .font(.headline)
-                
+
                 HStack {
                     Text("Provider:")
-                    
+
                     Button(selectedAIProvider) {
                         showingProviderPicker = true
                     }
                     .buttonStyle(.bordered)
-                    
+
                     Spacer()
                 }
                 .sheet(isPresented: $showingProviderPicker) {
@@ -586,7 +586,7 @@ struct SettingsView: View {
                             UserDefaults.standard.set(selectedAIProvider, forKey: "selected_ai_provider")
                         }
                 }
-                
+
                 Text("Select between OpenAI and Google Gemini for AI-powered code analysis")
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -594,33 +594,33 @@ struct SettingsView: View {
             .padding()
             .background(Color(.controlBackgroundColor))
             .cornerRadius(8)
-            
+
             // AI Configuration
             VStack(alignment: .leading, spacing: 12) {
                 Text("AI Configuration")
                     .font(.headline)
-                
+
                 HStack {
                     Text("Status:")
                     Text(viewModel.aiEnabled ? "✅ Enabled" : "❌ Disabled")
                         .foregroundColor(viewModel.aiEnabled ? .green : .red)
-                    
+
                     Spacer()
-                    
+
                     Button(keyManager.hasValidKey ? "Update API Key" : "Setup API Key") {
                         keyManager.showKeySetup()
                     }
                     .buttonStyle(.bordered)
                 }
-                
+
                 if selectedAIProvider == "Google Gemini" {
                     HStack {
                         Text("Gemini Key:")
                         Text(keyManager.hasValidGeminiKey ? "✅ Configured" : "❌ Not set")
                             .foregroundColor(keyManager.hasValidGeminiKey ? .green : .red)
-                        
+
                         Spacer()
-                        
+
                         Button(keyManager.hasValidGeminiKey ? "Update Gemini Key" : "Add Gemini Key") {
                             showingGeminiKeyInput = true
                         }
@@ -630,7 +630,7 @@ struct SettingsView: View {
                         GeminiKeyInputView(tempKey: $tempGeminiKey, keyManager: keyManager)
                     }
                 }
-                
+
                 if keyManager.hasValidKey && selectedAIProvider == "OpenAI" {
                     Button("Remove OpenAI API Key") {
                         do {
@@ -642,7 +642,7 @@ struct SettingsView: View {
                     .buttonStyle(.bordered)
                     .foregroundColor(.red)
                 }
-                
+
                 if keyManager.hasValidGeminiKey && selectedAIProvider == "Google Gemini" {
                     Button("Remove Gemini API Key") {
                         do {
@@ -658,7 +658,7 @@ struct SettingsView: View {
             .padding()
             .background(Color(.controlBackgroundColor))
             .cornerRadius(8)
-            
+
             Spacer()
         }
         .padding()
@@ -677,35 +677,35 @@ struct GeminiKeyInputView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isValidating = false
     @State private var validationResult: String? = nil
-    
+
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
                 Text("Enter your Google Gemini API Key")
                     .font(.headline)
                     .multilineTextAlignment(.center)
-                
+
                 Text("Get your API key from https://makersuite.google.com/app/apikey")
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
-                
+
                 SecureField("Gemini API Key (starts with 'AI')", text: $tempKey)
                     .textFieldStyle(.roundedBorder)
                     .font(.system(.body, design: .monospaced))
-                
+
                 if let result = validationResult {
                     Text(result)
                         .font(.caption)
                         .foregroundColor(result.contains("✅") ? .green : .red)
                 }
-                
+
                 HStack(spacing: 16) {
                     Button("Cancel") {
                         dismiss()
                     }
                     .buttonStyle(.bordered)
-                    
+
                     Button("Test Key") {
                         Task {
                             await validateKey()
@@ -713,14 +713,14 @@ struct GeminiKeyInputView: View {
                     }
                     .disabled(tempKey.isEmpty || isValidating)
                     .buttonStyle(.bordered)
-                    
+
                     Button("Save") {
                         saveKey()
                     }
                     .disabled(tempKey.isEmpty)
                     .buttonStyle(.borderedProminent)
                 }
-                
+
                 Spacer()
             }
             .padding()
@@ -730,19 +730,19 @@ struct GeminiKeyInputView: View {
             #endif
         }
     }
-    
+
     private func validateKey() async {
         isValidating = true
         validationResult = "Validating..."
-        
+
         let isValid = await keyManager.validateGeminiKey(tempKey)
-        
+
         DispatchQueue.main.async {
             self.isValidating = false
             self.validationResult = isValid ? "✅ Valid API key" : "❌ Invalid API key"
         }
     }
-    
+
     private func saveKey() {
         do {
             try keyManager.setGeminiKey(tempKey)
@@ -759,9 +759,9 @@ struct GeminiKeyInputView: View {
 struct AIProviderPickerView: View {
     @Binding var selectedProvider: String
     @Environment(\.dismiss) private var dismiss
-    
+
     let providers = ["OpenAI", "Google Gemini"]
-    
+
     var body: some View {
         NavigationView {
             List(providers, id: \.self) { provider in
@@ -769,14 +769,14 @@ struct AIProviderPickerView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(provider)
                             .font(.headline)
-                        
+
                         Text(provider == "OpenAI" ? "GPT models for code analysis" : "Google's Gemini AI for code analysis")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
-                    
+
                     Spacer()
-                    
+
                     if provider == selectedProvider {
                         Image(systemName: "checkmark")
                             .foregroundColor(.blue)
@@ -806,15 +806,15 @@ struct AIProviderPickerView: View {
 struct LanguagePickerView: View {
     @Binding var selectedLanguage: CodeLanguage
     @Environment(\.dismiss) private var dismiss
-    
+
     var body: some View {
         NavigationView {
             List(CodeLanguage.allCases, id: \.self) { language in
                 HStack {
                     Text(language.displayName)
-                    
+
                     Spacer()
-                    
+
                     if language == selectedLanguage {
                         Image(systemName: "checkmark")
                             .foregroundColor(.blue)

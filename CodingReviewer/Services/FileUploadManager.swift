@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AppLogger
 import SwiftUI
 import UniformTypeIdentifiers
 import Combine
@@ -22,7 +23,7 @@ enum FileUploadError: LocalizedError {
     case directoryEnumerationFailed(String)
     case encodingError(String)
     case networkError(Error)
-    
+
     var errorDescription: String? {
         switch self {
         case .accessDenied(let filename):
@@ -53,7 +54,7 @@ struct FileUploadConfiguration {
     let maxFileSize: Int
     let maxFilesPerUpload: Int
     let supportedFileTypes: Set<String>
-    
+
     static let `default` = FileUploadConfiguration(
         maxFileSize: 10 * 1024 * 1024, // 10MB
         maxFilesPerUpload: 100,
@@ -74,7 +75,7 @@ struct FileData {
     let content: String
     let fileExtension: String
     let size: Int
-    
+
     init(name: String, path: String, content: String) {
         self.name = name
         self.path = path
@@ -82,7 +83,7 @@ struct FileData {
         self.fileExtension = URL(fileURLWithPath: name).pathExtension.lowercased()
         self.size = content.utf8.count
     }
-    
+
     var displaySize: String {
         ByteCountFormatter.string(fromByteCount: Int64(size), countStyle: .file)
     }
@@ -92,7 +93,7 @@ struct SimpleUploadResult {
     let successfulFiles: [FileData]
     let failedFiles: [(String, Error)]
     let warnings: [String]
-    
+
     var hasErrors: Bool { !failedFiles.isEmpty }
     var hasWarnings: Bool { !warnings.isEmpty }
 }
@@ -103,43 +104,43 @@ class FileUploadManager: ObservableObject {
     @Published var isUploading: Bool = false
     @Published var uploadProgress: Double = 0.0
     @Published var errorMessage: String? = nil
-    
+
     private let configuration: FileUploadConfiguration
     private let logger = FileUploadLogger()
-    
+
     init(configuration: FileUploadConfiguration = .default) {
         self.configuration = configuration
     }
-    
+
     // MARK: - Main Upload Methods
-    
+
     func uploadFiles(from urls: [URL]) async throws -> SimpleUploadResult {
         logger.log("📁 Starting file upload for \(urls.count) items")
-        
+
         await MainActor.run {
             isUploading = true
             uploadProgress = 0.0
             errorMessage = nil
         }
-        
+
         defer {
             Task { @MainActor in
                 isUploading = false
                 uploadProgress = 0.0
             }
         }
-        
+
         var successfulFiles: [FileData] = []
         var failedFiles: [(String, Error)] = []
         var warnings: [String] = []
-        
+
         let totalFiles = urls.count
-        
+
         for (index, url) in urls.enumerated() {
             do {
                 // Check if it's a directory
                 let resourceValues = try url.resourceValues(forKeys: [.isDirectoryKey])
-                
+
                 if resourceValues.isDirectory == true {
                     // Handle directory upload
                     let directoryResult = try await uploadDirectory(at: url)
@@ -155,25 +156,25 @@ class FileUploadManager: ObservableObject {
                 failedFiles.append((url.lastPathComponent, error))
                 logger.log("❌ Failed to upload \(url.lastPathComponent): \(error)")
             }
-            
+
             await MainActor.run {
                 uploadProgress = Double(index + 1) / Double(totalFiles)
             }
         }
-        
+
         let result = SimpleUploadResult(
             successfulFiles: successfulFiles,
             failedFiles: failedFiles,
             warnings: warnings
         )
-        
+
         logger.log("📁 Upload completed: \(successfulFiles.count) successful, \(failedFiles.count) failed")
-        
+
         return result
     }
-    
+
     // MARK: - Private Upload Methods
-    
+
     private func uploadSingleFile(from url: URL) async throws -> FileData {
         // Check file access - be more lenient with security scoped resource access
         let canAccess = url.startAccessingSecurityScopedResource()
@@ -182,34 +183,34 @@ class FileUploadManager: ObservableObject {
                 url.stopAccessingSecurityScopedResource()
             }
         }
-        
+
         // Validate file
         try validateFile(at: url)
-        
+
         // Read file content with multiple encoding attempts
         let content = try readFileContent(from: url)
-        
+
         // Create FileData
         let file = FileData(
             name: url.lastPathComponent,
             path: url.path,
             content: content
         )
-        
+
         logger.log("📄 Uploaded file: \(file.name) (\(file.displaySize))")
-        
+
         return file
     }
-    
+
     private func uploadDirectory(at url: URL) async throws -> SimpleUploadResult {
         logger.log("📁 Scanning directory: \(url.lastPathComponent)")
-        
+
         var successfulFiles: [FileData] = []
         var failedFiles: [(String, Error)] = []
         var warnings: [String] = []
-        
+
         let fileManager = Foundation.FileManager.default
-        
+
         // First, try to access the security scoped resource
         let canAccess = url.startAccessingSecurityScopedResource()
         defer {
@@ -217,7 +218,7 @@ class FileUploadManager: ObservableObject {
                 url.stopAccessingSecurityScopedResource()
             }
         }
-        
+
         // Try different enumeration approaches
         let enumerator = fileManager.enumerator(
             at: url,
@@ -229,7 +230,7 @@ class FileUploadManager: ObservableObject {
                 return true // Continue enumeration
             }
         )
-        
+
         guard let enumerator = enumerator else {
             // Fallback: try direct directory reading
             do {
@@ -245,24 +246,24 @@ class FileUploadManager: ObservableObject {
             } catch {
                 throw FileUploadError.directoryEnumerationFailed(url.path)
             }
-            
+
             return SimpleUploadResult(successfulFiles: successfulFiles, failedFiles: failedFiles, warnings: warnings)
         }
-        
+
         // Enumerate through directory - convert to array first to avoid async issues
         var fileCount = 0
         let enumeratorArray = enumerator.allObjects as! [URL]
-        
+
         for fileURL in enumeratorArray {
             // Stop if we exceed max files
             guard fileCount < configuration.maxFilesPerUpload else {
                 warnings.append("Directory contains more than \(configuration.maxFilesPerUpload) files. Some files were skipped.")
                 break
             }
-            
+
             do {
                 let resourceValues = try fileURL.resourceValues(forKeys: [.isRegularFileKey])
-                
+
                 if resourceValues.isRegularFile == true {
                     let file = try await uploadSingleFile(from: fileURL)
                     successfulFiles.append(file)
@@ -273,34 +274,34 @@ class FileUploadManager: ObservableObject {
                 logger.log("❌ Failed to process file in directory: \(fileURL.lastPathComponent) - \(error)")
             }
         }
-        
+
         return SimpleUploadResult(successfulFiles: successfulFiles, failedFiles: failedFiles, warnings: warnings)
     }
-    
+
     // MARK: - File Validation
-    
+
     private func validateFile(at url: URL) throws {
         let resourceValues = try url.resourceValues(forKeys: [
             .isRegularFileKey,
             .fileSizeKey,
             .isReadableKey
         ])
-        
+
         // Check if it's a regular file
         guard resourceValues.isRegularFile == true else {
             throw FileUploadError.notARegularFile(url.lastPathComponent)
         }
-        
+
         // Check readability
         guard resourceValues.isReadable == true else {
             throw FileUploadError.accessDenied(url.lastPathComponent)
         }
-        
+
         // Check file size
         if let fileSize = resourceValues.fileSize, fileSize > configuration.maxFileSize {
             throw FileUploadError.fileTooLarge(url.lastPathComponent, fileSize, configuration.maxFileSize)
         }
-        
+
         // Check file type (optional - we can be more lenient)
         let fileExtension = url.pathExtension.lowercased()
         if !fileExtension.isEmpty && !configuration.supportedFileTypes.contains(fileExtension) {
@@ -308,9 +309,9 @@ class FileUploadManager: ObservableObject {
             // Don't throw error, just log warning
         }
     }
-    
+
     // MARK: - Content Reading
-    
+
     private func readFileContent(from url: URL) throws -> String {
         // Try UTF-8 first
         do {
@@ -328,27 +329,27 @@ class FileUploadManager: ObservableObject {
                     let content = String(data: data, encoding: .utf8) ??
                                  String(data: data, encoding: .ascii) ??
                                  "// Unable to decode file content"
-                    
+
                     if content == "// Unable to decode file content" {
                         throw FileUploadError.encodingError(url.lastPathComponent)
                     }
-                    
+
                     return content
                 }
             }
         }
     }
-    
+
     // MARK: - Utility Methods
-    
+
     func getSupportedFileTypes() -> Set<String> {
         return configuration.supportedFileTypes
     }
-    
+
     func getMaxFileSize() -> Int {
         return configuration.maxFileSize
     }
-    
+
     func validateFileTypeSupported(extension fileExtension: String) -> Bool {
         return configuration.supportedFileTypes.contains(fileExtension.lowercased())
     }
@@ -360,7 +361,7 @@ private class FileUploadLogger {
     func log(_ message: String, file: String = #file, line: Int = #line) {
         let fileName = (file as NSString).lastPathComponent
         let timestamp = DateFormatter.uploadLogFormatter.string(from: Date())
-        print("[\(timestamp)] [\(fileName):\(line)] [FileUpload] \(message)")
+        AppLogger.shared.debug("[\(timestamp)] [\(fileName):\(line)] [FileUpload] \(message)")
     }
 }
 

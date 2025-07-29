@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppLogger
 import UniformTypeIdentifiers
 
 struct FileUploadView: View {
@@ -19,14 +20,14 @@ struct FileUploadView: View {
     @State private var showingAnalysisResults = false
     @State private var analysisRecords: [FileAnalysisRecord] = []
     @State private var sheetAnalysisRecords: [FileAnalysisRecord] = []
-    
+
     var body: some View {
         VStack(spacing: 0) {
             // Header
             headerView
-            
+
             Divider()
-            
+
             // Main content
             if fileManager.uploadedFiles.isEmpty && fileManager.projects.isEmpty {
                 emptyStateView
@@ -67,16 +68,16 @@ struct FileUploadView: View {
             }
         }
     }
-    
+
     // MARK: - Header
-    
+
     private var headerView: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: "folder.badge.plus")
                     .font(.title2)
                     .foregroundColor(.accentColor)
-                
+
                 VStack(alignment: .leading, spacing: 2) {
                     Text("File & Project Management")
                         .font(.headline)
@@ -84,16 +85,16 @@ struct FileUploadView: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
-                
+
                 Spacer()
-                
+
                 if fileManager.isUploading {
                     ProgressView(value: fileManager.uploadProgress)
                         .frame(width: 100)
                         .progressViewStyle(LinearProgressViewStyle())
                 }
             }
-            
+
             // Statistics
             if !fileManager.uploadedFiles.isEmpty || !fileManager.projects.isEmpty {
                 statisticsView
@@ -102,7 +103,7 @@ struct FileUploadView: View {
         .padding()
         .background(Color(NSColor.controlBackgroundColor))
     }
-    
+
     private var statisticsView: some View {
         HStack(spacing: 20) {
             StatisticItem(
@@ -111,23 +112,23 @@ struct FileUploadView: View {
                 value: "\(fileManager.uploadedFiles.count)",
                 color: .blue
             )
-            
+
             StatisticItem(
                 icon: "folder",
                 title: "Projects",
                 value: "\(fileManager.projects.count)",
                 color: .green
             )
-            
+
             StatisticItem(
                 icon: "chart.bar",
                 title: "Analyses",
                 value: "\(fileManager.analysisHistory.count)",
                 color: .orange
             )
-            
+
             Spacer()
-            
+
             if !fileManager.uploadedFiles.isEmpty {
                 Button("Analyze All") {
                     analyzeAllFiles()
@@ -137,13 +138,13 @@ struct FileUploadView: View {
             }
         }
     }
-    
+
     // MARK: - Empty State
-    
+
     private var emptyStateView: some View {
         VStack(spacing: 24) {
             Spacer()
-            
+
             // Drop zone
             VStack(spacing: 16) {
                 Image(systemName: isTargeted ? "folder.fill.badge.plus" : "folder.badge.plus")
@@ -151,24 +152,24 @@ struct FileUploadView: View {
                     .foregroundColor(isTargeted ? .accentColor : .secondary)
                     .scaleEffect(isTargeted ? 1.1 : 1.0)
                     .animation(.easeInOut(duration: 0.2), value: isTargeted)
-                
+
                 VStack(spacing: 8) {
                     Text("Drop files or folders here")
                         .font(.title2)
                         .fontWeight(.medium)
-                    
+
                     Text("Supports Swift, Python, JavaScript, TypeScript, Java, C++, and more")
                         .font(.body)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
                 }
-                
+
                 HStack(spacing: 16) {
                     Button("Choose Files") {
                         showingFileImporter = true
                     }
                     .buttonStyle(.borderedProminent)
-                    
+
                     Button("Choose Folder") {
                         showFolderPicker()
                     }
@@ -191,32 +192,32 @@ struct FileUploadView: View {
             .onDrop(of: [.fileURL], isTargeted: $isTargeted) { providers in
                 handleDrop(providers: providers)
             }
-            
+
             Spacer()
         }
         .frame(maxWidth: .infinity)
     }
-    
+
     // MARK: - Content View
-    
+
     private var contentView: some View {
         HSplitView {
             // Sidebar
             sidebarView
                 .frame(minWidth: 250)
-            
+
             // Main content
             mainContentView
                 .frame(minWidth: 400)
         }
     }
-    
+
     private var sidebarView: some View {
         VStack(alignment: .leading, spacing: 0) {
             // Recent files
             if !fileManager.recentFiles.isEmpty {
                 SectionHeaderView(title: "Recent Files", icon: "clock")
-                
+
                 LazyVStack(spacing: 4) {
                     ForEach(fileManager.recentFiles.prefix(5)) { file in
                         FileRowView(file: file, isSelected: selectedFiles.contains(file.id)) {
@@ -225,15 +226,15 @@ struct FileUploadView: View {
                     }
                 }
                 .padding(.horizontal)
-                
+
                 Divider()
                     .padding(.vertical, 8)
             }
-            
+
             // Projects
             if !fileManager.projects.isEmpty {
                 SectionHeaderView(title: "Projects", icon: "folder.fill")
-                
+
                 LazyVStack(spacing: 4) {
                     ForEach(fileManager.projects) { project in
                         ProjectRowView(project: project) {
@@ -244,14 +245,14 @@ struct FileUploadView: View {
                     }
                 }
                 .padding(.horizontal)
-                
+
                 Divider()
                     .padding(.vertical, 8)
             }
-            
+
             // All files
             SectionHeaderView(title: "All Files", icon: "doc.text")
-            
+
             ScrollView {
                 LazyVStack(spacing: 4) {
                     ForEach(fileManager.uploadedFiles) { file in
@@ -262,12 +263,12 @@ struct FileUploadView: View {
                 }
                 .padding(.horizontal)
             }
-            
+
             Spacer()
         }
         .background(Color(NSColor.controlBackgroundColor))
     }
-    
+
     private var mainContentView: some View {
         VStack(spacing: 0) {
             // Selection info
@@ -275,7 +276,7 @@ struct FileUploadView: View {
                 selectionInfoView
                 Divider()
             }
-            
+
             // File details or drop zone
             if selectedFiles.isEmpty {
                 secondaryDropZone
@@ -284,21 +285,21 @@ struct FileUploadView: View {
             }
         }
     }
-    
+
     private var selectionInfoView: some View {
         HStack {
             Text("\(selectedFiles.count) files selected")
                 .font(.headline)
-            
+
             Spacer()
-            
+
             HStack(spacing: 12) {
                 Button("Analyze Selected") {
                     analyzeSelectedFiles()
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(selectedFiles.isEmpty)
-                
+
                 Button("Clear Selection") {
                     selectedFiles.removeAll()
                 }
@@ -308,24 +309,24 @@ struct FileUploadView: View {
         .padding()
         .background(Color(NSColor.controlBackgroundColor))
     }
-    
+
     private var secondaryDropZone: some View {
         VStack(spacing: 16) {
             Image(systemName: "plus.circle")
                 .font(.system(size: 32))
                 .foregroundColor(.secondary)
-            
+
             Text("Select files from the sidebar or drop more files here")
                 .font(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
-            
+
             HStack {
                 Button("Add More Files") {
                     showingFileImporter = true
                 }
                 .buttonStyle(.bordered)
-                
+
                 Button("Add Folder") {
                     showFolderPicker()
                 }
@@ -338,10 +339,10 @@ struct FileUploadView: View {
             handleDrop(providers: providers)
         }
     }
-    
+
     private var fileDetailsView: some View {
         let selectedFilesList = fileManager.uploadedFiles.filter { selectedFiles.contains($0.id) }
-        
+
         return ScrollView {
             LazyVStack(spacing: 12) {
                 ForEach(selectedFilesList) { file in
@@ -356,32 +357,32 @@ struct FileUploadView: View {
         }
         .background(Color(NSColor.textBackgroundColor))
     }
-    
+
     // MARK: - Toolbar
-    
+
     private var toolbarButtons: some View {
         Group {
             Button("Add Files") {
                 showingFileImporter = true
             }
-            
+
             Button("Add Folder") {
                 showFolderPicker()
             }
-            
+
             if !fileManager.uploadedFiles.isEmpty {
                 Menu("Actions") {
                     Button("Analyze All Files") {
                         analyzeAllFiles()
                     }
-                    
+
                     Button("Clear All Files") {
                         fileManager.clearAllFiles()
                         selectedFiles.removeAll()
                     }
-                    
+
                     Divider()
-                    
+
                     Button("Export File List") {
                         exportFileList()
                     }
@@ -389,9 +390,9 @@ struct FileUploadView: View {
             }
         }
     }
-    
+
     // MARK: - Actions
-    
+
     private func handleFileImport(_ result: Result<[URL], Error>) {
         switch result {
         case .success(let urls):
@@ -412,14 +413,14 @@ struct FileUploadView: View {
             fileManager.errorMessage = error.localizedDescription
         }
     }
-    
+
     private func showFolderPicker() {
         let panel = NSOpenPanel()
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
         panel.allowsMultipleSelection = false
         panel.canCreateDirectories = false
-        
+
         if panel.runModal() == .OK, let url = panel.url {
             Task {
                 do {
@@ -436,16 +437,16 @@ struct FileUploadView: View {
             }
         }
     }
-    
+
     private func handleDrop(providers: [NSItemProvider]) -> Bool {
         var urls: [URL] = []
-        
+
         for provider in providers {
             if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
                 provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, error in
                     if let data = item as? Data, let url = URL(dataRepresentation: data, relativeTo: nil) {
                         urls.append(url)
-                        
+
                         if urls.count == providers.count {
                             Task {
                                 do {
@@ -465,10 +466,10 @@ struct FileUploadView: View {
                 }
             }
         }
-        
+
         return !providers.isEmpty
     }
-    
+
     private func toggleFileSelection(_ file: CodeFile) {
         if selectedFiles.contains(file.id) {
             selectedFiles.remove(file.id)
@@ -476,31 +477,31 @@ struct FileUploadView: View {
             selectedFiles.insert(file.id)
         }
     }
-    
+
     private func selectProjectFiles(_ project: ProjectStructure) {
         let projectFileIds = Set(project.files.map(\.id))
         selectedFiles = selectedFiles.symmetricDifference(projectFileIds)
     }
-    
+
     private func analyzeSelectedFiles() {
         let filesToAnalyze = fileManager.uploadedFiles.filter { selectedFiles.contains($0.id) }
-        
+
         Task {
             do {
                 let records = try await fileManager.analyzeMultipleFiles(filesToAnalyze, withAI: true)
                 await MainActor.run {
-                    print("✅ Selected files analysis completed. Found \(records.count) records")
-                    
+                    AppLogger.shared.debug("✅ Selected files analysis completed. Found \(records.count) records")
+
                     // Clear any previous state first
                     self.showingAnalysisResults = false
-                    
+
                     // Set the records
                     self.analysisRecords = records
-                    
+
                     // Force state update and show sheet immediately
                     DispatchQueue.main.async {
                         self.showingAnalysisResults = true
-                        print("🔍 Sheet should now be presented with \(records.count) records")
+                        AppLogger.shared.debug("🔍 Sheet should now be presented with \(records.count) records")
                     }
                 }
             } catch {
@@ -510,13 +511,13 @@ struct FileUploadView: View {
             }
         }
     }
-    
+
     private func analyzeAllFiles() {
         guard !fileManager.uploadedFiles.isEmpty else {
             fileManager.errorMessage = "No files to analyze. Please upload some files first."
             return
         }
-        
+
         Task {
             do {
                 let records = try await fileManager.analyzeMultipleFiles(fileManager.uploadedFiles, withAI: true)
@@ -524,7 +525,7 @@ struct FileUploadView: View {
                     // Set both record properties to ensure consistency
                     self.analysisRecords = records
                     self.sheetAnalysisRecords = records
-                    
+
                     // Small delay to ensure records are properly set before showing sheet
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         self.showingAnalysisResults = true
@@ -537,12 +538,12 @@ struct FileUploadView: View {
             }
         }
     }
-    
+
     private func exportFileList() {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.json]
         panel.nameFieldStringValue = "file_list.json"
-        
+
         if panel.runModal() == .OK, let url = panel.url {
             do {
                 // Create a simplified exportable format
@@ -553,7 +554,7 @@ struct FileUploadView: View {
                     let size: Int
                     let lastModified: String
                 }
-                
+
                 let exportData = fileManager.uploadedFiles.map { file in
                     ExportFileInfo(
                         name: file.name,
@@ -563,7 +564,7 @@ struct FileUploadView: View {
                         lastModified: ISO8601DateFormatter().string(from: file.lastModified)
                     )
                 }
-                
+
                 let encoder = JSONEncoder()
                 encoder.outputFormatting = .prettyPrinted
                 let data = try encoder.encode(exportData)
@@ -573,14 +574,14 @@ struct FileUploadView: View {
             }
         }
     }
-    
+
     private func uploadResultMessage(_ result: FileUploadResult) -> String {
         var message = ""
-        
+
         if !result.successfulFiles.isEmpty {
             message += "Successfully uploaded \(result.successfulFiles.count) files.\n"
         }
-        
+
         if !result.failedFiles.isEmpty {
             message += "Failed to upload \(result.failedFiles.count) files:\n"
             for (filename, error) in result.failedFiles.prefix(3) {
@@ -590,7 +591,7 @@ struct FileUploadView: View {
                 message += "• ... and \(result.failedFiles.count - 3) more\n"
             }
         }
-        
+
         if !result.warnings.isEmpty {
             message += "\nWarnings:\n"
             for warning in result.warnings.prefix(3) {
@@ -600,7 +601,7 @@ struct FileUploadView: View {
                 message += "• ... and \(result.warnings.count - 3) more\n"
             }
         }
-        
+
         return message
     }
 }
@@ -612,13 +613,13 @@ struct StatisticItem: View {
     let title: String
     let value: String
     let color: Color
-    
+
     var body: some View {
         HStack(spacing: 8) {
             Image(systemName: icon)
                 .foregroundColor(color)
                 .frame(width: 16)
-            
+
             VStack(alignment: .leading, spacing: 1) {
                 Text(value)
                     .font(.headline)
@@ -634,17 +635,17 @@ struct StatisticItem: View {
 struct SectionHeaderView: View {
     let title: String
     let icon: String
-    
+
     var body: some View {
         HStack {
             Image(systemName: icon)
                 .foregroundColor(.accentColor)
                 .frame(width: 16)
-            
+
             Text(title)
                 .font(.headline)
                 .fontWeight(.semibold)
-            
+
             Spacer()
         }
         .padding(.horizontal)
@@ -657,33 +658,33 @@ struct FileRowView: View {
     let file: CodeFile
     let isSelected: Bool
     let onTap: () -> Void
-    
+
     var body: some View {
         Button(action: onTap) {
             HStack(spacing: 10) {
                 Image(systemName: file.language.iconName)
                     .foregroundColor(.accentColor)
                     .frame(width: 16)
-                
+
                 VStack(alignment: .leading, spacing: 2) {
                     Text(file.name)
                         .font(.body)
                         .lineLimit(1)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    
+
                     HStack {
                         Text(file.language.displayName)
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        
+
                         Spacer()
-                        
+
                         Text(file.displaySize)
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
                 }
-                
+
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(.accentColor)
@@ -708,25 +709,25 @@ struct ProjectRowView: View {
     let project: ProjectStructure
     let onSelect: () -> Void
     let onDelete: () -> Void
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: "folder.fill")
                     .foregroundColor(.accentColor)
-                
+
                 VStack(alignment: .leading, spacing: 2) {
                     Text(project.name)
                         .font(.headline)
                         .lineLimit(1)
-                    
+
                     Text("\(project.fileCount) files • \(project.displaySize)")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
-                
+
                 Spacer()
-                
+
                 Menu {
                     Button("Select All Files", action: onSelect)
                     Button("Remove Project", role: .destructive, action: onDelete)
@@ -737,7 +738,7 @@ struct ProjectRowView: View {
                 .menuStyle(.borderlessButton)
                 .frame(width: 20, height: 20)
             }
-            
+
             // Language distribution
             if !project.languageDistribution.isEmpty {
                 HStack {
@@ -749,13 +750,13 @@ struct ProjectRowView: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     }
-                    
+
                     if project.languageDistribution.count > 3 {
                         Text("+\(project.languageDistribution.count - 3) more")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }
-                    
+
                     Spacer()
                 }
             }
@@ -775,7 +776,7 @@ struct ProjectRowView: View {
 struct FileDetailCard: View {
     let file: CodeFile
     let onDelete: () -> Void
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             // Header
@@ -783,12 +784,12 @@ struct FileDetailCard: View {
                 Image(systemName: file.language.iconName)
                     .foregroundColor(.accentColor)
                     .font(.title2)
-                
+
                 VStack(alignment: .leading, spacing: 2) {
                     Text(file.name)
                         .font(.headline)
                         .lineLimit(1)
-                    
+
                     HStack {
                         Text(file.language.displayName)
                             .font(.caption)
@@ -798,28 +799,28 @@ struct FileDetailCard: View {
                                 Capsule()
                                     .fill(Color.accentColor.opacity(0.1))
                             )
-                        
+
                         Text(file.displaySize)
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        
+
                         Spacer()
-                        
+
                         Text(file.lastModified, style: .relative)
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
                 }
-                
+
                 Spacer()
-                
+
                 Button(action: onDelete) {
                     Image(systemName: "trash")
                         .foregroundColor(.red)
                 }
                 .buttonStyle(.borderless)
             }
-            
+
             // File path
             Text(file.path)
                 .font(.caption)
@@ -829,14 +830,14 @@ struct FileDetailCard: View {
                     RoundedRectangle(cornerRadius: 4)
                         .fill(Color.secondary.opacity(0.1))
                 )
-            
+
             // Content preview
             VStack(alignment: .leading, spacing: 4) {
                 Text("Content Preview")
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundColor(.secondary)
-                
+
                 ScrollView {
                     Text(file.content.prefix(500) + (file.content.count > 500 ? "..." : ""))
                         .font(.system(.caption, design: .monospaced))
@@ -865,28 +866,28 @@ struct FileDetailCard: View {
 struct AnalysisResultsView: View {
     @Binding var records: [FileAnalysisRecord]
     @Environment(\.dismiss) private var dismiss
-    
+
     // Computed properties for summary statistics
     private var totalIssues: Int {
         records.reduce(0) { $0 + $1.analysisResults.count }
     }
-    
+
     private var criticalIssues: Int {
         records.flatMap(\.analysisResults).filter { $0.severity == "critical" }.count
     }
-    
+
     private var highIssues: Int {
         records.flatMap(\.analysisResults).filter { $0.severity == "high" }.count
     }
-    
+
     private var mediumIssues: Int {
         records.flatMap(\.analysisResults).filter { $0.severity == "medium" }.count
     }
-    
+
     private var lowIssues: Int {
         records.flatMap(\.analysisResults).filter { $0.severity == "low" }.count
     }
-    
+
     var body: some View {
         NavigationView {
             Group {
@@ -895,11 +896,11 @@ struct AnalysisResultsView: View {
                         Image(systemName: "doc.text.magnifyingglass")
                             .font(.system(size: 60))
                             .foregroundColor(.secondary)
-                        
+
                         Text("No Analysis Results")
                             .font(.title2)
                             .fontWeight(.semibold)
-                        
+
                         Text("Upload some files and try analyzing them again.")
                             .font(.body)
                             .foregroundColor(.secondary)
@@ -917,34 +918,34 @@ struct AnalysisResultsView: View {
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundColor(.green)
                                     .font(.title2)
-                                
+
                                 VStack(alignment: .leading, spacing: 4) {
                                     Text("Analysis Complete")
                                         .font(.headline)
                                         .fontWeight(.semibold)
-                                    
+
                                     Text("\(records.count) files analyzed • \(totalIssues) issues found")
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
                                 }
-                                
+
                                 Spacer()
                             }
-                            
+
                             if totalIssues > 0 {
                                 HStack(spacing: 16) {
                                     Label("\(criticalIssues) Critical", systemImage: "exclamationmark.octagon")
                                         .foregroundColor(.red)
                                         .font(.caption)
-                                    
+
                                     Label("\(highIssues) High", systemImage: "exclamationmark.circle")
                                         .foregroundColor(.orange)
                                         .font(.caption)
-                                    
+
                                     Label("\(mediumIssues) Medium", systemImage: "exclamationmark.triangle")
                                         .foregroundColor(.yellow)
                                         .font(.caption)
-                                    
+
                                     Label("\(lowIssues) Low", systemImage: "info.circle")
                                         .foregroundColor(.blue)
                                         .font(.caption)
@@ -953,9 +954,9 @@ struct AnalysisResultsView: View {
                         }
                         .padding()
                         .background(Color(.controlBackgroundColor))
-                        
+
                         Divider()
-                        
+
                         // Results list
                         List {
                             ForEach(records) { record in

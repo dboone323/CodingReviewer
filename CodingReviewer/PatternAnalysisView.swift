@@ -16,12 +16,12 @@ struct PatternAnalysisView: View {
     @ObservedObject var viewModel: CodeReviewViewModel
     @State private var selectedTab: PatternTab = .patterns
     @State private var isAnalyzing = false
-    
+
     enum PatternTab: String, CaseIterable {
         case patterns = "Design Patterns"
         case smells = "Code Smells"
         case performance = "Performance"
-        
+
         var systemImage: String {
             switch self {
             case .patterns: return "brain.head.profile"
@@ -30,7 +30,7 @@ struct PatternAnalysisView: View {
             }
         }
     }
-    
+
     var body: some View {
         VStack(spacing: 0) {
             // Header
@@ -39,22 +39,22 @@ struct PatternAnalysisView: View {
                     Text("Pattern Recognition")
                         .font(.title2)
                         .fontWeight(.bold)
-                    
+
                     Spacer()
-                    
+
                     if patternEngine.isAnalyzing {
                         ProgressView()
                             .scaleEffect(0.8)
                     }
                 }
-                
+
                 Text("AI-powered design pattern detection and code smell analysis")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
             .padding()
             .background(Color(.controlBackgroundColor))
-            
+
             // Tab Selection
             Picker("Analysis Type", selection: $selectedTab) {
                 ForEach(PatternTab.allCases, id: \.self) { tab in
@@ -65,7 +65,7 @@ struct PatternAnalysisView: View {
             .pickerStyle(.segmented)
             .padding(.horizontal)
             .padding(.top)
-            
+
             // Analysis Button
             HStack {
                 Button("Analyze Patterns") {
@@ -75,18 +75,18 @@ struct PatternAnalysisView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(viewModel.codeInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isAnalyzing)
-                
+
                 Spacer()
-                
+
                 if patternEngine.analysisProgress > 0 && patternEngine.analysisProgress < 1 {
                     ProgressView(value: patternEngine.analysisProgress, total: 1.0)
                         .frame(width: 100)
                 }
             }
             .padding()
-            
+
             Divider()
-            
+
             // Content
             ScrollView {
                 VStack(spacing: 16) {
@@ -103,25 +103,25 @@ struct PatternAnalysisView: View {
             }
         }
     }
-    
+
     @MainActor
     private func analyzeCurrentCode() async {
         guard !viewModel.codeInput.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).isEmpty else { return }
-        
+
         isAnalyzing = true
-        
+
         // Analyze patterns
-        let _ = await patternEngine.detectDesignPatterns(
+        _ = await patternEngine.detectDesignPatterns(
             in: viewModel.codeInput,
             language: viewModel.selectedLanguage
         )
-        
+
         // Analyze code smells
-        let _ = await patternEngine.identifyCodeSmells(viewModel.analysisResults)
-        
+        _ = await patternEngine.identifyCodeSmells(viewModel.analysisResults)
+
         // Analyze performance
-        let _ = await patternEngine.detectPerformanceBottlenecks(viewModel.codeInput)
-        
+        _ = await patternEngine.detectPerformanceBottlenecks(viewModel.codeInput)
+
         isAnalyzing = false
     }
 }
@@ -130,7 +130,7 @@ struct PatternAnalysisView: View {
 
 struct PatternsContentView: View {
     let patterns: [DetectedPattern]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             if patterns.isEmpty {
@@ -142,7 +142,7 @@ struct PatternsContentView: View {
             } else {
                 Text("Detected Design Patterns")
                     .font(.headline)
-                
+
                 ForEach(patterns) { pattern in
                     PatternCard(pattern: pattern)
                 }
@@ -155,7 +155,7 @@ struct PatternsContentView: View {
 
 struct CodeSmellsContentView: View {
     let smells: [CodeSmell]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             if smells.isEmpty {
@@ -167,7 +167,7 @@ struct CodeSmellsContentView: View {
             } else {
                 Text("Detected Code Smells")
                     .font(.headline)
-                
+
                 ForEach(smells) { smell in
                     CodeSmellCard(smell: smell)
                 }
@@ -180,7 +180,7 @@ struct CodeSmellsContentView: View {
 
 struct PerformanceContentView: View {
     let issues: [PerformanceIssue]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             if issues.isEmpty {
@@ -192,7 +192,7 @@ struct PerformanceContentView: View {
             } else {
                 Text("Performance Issues")
                     .font(.headline)
-                
+
                 ForEach(issues) { issue in
                     PerformanceIssueCard(issue: issue)
                 }
@@ -206,57 +206,57 @@ struct PerformanceContentView: View {
 struct PatternCard: View {
     let pattern: DetectedPattern
     @State private var isExpanded = false
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(pattern.name)
                         .font(.headline)
-                    
+
                     Text(pattern.description)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
-                
+
                 Spacer()
-                
+
                 VStack(alignment: .trailing, spacing: 4) {
                     Text("\(pattern.confidencePercentage)%")
                         .font(.title3)
                         .fontWeight(.bold)
                         .foregroundColor(.blue)
-                    
+
                     Text("Confidence")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     Button(action: { isExpanded.toggle() }) {
                         Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                     }
                     .buttonStyle(.borderless)
                 }
             }
-            
+
             if isExpanded {
                 VStack(alignment: .leading, spacing: 8) {
                     Divider()
-                    
+
                     if let suggestion = pattern.suggestion {
                         Text("💡 Suggestion")
                             .font(.subheadline)
                             .fontWeight(.medium)
-                        
+
                         Text(suggestion)
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
-                    
+
                     if !pattern.relatedPatterns.isEmpty {
                         Text("🔗 Related Patterns")
                             .font(.subheadline)
                             .fontWeight(.medium)
-                        
+
                         Text(pattern.relatedPatterns.joined(separator: ", "))
                             .font(.caption)
                             .foregroundColor(.blue)
@@ -272,21 +272,21 @@ struct PatternCard: View {
 
 struct CodeSmellCard: View {
     let smell: CodeSmell
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(smell.type.rawValue)
                         .font(.headline)
-                    
+
                     Text(smell.description)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
-                
+
                 Spacer()
-                
+
                 VStack(alignment: .trailing, spacing: 4) {
                     Text(smell.severity.rawValue)
                         .font(.caption)
@@ -296,13 +296,13 @@ struct CodeSmellCard: View {
                         .padding(.vertical, 4)
                         .background(smell.severity.color.opacity(0.2))
                         .cornerRadius(6)
-                    
+
                     Text("Line \(smell.location.line)")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
-            
+
             Text("💡 " + smell.suggestion)
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -316,21 +316,21 @@ struct CodeSmellCard: View {
 
 struct PerformanceIssueCard: View {
     let issue: PerformanceIssue
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(issue.type.rawValue)
                         .font(.headline)
-                    
+
                     Text(issue.description)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
-                
+
                 Spacer()
-                
+
                 VStack(alignment: .trailing, spacing: 4) {
                     Text(issue.severity.rawValue)
                         .font(.caption)
@@ -340,13 +340,13 @@ struct PerformanceIssueCard: View {
                         .padding(.vertical, 4)
                         .background(issue.severity.color.opacity(0.2))
                         .cornerRadius(6)
-                    
+
                     Text(issue.estimatedImpact.rawValue)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
-            
+
             Text("🔧 " + issue.suggestion)
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -364,18 +364,18 @@ struct EmptyPatternStateView: View {
     let icon: String
     let title: String
     let description: String
-    
+
     var body: some View {
         VStack(spacing: 16) {
             Image(systemName: icon)
                 .font(.system(size: 48))
                 .foregroundColor(.gray)
-            
+
             VStack(spacing: 8) {
                 Text(title)
                     .font(.headline)
                     .fontWeight(.semibold)
-                
+
                 Text(description)
                     .font(.subheadline)
                     .foregroundColor(.secondary)

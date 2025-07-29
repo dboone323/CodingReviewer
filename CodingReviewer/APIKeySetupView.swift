@@ -14,7 +14,7 @@ struct APIKeySetupView: View {
     @State private var validationResult: String? = nil
     @State private var selectedProvider = "OpenAI"
     @Environment(\.dismiss) private var dismiss
-    
+
     var body: some View {
         NavigationView {
             VStack(spacing: 24) {
@@ -23,38 +23,38 @@ struct APIKeySetupView: View {
                     Image(systemName: "key.fill")
                         .font(.system(size: 48))
                         .foregroundColor(.blue)
-                    
+
                     Text("API Key Setup")
                         .font(.title2)
                         .fontWeight(.bold)
-                    
+
                     Text("Configure your AI service to enable advanced code analysis")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
                 }
-                
+
                 // Provider Selection
                 VStack(alignment: .leading, spacing: 12) {
                     Text("AI Provider")
                         .font(.headline)
-                    
+
                     Picker("Provider", selection: $selectedProvider) {
                         Text("OpenAI").tag("OpenAI")
                         Text("Google Gemini").tag("Google Gemini")
                     }
                     .pickerStyle(.segmented)
                 }
-                
+
                 // API Key Input
                 VStack(alignment: .leading, spacing: 12) {
                     Text("\(selectedProvider) API Key")
                         .font(.headline)
-                    
+
                     SecureField("Enter your API key", text: $tempKey)
                         .textFieldStyle(.roundedBorder)
                         .font(.system(.body, design: .monospaced))
-                    
+
                     if selectedProvider == "OpenAI" {
                         Text("Get your API key from https://platform.openai.com/api-keys")
                             .font(.caption)
@@ -65,7 +65,7 @@ struct APIKeySetupView: View {
                             .foregroundColor(.secondary)
                     }
                 }
-                
+
                 // Validation Result
                 if let result = validationResult {
                     Text(result)
@@ -76,14 +76,14 @@ struct APIKeySetupView: View {
                         .background(Color(.controlBackgroundColor))
                         .cornerRadius(8)
                 }
-                
+
                 // Action Buttons
                 HStack(spacing: 16) {
                     Button("Cancel") {
                         dismiss()
                     }
                     .buttonStyle(.bordered)
-                    
+
                     Button("Test Key") {
                         Task {
                             await validateKey()
@@ -91,7 +91,7 @@ struct APIKeySetupView: View {
                     }
                     .disabled(tempKey.isEmpty || isValidating)
                     .buttonStyle(.bordered)
-                    
+
                     Button("Save") {
                         Task {
                             await saveKey()
@@ -100,7 +100,7 @@ struct APIKeySetupView: View {
                     .disabled(tempKey.isEmpty)
                     .buttonStyle(.borderedProminent)
                 }
-                
+
                 Spacer()
             }
             .padding()
@@ -115,11 +115,11 @@ struct APIKeySetupView: View {
         }
         .frame(minWidth: 500, minHeight: 400)
     }
-    
+
     private func validateKey() async {
         isValidating = true
         validationResult = "Validating..."
-        
+
         // Simple validation - check if key has proper format
         let isValid: Bool
         if selectedProvider == "OpenAI" {
@@ -127,33 +127,33 @@ struct APIKeySetupView: View {
         } else {
             isValid = tempKey.count > 10 // Basic check for Gemini
         }
-        
+
         // Simulate API call delay
         try? await Task.sleep(nanoseconds: 1_000_000_000)
-        
+
         await MainActor.run {
             self.isValidating = false
             self.validationResult = isValid ? "✅ Valid API key format" : "❌ Invalid API key format"
         }
     }
-    
+
     private func saveKey() async {
         await MainActor.run {
             isValidating = true
             validationResult = "Saving..."
         }
-        
+
         // Save to UserDefaults - will integrate with APIKeyManager later
         if selectedProvider == "OpenAI" {
             UserDefaults.standard.set(tempKey, forKey: "openai_api_key")
         } else {
             UserDefaults.standard.set(tempKey, forKey: "gemini_api_key")
         }
-        
+
         await MainActor.run {
             self.isValidating = false
             self.validationResult = "✅ API key saved successfully"
-            
+
             // Auto-dismiss after showing success message
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 self.dismiss()

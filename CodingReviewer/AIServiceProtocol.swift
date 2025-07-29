@@ -17,7 +17,7 @@ struct AIAnalysisRequest {
     let language: CodeLanguage
     let analysisType: AnalysisType
     let context: AnalysisContext?
-    
+
     enum AnalysisType {
         case quality
         case security
@@ -26,13 +26,13 @@ struct AIAnalysisRequest {
         case refactoring
         case comprehensive
     }
-    
+
     struct AnalysisContext {
         let fileName: String?
         let projectType: ProjectType?
         let dependencies: [String]?
         let targetFramework: String?
-        
+
         enum ProjectType {
             case ios, macos, watchos, tvos, multiplatform
         }
@@ -45,7 +45,7 @@ struct ComplexityScore {
     let score: Double // 0.0 to 1.0
     let description: String
     let cyclomaticComplexity: Double
-    
+
     enum Rating: String, CaseIterable {
         case excellent = "excellent"
         case good = "good"
@@ -58,7 +58,7 @@ struct ComplexityScore {
 struct MaintainabilityScore {
     let score: Double // 0.0 to 1.0
     let description: String
-    
+
     enum Rating: String, CaseIterable {
         case excellent = "excellent"
         case good = "good"
@@ -86,7 +86,7 @@ struct AISuggestion {
     let lineNumber: Int?
     let columnNumber: Int?
     let confidence: Double // 0.0 to 1.0
-    
+
     enum SuggestionType: String, CaseIterable {
         case codeQuality = "Code Quality"
         case security = "Security"
@@ -95,13 +95,13 @@ struct AISuggestion {
         case refactoring = "Refactoring"
         case documentation = "Documentation"
     }
-    
+
     enum Severity: String, CaseIterable {
         case info = "Info"
         case warning = "Warning"
         case error = "Error"
         case critical = "Critical"
-        
+
         var color: String {
             switch self {
             case .info: return "blue"
@@ -135,7 +135,7 @@ enum AIServiceError: LocalizedError {
     case invalidResponse
     case serviceUnavailable
     case insufficientCredits
-    
+
     var errorDescription: String? {
         switch self {
         case .invalidAPIKey:
@@ -194,7 +194,7 @@ struct APIUsageStats: Codable {
     let lastResetDate: Date
     let dailyLimit: Int
     let monthlyLimit: Int
-    
+
     init() {
         self.tokensUsed = 0
         self.requestsCount = 0

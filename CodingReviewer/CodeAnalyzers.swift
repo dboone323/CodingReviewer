@@ -11,13 +11,13 @@ struct AnalysisResult {
     let message: String
     let line: Int?
     let severity: Severity
-    
+
     enum ResultType {
         case quality
         case security
         case suggestion
         case performance
-        
+
         var rawValue: String {
             switch self {
             case .quality: return "quality"
@@ -27,13 +27,13 @@ struct AnalysisResult {
             }
         }
     }
-    
+
     enum Severity {
         case low
         case medium
         case high
         case critical
-        
+
         var rawValue: String {
             switch self {
             case .low: return "low"
@@ -47,36 +47,36 @@ struct AnalysisResult {
 
 /// Analyzes code quality and style issues
 final class QualityAnalyzer: CodeAnalyzer {
-    
+
     func analyze(_ code: String) async -> [AnalysisResult] {
         var results: [AnalysisResult] = []
         let lines = code.components(separatedBy: .newlines)
-        
+
         // Force unwrapping detection
         results.append(contentsOf: checkForceUnwrapping(in: code))
-        
+
         // Long lines detection
         results.append(contentsOf: checkLongLines(in: lines))
-        
+
         // TODO/FIXME detection
         results.append(contentsOf: checkTodoComments(in: code))
-        
+
         // Access control suggestions
         results.append(contentsOf: checkAccessControl(in: code))
-        
+
         // Error handling suggestions
         results.append(contentsOf: checkErrorHandling(in: code))
-        
+
         // Retain cycle potential
         results.append(contentsOf: checkRetainCycles(in: code))
-        
+
         return results
     }
-    
+
     private func checkForceUnwrapping(in code: String) -> [AnalysisResult] {
         let forceUnwrapPattern = "\\w+!"
         let matches = findMatches(pattern: forceUnwrapPattern, in: code)
-        
+
         return matches.isEmpty ? [] : [
             AnalysisResult(
                 type: .quality,
@@ -87,10 +87,10 @@ final class QualityAnalyzer: CodeAnalyzer {
             )
         ]
     }
-    
+
     private func checkLongLines(in lines: [String]) -> [AnalysisResult] {
         let longLines = lines.enumerated().filter { $0.element.count > 120 }
-        
+
         return longLines.isEmpty ? [] : [
             AnalysisResult(
                 type: .quality,
@@ -101,10 +101,10 @@ final class QualityAnalyzer: CodeAnalyzer {
             )
         ]
     }
-    
+
     private func checkTodoComments(in code: String) -> [AnalysisResult] {
         let todoCount = findMatches(pattern: "(?i)(TODO|FIXME|HACK)", in: code).count
-        
+
         return todoCount > 0 ? [
             AnalysisResult(
                 type: .suggestion,
@@ -114,11 +114,11 @@ final class QualityAnalyzer: CodeAnalyzer {
             )
         ] : []
     }
-    
+
     private func checkAccessControl(in code: String) -> [AnalysisResult] {
         let publicDeclarations = findMatches(pattern: "public (class|struct|func|var|let)", in: code).count
         let privateDeclarations = findMatches(pattern: "private (class|struct|func|var|let)", in: code).count
-        
+
         return publicDeclarations > privateDeclarations * 2 ? [
             AnalysisResult(
                 type: .suggestion,
@@ -128,10 +128,10 @@ final class QualityAnalyzer: CodeAnalyzer {
             )
         ] : []
     }
-    
+
     private func checkErrorHandling(in code: String) -> [AnalysisResult] {
         let hasTry = code.contains("try") && !code.contains("catch") && !code.contains("try?") && !code.contains("try!")
-        
+
         return hasTry ? [
             AnalysisResult(
                 type: .suggestion,
@@ -141,10 +141,10 @@ final class QualityAnalyzer: CodeAnalyzer {
             )
         ] : []
     }
-    
+
     private func checkRetainCycles(in code: String) -> [AnalysisResult] {
         let hasSelfInEscaping = code.contains("self.") && code.contains("@escaping")
-        
+
         return hasSelfInEscaping ? [
             AnalysisResult(
                 type: .suggestion,
@@ -154,7 +154,7 @@ final class QualityAnalyzer: CodeAnalyzer {
             )
         ] : []
     }
-    
+
     private func findMatches(pattern: String, in string: String) -> [NSTextCheckingResult] {
         do {
             let regex = try NSRegularExpression(pattern: pattern, options: [])
@@ -168,29 +168,29 @@ final class QualityAnalyzer: CodeAnalyzer {
 
 /// Analyzes potential security concerns
 final class SecurityAnalyzer: CodeAnalyzer {
-    
+
     func analyze(_ code: String) async -> [AnalysisResult] {
         var results: [AnalysisResult] = []
-        
+
         // Check for hardcoded sensitive information
         results.append(contentsOf: checkSensitiveInformation(in: code))
-        
+
         // Check for unsafe network operations
         results.append(contentsOf: checkUnsafeNetwork(in: code))
-        
+
         // Check for SQL injection potential
         results.append(contentsOf: checkSQLInjection(in: code))
-        
+
         // Check for file system access
         results.append(contentsOf: checkFileSystemAccess(in: code))
-        
+
         return results
     }
-    
+
     private func checkSensitiveInformation(in code: String) -> [AnalysisResult] {
         let sensitivePatterns = ["password", "secret", "token", "key", "credential"]
         var results: [AnalysisResult] = []
-        
+
         for pattern in sensitivePatterns {
             if code.lowercased().contains(pattern) && code.contains("=") {
                 results.append(AnalysisResult(
@@ -201,10 +201,10 @@ final class SecurityAnalyzer: CodeAnalyzer {
                 ))
             }
         }
-        
+
         return results
     }
-    
+
     private func checkUnsafeNetwork(in code: String) -> [AnalysisResult] {
         code.contains("http://") ? [
             AnalysisResult(
@@ -215,10 +215,10 @@ final class SecurityAnalyzer: CodeAnalyzer {
             )
         ] : []
     }
-    
+
     private func checkSQLInjection(in code: String) -> [AnalysisResult] {
         let hasSQL = code.contains("SQL") || code.contains("sqlite")
-        
+
         return hasSQL ? [
             AnalysisResult(
                 type: .security,
@@ -228,10 +228,10 @@ final class SecurityAnalyzer: CodeAnalyzer {
             )
         ] : []
     }
-    
+
     private func checkFileSystemAccess(in code: String) -> [AnalysisResult] {
         let hasFileAccess = code.contains("FileManager") || code.contains("Bundle.main")
-        
+
         return hasFileAccess ? [
             AnalysisResult(
                 type: .security,
@@ -245,21 +245,21 @@ final class SecurityAnalyzer: CodeAnalyzer {
 
 /// Analyzes performance-related issues
 final class PerformanceAnalyzer: CodeAnalyzer {
-    
+
     func analyze(_ code: String) async -> [AnalysisResult] {
         var results: [AnalysisResult] = []
-        
+
         // Check for potential performance issues
         results.append(contentsOf: checkMainThreadBlocking(in: code))
         results.append(contentsOf: checkExpensiveOperations(in: code))
-        
+
         return results
     }
-    
+
     private func checkMainThreadBlocking(in code: String) -> [AnalysisResult] {
         let blockingPatterns = ["Thread.sleep", "sleep(", "usleep"]
         var results: [AnalysisResult] = []
-        
+
         for pattern in blockingPatterns where code.contains(pattern) {
             results.append(AnalysisResult(
                 type: .performance,
@@ -268,14 +268,14 @@ final class PerformanceAnalyzer: CodeAnalyzer {
                 severity: .medium
             ))
         }
-        
+
         return results
     }
-    
+
     private func checkExpensiveOperations(in code: String) -> [AnalysisResult] {
         let expensivePatterns = ["for.*in.*{", "while.*{"]
         var results: [AnalysisResult] = []
-        
+
         for pattern in expensivePatterns where findMatches(pattern: pattern, in: code).count > 10 {
             results.append(AnalysisResult(
                 type: .performance,
@@ -285,10 +285,10 @@ final class PerformanceAnalyzer: CodeAnalyzer {
             ))
             break
         }
-        
+
         return results
     }
-    
+
     private func findMatches(pattern: String, in string: String) -> [NSTextCheckingResult] {
         do {
             let regex = try NSRegularExpression(pattern: pattern, options: [])

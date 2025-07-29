@@ -1,5 +1,7 @@
 import Foundation
+import AppLogger
 import os.log
+import AppLogger
 
 /// Comprehensive logging and error handling system
 enum LogLevel: String, CaseIterable {
@@ -19,7 +21,7 @@ enum LogCategory: String, CaseIterable {
     case ui = "UI"
     case ai = "AI"
     case network = "Network"
-    
+
     var emoji: String {
         switch self {
         case .general: return "📝"
@@ -37,21 +39,21 @@ enum LogCategory: String, CaseIterable {
 final class AppLogger {
     private let logger = Logger(subsystem: "com.DanielStevens.CodingReviewer", category: "CodeAnalysis")
     private var performanceMetrics: [String: Date] = [:]
-    
+
     static let shared = AppLogger()
     private init() {}
-    
+
     func log(
-        _ message: String, 
+        _ message: String,
         level: LogLevel = .info,
         category: LogCategory = .general,
-        file: String = #file, 
-        function: String = #function, 
+        file: String = #file,
+        function: String = #function,
         line: Int = #line
     ) {
         let filename = (file as NSString).lastPathComponent
         let logMessage = "\(category.emoji) \(level.rawValue) [\(filename):\(line)] \(function) - \(message)"
-        
+
         switch level {
         case .debug:
             logger.debug("\(logMessage)")
@@ -65,41 +67,41 @@ final class AppLogger {
             logger.critical("\(logMessage)")
         }
     }
-    
+
     func startMeasurement(for operation: String) -> Date {
         let startTime = Date()
         performanceMetrics[operation] = startTime
         log("Started measuring: \(operation)", level: .debug, category: .performance)
         return startTime
     }
-    
+
     func endMeasurement(for operation: String, startTime: Date) {
         let duration = Date().timeIntervalSince(startTime)
         performanceMetrics.removeValue(forKey: operation)
-        log("Completed \(operation) in \(String(format: "%.3f", duration))s", 
+        log("Completed \(operation) in \(String(format: "%.3f", duration))s",
             level: .info, category: .performance)
     }
-    
+
     func logAnalysisStart(codeLength: Int) {
         log("Starting code analysis for \(codeLength) characters", level: .info, category: .analysis)
     }
-    
+
     func logAnalysisComplete(resultsCount: Int, duration: TimeInterval) {
-        log("Analysis completed: \(resultsCount) results in \(String(format: "%.2f", duration))s", 
+        log("Analysis completed: \(resultsCount) results in \(String(format: "%.2f", duration))s",
             level: .info, category: .analysis)
     }
-    
+
     func logError(_ error: Error, context: String, category: LogCategory = .general) {
         log("Error in \(context): \(error.localizedDescription)", level: .error, category: category)
     }
-    
+
     func logAIRequest(type: String, tokenCount: Int) {
         log("AI \(type) request - \(tokenCount) tokens", level: .info, category: .ai)
     }
-    
+
     func logAIResponse(type: String, success: Bool, duration: TimeInterval) {
         let status = success ? "successful" : "failed"
-        log("AI \(type) response \(status) in \(String(format: "%.2f", duration))s", 
+        log("AI \(type) response \(status) in \(String(format: "%.2f", duration))s",
             level: success ? .info : .warning, category: .ai)
     }
 }
@@ -110,7 +112,7 @@ enum CodeReviewError: LocalizedError {
     case invalidInput(String)
     case analysisInterrupted
     case systemResourceExhausted
-    
+
     var errorDescription: String? {
         switch self {
         case .analysisTimeout:
@@ -123,7 +125,7 @@ enum CodeReviewError: LocalizedError {
             return "System resources exhausted. Please try again later."
         }
     }
-    
+
     var recoverySuggestion: String? {
         switch self {
         case .analysisTimeout:
@@ -141,17 +143,17 @@ enum CodeReviewError: LocalizedError {
 /// Performance monitoring for analysis operations
 actor PerformanceMonitor {
     private var analysisMetrics: [String: TimeInterval] = [:]
-    
+
     func startMeasurement(for operation: String) -> Date {
         Date()
     }
-    
+
     func endMeasurement(for operation: String, startTime: Date) {
         let duration = Date().timeIntervalSince(startTime)
         analysisMetrics[operation] = duration
         AppLogger.shared.log("Performance: \(operation) took \(String(format: "%.2f", duration))s", level: .debug)
     }
-    
+
     func getMetrics() -> [String: TimeInterval] {
         analysisMetrics
     }

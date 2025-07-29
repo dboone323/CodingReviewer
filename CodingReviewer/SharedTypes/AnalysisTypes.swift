@@ -14,11 +14,11 @@ enum AnalysisEngine: String, CaseIterable, Codable {
     case ai = "AI"
     case pattern = "Pattern"
     case combined = "Combined"
-    
+
     var displayName: String {
         return rawValue
     }
-    
+
     var description: String {
         switch self {
         case .ai: return "AI-powered analysis using language models"
@@ -33,7 +33,7 @@ enum AnalysisScope: String, CaseIterable, Codable {
     case project = "Project"
     case folder = "Folder"
     case selection = "Selection"
-    
+
     var systemImage: String {
         switch self {
         case .file: return "doc"
@@ -49,7 +49,7 @@ enum AnalysisMode: String, CaseIterable, Codable {
     case standard = "Standard"
     case detailed = "Detailed"
     case comprehensive = "Comprehensive"
-    
+
     var description: String {
         switch self {
         case .quick: return "Fast analysis with basic checks"
@@ -58,7 +58,7 @@ enum AnalysisMode: String, CaseIterable, Codable {
         case .comprehensive: return "Complete analysis with all features"
         }
     }
-    
+
     var estimatedTime: String {
         switch self {
         case .quick: return "< 30 seconds"
@@ -80,7 +80,7 @@ enum PatternType: String, CaseIterable, Codable {
     case performance = "Performance"
     case security = "Security"
     case maintainability = "Maintainability"
-    
+
     var systemImage: String {
         switch self {
         case .antiPattern: return "exclamationmark.triangle"
@@ -100,7 +100,7 @@ enum PatternConfidence: String, CaseIterable, Codable {
     case medium = "Medium"
     case high = "High"
     case certain = "Certain"
-    
+
     var color: String {
         switch self {
         case .low: return "red"
@@ -109,7 +109,7 @@ enum PatternConfidence: String, CaseIterable, Codable {
         case .certain: return "blue"
         }
     }
-    
+
     var percentage: Int {
         switch self {
         case .low: return 25
@@ -131,7 +131,7 @@ enum QualityMetric: String, CaseIterable, Codable {
     case security = "Security"
     case documentation = "Documentation"
     case consistency = "Consistency"
-    
+
     var systemImage: String {
         switch self {
         case .complexity: return "brain"
@@ -144,7 +144,7 @@ enum QualityMetric: String, CaseIterable, Codable {
         case .consistency: return "checkmark.seal"
         }
     }
-    
+
     var description: String {
         switch self {
         case .complexity: return "Code complexity analysis"
@@ -164,7 +164,7 @@ enum ComplexityLevel: String, CaseIterable, Codable {
     case moderate = "Moderate"
     case complex = "Complex"
     case veryComplex = "Very Complex"
-    
+
     var color: String {
         switch self {
         case .simple: return "green"
@@ -173,7 +173,7 @@ enum ComplexityLevel: String, CaseIterable, Codable {
         case .veryComplex: return "red"
         }
     }
-    
+
     var range: String {
         switch self {
         case .simple: return "1-5"
@@ -195,7 +195,7 @@ enum DocumentationType: String, CaseIterable, Codable {
     case api = "API"
     case technical = "Technical"
     case user = "User Guide"
-    
+
     var systemImage: String {
         switch self {
         case .inline: return "text.alignleft"
@@ -216,7 +216,7 @@ enum DocumentationQuality: String, CaseIterable, Codable {
     case adequate = "Adequate"
     case good = "Good"
     case excellent = "Excellent"
-    
+
     var color: String {
         switch self {
         case .missing: return "red"
@@ -226,7 +226,7 @@ enum DocumentationQuality: String, CaseIterable, Codable {
         case .excellent: return "blue"
         }
     }
-    
+
     var score: Int {
         switch self {
         case .missing: return 0
@@ -245,7 +245,7 @@ enum SharedFixCategory: String, CaseIterable, Codable {
     case assisted = "Assisted"
     case manual = "Manual"
     case review = "Review Required"
-    
+
     var systemImage: String {
         switch self {
         case .automatic: return "wand.and.rays"
@@ -254,7 +254,7 @@ enum SharedFixCategory: String, CaseIterable, Codable {
         case .review: return "eye"
         }
     }
-    
+
     var description: String {
         switch self {
         case .automatic: return "Can be fixed automatically"
@@ -271,7 +271,7 @@ enum FixStatus: String, CaseIterable, Codable {
     case applied = "Applied"
     case rejected = "Rejected"
     case failed = "Failed"
-    
+
     var systemImage: String {
         switch self {
         case .pending: return "clock"
@@ -281,7 +281,7 @@ enum FixStatus: String, CaseIterable, Codable {
         case .failed: return "exclamationmark.triangle"
         }
     }
-    
+
     var color: String {
         switch self {
         case .pending: return "gray"

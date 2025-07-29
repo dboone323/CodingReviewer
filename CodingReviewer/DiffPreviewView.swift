@@ -16,15 +16,15 @@ struct DiffPreviewView: View {
     let originalCode: String
     @Environment(\.dismiss) private var dismiss
     @State private var showingApplyConfirmation = false
-    
+
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
                 // Fix Details Header
                 FixDetailsHeader(fix: fix)
-                
+
                 Divider()
-                
+
                 // Code Diff View
                 ScrollView {
                     DiffComparisonView(
@@ -33,18 +33,18 @@ struct DiffPreviewView: View {
                         changedLineRange: fix.startLine...fix.endLine
                     )
                 }
-                
+
                 Divider()
-                
+
                 // Action Bar
                 HStack {
                     Button("Cancel") {
                         dismiss()
                     }
                     .buttonStyle(.bordered)
-                    
+
                     Spacer()
-                    
+
                     Button("Apply This Fix") {
                         showingApplyConfirmation = true
                     }
@@ -64,36 +64,36 @@ struct DiffPreviewView: View {
             Text("Apply this fix? This action cannot be undone.")
         }
     }
-    
+
     // MARK: - Helper Methods
-    
+
     private func getContextualCode() -> String {
         let lines = originalCode.components(separatedBy: .newlines)
         let contextRange = getContextRange(for: fix.startLine...fix.endLine, in: lines)
         return lines[contextRange].joined(separator: "\n")
     }
-    
+
     private func getModifiedContextualCode() -> String {
         let lines = originalCode.components(separatedBy: .newlines)
         var modifiedLines = lines
-        
+
         // Apply the fix
         if fix.startLine == fix.endLine {
             modifiedLines[fix.startLine] = fix.fixedCode
         } else {
             let lineRange = fix.startLine...min(fix.endLine, lines.count - 1)
             modifiedLines.removeSubrange(lineRange)
-            
+
             let fixedLines = fix.fixedCode.components(separatedBy: .newlines)
             modifiedLines.insert(contentsOf: fixedLines, at: fix.startLine)
         }
-        
+
         let contextRange = getContextRange(for: fix.startLine...fix.endLine, in: lines)
         let adjustedRange = contextRange.lowerBound..<min(contextRange.upperBound, modifiedLines.count)
-        
+
         return modifiedLines[adjustedRange].joined(separator: "\n")
     }
-    
+
     private func getContextRange(for changeRange: ClosedRange<Int>, in lines: [String]) -> Range<Int> {
         let contextLines = 3
         let start = max(0, changeRange.lowerBound - contextLines)
@@ -106,7 +106,7 @@ struct DiffPreviewView: View {
 
 struct FixDetailsHeader: View {
     let fix: IntelligentFix
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
@@ -120,35 +120,35 @@ struct FixDetailsHeader: View {
                             .background(fix.category.color.opacity(0.2))
                             .foregroundColor(fix.category.color)
                             .cornerRadius(4)
-                        
+
                         Spacer()
-                        
+
                         ConfidenceBadge(confidence: fix.confidence)
                         ImpactIndicator(impact: fix.impact)
                     }
-                    
+
                     Text(fix.description)
                         .font(.headline)
                         .foregroundColor(.primary)
                 }
-                
+
                 Spacer()
             }
-            
+
             if !fix.explanation.isEmpty {
                 Text(fix.explanation)
                     .font(.body)
                     .foregroundColor(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            
+
             HStack {
                 Label("Line \(fix.startLine + 1)", systemImage: "text.cursor")
                     .font(.caption)
                     .foregroundColor(.secondary)
-                
+
                 Spacer()
-                
+
                 Text("Impact: \(fix.impact.rawValue)")
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -164,13 +164,13 @@ struct DiffComparisonView: View {
     let originalCode: String
     let modifiedCode: String
     let changedLineRange: ClosedRange<Int>
-    
+
     var body: some View {
         HStack(spacing: 0) {
             // Original Code
             VStack(alignment: .leading, spacing: 0) {
                 DiffHeaderView(title: "Original", color: .red)
-                
+
                 CodeView(
                     code: originalCode,
                     highlightType: .removal,
@@ -178,16 +178,16 @@ struct DiffComparisonView: View {
                 )
             }
             .frame(maxWidth: .infinity)
-            
+
             // Divider
             Rectangle()
                 .fill(Color.gray.opacity(0.3))
                 .frame(width: 1)
-            
+
             // Modified Code
             VStack(alignment: .leading, spacing: 0) {
                 DiffHeaderView(title: "Fixed", color: .green)
-                
+
                 CodeView(
                     code: modifiedCode,
                     highlightType: .addition,
@@ -205,13 +205,13 @@ struct DiffComparisonView: View {
 struct DiffHeaderView: View {
     let title: String
     let color: Color
-    
+
     var body: some View {
         HStack {
             Text(title)
                 .font(.headline)
                 .foregroundColor(color)
-            
+
             Spacer()
         }
         .padding(.horizontal)
@@ -226,7 +226,7 @@ struct CodeView: View {
     let code: String
     let highlightType: DiffHighlightType
     let changedLineRange: ClosedRange<Int>
-    
+
     var body: some View {
         ScrollView([.horizontal, .vertical]) {
             VStack(alignment: .leading, spacing: 0) {
@@ -251,7 +251,7 @@ struct CodeLineView: View {
     let content: String
     let isChanged: Bool
     let highlightType: DiffHighlightType
-    
+
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
             // Line number
@@ -260,7 +260,7 @@ struct CodeLineView: View {
                 .foregroundColor(.secondary)
                 .frame(width: 40, alignment: .trailing)
                 .opacity(0.7)
-            
+
             // Code content
             Text(content.isEmpty ? " " : content)
                 .font(.system(.body, design: .monospaced))
@@ -289,7 +289,7 @@ enum DiffHighlightType {
     case addition
     case removal
     case context
-    
+
     var backgroundColor: Color {
         switch self {
         case .addition:
@@ -300,7 +300,7 @@ enum DiffHighlightType {
             return Color.clear
         }
     }
-    
+
     var borderColor: Color {
         switch self {
         case .addition:
@@ -311,7 +311,7 @@ enum DiffHighlightType {
             return Color.clear
         }
     }
-    
+
     var textColor: Color {
         switch self {
         case .addition:
@@ -333,7 +333,7 @@ struct FixHistoryEntry: Identifiable, Codable {
     let originalCode: String
     let modifiedCode: String
     let fileName: String
-    
+
     var formattedDate: String {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
@@ -344,7 +344,7 @@ struct FixHistoryEntry: Identifiable, Codable {
 
 class FixHistoryManager: ObservableObject {
     @Published var history: [FixHistoryEntry] = []
-    
+
     func recordAppliedFix(_ fix: IntelligentFix, originalCode: String, modifiedCode: String, fileName: String) {
         let entry = FixHistoryEntry(
             fixId: fix.id,
@@ -353,31 +353,31 @@ class FixHistoryManager: ObservableObject {
             modifiedCode: modifiedCode,
             fileName: fileName
         )
-        
+
         history.insert(entry, at: 0) // Most recent first
-        
+
         // Keep only last 100 entries
         if history.count > 100 {
             history = Array(history.prefix(100))
         }
-        
+
         saveHistory()
     }
-    
+
     private func saveHistory() {
         // Save to UserDefaults or Core Data
         if let encoded = try? JSONEncoder().encode(history) {
             UserDefaults.standard.set(encoded, forKey: "FixHistory")
         }
     }
-    
+
     private func loadHistory() {
         if let data = UserDefaults.standard.data(forKey: "FixHistory"),
            let decoded = try? JSONDecoder().decode([FixHistoryEntry].self, from: data) {
             history = decoded
         }
     }
-    
+
     init() {
         loadHistory()
     }

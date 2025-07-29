@@ -1,5 +1,7 @@
 import SwiftUI
+import AppLogger
 import Foundation
+import AppLogger
 import Combine
 import os
 
@@ -12,11 +14,11 @@ protocol CodeReviewService {
 actor AnalysisDebouncer {
     private var lastAnalysisTime: Date = .distantPast
     private let debounceInterval: TimeInterval = 0.5
-    
+
     func shouldAnalyze() -> Bool {
         let now = Date()
         let timeSinceLastAnalysis = now.timeIntervalSince(lastAnalysisTime)
-        
+
         if timeSinceLastAnalysis >= debounceInterval {
             lastAnalysisTime = now
             return true
@@ -30,13 +32,13 @@ struct CodeAnalysisReport {
     let results: [AnalysisResult]
     let metrics: CodeMetrics
     let overallRating: Rating
-    
+
     enum Rating {
         case excellent
         case good
         case needsImprovement
         case poor
-        
+
         var description: String {
             switch self {
             case .excellent: return "🌟 Excellent"
@@ -59,9 +61,9 @@ struct CodeMetrics {
 /// Enhanced ViewModel with AI integration and better architecture
 @MainActor
 final class CodeReviewViewModel: ObservableObject {
-    
+
     // MARK: - Published Properties
-    
+
     @Published var codeInput: String = ""
     @Published var analysisResults: [AnalysisResult] = []
     @Published var aiAnalysisResult: AIAnalysisResponse?
@@ -74,12 +76,12 @@ final class CodeReviewViewModel: ObservableObject {
     @Published var selectedLanguage: CodeLanguage = .swift
     @Published var aiEnabled: Bool = false
     @Published var analysisReport: CodeAnalysisReport?
-    
+
     // For legacy support
     @Published var analysisResult: String = ""
-    
+
     // MARK: - Private Properties
-    
+
     private let codeReviewService: CodeReviewService
     private var aiService: EnhancedAICodeReviewService?
     private let keyManager: APIKeyManager
@@ -87,9 +89,9 @@ final class CodeReviewViewModel: ObservableObject {
     private let debouncer = AnalysisDebouncer()
     private let logger = AppLogger.shared
     private let osLogger = Logger(subsystem: "com.DanielStevens.CodingReviewer", category: "CodeReviewViewModel")
-    
+
     // MARK: - Initialization
-    
+
     @MainActor
     init(codeReviewService: CodeReviewService = DefaultCodeReviewService(), keyManager: APIKeyManager) {
         self.codeReviewService = codeReviewService
@@ -97,43 +99,43 @@ final class CodeReviewViewModel: ObservableObject {
         setupAIService()
         observeKeyManager()
     }
-    
+
     // MARK: - Public Methods
-    
+
     /// Performs comprehensive code analysis including AI if enabled
     func analyzeCode() async {
         guard !codeInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             errorMessage = "No code provided for analysis"
             return
         }
-        
+
         guard codeInput.count < 100000 else {
             errorMessage = "Code too large (max 100,000 characters)"
             return
         }
-        
+
         // Debounce analysis requests
         if await debouncer.shouldAnalyze() {
             isAnalyzing = true
             errorMessage = nil
             showingResults = false
-            
+
             logger.logAnalysisStart(codeLength: codeInput.count)
             let startTime = Date()
-            
+
             do {
                 // Run traditional analysis
                 let report = await codeReviewService.analyzeCode(codeInput)
                 analysisResults = report.results
                 analysisReport = report
                 analysisResult = generateReportString(from: report) // Legacy support
-                
+
                 // Run AI analysis if enabled
                 if aiEnabled, let aiService = aiService {
                     isAIAnalyzing = true
                     // Simple quality analysis for now
                     let qualityScore = try await aiService.analyzeCodeQuality(codeInput)
-                    
+
                     // Create simple AI response for compatibility
                     let basicSuggestion = AISuggestion(
                         id: UUID(),
@@ -145,7 +147,7 @@ final class CodeReviewViewModel: ObservableObject {
                         columnNumber: nil,
                         confidence: 0.8
                     )
-                    
+
                     aiAnalysisResult = AIAnalysisResponse(
                         suggestions: [basicSuggestion],
                         fixes: [],
@@ -155,13 +157,13 @@ final class CodeReviewViewModel: ObservableObject {
                         executionTime: 0.1
                     )
                     aiSuggestions = [basicSuggestion]
-                    
+
                     // Generate fixes for critical issues (simplified)
                     let criticalIssues = analysisResults.filter { $0.severity == .critical || $0.severity == .high }
                     if !criticalIssues.isEmpty {
                         let issueMessages = criticalIssues.map { $0.message }
                         let fixes = try await aiService.generateFixesForIssues(issueMessages)
-                        availableFixes = fixes.map { _ in 
+                        availableFixes = fixes.map { _ in
                             CodeFix(
                                 id: UUID(),
                                 suggestionId: UUID(),
@@ -175,23 +177,23 @@ final class CodeReviewViewModel: ObservableObject {
                             )
                         }
                     }
-                    
+
                     isAIAnalyzing = false
                 }
-                
+
                 showingResults = true
                 let duration = Date().timeIntervalSince(startTime)
                 logger.logAnalysisComplete(resultsCount: report.results.count, duration: duration)
-                
+
             } catch {
                 errorMessage = error.localizedDescription
                 logger.log("Analysis failed: \(error)", level: .error, category: .analysis)
             }
-            
+
             isAnalyzing = false
         }
     }
-    
+
     /// Legacy analyze method for backward compatibility
     @MainActor
     public func analyze(_ code: String) {
@@ -200,7 +202,7 @@ final class CodeReviewViewModel: ObservableObject {
             await analyzeCode()
         }
     }
-    
+
     /// Applies an AI-generated fix to the code
     func applyFix(_ fix: CodeFix) {
         // For now, replace the original code with the fixed code
@@ -208,7 +210,7 @@ final class CodeReviewViewModel: ObservableObject {
         if codeInput.contains(fix.originalCode) {
             codeInput = codeInput.replacingOccurrences(of: fix.originalCode, with: fix.fixedCode)
             logger.log("Applied AI fix: \(fix.title)", level: .info, category: .ai)
-            
+
             // Re-analyze after applying fix
             Task {
                 await analyzeCode()
@@ -217,11 +219,11 @@ final class CodeReviewViewModel: ObservableObject {
             errorMessage = "Cannot apply fix: original code not found"
         }
     }
-    
+
     /// Explains a specific issue using AI
     func explainIssue(_ issue: AnalysisResult) async {
         guard let aiService = aiService else { return }
-        
+
         do {
             // Use explainCode method with the relevant code snippet
             let codeSnippet = extractCodeSnippet(for: issue)
@@ -232,7 +234,7 @@ final class CodeReviewViewModel: ObservableObject {
             logger.log("Failed to generate AI explanation: \(error)", level: .error, category: .ai)
         }
     }
-    
+
     private func extractCodeSnippet(for issue: AnalysisResult) -> String {
         // Extract a relevant code snippet for the issue
         if let line = issue.line {
@@ -243,11 +245,11 @@ final class CodeReviewViewModel: ObservableObject {
         }
         return codeInput
     }
-    
+
     /// Generates documentation for the current code
     func generateDocumentation() async {
         guard let aiService = aiService, !codeInput.isEmpty else { return }
-        
+
         do {
             let documentation = try await aiService.generateDocumentation(for: codeInput, language: selectedLanguage.rawValue)
             // Could populate a documentation view or copy to clipboard
@@ -256,17 +258,17 @@ final class CodeReviewViewModel: ObservableObject {
             logger.log("Failed to generate AI documentation: \(error)", level: .error, category: .ai)
         }
     }
-    
+
     /// Shows the API key setup screen
     func showAPIKeySetup() {
-        print("🧠 [DEBUG] CodeReviewViewModel.showAPIKeySetup() called")
-        print("🧠 [DEBUG] About to call keyManager.showKeySetup()")
+        AppLogger.shared.debug("🧠 [DEBUG] CodeReviewViewModel.showAPIKeySetup() called")
+        AppLogger.shared.debug("🧠 [DEBUG] About to call keyManager.showKeySetup()")
         osLogger.info("🧠 CodeReviewViewModel showAPIKeySetup called")
         keyManager.showKeySetup()
-        print("🧠 [DEBUG] Completed call to keyManager.showKeySetup()")
+        AppLogger.shared.debug("🧠 [DEBUG] Completed call to keyManager.showKeySetup()")
         osLogger.info("🧠 CodeReviewViewModel showAPIKeySetup completed")
     }
-    
+
     /// Clears all analysis results
     public func clearResults() {
         analysisResult = ""
@@ -277,16 +279,16 @@ final class CodeReviewViewModel: ObservableObject {
         errorMessage = nil
         showingResults = false
     }
-    
+
     // MARK: - Private Methods
-    
+
     private func setupAIService() {
         guard let apiKey = keyManager.getOpenAIKey() else {
             logger.log("No API key available for AI service", level: .warning, category: .ai)
             aiEnabled = false
             return
         }
-        
+
         do {
             let openAIService = OpenAIService(apiKey: apiKey)
             aiService = EnhancedAICodeReviewService()
@@ -297,7 +299,7 @@ final class CodeReviewViewModel: ObservableObject {
             aiEnabled = false
         }
     }
-    
+
     private func observeKeyManager() {
         keyManager.$hasValidKey
             .sink { [weak self] hasKey in
@@ -305,7 +307,7 @@ final class CodeReviewViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-    
+
     private func updateAIStatus(hasKey: Bool) {
         if hasKey && aiService == nil {
             setupAIService()
@@ -314,24 +316,24 @@ final class CodeReviewViewModel: ObservableObject {
             aiEnabled = false
         }
     }
-    
+
     private func generateReportString(from report: CodeAnalysisReport) -> String {
         var reportString = "📊 Code Analysis Report\n"
         reportString += String(repeating: "=", count: 50) + "\n\n"
-        
+
         // Basic metrics
         reportString += "📈 Code Metrics:\n"
         reportString += "• Character count: \(report.metrics.characterCount)\n"
         reportString += "• Line count: \(report.metrics.lineCount)\n"
         reportString += "• Estimated complexity: \(report.metrics.estimatedComplexity)\n"
         reportString += "• Analysis time: \(String(format: "%.2f", report.metrics.analysisTime))s\n\n"
-        
+
         // Group results by type
         let qualityResults = report.results.filter { $0.type == .quality }
         let securityResults = report.results.filter { $0.type == .security }
         let suggestionResults = report.results.filter { $0.type == .suggestion }
         let performanceResults = report.results.filter { $0.type == .performance }
-        
+
         // Quality Issues
         if qualityResults.isEmpty {
             reportString += "✅ Quality Issues: None detected\n\n"
@@ -342,7 +344,7 @@ final class CodeReviewViewModel: ObservableObject {
             }
             reportString += "\n"
         }
-        
+
         // Security Concerns
         if securityResults.isEmpty {
             reportString += "🔒 Security: No concerns detected\n\n"
@@ -353,7 +355,7 @@ final class CodeReviewViewModel: ObservableObject {
             }
             reportString += "\n"
         }
-        
+
         // Performance Issues
         if performanceResults.isEmpty {
             reportString += "⚡ Performance: No issues detected\n\n"
@@ -364,7 +366,7 @@ final class CodeReviewViewModel: ObservableObject {
             }
             reportString += "\n"
         }
-        
+
         // Suggestions
         if suggestionResults.isEmpty {
             reportString += "💡 Suggestions: None\n\n"
@@ -375,10 +377,10 @@ final class CodeReviewViewModel: ObservableObject {
             }
             reportString += "\n"
         }
-        
+
         // Overall rating
         reportString += "📊 Overall Rating: \(report.overallRating.description)\n"
-        
+
         // AI Analysis if available
         if let aiResult = aiAnalysisResult {
             reportString += "\n🤖 AI Analysis:\n"
@@ -393,7 +395,7 @@ final class CodeReviewViewModel: ObservableObject {
                 reportString += "\n💬 AI Assessment:\n\(documentation)\n"
             }
         }
-        
+
         return reportString
     }
 
@@ -401,35 +403,35 @@ final class CodeReviewViewModel: ObservableObject {
 
 /// Default implementation of CodeReviewService
 final class DefaultCodeReviewService: CodeReviewService {
-    
+
     private let analyzers: [CodeAnalyzer] = [
         QualityAnalyzer(),
         SecurityAnalyzer(),
         PerformanceAnalyzer()
     ]
-    
+
     func analyzeCode(_ code: String) async -> CodeAnalysisReport {
         let startTime = CFAbsoluteTimeGetCurrent()
-        
+
         // Run analysis on background queue
         return await withTaskGroup(of: [AnalysisResult].self) { group in
             var allResults: [AnalysisResult] = []
-            
+
             // Add analysis tasks to group
             for analyzer in analyzers {
                 group.addTask {
                     await analyzer.analyze(code)
                 }
             }
-            
+
             // Collect results
             for await results in group {
                 allResults.append(contentsOf: results)
             }
-            
+
             let endTime = CFAbsoluteTimeGetCurrent()
             let analysisTime = endTime - startTime
-            
+
             // Calculate metrics
             let metrics = CodeMetrics(
                 characterCount: code.count,
@@ -437,10 +439,10 @@ final class DefaultCodeReviewService: CodeReviewService {
                 estimatedComplexity: calculateComplexity(code),
                 analysisTime: analysisTime
             )
-            
+
             // Determine overall rating
             let rating = determineRating(from: allResults)
-            
+
             return CodeAnalysisReport(
                 results: allResults,
                 metrics: metrics,
@@ -448,24 +450,24 @@ final class DefaultCodeReviewService: CodeReviewService {
             )
         }
     }
-    
+
     private func calculateComplexity(_ code: String) -> Int {
         let complexityKeywords = ["if", "else", "for", "while", "switch", "case", "catch", "&&", "||"]
         var complexity = 1 // Base complexity
-        
+
         for keyword in complexityKeywords {
             complexity += code.components(separatedBy: keyword).count - 1
         }
-        
+
         return complexity
     }
-    
+
     private func determineRating(from results: [AnalysisResult]) -> CodeAnalysisReport.Rating {
         let criticalCount = results.filter { $0.severity == .critical }.count
         let highCount = results.filter { $0.severity == .high }.count
         let mediumCount = results.filter { $0.severity == .medium }.count
         let totalIssues = criticalCount + highCount + mediumCount
-        
+
         switch totalIssues {
         case 0: return .excellent
         case 1...2: return .good
@@ -473,9 +475,9 @@ final class DefaultCodeReviewService: CodeReviewService {
         default: return .poor
         }
     }
-    
+
     // MARK: - Helper Methods
-    
+
     private func convertToEnhancedAnalysisItems(_ results: [AnalysisResult]) -> [EnhancedAnalysisItem] {
         return results.map { result in
             EnhancedAnalysisItem(

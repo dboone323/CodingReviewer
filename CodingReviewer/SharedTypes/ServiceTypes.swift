@@ -13,18 +13,18 @@ import Foundation
 enum AIProvider: String, CaseIterable, Codable {
     case openAI = "OpenAI"
     case gemini = "Google Gemini"
-    
+
     var displayName: String {
         return rawValue
     }
-    
+
     var description: String {
         switch self {
         case .openAI: return "GPT models for code analysis"
         case .gemini: return "Google's Gemini AI for code analysis"
         }
     }
-    
+
     var keyPrefix: String {
         switch self {
         case .openAI: return "sk-"
@@ -40,7 +40,7 @@ enum AnalysisType: String, CaseIterable, Codable {
     case documentation = "Documentation"
     case refactoring = "Refactoring"
     case comprehensive = "Comprehensive"
-    
+
     var systemImage: String {
         switch self {
         case .quality: return "checkmark.seal"
@@ -51,7 +51,7 @@ enum AnalysisType: String, CaseIterable, Codable {
         case .comprehensive: return "brain.head.profile"
         }
     }
-    
+
     var description: String {
         switch self {
         case .quality: return "Analyze code quality and best practices"
@@ -73,7 +73,7 @@ enum SuggestionType: String, CaseIterable, Codable {
     case documentation = "Documentation"
     case maintainability = "Maintainability"
     case testing = "Testing"
-    
+
     var systemImage: String {
         switch self {
         case .codeQuality: return "checkmark.seal"
@@ -99,11 +99,11 @@ enum AnalysisResultType: String, CaseIterable, Codable {
     case logic = "Logic"
     case naming = "Naming"
     case architecture = "Architecture"
-    
+
     var displayName: String {
         return rawValue
     }
-    
+
     var systemImage: String {
         switch self {
         case .quality: return "checkmark.seal"
@@ -130,11 +130,11 @@ enum ProjectType: String, CaseIterable, Codable {
     case backend = "Backend"
     case library = "Library"
     case unknown = "Unknown"
-    
+
     var displayName: String {
         return rawValue
     }
-    
+
     var systemImage: String {
         switch self {
         case .ios: return "iphone"
@@ -157,7 +157,7 @@ enum FileUploadStatus: String, CaseIterable, Codable {
     case completed = "Completed"
     case failed = "Failed"
     case cancelled = "Cancelled"
-    
+
     var systemImage: String {
         switch self {
         case .pending: return "clock"
@@ -168,7 +168,7 @@ enum FileUploadStatus: String, CaseIterable, Codable {
         case .cancelled: return "stop.circle"
         }
     }
-    
+
     var color: String {
         switch self {
         case .pending: return "gray"
@@ -188,7 +188,7 @@ enum APIUsageStatus: String, CaseIterable, Codable {
     case approaching = "Approaching Limit"
     case exceeded = "Limit Exceeded"
     case error = "Error"
-    
+
     var color: String {
         switch self {
         case .normal: return "green"

@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppLogger
 
 // MARK: - Interactive Fix Application View
 
@@ -17,11 +18,11 @@ struct FixApplicationView: View {
     @State private var previewFix: IntelligentFix?
     @State private var appliedFixes: [UUID] = []
     @State private var showingApplyConfirmation = false
-    
+
     let analysis: EnhancedAnalysisResult
     let originalCode: String
     let onFixesApplied: (String) -> Void
-    
+
     var body: some View {
         VStack(spacing: 0) {
             // Header
@@ -31,9 +32,9 @@ struct FixApplicationView: View {
                 onSelectAll: selectAllFixes,
                 onDeselectAll: deselectAllFixes
             )
-            
+
             Divider()
-            
+
             // Fixes List
             if fixGenerator.isGeneratingFixes {
                 FixGenerationProgressView(progress: fixGenerator.fixGenerationProgress)
@@ -50,9 +51,9 @@ struct FixApplicationView: View {
                     }
                 )
             }
-            
+
             Divider()
-            
+
             // Action Bar
             FixActionBar(
                 hasSelectedFixes: !selectedFixes.isEmpty,
@@ -77,9 +78,9 @@ struct FixApplicationView: View {
             Text("Apply \(selectedFixes.count) selected fixes? This action cannot be undone.")
         }
     }
-    
+
     // MARK: - Actions
-    
+
     private func generateFixes() async {
         do {
             let context = CodeContext(
@@ -87,25 +88,25 @@ struct FixApplicationView: View {
                 fileName: analysis.fileName,
                 language: analysis.language
             )
-            
+
             _ = try await fixGenerator.generateFixes(for: analysis, context: context)
         } catch {
             AppLogger.shared.log("Failed to generate fixes: \(error)", level: .error, category: .ai)
         }
     }
-    
+
     private func selectAllFixes() {
         selectedFixes = Set(fixGenerator.generatedFixes.map { $0.id })
     }
-    
+
     private func deselectAllFixes() {
         selectedFixes.removeAll()
     }
-    
+
     private func applySelectedFixes() {
         showingApplyConfirmation = true
     }
-    
+
     private func previewSelectedFixes() {
         // Show preview of all selected fixes
         if let firstFix = fixGenerator.generatedFixes.first(where: { selectedFixes.contains($0.id) }) {
@@ -113,13 +114,13 @@ struct FixApplicationView: View {
             showingDiffPreview = true
         }
     }
-    
+
     private func applyConfirmedFixes() {
         var modifiedCode = originalCode
         let sortedFixes = fixGenerator.generatedFixes
             .filter { selectedFixes.contains($0.id) }
             .sorted { $0.startLine > $1.startLine } // Apply from bottom to top
-        
+
         for fix in sortedFixes {
             do {
                 modifiedCode = try fixGenerator.applyFix(fix, to: modifiedCode)
@@ -128,7 +129,7 @@ struct FixApplicationView: View {
                 AppLogger.shared.log("Failed to apply fix \(fix.id): \(error)", level: .error, category: .ai)
             }
         }
-        
+
         selectedFixes.removeAll()
         onFixesApplied(modifiedCode)
     }
@@ -141,21 +142,21 @@ struct FixApplicationHeader: View {
     let selectedCount: Int
     let onSelectAll: () -> Void
     let onDeselectAll: () -> Void
-    
+
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Intelligent Fixes")
                     .font(.headline)
                     .foregroundColor(.primary)
-                
+
                 Text("\(totalFixes) fixes available")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            
+
             Spacer()
-            
+
             if totalFixes > 0 {
                 HStack(spacing: 12) {
                     Button(selectedCount == totalFixes ? "Deselect All" : "Select All") {
@@ -166,7 +167,7 @@ struct FixApplicationHeader: View {
                         }
                     }
                     .buttonStyle(.bordered)
-                    
+
                     if selectedCount > 0 {
                         Text("\(selectedCount) selected")
                             .font(.caption)
@@ -183,12 +184,12 @@ struct FixApplicationHeader: View {
 
 struct FixGenerationProgressView: View {
     let progress: Double
-    
+
     var body: some View {
         VStack(spacing: 16) {
             ProgressView("Generating intelligent fixes...", value: progress, total: 1.0)
                 .progressViewStyle(LinearProgressViewStyle())
-            
+
             Text("\(Int(progress * 100))% complete")
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -206,11 +207,11 @@ struct EmptyFixesView: View {
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 48))
                 .foregroundColor(.green)
-            
+
             Text("No Fixes Needed")
                 .font(.title2)
                 .fontWeight(.semibold)
-            
+
             Text("Your code looks great! No intelligent fixes are suggested at this time.")
                 .font(.body)
                 .foregroundColor(.secondary)
@@ -228,7 +229,7 @@ struct FixesList: View {
     @Binding var selectedFixes: Set<UUID>
     let appliedFixes: [UUID]
     let onPreviewFix: (IntelligentFix) -> Void
-    
+
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 8) {
@@ -249,7 +250,7 @@ struct FixesList: View {
             .padding()
         }
     }
-    
+
     private func toggleFixSelection(_ fixId: UUID) {
         if selectedFixes.contains(fixId) {
             selectedFixes.remove(fixId)
@@ -267,7 +268,7 @@ struct FixRowView: View {
     let isApplied: Bool
     let onToggleSelection: () -> Void
     let onPreview: () -> Void
-    
+
     var body: some View {
         HStack(spacing: 12) {
             // Selection checkbox
@@ -277,7 +278,7 @@ struct FixRowView: View {
                     .font(.title3)
             }
             .disabled(isApplied)
-            
+
             // Fix details
             VStack(alignment: .leading, spacing: 6) {
                 HStack {
@@ -292,41 +293,41 @@ struct FixRowView: View {
                             .foregroundColor(fix.category.color)
                             .cornerRadius(4)
                     }
-                    
+
                     Spacer()
-                    
+
                     // Confidence badge
                     ConfidenceBadge(confidence: fix.confidence)
-                    
+
                     // Impact indicator
                     ImpactIndicator(impact: fix.impact)
                 }
-                
+
                 // Description
                 Text(fix.description)
                     .font(.body)
                     .foregroundColor(.primary)
-                
+
                 // Code preview
                 HStack {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Line \(fix.startLine + 1)")
                             .font(.caption2)
                             .foregroundColor(.secondary)
-                        
+
                         Text(fix.originalCode.prefix(60) + (fix.originalCode.count > 60 ? "..." : ""))
                             .font(.system(.caption, design: .monospaced))
                             .foregroundColor(.secondary)
                     }
-                    
+
                     Spacer()
-                    
+
                     Button("Preview", action: onPreview)
                         .buttonStyle(.bordered)
                         .controlSize(.small)
                 }
             }
-            
+
             // Applied indicator
             if isApplied {
                 Image(systemName: "checkmark.circle.fill")
@@ -351,7 +352,7 @@ struct FixRowView: View {
 
 struct ConfidenceBadge: View {
     let confidence: Double
-    
+
     var body: some View {
         Text("\(Int(confidence * 100))%")
             .font(.caption2)
@@ -362,7 +363,7 @@ struct ConfidenceBadge: View {
             .foregroundColor(confidenceColor)
             .cornerRadius(4)
     }
-    
+
     private var confidenceColor: Color {
         if confidence >= 0.8 {
             return .green
@@ -376,7 +377,7 @@ struct ConfidenceBadge: View {
 
 struct ImpactIndicator: View {
     let impact: FixImpact
-    
+
     var body: some View {
         HStack(spacing: 2) {
             ForEach(0..<impact.priority, id: \.self) { _ in
@@ -391,7 +392,7 @@ struct ImpactIndicator: View {
             }
         }
     }
-    
+
     private var impactColor: Color {
         switch impact {
         case .low: return .green
@@ -408,15 +409,15 @@ struct FixActionBar: View {
     let hasSelectedFixes: Bool
     let onApplySelected: () -> Void
     let onPreviewSelected: () -> Void
-    
+
     var body: some View {
         HStack {
             Spacer()
-            
+
             if hasSelectedFixes {
                 Button("Preview Selected", action: onPreviewSelected)
                     .buttonStyle(.bordered)
-                
+
                 Button("Apply Selected", action: onApplySelected)
                     .buttonStyle(.borderedProminent)
             } else {

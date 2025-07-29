@@ -20,7 +20,7 @@ enum Severity: String, CaseIterable, Codable {
     case warning = "Warning"
     case error = "Error"
     case critical = "Critical"
-    
+
     var color: Color {
         switch self {
         case .info: return .blue
@@ -29,7 +29,7 @@ enum Severity: String, CaseIterable, Codable {
         case .critical: return .purple
         }
     }
-    
+
     var systemImage: String {
         switch self {
         case .info: return "info.circle"
@@ -46,7 +46,7 @@ enum QualityLevel: String, CaseIterable, Codable {
     case fair = "Fair"
     case poor = "Poor"
     case critical = "Critical"
-    
+
     var color: Color {
         switch self {
         case .excellent: return .green
@@ -56,7 +56,7 @@ enum QualityLevel: String, CaseIterable, Codable {
         case .critical: return .red
         }
     }
-    
+
     var score: Int {
         switch self {
         case .excellent: return 90
@@ -74,7 +74,7 @@ enum EffortLevel: String, CaseIterable, Codable {
     case medium = "Medium"
     case high = "High"
     case extensive = "Extensive"
-    
+
     var color: Color {
         switch self {
         case .minimal: return .green
@@ -84,7 +84,7 @@ enum EffortLevel: String, CaseIterable, Codable {
         case .extensive: return .red
         }
     }
-    
+
     var estimatedHours: String {
         switch self {
         case .minimal: return "< 1 hour"
@@ -102,7 +102,7 @@ enum ImpactLevel: String, CaseIterable, Codable {
     case moderate = "Moderate"
     case major = "Major"
     case critical = "Critical"
-    
+
     var color: Color {
         switch self {
         case .negligible: return .gray
@@ -112,7 +112,7 @@ enum ImpactLevel: String, CaseIterable, Codable {
         case .critical: return .red
         }
     }
-    
+
     var priority: Int {
         switch self {
         case .negligible: return 1

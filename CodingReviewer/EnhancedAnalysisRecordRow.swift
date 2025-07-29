@@ -10,7 +10,7 @@ import SwiftUI
 struct EnhancedAnalysisRecordRow: View {
     let record: FileAnalysisRecord
     @State private var isExpanded = true  // Start expanded so users can see results immediately
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             // Header with file info and summary
@@ -19,33 +19,33 @@ struct EnhancedAnalysisRecordRow: View {
                     Text(record.file.name)
                         .font(.headline)
                         .foregroundColor(.primary)
-                    
+
                     HStack {
                         Label("\(record.analysisResults.count) issues", systemImage: "exclamationmark.triangle")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        
+
                         Spacer()
-                        
+
                         Text("Analyzed \(formatDuration(record.duration))")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
                 }
-                
+
                 Spacer()
-                
+
                 Button(action: { isExpanded.toggle() }) {
                     Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                         .foregroundColor(.secondary)
                 }
             }
             .padding(.vertical, 4)
-            
+
             // Expandable details
             if isExpanded {
                 Divider()
-                
+
                 if record.analysisResults.isEmpty {
                     Text("No issues found")
                         .italic()
@@ -59,17 +59,17 @@ struct EnhancedAnalysisRecordRow: View {
                     }
                     .padding(.top, 4)
                 }
-                
+
                 // AI Analysis Result
                 if let aiResult = record.aiAnalysisResult {
                     Divider()
-                    
+
                     VStack(alignment: .leading, spacing: 4) {
                         Label("AI Analysis", systemImage: "brain.head.profile")
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(.blue)
-                        
+
                         Text(aiResult)
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -83,7 +83,7 @@ struct EnhancedAnalysisRecordRow: View {
         .background(Color(NSColor.controlBackgroundColor))
         .cornerRadius(8)
     }
-    
+
     @ViewBuilder
     private func analysisItemView(item: EnhancedAnalysisItem, index: Int) -> some View {
         HStack(alignment: .top, spacing: 8) {
@@ -92,15 +92,15 @@ struct EnhancedAnalysisRecordRow: View {
                 .fill(severityColor(for: item.severity))
                 .frame(width: 8, height: 8)
                 .offset(y: 4)
-            
+
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Text(item.message)
                         .font(.body)
                         .foregroundColor(.primary)
-                    
+
                     Spacer()
-                    
+
                     if let lineNumber = item.lineNumber {
                         Text("Line \(lineNumber)")
                             .font(.caption)
@@ -111,7 +111,7 @@ struct EnhancedAnalysisRecordRow: View {
                             .cornerRadius(4)
                     }
                 }
-                
+
                 Text(item.type.capitalized)
                     .font(.caption2)
                     .foregroundColor(.secondary)
@@ -123,7 +123,7 @@ struct EnhancedAnalysisRecordRow: View {
         }
         .padding(.vertical, 4)
     }
-    
+
     private func severityColor(for severity: String) -> Color {
         switch severity.lowercased() {
         case "critical":
@@ -138,7 +138,7 @@ struct EnhancedAnalysisRecordRow: View {
             return .gray
         }
     }
-    
+
     private func formatDuration(_ duration: TimeInterval) -> String {
         if duration < 1 {
             return String(format: "%.0fms", duration * 1000)
@@ -156,7 +156,7 @@ struct EnhancedAnalysisRecordRow_Previews: PreviewProvider {
             content: "// Sample content",
             language: .swift
         )
-        
+
         let sampleAnalysisResults = [
             EnhancedAnalysisItem(
                 message: "Variable 'unused' is declared but never used",
@@ -171,14 +171,14 @@ struct EnhancedAnalysisRecordRow_Previews: PreviewProvider {
                 type: "security"
             )
         ]
-        
+
         // Create FileAnalysisRecord using the correct initializer
         var sampleRecord = FileAnalysisRecord(
             file: sampleFile,
             analysisResults: sampleAnalysisResults,
             duration: 0.5
         )
-        
+
         EnhancedAnalysisRecordRow(record: sampleRecord)
             .padding()
             .previewLayout(.sizeThatFits)
