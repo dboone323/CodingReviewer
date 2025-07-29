@@ -1,0 +1,13 @@
+# Global owners
+* @dboone323
+
+# Specific file patterns
+*.swift @dboone323
+.github/ @dboone323
+*.md @dboone323
+
+# Security-sensitive files
+*security* @dboone323
+*Security* @dboone323
+*.pem @dboone323
+*.key @dboone323
