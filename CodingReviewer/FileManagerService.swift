@@ -866,17 +866,48 @@ final class FileManagerService: ObservableObject {
         
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
-            let (data, _) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await URLSession.shared.data(for: request)
             
-            if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-               let choices = json["choices"] as? [[String: Any]],
-               let firstChoice = choices.first,
-               let message = firstChoice["message"] as? [String: Any],
-               let content = message["content"] as? String {
-                return content.trimmingCharacters(in: .whitespacesAndNewlines)
+            // Check HTTP status code for specific errors
+            if let httpResponse = response as? HTTPURLResponse {
+                switch httpResponse.statusCode {
+                case 401:
+                    return "Error: Invalid API key. Please check your OpenAI API key in settings."
+                case 429:
+                    return "Error: Rate limit exceeded. Please try again later."
+                case 500...599:
+                    return "Error: OpenAI service is currently unavailable. Please try again later."
+                case 400:
+                    return "Error: Invalid request format or token limit exceeded."
+                default:
+                    break
+                }
+            }
+            
+            if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                // Check for API error response
+                if let error = json["error"] as? [String: Any],
+                   let message = error["message"] as? String {
+                    return "OpenAI API Error: \(message)"
+                }
+                
+                // Parse successful response
+                if let choices = json["choices"] as? [[String: Any]],
+                   let firstChoice = choices.first,
+                   let message = firstChoice["message"] as? [String: Any],
+                   let content = message["content"] as? String {
+                    return content.trimmingCharacters(in: .whitespacesAndNewlines)
+                }
             }
         } catch {
-            return "OpenAI API Error: \(error.localizedDescription)"
+            let errorMessage = error.localizedDescription
+            if errorMessage.contains("network") || errorMessage.contains("connection") {
+                return "Error: Network connection failed. Please check your internet connection."
+            } else if errorMessage.contains("timeout") {
+                return "Error: Request timed out. Please try again."
+            } else {
+                return "OpenAI API Error: \(errorMessage)"
+            }
         }
         
         return "No response from OpenAI"
@@ -907,19 +938,48 @@ final class FileManagerService: ObservableObject {
         
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
-            let (data, _) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await URLSession.shared.data(for: request)
             
-            if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-               let candidates = json["candidates"] as? [[String: Any]],
-               let firstCandidate = candidates.first,
-               let content = firstCandidate["content"] as? [String: Any],
-               let parts = content["parts"] as? [[String: Any]],
-               let firstPart = parts.first,
-               let text = firstPart["text"] as? String {
-                return text.trimmingCharacters(in: .whitespacesAndNewlines)
+            // Check HTTP status code for specific errors
+            if let httpResponse = response as? HTTPURLResponse {
+                switch httpResponse.statusCode {
+                case 400:
+                    return "Error: Invalid Gemini API key or request format. Please check your settings."
+                case 429:
+                    return "Error: Gemini API rate limit exceeded. Please try again later."
+                case 500...599:
+                    return "Error: Gemini service is currently unavailable. Please try again later."
+                default:
+                    break
+                }
+            }
+            
+            if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                // Check for API error response
+                if let error = json["error"] as? [String: Any],
+                   let message = error["message"] as? String {
+                    return "Gemini API Error: \(message)"
+                }
+                
+                // Parse successful response
+                if let candidates = json["candidates"] as? [[String: Any]],
+                   let firstCandidate = candidates.first,
+                   let content = firstCandidate["content"] as? [String: Any],
+                   let parts = content["parts"] as? [[String: Any]],
+                   let firstPart = parts.first,
+                   let text = firstPart["text"] as? String {
+                    return text.trimmingCharacters(in: .whitespacesAndNewlines)
+                }
             }
         } catch {
-            return "Gemini API Error: \(error.localizedDescription)"
+            let errorMessage = error.localizedDescription
+            if errorMessage.contains("network") || errorMessage.contains("connection") {
+                return "Error: Network connection failed. Please check your internet connection."
+            } else if errorMessage.contains("timeout") {
+                return "Error: Request timed out. Please try again."
+            } else {
+                return "Gemini API Error: \(errorMessage)"
+            }
         }
         
         return "No response from Gemini"

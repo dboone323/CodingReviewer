@@ -327,7 +327,9 @@ final class SmartDocumentationGenerator: ObservableObject {
     
     private func analyzeCodePurpose(_ code: String, language: CodeLanguage) async -> String {
         do {
-            let response = try await aiService.generateDocumentation(code, language: language)
+            // Use specialized prompt for code purpose analysis
+            let purposePrompt = "Analyze the purpose of this \(language.displayName) code. Focus on what it does and its main functionality:\n\n\(code)"
+            let response = try await aiService.explainCode(purposePrompt, language: language)
             return response
         } catch {
             logger.log("❌ Failed to analyze code purpose: \(error)", level: .error, category: .ai)
@@ -337,7 +339,9 @@ final class SmartDocumentationGenerator: ObservableObject {
     
     private func analyzeArchitecture(_ code: String, language: CodeLanguage) async -> String {
         do {
-            let response = try await aiService.generateDocumentation(code, language: language)
+            // Use specialized prompt for architecture analysis
+            let architecturePrompt = "Analyze the architecture and design patterns in this \(language.displayName) code. Focus on structure, patterns, and organization:\n\n\(code)"
+            let response = try await aiService.explainCode(architecturePrompt, language: language)
             return response
         } catch {
             logger.log("❌ Failed to analyze architecture: \(error)", level: .error, category: .ai)
@@ -347,7 +351,9 @@ final class SmartDocumentationGenerator: ObservableObject {
     
     private func analyzeBestPractices(_ code: String, language: CodeLanguage) async -> String {
         do {
-            let response = try await aiService.generateDocumentation(code, language: language)
+            // Use specialized prompt for best practices analysis
+            let practicesPrompt = "Analyze this \(language.displayName) code for best practices, code quality, and improvement recommendations:\n\n\(code)"
+            let response = try await aiService.explainCode(practicesPrompt, language: language)
             return response
         } catch {
             logger.log("❌ Failed to analyze best practices: \(error)", level: .error, category: .ai)

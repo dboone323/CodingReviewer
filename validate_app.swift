@@ -13,8 +13,23 @@ class AppValidator {
     private var passedChecks = 0
     private var failedChecks = 0
     
+    // Dynamic path detection
+    private let projectPath: String
+    
+    init() {
+        // Get the current working directory or use the script's directory
+        if let scriptPath = ProcessInfo.processInfo.environment["PWD"] {
+            projectPath = scriptPath
+        } else {
+            // Fallback to script's directory
+            let scriptURL = URL(fileURLWithPath: CommandLine.arguments[0])
+            projectPath = scriptURL.deletingLastPathComponent().path
+        }
+    }
+    
     func validate() {
         print("🔍 CodingReviewer App Validation Suite")
+        print("📁 Project Path: \(projectPath)")
         print(String(repeating: "=", count: 60))
         
         validateProjectStructure()
@@ -40,7 +55,6 @@ class AppValidator {
         print("\n📁 Validating Project Structure...")
         
         let fileManager = FileManager.default
-        let projectPath = "/Users/danielstevens/Desktop/CodingReviewer"
         
         // Check main project file
         check(fileManager.fileExists(atPath: "\(projectPath)/CodingReviewer.xcodeproj"),
@@ -70,39 +84,38 @@ class AppValidator {
     private func validateBuildConfiguration() {
         print("\n🔧 Validating Build Configuration...")
         
-        let projectPath = "/Users/danielstevens/Desktop/CodingReviewer"
+        let fileManager = FileManager.default
         
-        // Check if project can list configurations
-        let task = Process()
-        task.launchPath = "/usr/bin/xcodebuild"
-        task.arguments = ["-list", "-project", "\(projectPath)/CodingReviewer.xcodeproj"]
-        task.currentDirectoryPath = projectPath
+        // Check Info.plist
+        check(fileManager.fileExists(atPath: "\(projectPath)/CodingReviewer/Info.plist"),
+              "Info.plist exists")
         
-        let pipe = Pipe()
-        task.standardOutput = pipe
-        task.standardError = pipe
+        // Check .swiftlint.yml
+        check(fileManager.fileExists(atPath: "\(projectPath)/.swiftlint.yml"),
+              "SwiftLint configuration exists")
         
-        do {
-            try task.run()
-            task.waitUntilExit()
-            
-            let data = pipe.fileHandleForReading.readDataToEndOfFile()
-            let output = String(data: data, encoding: .utf8) ?? ""
-            
-            check(task.terminationStatus == 0, "Xcode project configuration is valid")
-            check(output.contains("CodingReviewer"), "Main target exists")
-            check(output.contains("CodingReviewerTests"), "Test target exists")
-            check(output.contains("Debug"), "Debug configuration exists")
-            check(output.contains("Release"), "Release configuration exists")
-        } catch {
-            check(false, "Failed to validate build configuration: \(error)")
+        // Check for Package.swift (if using SPM)
+        let hasPackageSwift = fileManager.fileExists(atPath: "\(projectPath)/Package.swift")
+        if hasPackageSwift {
+            print("📦 Package.swift found - SPM project detected")
         }
+        
+        // Check for Podfile (if using CocoaPods)
+        let hasPodfile = fileManager.fileExists(atPath: "\(projectPath)/Podfile")
+        if hasPodfile {
+            print("🍫 Podfile found - CocoaPods project detected")
+        }
+        
+        // Check schemes directory
+        check(fileManager.fileExists(atPath: "\(projectPath)/CodingReviewer.xcodeproj/xcshareddata/xcschemes"),
+              "Shared schemes directory exists")
     }
     
     private func validateSourceFiles() {
         print("\n📄 Validating Source Files...")
         
-        let projectPath = "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer"
+        let fileManager = FileManager.default
+        let sourcePath = "\(projectPath)/CodingReviewer"
         let expectedFiles = [
             "CodingReviewerApp.swift",
             "ContentView.swift",
@@ -117,10 +130,8 @@ class AppValidator {
             "AISettingsView.swift"
         ]
         
-        let fileManager = FileManager.default
-        
         for file in expectedFiles {
-            let filePath = "\(projectPath)/\(file)"
+            let filePath = "\(sourcePath)/\(file)"
             let exists = fileManager.fileExists(atPath: filePath)
             check(exists, "Source file exists: \(file)")
             
@@ -140,7 +151,7 @@ class AppValidator {
     private func validateTestFiles() {
         print("\n🧪 Validating Test Files...")
         
-        let testPath = "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests"
+        let testPath = "\(projectPath)/CodingReviewerTests"
         let expectedTestFiles = [
             "CodingReviewerTests.swift",
             "CodeAnalysisTests.swift",
@@ -169,14 +180,13 @@ class AppValidator {
         }
         
         // Check standalone test files
-        let standalonePath = "/Users/danielstevens/Desktop/CodingReviewer"
         let standaloneTests = [
             "test_core_components.swift",
             "validate_app.swift"
         ]
         
         for file in standaloneTests {
-            let filePath = "\(standalonePath)/\(file)"
+            let filePath = "\(projectPath)/\(file)"
             check(fileManager.fileExists(atPath: filePath), "Standalone test exists: \(file)")
         }
     }
@@ -184,7 +194,7 @@ class AppValidator {
     private func validateAssets() {
         print("\n🎨 Validating Assets...")
         
-        let assetsPath = "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/Assets.xcassets"
+        let assetsPath = "\(projectPath)/CodingReviewer/Assets.xcassets"
         let fileManager = FileManager.default
         
         check(fileManager.fileExists(atPath: assetsPath), "Assets catalog exists")

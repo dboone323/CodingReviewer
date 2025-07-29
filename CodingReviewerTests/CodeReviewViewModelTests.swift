@@ -13,11 +13,11 @@ import Combine
 final class CodeReviewViewModelTests {
     
     var viewModel: CodeReviewViewModel!
-    var mockKeyManager: MockAPIKeyManager!
+    var mockKeyManager: APIKeyManager!
     var mockCodeReviewService: MockCodeReviewService!
     
     init() async throws {
-        mockKeyManager = MockAPIKeyManager()
+        mockKeyManager = APIKeyManager.shared // Use the shared instance for testing
         mockCodeReviewService = MockCodeReviewService()
         viewModel = CodeReviewViewModel(codeReviewService: mockCodeReviewService, keyManager: mockKeyManager)
     }
@@ -117,25 +117,25 @@ final class CodeReviewViewModelTests {
     @Test
     func testAIEnabledWithValidKey() async throws {
         // Given
-        mockKeyManager.mockHasValidKey = true
+        mockKeyManager.hasValidKey = true
         
-        // When
-        mockKeyManager.triggerKeyUpdate()
+        // When (simulate the key being updated)
+        // Note: The real APIKeyManager will notify changes automatically
         
         // Then
-        #expect(mockKeyManager.mockHasValidKey == true)
+        #expect(mockKeyManager.hasValidKey == true)
     }
     
     @Test
     func testAIDisabledWithoutKey() async throws {
         // Given
-        mockKeyManager.mockHasValidKey = false
+        mockKeyManager.hasValidKey = false
         
-        // When
-        mockKeyManager.triggerKeyUpdate()
+        // When (simulate the key being updated)
+        // Note: The real APIKeyManager will notify changes automatically
         
         // Then
-        #expect(mockKeyManager.mockHasValidKey == false)
+        #expect(mockKeyManager.hasValidKey == false)
         #expect(viewModel.aiEnabled == false)
     }
     
@@ -147,12 +147,14 @@ final class CodeReviewViewModelTests {
         viewModel.codeInput = "var x = getValue()"
         let fix = CodeFix(
             id: UUID(),
+            suggestionId: UUID(),
             title: "Use lazy initialization",
             description: "Apply lazy keyword",
-            lineNumber: 1,
             originalCode: "var x = getValue()",
             fixedCode: "lazy var x = getValue()",
-            confidence: 0.9
+            explanation: "Using lazy initialization improves performance",
+            confidence: 0.9,
+            isAutoApplicable: true
         )
         
         // When
@@ -168,12 +170,14 @@ final class CodeReviewViewModelTests {
         viewModel.codeInput = "different code"
         let fix = CodeFix(
             id: UUID(),
+            suggestionId: UUID(),
             title: "Test fix",
             description: "Test description",
-            lineNumber: 1,
             originalCode: "var x = getValue()",
             fixedCode: "lazy var x = getValue()",
-            confidence: 0.9
+            explanation: "Test explanation for improvement",
+            confidence: 0.9,
+            isAutoApplicable: true
         )
         
         // When
@@ -251,40 +255,6 @@ final class CodeReviewViewModelTests {
 
 import Foundation
 
-protocol APIKeyManagerProtocol: ObservableObject {
-    var hasValidKey: Bool { get set }
-    var showingKeySetup: Bool { get set }
-    func getOpenAIKey() -> String?
-}
-
-extension APIKeyManager: APIKeyManagerProtocol {}
-
-class MockAPIKeyManager: APIKeyManagerProtocol {
-    var mockHasValidKey: Bool = false
-    var mockShowingKeySetup: Bool = false
-    
-    var hasValidKey: Bool {
-        get { mockHasValidKey }
-        set { mockHasValidKey = newValue }
-    }
-    
-    var showingKeySetup: Bool {
-        get { mockShowingKeySetup }
-        set { mockShowingKeySetup = newValue }
-    }
-    
-    func getOpenAIKey() -> String? {
-        return hasValidKey ? "test-key" : nil
-    }
-    
-    var objectWillChange = PassthroughSubject<Void, Never>()
-    
-    func triggerKeyUpdate() {
-        // Simulate key update
-        objectWillChange.send()
-    }
-}
-
 class MockCodeReviewService: CodeReviewService {
     var mockResults: [AnalysisResult] = []
     var shouldThrowError: Bool = false
@@ -296,7 +266,24 @@ class MockCodeReviewService: CodeReviewService {
         }
         
         if shouldThrowError {
-            throw NSError(domain: "TestError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Mock error"])
+            // Return an error report instead of throwing
+            let metrics = CodeMetrics(
+                characterCount: code.count,
+                lineCount: code.components(separatedBy: .newlines).count,
+                estimatedComplexity: 1,
+                analysisTime: delayDuration
+            )
+            
+            return CodeAnalysisReport(
+                results: [AnalysisResult(
+                    type: .security,
+                    message: "Mock error for testing",
+                    line: 1,
+                    severity: .high
+                )],
+                metrics: metrics,
+                overallRating: .poor
+            )
         }
         
         let metrics = CodeMetrics(

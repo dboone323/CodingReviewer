@@ -40,16 +40,16 @@ final class IntelligentFixGenerator: ObservableObject {
         var fixes: [IntelligentFix] = []
         
         // Generate different types of fixes based on analysis
-        let securityFixes = await generateSecurityFixes(analysis: analysis, context: context)
+        let securityFixes = generateSecurityFixes(analysis: analysis, context: context)
         await updateProgress(0.25)
         
-        let performanceFixes = await generatePerformanceFixes(analysis: analysis, context: context)
+        let performanceFixes = generatePerformanceFixes(analysis: analysis, context: context)
         await updateProgress(0.50)
         
-        let styleFixes = await generateStyleFixes(analysis: analysis, context: context)
+        let styleFixes = generateStyleFixes(analysis: analysis, context: context)
         await updateProgress(0.75)
         
-        let logicFixes = await generateLogicFixes(analysis: analysis, context: context)
+        let logicFixes = generateLogicFixes(analysis: analysis, context: context)
         await updateProgress(1.0)
         
         fixes.append(contentsOf: securityFixes)
@@ -113,7 +113,7 @@ final class IntelligentFixGenerator: ObservableObject {
     private func generateSecurityFixes(
         analysis: EnhancedAnalysisResult,
         context: CodeContext
-    ) async -> [IntelligentFix] {
+    ) -> [IntelligentFix] {
         
         var fixes: [IntelligentFix] = []
         let code = context.originalCode
@@ -173,7 +173,7 @@ final class IntelligentFixGenerator: ObservableObject {
     private func generatePerformanceFixes(
         analysis: EnhancedAnalysisResult,
         context: CodeContext
-    ) async -> [IntelligentFix] {
+    ) -> [IntelligentFix] {
         
         var fixes: [IntelligentFix] = []
         let code = context.originalCode
@@ -223,7 +223,7 @@ final class IntelligentFixGenerator: ObservableObject {
     private func generateStyleFixes(
         analysis: EnhancedAnalysisResult,
         context: CodeContext
-    ) async -> [IntelligentFix] {
+    ) -> [IntelligentFix] {
         
         var fixes: [IntelligentFix] = []
         let code = context.originalCode
@@ -242,7 +242,7 @@ final class IntelligentFixGenerator: ObservableObject {
     private func generateLogicFixes(
         analysis: EnhancedAnalysisResult,
         context: CodeContext
-    ) async -> [IntelligentFix] {
+    ) -> [IntelligentFix] {
         
         var fixes: [IntelligentFix] = []
         let code = context.originalCode
