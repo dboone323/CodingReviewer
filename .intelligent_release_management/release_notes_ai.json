@@ -1,0 +1,59 @@
+{
+  "release_notes_ai": {
+    "generation_templates": {
+      "major_release": {
+        "structure": [
+          "## 🎉 Major Release {version}",
+          "### 🚀 Breaking Changes",
+          "### ✨ New Features", 
+          "### 🐛 Bug Fixes",
+          "### 📈 Performance Improvements",
+          "### 📚 Documentation Updates",
+          "### 🔧 Technical Changes"
+        ],
+        "tone": "exciting",
+        "detail_level": "comprehensive"
+      },
+      "minor_release": {
+        "structure": [
+          "## ✨ Feature Release {version}",
+          "### 🆕 New Features",
+          "### 🐛 Bug Fixes",
+          "### 🔧 Improvements",
+          "### 📚 Documentation"
+        ],
+        "tone": "informative",
+        "detail_level": "detailed"
+      },
+      "patch_release": {
+        "structure": [
+          "## 🐛 Bug Fix Release {version}",
+          "### Fixes",
+          "### Minor Improvements"
+        ],
+        "tone": "concise",
+        "detail_level": "brief"
+      }
+    },
+    "content_analysis": {
+      "commit_categorization": {
+        "user_facing": true,
+        "technical_only": false,
+        "breaking_change": true,
+        "security_fix": true
+      },
+      "impact_assessment": {
+        "high": "Major functionality changes",
+        "medium": "Feature additions or significant fixes",
+        "low": "Minor fixes or improvements"
+      }
+    },
+    "auto_generation_rules": {
+      "include_commit_authors": true,
+      "include_issue_links": true,
+      "include_performance_metrics": true,
+      "group_by_component": true
+    },
+    "last_generated": "2025-07-30T13:24:57Z"
+  }
+}

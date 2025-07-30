@@ -1,0 +1,27 @@
+{
+  "test_configuration": {
+    "name": "Manual Test Configuration",
+    "version": "1.0.0",
+    "created": "2025-07-29T21:57:26-05:00",
+    "test_files": {
+      "swift_files": 20,
+      "javascript_files": 15,
+      "python_files": 10,
+      "total_files": 45
+    },
+    "test_parameters": {
+      "file_upload_limit": 1000,
+      "expected_behavior": "All files should upload and be accessible across views",
+      "analytics_expected": true,
+      "ai_features_expected": true
+    },
+    "validation_checklist": [
+      "Upload all test files to FileUploadView",
+      "Verify file count shows 45+ files",
+      "Switch to Enhanced AI Insights tab",
+      "Confirm uploaded files are visible in analytics",
+      "Check ML Integration can access files",
+      "Verify real-time updates between views"
+    ]
+  }
+}

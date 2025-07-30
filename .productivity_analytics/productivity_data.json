@@ -1,0 +1,90 @@
+{
+  "productivity_analytics": {
+    "developer_profile": {
+      "name": "Developer",
+      "role": "Software Engineer",
+      "experience_level": "Senior",
+      "primary_languages": ["Swift", "JavaScript", "Python"],
+      "work_patterns": {
+        "peak_hours": ["09:00-11:00", "14:00-16:00"],
+        "preferred_session_length": 45,
+        "break_frequency": 60
+      }
+    },
+    "coding_velocity": {
+      "lines_per_day": {
+        "current": 450,
+        "average_7d": 425,
+        "average_30d": 398,
+        "target": 500
+      },
+      "commits_per_day": {
+        "current": 8,
+        "average_7d": 7.2,
+        "average_30d": 6.8,
+        "target": 10
+      },
+      "files_modified": {
+        "current": 12,
+        "average_7d": 11.5,
+        "average_30d": 10.2,
+        "target": 15
+      }
+    },
+    "focus_time": {
+      "deep_work_sessions": {
+        "daily_count": 3,
+        "average_duration": 42,
+        "quality_score": 8.5,
+        "interruption_count": 2
+      },
+      "context_switching": {
+        "file_switches_per_hour": 15,
+        "project_switches_per_day": 3,
+        "language_switches_per_day": 2
+      },
+      "flow_state": {
+        "sessions_today": 2,
+        "total_duration": 85,
+        "efficiency_rating": 9.2
+      }
+    },
+    "collaboration_patterns": {
+      "code_reviews": {
+        "reviews_given": 5,
+        "reviews_received": 3,
+        "average_review_time": 25,
+        "approval_rate": 0.92
+      },
+      "pair_programming": {
+        "sessions_per_week": 4,
+        "average_duration": 90,
+        "knowledge_transfer_score": 8.7
+      },
+      "communication": {
+        "slack_messages": 35,
+        "meeting_hours": 2.5,
+        "documentation_updates": 3
+      }
+    },
+    "skill_assessment": {
+      "current_skills": {
+        "Swift": 9.0,
+        "JavaScript": 8.5,
+        "Python": 7.8,
+        "Git": 8.9,
+        "Testing": 8.2
+      },
+      "learning_progress": {
+        "courses_completed": 2,
+        "new_technologies": ["SwiftUI", "Combine"],
+        "skill_improvement_rate": 0.15
+      },
+      "knowledge_gaps": [
+        "Advanced iOS Performance",
+        "Machine Learning",
+        "DevOps Automation"
+      ]
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "multiplatform_deployment": {
+    "platforms": {
+      "ios": {
+        "enabled": true,
+        "scheme": "CodingReviewer",
+        "configuration": "Release",
+        "export_options": "ExportOptions.plist",
+        "bundle_id": "com.codingreviewer.app",
+        "team_id": "TEAM_ID_PLACEHOLDER",
+        "archive_path": "build/ios/CodingReviewer.xcarchive",
+        "ipa_path": "build/ios/CodingReviewer.ipa"
+      },
+      "android": {
+        "enabled": false,
+        "gradle_task": "assembleRelease",
+        "build_type": "release",
+        "flavor": "production",
+        "output_path": "build/android/app-release.apk",
+        "keystore_path": "android/app/release.keystore"
+      },
+      "macos": {
+        "enabled": true,
+        "scheme": "CodingReviewer-macOS",
+        "configuration": "Release",
+        "archive_path": "build/macos/CodingReviewer.xcarchive",
+        "app_path": "build/macos/CodingReviewer.app"
+      },
+      "web": {
+        "enabled": false,
+        "build_command": "npm run build",
+        "output_dir": "dist",
+        "deploy_target": "firebase"
+      }
+    },
+    "app_store_connect": {
+      "api_key_id": "API_KEY_ID_PLACEHOLDER",
+      "api_key_path": "private_keys/AuthKey.p8",
+      "issuer_id": "ISSUER_ID_PLACEHOLDER",
+      "auto_submit": false,
+      "beta_testing": true
+    },
+    "beta_testing": {
+      "testflight": {
+        "enabled": true,
+        "groups": ["Internal", "External"],
+        "auto_notify": true,
+        "review_notes": "Automated build from CI/CD pipeline"
+      },
+      "firebase": {
+        "enabled": false,
+        "app_id": "FIREBASE_APP_ID",
+        "groups": ["qa-team", "beta-testers"]
+      }
+    },
+    "crash_reporting": {
+      "crashlytics": {
+        "enabled": true,
+        "upload_symbols": true,
+        "api_key": "CRASHLYTICS_API_KEY"
+      },
+      "bugsnag": {
+        "enabled": false,
+        "api_key": "BUGSNAG_API_KEY"
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+# Intelligent Code Generator Pattern Database
+# This file stores learned patterns and code generation rules
+
+[SWIFT_PATTERNS]
+# Common Swift patterns and their contexts
+
+# View Controller Patterns
+view_controller_lifecycle=viewDidLoad,viewWillAppear,viewDidAppear,viewWillDisappear,viewDidDisappear
+ui_setup_pattern=setupUI,configureViews,setupConstraints,setupDelegates
+data_binding_pattern=bindData,updateUI,refreshView,configureCell
+
+# SwiftUI Patterns
+swiftui_view_pattern=body,init,@State,@Binding,@ObservedObject
+swiftui_navigation_pattern=NavigationView,NavigationLink,sheet,fullScreenCover
+swiftui_data_pattern=@StateObject,@EnvironmentObject,@FetchRequest
+
+# Error Handling Patterns
+error_handling_pattern=do-catch,Result,Optional,guard
+async_pattern=async,await,Task,@MainActor
+
+# Protocol Patterns
+protocol_pattern=protocol,extension,associatedtype,Self
+delegate_pattern=weak,delegate,protocol
+
+[CODE_GENERATION_RULES]
+# Rules for generating code based on context
+
+# When creating a new Swift file
+new_swift_file=import Foundation,import SwiftUI,class,struct,protocol
+new_view_controller=UIViewController,viewDidLoad,setupUI
+new_swiftui_view=View,body,@State
+
+# When adding functions
+function_with_params=func,parameters,return,throws
+async_function=async,throws,await
+completion_handler=@escaping,completion
+
+# When adding properties
+computed_property=get,set,didSet,willSet
+observed_property=@Published,@State,@Binding
+
+[TESTING_PATTERNS]
+# Unit test generation patterns
+
+test_function_pattern=func test,XCTAssert,given,when,then
+mock_pattern=protocol,Mock,stub,verify
+async_test_pattern=XCTestExpectation,waitForExpectations
+

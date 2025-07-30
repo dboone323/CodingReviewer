@@ -1,0 +1,48 @@
+{
+  "deployment_risk_assessment": {
+    "risk_factors": {
+      "code_changes": {
+        "files_changed_weight": 0.3,
+        "lines_added_weight": 0.2,
+        "lines_deleted_weight": 0.25,
+        "critical_files_weight": 0.4,
+        "test_coverage_weight": 0.35
+      },
+      "testing_metrics": {
+        "test_pass_rate_weight": 0.4,
+        "test_coverage_weight": 0.3,
+        "performance_test_weight": 0.2,
+        "security_scan_weight": 0.1
+      },
+      "historical_data": {
+        "previous_deployment_success_rate": 0.95,
+        "rollback_frequency": 0.05,
+        "average_deployment_time": 180,
+        "incident_correlation": 0.02
+      }
+    },
+    "risk_scoring": {
+      "low_risk": {
+        "threshold": 0.3,
+        "deployment_strategy": "standard",
+        "monitoring_level": "basic"
+      },
+      "medium_risk": {
+        "threshold": 0.6,
+        "deployment_strategy": "canary",
+        "monitoring_level": "enhanced"
+      },
+      "high_risk": {
+        "threshold": 1.0,
+        "deployment_strategy": "blue_green",
+        "monitoring_level": "intensive"
+      }
+    },
+    "ml_model": {
+      "algorithm": "gradient_boosting",
+      "training_data_points": 100,
+      "accuracy_score": 0.87,
+      "last_training": "2025-07-30T13:33:44Z"
+    }
+  }
+}

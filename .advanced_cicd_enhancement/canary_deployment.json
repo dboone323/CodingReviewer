@@ -1,0 +1,49 @@
+{
+  "canary_deployment": {
+    "strategy": {
+      "initial_traffic_percentage": 5,
+      "increment_percentage": 10,
+      "increment_interval": "10m",
+      "max_traffic_percentage": 100,
+      "rollback_threshold": {
+        "error_rate": 0.01,
+        "response_time": 500,
+        "success_rate": 0.99
+      }
+    },
+    "monitoring": {
+      "metrics": [
+        "error_rate",
+        "response_time",
+        "throughput",
+        "cpu_usage",
+        "memory_usage",
+        "user_satisfaction"
+      ],
+      "alert_thresholds": {
+        "error_rate_spike": 0.005,
+        "response_time_degradation": 200,
+        "resource_usage_limit": 0.8
+      },
+      "monitoring_duration": "30m"
+    },
+    "automation": {
+      "auto_promote": true,
+      "auto_rollback": true,
+      "notification_channels": ["slack", "email", "webhook"],
+      "approval_required": false
+    },
+    "environments": {
+      "staging": {
+        "enabled": true,
+        "traffic_percentage": 100,
+        "monitoring_level": "detailed"
+      },
+      "production": {
+        "enabled": true,
+        "traffic_percentage": 5,
+        "monitoring_level": "intensive"
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+# staging Environment Configuration
+environment = "staging"
+aws_region  = "us-west-2"
+
+# Environment-specific settings
+instance_type = "t3.small"
+min_capacity = 2
+max_capacity = 4

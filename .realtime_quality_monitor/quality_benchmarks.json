@@ -1,0 +1,24 @@
+{
+  "benchmarks": {
+    "swift_projects": {
+      "complexity_threshold": 10,
+      "maintainability_threshold": 70,
+      "documentation_threshold": 80,
+      "test_coverage_threshold": 85
+    },
+    "ios_apps": {
+      "memory_safety_threshold": 90,
+      "performance_threshold": 85,
+      "code_duplication_threshold": 5
+    }
+  },
+  "project_specific": {
+    "target_overall_score": 85,
+    "critical_thresholds": {
+      "complexity": 15,
+      "maintainability": 60,
+      "performance": 80
+    }
+  },
+  "last_updated": "2025-07-30T13:03:53Z"
+}

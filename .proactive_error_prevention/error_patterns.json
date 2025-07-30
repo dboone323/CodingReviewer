@@ -1,0 +1,66 @@
+{
+  "error_patterns": {
+    "build_failures": {
+      "swift_syntax": {
+        "patterns": [
+          "missing semicolon",
+          "undeclared identifier",
+          "type mismatch",
+          "missing import",
+          "undefined symbol"
+        ],
+        "prediction_accuracy": 0.85,
+        "prevention_strategies": [
+          "syntax_validation",
+          "import_verification",
+          "type_checking"
+        ]
+      },
+      "dependency_conflicts": {
+        "patterns": [
+          "version incompatibility",
+          "missing framework",
+          "circular dependency",
+          "duplicate symbols"
+        ],
+        "prediction_accuracy": 0.78,
+        "prevention_strategies": [
+          "dependency_analysis",
+          "version_compatibility_check",
+          "conflict_resolution"
+        ]
+      }
+    },
+    "runtime_failures": {
+      "memory_issues": {
+        "patterns": [
+          "force unwrapping nil",
+          "array out of bounds",
+          "memory leak patterns",
+          "retain cycles"
+        ],
+        "prediction_accuracy": 0.72,
+        "prevention_strategies": [
+          "nil_safety_check",
+          "bounds_validation",
+          "memory_analysis"
+        ]
+      },
+      "logic_errors": {
+        "patterns": [
+          "infinite loops",
+          "division by zero",
+          "incorrect conditional logic",
+          "state inconsistency"
+        ],
+        "prediction_accuracy": 0.68,
+        "prevention_strategies": [
+          "logic_validation",
+          "state_analysis",
+          "flow_verification"
+        ]
+      }
+    }
+  },
+  "last_updated": "2025-07-30T12:54:10Z"
+}

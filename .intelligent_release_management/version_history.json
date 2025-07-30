@@ -1,0 +1,66 @@
+{
+  "version_history": {
+    "current_version": "1.0.0",
+    "version_strategy": "semantic",
+    "release_cycle": "continuous",
+    "version_metadata": {
+      "major": 1,
+      "minor": 0,
+      "patch": 0,
+      "build": 0,
+      "pre_release": null
+    },
+    "auto_versioning_rules": {
+      "breaking_changes": "major",
+      "new_features": "minor", 
+      "bug_fixes": "patch",
+      "documentation": "build",
+      "refactoring": "build"
+    },
+    "release_branches": {
+      "main": "production",
+      "develop": "staging",
+      "feature/*": "development",
+      "hotfix/*": "emergency"
+    },
+    "version_tags": [],
+    "last_release": "2025-07-30T13:24:57Z"
+  },
+  "semantic_analysis": {
+    "commit_classification": {
+      "breaking_change_patterns": [
+        "BREAKING CHANGE:",
+        "breaking:",
+        "!:",
+        "removes?\\s+\\w+",
+        "deletes?\\s+\\w+"
+      ],
+      "feature_patterns": [
+        "feat:",
+        "feature:",
+        "add:",
+        "implement:",
+        "new:"
+      ],
+      "fix_patterns": [
+        "fix:",
+        "bug:",
+        "hotfix:",
+        "patch:",
+        "correct:"
+      ],
+      "docs_patterns": [
+        "docs:",
+        "documentation:",
+        "readme:",
+        "comments:"
+      ]
+    },
+    "impact_scoring": {
+      "files_changed_weight": 0.3,
+      "lines_changed_weight": 0.2,
+      "commit_message_weight": 0.4,
+      "test_coverage_weight": 0.1
+    }
+  }
+}

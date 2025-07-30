@@ -8,6 +8,7 @@ struct ContentView: View {
     @State private var isLoading = false
     @StateObject private var keyManager: APIKeyManager
     @StateObject private var viewModel: CodeReviewViewModel
+    @StateObject private var sharedDataManager = SharedDataManager.shared
     @State private var selectedTab: Tab = .analysis
 
     init() {
@@ -79,18 +80,23 @@ struct ContentView: View {
                 TabView(selection: $selectedTab) {
                     AnalysisView(viewModel: viewModel)
                         .tag(Tab.analysis)
+                        .environmentObject(sharedDataManager.fileManager)
 
                     FileUploadView()
                         .tag(Tab.files)
+                        .environmentObject(sharedDataManager.fileManager)
 
-                    AIInsightsView()
+                    EnhancedAIInsightsView()
                         .tag(Tab.ai)
+                        .environmentObject(sharedDataManager.fileManager)
 
                     PatternAnalysisView(viewModel: viewModel)
                         .tag(Tab.patterns)
+                        .environmentObject(sharedDataManager.fileManager)
 
                     SettingsView(keyManager: keyManager, viewModel: viewModel)
                         .tag(Tab.settings)
+                        .environmentObject(sharedDataManager.fileManager)
                 }
             }
         }

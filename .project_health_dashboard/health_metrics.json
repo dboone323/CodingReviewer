@@ -1,0 +1,56 @@
+{
+  "project_health": {
+    "overview": {
+      "project_name": "CodingReviewer",
+      "health_score": 87,
+      "last_updated": "2025-07-30T14:08:34Z",
+      "status": "healthy",
+      "alerts_count": 2,
+      "critical_issues": 0
+    },
+    "code_quality": {
+      "overall_score": 92,
+      "test_coverage": 78,
+      "code_complexity": 6.2,
+      "technical_debt": 15,
+      "security_score": 89,
+      "maintainability_index": 85
+    },
+    "performance": {
+      "build_time": 125,
+      "test_execution_time": 145,
+      "app_startup_time": 2.8,
+      "memory_usage": 165,
+      "cpu_utilization": 0.35,
+      "performance_score": 83
+    },
+    "development_velocity": {
+      "commits_per_day": 8.5,
+      "lines_changed_per_day": 450,
+      "pull_requests_per_week": 12,
+      "issue_resolution_time": 2.3,
+      "feature_delivery_rate": 1.2,
+      "velocity_score": 88
+    },
+    "team_productivity": {
+      "active_developers": 5,
+      "code_review_turnaround": 18,
+      "collaboration_score": 91,
+      "knowledge_sharing_index": 76,
+      "team_satisfaction": 8.4
+    },
+    "project_risks": {
+      "dependency_vulnerabilities": 3,
+      "outdated_dependencies": 8,
+      "code_duplication": 12,
+      "documentation_coverage": 65,
+      "risk_score": 25
+    },
+    "trends": {
+      "health_trend": "improving",
+      "velocity_trend": "stable",
+      "quality_trend": "improving",
+      "risk_trend": "decreasing"
+    }
+  }
+}

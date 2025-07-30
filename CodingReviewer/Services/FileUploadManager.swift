@@ -57,7 +57,7 @@ struct FileUploadConfiguration {
 
     nonisolated static let `default` = FileUploadConfiguration(
         maxFileSize: 10 * 1024 * 1024, // 10MB
-        maxFilesPerUpload: 100,
+        maxFilesPerUpload: 1000, // Increased from 100 to 1000 for large projects
         supportedFileTypes: [
             "swift", "py", "js", "ts", "java", "cpp", "c", "h", "hpp",
             "go", "rs", "php", "rb", "cs", "kt", "scala", "m", "mm",

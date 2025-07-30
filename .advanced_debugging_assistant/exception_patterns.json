@@ -1,0 +1,72 @@
+{
+  "exception_patterns": {
+    "common_swift_exceptions": {
+      "force_unwrap_crash": {
+        "pattern": "Fatal error: Unexpectedly found nil",
+        "root_causes": [
+          "Force unwrapping optional values (!)",
+          "Implicitly unwrapped optionals becoming nil",
+          "IBOutlet connections broken"
+        ],
+        "solutions": [
+          "Use optional binding (if let, guard let)",
+          "Verify IBOutlet connections",
+          "Add nil checks before force unwrapping"
+        ],
+        "frequency": 0.35,
+        "severity": "high"
+      },
+      "index_out_of_range": {
+        "pattern": "Array index out of range|Index out of range",
+        "root_causes": [
+          "Accessing array without bounds checking",
+          "Empty array access",
+          "Incorrect loop conditions"
+        ],
+        "solutions": [
+          "Check array.count before accessing",
+          "Use array.indices for safe iteration",
+          "Implement bounds checking"
+        ],
+        "frequency": 0.25,
+        "severity": "medium"
+      },
+      "type_casting_failure": {
+        "pattern": "Could not cast value|Unable to cast",
+        "root_causes": [
+          "Incorrect type assumptions",
+          "Force casting (as!)",
+          "JSON parsing errors"
+        ],
+        "solutions": [
+          "Use conditional casting (as?)",
+          "Verify data types before casting",
+          "Implement proper error handling"
+        ],
+        "frequency": 0.15,
+        "severity": "medium"
+      },
+      "memory_pressure": {
+        "pattern": "Memory pressure|Received memory warning",
+        "root_causes": [
+          "Memory leaks",
+          "Large object retention",
+          "Image/data caching issues"
+        ],
+        "solutions": [
+          "Use memory profiler",
+          "Implement proper object deallocation",
+          "Optimize image/data handling"
+        ],
+        "frequency": 0.1,
+        "severity": "high"
+      }
+    },
+    "pattern_analysis": {
+      "correlation_threshold": 0.7,
+      "frequency_weight": 0.6,
+      "recency_weight": 0.4,
+      "last_analysis": "2025-07-30T13:14:33Z"
+    }
+  }
+}

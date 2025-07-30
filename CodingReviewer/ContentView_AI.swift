@@ -327,7 +327,7 @@ enum AIInsightsTab: String, CaseIterable {
 // MARK: - Enhanced AI Insights View
 
 struct AIInsightsView: View {
-    @StateObject private var fileManager = FileManagerService()
+    @EnvironmentObject var fileManager: FileManagerService
     @StateObject private var fixGenerator = IntelligentFixGenerator()
     @StateObject private var fixHistory = FixHistoryManager()
     @StateObject private var patternEngine = PatternRecognitionEngine()
@@ -350,9 +350,19 @@ struct AIInsightsView: View {
 
             Divider()
 
-            if fileManager.analysisHistory.isEmpty {
-                // Empty State
+            if fileManager.analysisHistory.isEmpty && fileManager.uploadedFiles.isEmpty {
+                // Empty State - no files at all
                 AIEmptyStateView()
+            } else if fileManager.analysisHistory.isEmpty && !fileManager.uploadedFiles.isEmpty {
+                // Show uploaded files available for analysis
+                AIUploadedFilesView(
+                    uploadedFiles: fileManager.uploadedFiles,
+                    onAnalyzeFiles: {
+                        Task {
+                            await analyzeUploadedFiles()
+                        }
+                    }
+                )
             } else {
                 HSplitView {
                     // Left Panel: Analysis History
@@ -423,6 +433,18 @@ struct AIInsightsView: View {
         }
         .sheet(isPresented: $showingFixHistory) {
             FixHistoryView(historyManager: fixHistory)
+        }
+    }
+    
+    @MainActor
+    private func analyzeUploadedFiles() async {
+        guard !fileManager.uploadedFiles.isEmpty else { return }
+        
+        do {
+            // Use the file manager's analysis method to create analysis history
+            _ = try await fileManager.analyzeMultipleFiles(fileManager.uploadedFiles, withAI: true)
+        } catch {
+            fileManager.errorMessage = "Failed to analyze uploaded files: \(error.localizedDescription)"
         }
     }
 
@@ -931,5 +953,125 @@ extension AnalysisResult.Severity {
         case .high: return .orange
         case .critical: return .red
         }
+    }
+}
+
+// MARK: - AI Uploaded Files View
+
+struct AIUploadedFilesView: View {
+    let uploadedFiles: [CodeFile]
+    let onAnalyzeFiles: () -> Void
+    
+    var body: some View {
+        VStack(spacing: 24) {
+            // Header
+            VStack(spacing: 12) {
+                Image(systemName: "brain.head.profile")
+                    .font(.system(size: 48))
+                    .foregroundColor(.blue)
+                
+                Text("Files Ready for AI Analysis")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                
+                Text("Upload complete! Your files are ready to be analyzed by our AI systems.")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+            }
+            
+            // Files overview
+            VStack(alignment: .leading, spacing: 16) {
+                HStack {
+                    Text("Uploaded Files")
+                        .font(.headline)
+                    
+                    Spacer()
+                    
+                    Text("\(uploadedFiles.count) files")
+                        .font(.subheadline)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color.blue.opacity(0.1))
+                        .cornerRadius(8)
+                }
+                
+                // Language breakdown
+                let languageGroups = Dictionary(grouping: uploadedFiles, by: { $0.language })
+                let sortedLanguages = Array(Set(uploadedFiles.map { $0.language })).sorted(by: { $0.displayName < $1.displayName })
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 12) {
+                    ForEach(sortedLanguages, id: \.self) { language in
+                        HStack(spacing: 8) {
+                            Image(systemName: language.iconName)
+                                .foregroundColor(.blue)
+                            
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(language.displayName)
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                                
+                                Text("\(languageGroups[language]?.count ?? 0) files")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(Color(.controlBackgroundColor))
+                        .cornerRadius(8)
+                    }
+                }
+                
+                // Recent files preview
+                if !uploadedFiles.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Recent Files")
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                        
+                        ForEach(Array(uploadedFiles.prefix(5)), id: \.id) { file in
+                            HStack(spacing: 12) {
+                                Image(systemName: file.language.iconName)
+                                    .foregroundColor(.blue)
+                                    .frame(width: 20)
+                                
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(file.name)
+                                        .font(.body)
+                                        .lineLimit(1)
+                                    
+                                    Text("\(file.displaySize) • \(file.language.displayName)")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                
+                                Spacer()
+                            }
+                            .padding(.vertical, 4)
+                        }
+                        
+                        if uploadedFiles.count > 5 {
+                            Text("... and \(uploadedFiles.count - 5) more files")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .padding(.top, 4)
+                        }
+                    }
+                    .padding()
+                    .background(Color(.controlBackgroundColor).opacity(0.5))
+                    .cornerRadius(8)
+                }
+            }
+            .frame(maxWidth: 500)
+            
+            // Action button
+            Button("Start AI Analysis") {
+                onAnalyzeFiles()
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding()
     }
 }

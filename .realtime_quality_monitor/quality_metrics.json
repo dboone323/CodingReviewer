@@ -1,0 +1,32 @@
+{
+  "current_metrics": {
+    "overall_score": 0,
+    "complexity": {
+      "cyclomatic_complexity": 0,
+      "cognitive_complexity": 0,
+      "file_complexity_distribution": {}
+    },
+    "maintainability": {
+      "maintainability_index": 0,
+      "code_duplication": 0,
+      "technical_debt_ratio": 0
+    },
+    "performance": {
+      "memory_safety_score": 0,
+      "performance_hotspots": 0,
+      "optimization_opportunities": 0
+    },
+    "code_quality": {
+      "style_consistency": 0,
+      "documentation_coverage": 0,
+      "test_coverage": 0
+    }
+  },
+  "thresholds": {
+    "excellent": 90,
+    "good": 75,
+    "acceptable": 60,
+    "poor": 40
+  },
+  "last_updated": "2025-07-30T13:03:53Z"
+}

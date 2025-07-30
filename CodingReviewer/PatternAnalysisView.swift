@@ -315,6 +315,7 @@ struct PatternAnalysisView: View {
     @State private var isLoading = false
     @StateObject private var patternEngine = PatternRecognitionEngine()
     @ObservedObject var viewModel: CodeReviewViewModel
+    @EnvironmentObject var fileManager: FileManagerService
     @State private var selectedTab: PatternTab = .patterns
     @State private var isAnalyzing = false
 
@@ -349,9 +350,23 @@ struct PatternAnalysisView: View {
                     }
                 }
 
-                Text("AI-powered design pattern detection and code smell analysis")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                HStack {
+                    Text("AI-powered design pattern detection and code smell analysis")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    Spacer()
+                    
+                    if !fileManager.uploadedFiles.isEmpty {
+                        Text("\(fileManager.uploadedFiles.count) files loaded")
+                            .font(.caption)
+                            .foregroundColor(.blue)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.blue.opacity(0.1))
+                            .cornerRadius(6)
+                    }
+                }
             }
             .padding()
             .background(Color(.controlBackgroundColor))
@@ -367,7 +382,7 @@ struct PatternAnalysisView: View {
             .padding(.horizontal)
             .padding(.top)
 
-            // Analysis Button
+            // Analysis Button and File Info
             HStack {
                 Button("Analyze Patterns") {
                     Task {
@@ -375,7 +390,17 @@ struct PatternAnalysisView: View {
                     }
                 }
                 .buttonStyle(.borderedProminent)
-                .disabled(viewModel.codeInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isAnalyzing)
+                .disabled(viewModel.codeInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && fileManager.uploadedFiles.isEmpty || isAnalyzing)
+
+                if !fileManager.uploadedFiles.isEmpty {
+                    Button("Analyze Uploaded Files") {
+                        Task {
+                            await analyzeUploadedFiles()
+                        }
+                    }
+                    .buttonStyle(.bordered)
+                    .disabled(isAnalyzing)
+                }
 
                 Spacer()
 
@@ -391,6 +416,11 @@ struct PatternAnalysisView: View {
             // Content
             ScrollView {
                 VStack(spacing: 16) {
+                    // Show uploaded files info if available
+                    if !fileManager.uploadedFiles.isEmpty {
+                        UploadedFilesInfoView(files: fileManager.uploadedFiles)
+                    }
+                    
                     switch selectedTab {
                     case .patterns:
                         PatternsContentView(patterns: patternEngine.detectedPatterns)
@@ -423,6 +453,32 @@ struct PatternAnalysisView: View {
         // Analyze performance
         _ = await patternEngine.detectPerformanceBottlenecks(viewModel.codeInput)
 
+        isAnalyzing = false
+    }
+    
+    @MainActor
+    private func analyzeUploadedFiles() async {
+        guard !fileManager.uploadedFiles.isEmpty else { return }
+        
+        isAnalyzing = true
+        
+        // Combine all uploaded file content for analysis
+        let combinedContent = fileManager.uploadedFiles.map { file in
+            "// File: \(file.name) (\(file.language.displayName))\n\(file.content)"
+        }.joined(separator: "\n\n")
+        
+        // Detect patterns across all files
+        _ = await patternEngine.detectDesignPatterns(
+            in: combinedContent,
+            language: .swift // Use primary language or most common
+        )
+        
+        // Analyze code smells
+        _ = await patternEngine.identifyCodeSmells([])
+        
+        // Analyze performance
+        _ = await patternEngine.detectPerformanceBottlenecks(combinedContent)
+        
         isAnalyzing = false
     }
 }
@@ -699,6 +755,83 @@ struct EmptyPatternStateView: View {
         }
         .frame(maxWidth: .infinity, minHeight: 200)
         .padding()
+    }
+}
+
+// MARK: - Uploaded Files Info View
+
+struct UploadedFilesInfoView: View {
+    let files: [CodeFile]
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "folder.badge.checkmark")
+                    .foregroundColor(.blue)
+                
+                Text("Uploaded Files Available for Analysis")
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                
+                Spacer()
+                
+                Text("\(files.count) files")
+                    .font(.caption)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color.blue.opacity(0.1))
+                    .cornerRadius(6)
+            }
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(Array(files.prefix(10)), id: \.id) { file in
+                        HStack(spacing: 6) {
+                            Image(systemName: file.language.iconName)
+                                .foregroundColor(.blue)
+                            
+                            Text(file.name)
+                                .font(.caption)
+                                .lineLimit(1)
+                        }
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(Color(.controlBackgroundColor))
+                        .cornerRadius(6)
+                    }
+                    
+                    if files.count > 10 {
+                        Text("... +\(files.count - 10) more")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                    }
+                }
+                .padding(.horizontal)
+            }
+            
+            HStack {
+                let languageGroups = Dictionary(grouping: files, by: { $0.language })
+                let sortedLanguages = languageGroups.keys.sorted(by: { $0.displayName < $1.displayName })
+                ForEach(Array(sortedLanguages), id: \.self) { language in
+                    HStack(spacing: 4) {
+                        Circle()
+                            .fill(.blue)
+                            .frame(width: 8, height: 8)
+                        
+                        Text("\(languageGroups[language]?.count ?? 0) \(language.displayName)")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                
+                Spacer()
+            }
+        }
+        .padding()
+        .background(Color.blue.opacity(0.05))
+        .cornerRadius(12)
     }
 }
 

@@ -1,0 +1,25 @@
+# 🚀 LLDB Debugging Shortcuts for CodingReviewer
+
+## Quick Object Inspection
+# Print object description: po <object>
+# Print object with formatting: p <object>
+# Print view hierarchy: po [[UIWindow keyWindow] recursiveDescription]
+
+## Memory Debugging
+# Print retain count: po CFGetRetainCount(<object>)
+# Find memory leaks: memory read <address>
+# View memory usage: memory history <object>
+
+## Threading Debugging
+# Show all threads: thread list
+# Switch threads: thread select <number>
+# Show current queue: po dispatch_get_current_queue()
+
+## SwiftUI Specific
+# Debug view hierarchy: po self.view.recursiveDescription
+# Print state values: po self._state
+# Debug modifiers: po view.body
+
+## Breakpoint Commands (Add as breakpoint actions)
+# Log without stopping: po print("Checkpoint reached")
+# Conditional logging: po if condition { print("Debug info") }

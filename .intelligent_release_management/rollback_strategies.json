@@ -1,0 +1,70 @@
+{
+  "rollback_strategies": {
+    "automated_rollback": {
+      "triggers": {
+        "error_rate_spike": {
+          "threshold": 0.05,
+          "duration": "5m",
+          "enabled": true
+        },
+        "performance_degradation": {
+          "threshold": 0.20,
+          "duration": "10m", 
+          "enabled": true
+        },
+        "crash_rate_increase": {
+          "threshold": 0.02,
+          "duration": "3m",
+          "enabled": true
+        },
+        "user_complaints": {
+          "threshold": 10,
+          "duration": "15m",
+          "enabled": false
+        }
+      },
+      "rollback_methods": {
+        "feature_flag_disable": {
+          "priority": 1,
+          "execution_time": "immediate",
+          "impact": "minimal"
+        },
+        "previous_version_deploy": {
+          "priority": 2,
+          "execution_time": "5-10m",
+          "impact": "moderate"
+        },
+        "database_rollback": {
+          "priority": 3,
+          "execution_time": "10-30m",
+          "impact": "significant"
+        }
+      }
+    },
+    "rollback_validation": {
+      "pre_rollback_checks": [
+        "backup_verification",
+        "dependency_compatibility",
+        "data_integrity_check"
+      ],
+      "post_rollback_validation": [
+        "service_health_check",
+        "performance_validation",
+        "user_flow_testing"
+      ]
+    },
+    "emergency_procedures": {
+      "escalation_chain": [
+        "automated_rollback",
+        "team_notification",
+        "manual_intervention",
+        "emergency_response"
+      ],
+      "communication_plan": {
+        "internal_notification": true,
+        "user_communication": true,
+        "status_page_update": true
+      }
+    }
+  }
+}

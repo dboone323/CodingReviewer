@@ -1,0 +1,42 @@
+{
+  "file": "CodingReviewer/ContentView.swift",
+  "line": 15,
+  "column": 0,
+  "timestamp": "2025-07-30T12:41:22Z",
+  "context_analysis": {
+    "surrounding_code": {
+      "context_window": "    @StateObject private var viewModel: CodeReviewViewModel\    @StateObject private var sharedDataManager = SharedDataManager.shared\    @State private var selectedTab: Tab = .analysis\\    init() {\        let keyManager = APIKeyManager()\        self._keyManager = StateObject(wrappedValue: keyManager)\        self._viewModel = StateObject(wrappedValue: CodeReviewViewModel(keyManager: keyManager))\    }\\    enum Tab: String, CaseIterable {\",
+      "start_line": 10,
+      "end_line": 20
+    },
+    "current_scope": {
+      "function": "",
+      "class": "struct ContentView: View {",
+      "scope_level": 0
+    },
+    "available_variables": {
+      "local_variables": [
+        "let keyManager",
+        "var errorMessage",
+        "var isLoading",
+        "var keyManager",
+        "var selectedTab",
+        "var sharedDataManager",
+        "var viewModel"
+      ],
+      "parameters": [
+      ]
+    },
+    "available_frameworks": [
+      "Foundation",
+      "SwiftUI",
+      "os"
+    ],
+    "coding_patterns": {
+      "swiftui_usage": 67,
+      "uikit_usage": 0,
+      "async_usage": 11,
+      "combine_usage": 0
+    }
+  }
+}

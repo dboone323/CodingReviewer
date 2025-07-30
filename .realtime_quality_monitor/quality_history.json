@@ -1,0 +1,12 @@
+{
+  "history": [],
+  "trends": {
+    "overall_trend": "stable",
+    "complexity_trend": "stable",
+    "maintainability_trend": "stable",
+    "performance_trend": "stable"
+  },
+  "improvements": [],
+  "regressions": [],
+  "last_analysis": "2025-07-30T13:03:53Z"
+}

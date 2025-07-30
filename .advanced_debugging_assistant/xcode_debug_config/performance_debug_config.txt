@@ -1,0 +1,16 @@
+# ⚡ Performance Debugging Configuration
+
+## Instruments Integration
+# Time Profiler: For CPU usage analysis
+# Allocations: For memory usage tracking
+# Leaks: For memory leak detection
+# Core Animation: For UI performance analysis
+
+## Debugging Flags (Add to scheme environment variables)
+# CA_DEBUG_TRANSACTIONS = 1 (Core Animation debugging)
+# CA_COLOR_OPAQUE = 1 (Highlight opaque views)
+# DYLD_PRINT_STATISTICS = 1 (App launch time analysis)
+
+## SwiftUI Debug Environment
+# SWIFTUI_DEBUG_GRAPH = 1 (View hierarchy debugging)
+# SWIFTUI_ENABLE_DEBUG_FEATURES = 1 (Additional debug features)

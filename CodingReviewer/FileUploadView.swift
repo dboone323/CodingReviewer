@@ -12,7 +12,7 @@ import UniformTypeIdentifiers
 struct FileUploadView: View {
     @State private var errorMessage: String?
     @State private var isLoading = false
-    @StateObject private var fileManager = FileManagerService()
+    @EnvironmentObject private var fileManager: FileManagerService
     @State private var showingFileImporter = false
     @State private var showingFolderPicker = false
     @State private var isTargeted = false

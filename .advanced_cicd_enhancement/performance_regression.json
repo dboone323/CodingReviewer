@@ -1,0 +1,38 @@
+{
+  "performance_regression": {
+    "baseline_metrics": {
+      "build_time": 120,
+      "test_execution_time": 180,
+      "app_startup_time": 2.5,
+      "memory_usage_baseline": 150,
+      "cpu_usage_baseline": 0.3
+    },
+    "regression_thresholds": {
+      "build_time_increase": 0.2,
+      "test_time_increase": 0.15,
+      "startup_time_increase": 0.3,
+      "memory_increase": 0.25,
+      "cpu_increase": 0.4
+    },
+    "detection_algorithms": {
+      "statistical_process_control": {
+        "enabled": true,
+        "control_limit_factor": 3,
+        "trending_window": 10
+      },
+      "machine_learning": {
+        "enabled": true,
+        "algorithm": "isolation_forest",
+        "anomaly_threshold": 0.1
+      }
+    },
+    "automated_actions": {
+      "block_deployment_on_regression": true,
+      "generate_performance_report": true,
+      "notify_development_team": true,
+      "trigger_optimization_analysis": true
+    },
+    "historical_data": [],
+    "last_analysis": "2025-07-30T13:33:44Z"
+  }
+}

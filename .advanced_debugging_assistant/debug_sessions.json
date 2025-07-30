@@ -1,0 +1,17 @@
+{
+  "debug_sessions": {
+    "session_history": [],
+    "optimization_metrics": {
+      "average_session_duration": 0,
+      "breakpoint_hit_efficiency": 0,
+      "issue_resolution_rate": 0,
+      "session_success_rate": 0
+    },
+    "learned_patterns": {
+      "effective_breakpoints": [],
+      "common_debug_paths": [],
+      "resolution_strategies": []
+    },
+    "last_session": "2025-07-30T13:14:33Z"
+  }
+}

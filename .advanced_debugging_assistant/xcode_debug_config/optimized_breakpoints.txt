@@ -1,0 +1,19 @@
+# 🎯 Optimized Breakpoint Configuration for CodingReviewer
+# Generated: Wed Jul 30 08:14:34 CDT 2025
+
+# High-Value Breakpoints (Place these first for maximum debugging efficiency)
+
+## Critical Function Entry Points
+# View lifecycle and initialization functions
+# /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileUploadView.swift:    private func handleFileImport(_ result
+# /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileUploadView.swift:    private func showFolderPicker() {
+# /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileUploadView.swift:    private func handleDrop(providers
+# /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileUploadView.swift:    private func toggleFileSelection(_ file
+# /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileUploadView.swift:    private func selectProjectFiles(_ project
+
+## Exception Breakpoints (Recommended Settings)
+# Swift Error Breakpoint: Enable for all Swift errors
+# Objective-C Exception Breakpoint: Enable for debugging Obj-C interop
+# Symbolic Breakpoint: UIViewAlertForUnsatisfiableConstraints (for Auto Layout issues)
+
+## Memory Management Breakpoints

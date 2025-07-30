@@ -1,0 +1,8 @@
+# production Environment Configuration
+environment = "production"
+aws_region  = "us-west-2"
+
+# Environment-specific settings
+instance_type = "t3.medium"
+min_capacity = 3
+max_capacity = 10

@@ -1,0 +1,48 @@
+{
+  "environment_provisioning": {
+    "environments": {
+      "development": {
+        "auto_provision": true,
+        "resource_allocation": "minimal",
+        "data_seeding": true,
+        "monitoring_level": "basic"
+      },
+      "testing": {
+        "auto_provision": true,
+        "resource_allocation": "standard",
+        "data_seeding": true,
+        "monitoring_level": "detailed"
+      },
+      "staging": {
+        "auto_provision": true,
+        "resource_allocation": "production_like",
+        "data_seeding": false,
+        "monitoring_level": "comprehensive"
+      },
+      "production": {
+        "auto_provision": false,
+        "resource_allocation": "optimized",
+        "data_seeding": false,
+        "monitoring_level": "intensive"
+      }
+    },
+    "infrastructure_as_code": {
+      "tool": "terraform",
+      "version_control": true,
+      "automated_testing": true,
+      "drift_detection": true
+    },
+    "scaling": {
+      "auto_scaling": true,
+      "metrics_based": ["cpu", "memory", "requests"],
+      "scale_up_threshold": 0.7,
+      "scale_down_threshold": 0.3
+    },
+    "cost_optimization": {
+      "enabled": true,
+      "spot_instances": true,
+      "scheduled_shutdown": true,
+      "resource_right_sizing": true
+    }
+  }
+}
