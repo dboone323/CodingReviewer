@@ -1,0 +1,12 @@
+{
+  "timestamp": "2025-07-29T23:54:06Z",
+  "build_duration": 7,
+  "swift_files": 47,
+  "total_lines": 12838,
+  "avg_lines_per_file": 273,
+  "available_memory_mb": 270,
+  "cpu_cores": 10,
+  "cpu_usage_percent": "31.50",
+  "project_size": "520K",
+  "recommendations_count": 1
+}

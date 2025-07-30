@@ -1,0 +1,2036 @@
+[
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 985,
+    "reason" : "File should contain 500 lines or less: currently contains 985",
+    "rule_id" : "file_length",
+    "severity" : "Warning",
+    "type" : "File Length"
+  },
+  {
+    "character" : 13,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 515,
+    "reason" : "`where` clauses are preferred over a single `if` inside a `for`",
+    "rule_id" : "for_where",
+    "severity" : "Warning",
+    "type" : "Prefer For-Where"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 271,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 295,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 505,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 612,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 627,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 704,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 715,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 732,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 755,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 765,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 815,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 332,
+    "reason" : "Line should be 120 characters or less; currently it has 152 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 344,
+    "reason" : "Line should be 120 characters or less; currently it has 180 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 356,
+    "reason" : "Line should be 120 characters or less; currently it has 155 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 521,
+    "reason" : "Line should be 120 characters or less; currently it has 158 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 542,
+    "reason" : "Line should be 120 characters or less; currently it has 157 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 563,
+    "reason" : "Line should be 120 characters or less; currently it has 166 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 611,
+    "reason" : "Line should be 120 characters or less; currently it has 123 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 664,
+    "reason" : "Line should be 120 characters or less; currently it has 126 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 751,
+    "reason" : "Line should be 120 characters or less; currently it has 126 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 892,
+    "reason" : "Line should be 120 characters or less; currently it has 143 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : 7,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SmartDocumentationGenerator.swift",
+    "line" : 16,
+    "reason" : "Type body should span 500 lines or less excluding comments and whitespace: currently spans 654 lines",
+    "rule_id" : "type_body_length",
+    "severity" : "Error",
+    "type" : "Type Body Length"
+  },
+  {
+    "character" : 61,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/PatternAnalysisView.swift",
+    "line" : 234,
+    "reason" : "Trailing closure syntax should not be used when passing more than one closure argument",
+    "rule_id" : "multiple_closures_with_trailing_closure",
+    "severity" : "Warning",
+    "type" : "Multiple Closures with Trailing Closure"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/OpenAIService.swift",
+    "line" : 566,
+    "reason" : "File should contain 500 lines or less: currently contains 566",
+    "rule_id" : "file_length",
+    "severity" : "Warning",
+    "type" : "File Length"
+  },
+  {
+    "character" : 61,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/OpenAIService.swift",
+    "line" : 76,
+    "reason" : "Force unwrapping should be avoided",
+    "rule_id" : "force_unwrapping",
+    "severity" : "Error",
+    "type" : "Force Unwrapping"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/OpenAIService.swift",
+    "line" : 170,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/OpenAIService.swift",
+    "line" : 198,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/OpenAIService.swift",
+    "line" : 216,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/OpenAIService.swift",
+    "line" : 234,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/OpenAIService.swift",
+    "line" : 376,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/OpenAIService.swift",
+    "line" : 448,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/OpenAIService.swift",
+    "line" : 41,
+    "reason" : "Line should be 120 characters or less; currently it has 127 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/OpenAIService.swift",
+    "line" : 385,
+    "reason" : "Line should be 120 characters or less; currently it has 133 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/OpenAIService.swift",
+    "line" : 393,
+    "reason" : "Line should be 120 characters or less; currently it has 145 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/OpenAIService.swift",
+    "line" : 449,
+    "reason" : "Line should be 200 characters or less; currently it has 305 characters",
+    "rule_id" : "line_length",
+    "severity" : "Error",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/OpenAIService.swift",
+    "line" : 566,
+    "reason" : "Files should have a single trailing newline",
+    "rule_id" : "trailing_newline",
+    "severity" : "Warning",
+    "type" : "Trailing Newline"
+  },
+  {
+    "character" : 7,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/OpenAIService.swift",
+    "line" : 13,
+    "reason" : "Type body should span 300 lines or less excluding comments and whitespace: currently spans 385 lines",
+    "rule_id" : "type_body_length",
+    "severity" : "Warning",
+    "type" : "Type Body Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AISettingsView.swift",
+    "line" : 50,
+    "reason" : "Line should be 120 characters or less; currently it has 139 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AISettingsView.swift",
+    "line" : 130,
+    "reason" : "Files should have a single trailing newline",
+    "rule_id" : "trailing_newline",
+    "severity" : "Warning",
+    "type" : "Trailing Newline"
+  },
+  {
+    "character" : 51,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AISettingsView.swift",
+    "line" : 35,
+    "reason" : "Unused parameter in a closure should be replaced with _",
+    "rule_id" : "unused_closure_parameter",
+    "severity" : "Warning",
+    "type" : "Unused Closure Parameter"
+  },
+  {
+    "character" : 13,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/CodeReviewViewModel.swift",
+    "line" : 320,
+    "reason" : "Function should have complexity 10 or less; currently complexity is 12",
+    "rule_id" : "cyclomatic_complexity",
+    "severity" : "Warning",
+    "type" : "Cyclomatic Complexity"
+  },
+  {
+    "character" : 1,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/CodeReviewViewModel.swift",
+    "line" : 4,
+    "reason" : "Imports should be unique",
+    "rule_id" : "duplicate_imports",
+    "severity" : "Warning",
+    "type" : "Duplicate Imports"
+  },
+  {
+    "character" : 10,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/CodeReviewViewModel.swift",
+    "line" : 106,
+    "reason" : "Function body should span 50 lines or less excluding comments and whitespace: currently spans 70 lines",
+    "rule_id" : "function_body_length",
+    "severity" : "Warning",
+    "type" : "Function Body Length"
+  },
+  {
+    "character" : 18,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/CodeReviewViewModel.swift",
+    "line" : 320,
+    "reason" : "Function body should span 50 lines or less excluding comments and whitespace: currently spans 62 lines",
+    "rule_id" : "function_body_length",
+    "severity" : "Warning",
+    "type" : "Function Body Length"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/CodeReviewViewModel.swift",
+    "line" : 482,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/CodeReviewViewModel.swift",
+    "line" : 155,
+    "reason" : "Line should be 120 characters or less; currently it has 136 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/CodeReviewViewModel.swift",
+    "line" : 156,
+    "reason" : "Line should be 120 characters or less; currently it has 127 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/CodeReviewViewModel.swift",
+    "line" : 254,
+    "reason" : "Line should be 120 characters or less; currently it has 126 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : 72,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/CodeReviewViewModel.swift",
+    "line" : 155,
+    "reason" : "Operators should be surrounded by a single whitespace when they are being used",
+    "rule_id" : "operator_usage_whitespace",
+    "severity" : "Warning",
+    "type" : "Operator Usage Whitespace"
+  },
+  {
+    "character" : 82,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/CodeReviewViewModel.swift",
+    "line" : 156,
+    "reason" : "Operators should be surrounded by a single whitespace when they are being used",
+    "rule_id" : "operator_usage_whitespace",
+    "severity" : "Warning",
+    "type" : "Operator Usage Whitespace"
+  },
+  {
+    "character" : 7,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/CodeReviewViewModel.swift",
+    "line" : 63,
+    "reason" : "Type body should span 300 lines or less excluding comments and whitespace: currently spans 322 lines",
+    "rule_id" : "type_body_length",
+    "severity" : "Warning",
+    "type" : "Type Body Length"
+  },
+  {
+    "character" : 59,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 687,
+    "reason" : "Print statements should not be used in production code",
+    "rule_id" : "print_statements",
+    "severity" : "Warning",
+    "type" : "Print Statements"
+  },
+  {
+    "character" : 13,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 436,
+    "reason" : "Function should have complexity 10 or less; currently complexity is 24",
+    "rule_id" : "cyclomatic_complexity",
+    "severity" : "Error",
+    "type" : "Cyclomatic Complexity"
+  },
+  {
+    "character" : 13,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 473,
+    "reason" : "Function should have complexity 10 or less; currently complexity is 13",
+    "rule_id" : "cyclomatic_complexity",
+    "severity" : "Warning",
+    "type" : "Cyclomatic Complexity"
+  },
+  {
+    "character" : 13,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 849,
+    "reason" : "Function should have complexity 10 or less; currently complexity is 13",
+    "rule_id" : "cyclomatic_complexity",
+    "severity" : "Warning",
+    "type" : "Cyclomatic Complexity"
+  },
+  {
+    "character" : 13,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 917,
+    "reason" : "Function should have complexity 10 or less; currently complexity is 12",
+    "rule_id" : "cyclomatic_complexity",
+    "severity" : "Warning",
+    "type" : "Cyclomatic Complexity"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 1379,
+    "reason" : "File should contain 500 lines or less: currently contains 1379",
+    "rule_id" : "file_length",
+    "severity" : "Error",
+    "type" : "File Length"
+  },
+  {
+    "character" : 18,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 849,
+    "reason" : "Function body should span 50 lines or less excluding comments and whitespace: currently spans 55 lines",
+    "rule_id" : "function_body_length",
+    "severity" : "Warning",
+    "type" : "Function Body Length"
+  },
+  {
+    "character" : 18,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 917,
+    "reason" : "Function body should span 50 lines or less excluding comments and whitespace: currently spans 59 lines",
+    "rule_id" : "function_body_length",
+    "severity" : "Warning",
+    "type" : "Function Body Length"
+  },
+  {
+    "character" : 10,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 36,
+    "reason" : "Enum element name 'c' should be between 2 and 50 characters long",
+    "rule_id" : "identifier_name",
+    "severity" : "Warning",
+    "type" : "Identifier Name"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 553,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 1183,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 1187,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 144,
+    "reason" : "Line should be 120 characters or less; currently it has 124 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 428,
+    "reason" : "Line should be 120 characters or less; currently it has 141 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 590,
+    "reason" : "Line should be 120 characters or less; currently it has 144 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 636,
+    "reason" : "Line should be 120 characters or less; currently it has 124 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 662,
+    "reason" : "Line should be 120 characters or less; currently it has 134 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 706,
+    "reason" : "Line should be 120 characters or less; currently it has 124 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 731,
+    "reason" : "Line should be 120 characters or less; currently it has 125 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 747,
+    "reason" : "Line should be 120 characters or less; currently it has 123 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 804,
+    "reason" : "Line should be 120 characters or less; currently it has 137 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 831,
+    "reason" : "Line should be 120 characters or less; currently it has 128 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 839,
+    "reason" : "Line should be 120 characters or less; currently it has 148 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 840,
+    "reason" : "Line should be 120 characters or less; currently it has 143 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 918,
+    "reason" : "Line should be 120 characters or less; currently it has 155 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 1013,
+    "reason" : "Line should be 120 characters or less; currently it has 123 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 1017,
+    "reason" : "Line should be 120 characters or less; currently it has 123 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 1111,
+    "reason" : "Line should be 120 characters or less; currently it has 126 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 1122,
+    "reason" : "Line should be 120 characters or less; currently it has 146 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 1133,
+    "reason" : "Line should be 120 characters or less; currently it has 138 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 1162,
+    "reason" : "Line should be 120 characters or less; currently it has 128 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : 18,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 20,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 19,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 21,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 23,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 22,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 23,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 23,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 17,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 24,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 16,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 25,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 15,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 26,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 17,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 27,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 17,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 28,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 16,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 29,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 16,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 30,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 17,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 31,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 17,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 32,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 21,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 33,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 19,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 34,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 19,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 35,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 14,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 36,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 16,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 37,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 17,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 38,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 20,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 39,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 7,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 347,
+    "reason" : "Type body should span 500 lines or less excluding comments and whitespace: currently spans 702 lines",
+    "rule_id" : "type_body_length",
+    "severity" : "Error",
+    "type" : "Type Body Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileManagerService.swift",
+    "line" : 433,
+    "reason" : "Limit vertical whitespace to a single empty line; currently 2",
+    "rule_id" : "vertical_whitespace",
+    "severity" : "Warning",
+    "type" : "Vertical Whitespace"
+  },
+  {
+    "character" : 49,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/APIKeySetupView.swift",
+    "line" : 14,
+    "reason" : "Initializing an optional variable with nil is redundant",
+    "rule_id" : "redundant_optional_initialization",
+    "severity" : "Warning",
+    "type" : "Redundant Optional Initialization"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/APIKeySetupView.swift",
+    "line" : 167,
+    "reason" : "Files should have a single trailing newline",
+    "rule_id" : "trailing_newline",
+    "severity" : "Warning",
+    "type" : "Trailing Newline"
+  },
+  {
+    "character" : 44,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/APIKeyManager.swift",
+    "line" : 243,
+    "reason" : "Force unwrapping should be avoided",
+    "rule_id" : "force_unwrapping",
+    "severity" : "Error",
+    "type" : "Force Unwrapping"
+  },
+  {
+    "character" : 13,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/APIKeyManager.swift",
+    "line" : 37,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/APIKeyManager.swift",
+    "line" : 196,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/APIKeyManager.swift",
+    "line" : 201,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SharedTypes/AnalysisTypes.swift",
+    "line" : 19,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SharedTypes/ServiceTypes.swift",
+    "line" : 18,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SharedTypes/ServiceTypes.swift",
+    "line" : 104,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SharedTypes/ServiceTypes.swift",
+    "line" : 135,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 57,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/EnhancedAnalysisRecordRow.swift",
+    "line" : 38,
+    "reason" : "Trailing closure syntax should not be used when passing more than one closure argument",
+    "rule_id" : "multiple_closures_with_trailing_closure",
+    "severity" : "Warning",
+    "type" : "Multiple Closures with Trailing Closure"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/EnhancedAnalysisRecordRow.swift",
+    "line" : 187,
+    "reason" : "Files should have a single trailing newline",
+    "rule_id" : "trailing_newline",
+    "severity" : "Warning",
+    "type" : "Trailing Newline"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FixApplicationView.swift",
+    "line" : 431,
+    "reason" : "Files should have a single trailing newline",
+    "rule_id" : "trailing_newline",
+    "severity" : "Warning",
+    "type" : "Trailing Newline"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/PatternRecognitionEngine.swift",
+    "line" : 729,
+    "reason" : "File should contain 500 lines or less: currently contains 729",
+    "rule_id" : "file_length",
+    "severity" : "Warning",
+    "type" : "File Length"
+  },
+  {
+    "character" : 13,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/PatternRecognitionEngine.swift",
+    "line" : 492,
+    "reason" : "`where` clauses are preferred over a single `if` inside a `for`",
+    "rule_id" : "for_where",
+    "severity" : "Warning",
+    "type" : "Prefer For-Where"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/PatternRecognitionEngine.swift",
+    "line" : 254,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/PatternRecognitionEngine.swift",
+    "line" : 267,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/PatternRecognitionEngine.swift",
+    "line" : 280,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/PatternRecognitionEngine.swift",
+    "line" : 293,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/PatternRecognitionEngine.swift",
+    "line" : 306,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/PatternRecognitionEngine.swift",
+    "line" : 340,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/PatternRecognitionEngine.swift",
+    "line" : 359,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/PatternRecognitionEngine.swift",
+    "line" : 368,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/PatternRecognitionEngine.swift",
+    "line" : 377,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/PatternRecognitionEngine.swift",
+    "line" : 386,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/PatternRecognitionEngine.swift",
+    "line" : 477,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 7,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/PatternRecognitionEngine.swift",
+    "line" : 16,
+    "reason" : "Type body should span 300 lines or less excluding comments and whitespace: currently spans 382 lines",
+    "rule_id" : "type_body_length",
+    "severity" : "Warning",
+    "type" : "Type Body Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/ContentView_AI.swift",
+    "line" : 637,
+    "reason" : "File should contain 500 lines or less: currently contains 637",
+    "rule_id" : "file_length",
+    "severity" : "Warning",
+    "type" : "File Length"
+  },
+  {
+    "character" : 85,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/ContentView_AI.swift",
+    "line" : 159,
+    "reason" : "Force unwrapping should be avoided",
+    "rule_id" : "force_unwrapping",
+    "severity" : "Error",
+    "type" : "Force Unwrapping"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/ContentView_AI.swift",
+    "line" : 132,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/ContentView_AI.swift",
+    "line" : 154,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 70,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/ContentView_AI.swift",
+    "line" : 394,
+    "reason" : "Unused parameter in a closure should be replaced with _",
+    "rule_id" : "unused_closure_parameter",
+    "severity" : "Warning",
+    "type" : "Unused Closure Parameter"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/IntelligentFixGenerator.swift",
+    "line" : 276,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/IntelligentFixGenerator.swift",
+    "line" : 287,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/IntelligentFixGenerator.swift",
+    "line" : 292,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/IntelligentFixGenerator.swift",
+    "line" : 297,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/IntelligentFixGenerator.swift",
+    "line" : 302,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/IntelligentFixGenerator.swift",
+    "line" : 307,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/IntelligentFixGenerator.swift",
+    "line" : 312,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/IntelligentFixGenerator.swift",
+    "line" : 317,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/IntelligentFixGenerator.swift",
+    "line" : 322,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/IntelligentFixGenerator.swift",
+    "line" : 149,
+    "reason" : "Line should be 120 characters or less; currently it has 124 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/IntelligentFixGenerator.swift",
+    "line" : 160,
+    "reason" : "Line should be 120 characters or less; currently it has 160 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/IntelligentFixGenerator.swift",
+    "line" : 210,
+    "reason" : "Line should be 120 characters or less; currently it has 158 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/ContentView.swift",
+    "line" : 856,
+    "reason" : "File should contain 500 lines or less: currently contains 856",
+    "rule_id" : "file_length",
+    "severity" : "Warning",
+    "type" : "File Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/ContentView.swift",
+    "line" : 151,
+    "reason" : "Line should be 120 characters or less; currently it has 127 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/ContentView.swift",
+    "line" : 416,
+    "reason" : "Line should be 120 characters or less; currently it has 132 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/ContentView.swift",
+    "line" : 442,
+    "reason" : "Line should be 120 characters or less; currently it has 143 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/ContentView.swift",
+    "line" : 443,
+    "reason" : "Line should be 120 characters or less; currently it has 149 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/ContentView.swift",
+    "line" : 444,
+    "reason" : "Line should be 120 characters or less; currently it has 138 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/ContentView.swift",
+    "line" : 445,
+    "reason" : "Line should be 120 characters or less; currently it has 143 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/ContentView.swift",
+    "line" : 496,
+    "reason" : "Line should be 120 characters or less; currently it has 130 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/ContentView.swift",
+    "line" : 498,
+    "reason" : "Line should be 120 characters or less; currently it has 147 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/ContentView.swift",
+    "line" : 773,
+    "reason" : "Line should be 120 characters or less; currently it has 124 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : 57,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/ContentView.swift",
+    "line" : 218,
+    "reason" : "Trailing closure syntax should not be used when passing more than one closure argument",
+    "rule_id" : "multiple_closures_with_trailing_closure",
+    "severity" : "Warning",
+    "type" : "Multiple Closures with Trailing Closure"
+  },
+  {
+    "character" : 49,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/ContentView.swift",
+    "line" : 679,
+    "reason" : "Initializing an optional variable with nil is redundant",
+    "rule_id" : "redundant_optional_initialization",
+    "severity" : "Warning",
+    "type" : "Redundant Optional Initialization"
+  },
+  {
+    "character" : 34,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
+    "line" : 340,
+    "reason" : "Print statements should not be used in production code",
+    "rule_id" : "print_statements",
+    "severity" : "Warning",
+    "type" : "Print Statements"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
+    "line" : 618,
+    "reason" : "File should contain 500 lines or less: currently contains 618",
+    "rule_id" : "file_length",
+    "severity" : "Warning",
+    "type" : "File Length"
+  },
+  {
+    "character" : 13,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
+    "line" : 399,
+    "reason" : "Variable name 'i' should be between 2 and 50 characters long",
+    "rule_id" : "identifier_name",
+    "severity" : "Warning",
+    "type" : "Identifier Name"
+  },
+  {
+    "character" : 17,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
+    "line" : 404,
+    "reason" : "Variable name 'j' should be between 2 and 50 characters long",
+    "rule_id" : "identifier_name",
+    "severity" : "Warning",
+    "type" : "Identifier Name"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
+    "line" : 543,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
+    "line" : 554,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
+    "line" : 558,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
+    "line" : 562,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
+    "line" : 150,
+    "reason" : "Line should be 120 characters or less; currently it has 141 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
+    "line" : 155,
+    "reason" : "Line should be 120 characters or less; currently it has 128 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
+    "line" : 235,
+    "reason" : "Line should be 120 characters or less; currently it has 138 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
+    "line" : 304,
+    "reason" : "Line should be 120 characters or less; currently it has 121 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
+    "line" : 324,
+    "reason" : "Line should be 120 characters or less; currently it has 127 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
+    "line" : 387,
+    "reason" : "Line should be 120 characters or less; currently it has 127 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
+    "line" : 414,
+    "reason" : "Line should be 120 characters or less; currently it has 137 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
+    "line" : 589,
+    "reason" : "Line should be 120 characters or less; currently it has 134 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : 7,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeReviewService.swift",
+    "line" : 15,
+    "reason" : "Type body should span 300 lines or less excluding comments and whitespace: currently spans 414 lines",
+    "rule_id" : "type_body_length",
+    "severity" : "Warning",
+    "type" : "Type Body Length"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AIServiceProtocol.swift",
+    "line" : 36,
+    "reason" : "Types should be nested at most 1 level deep",
+    "rule_id" : "nesting",
+    "severity" : "Warning",
+    "type" : "Nesting"
+  },
+  {
+    "character" : 26,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AIServiceProtocol.swift",
+    "line" : 50,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 21,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AIServiceProtocol.swift",
+    "line" : 51,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 21,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AIServiceProtocol.swift",
+    "line" : 52,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 21,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AIServiceProtocol.swift",
+    "line" : 53,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 25,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AIServiceProtocol.swift",
+    "line" : 54,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 26,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AIServiceProtocol.swift",
+    "line" : 63,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 21,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AIServiceProtocol.swift",
+    "line" : 64,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 21,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AIServiceProtocol.swift",
+    "line" : 65,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 21,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AIServiceProtocol.swift",
+    "line" : 66,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 25,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AIServiceProtocol.swift",
+    "line" : 67,
+    "reason" : "String enum values can be omitted when they are equal to the enumcase name",
+    "rule_id" : "redundant_string_enum_value",
+    "severity" : "Warning",
+    "type" : "Redundant String Enum Value"
+  },
+  {
+    "character" : 1,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AppLogger.swift",
+    "line" : 4,
+    "reason" : "Imports should be unique",
+    "rule_id" : "duplicate_imports",
+    "severity" : "Warning",
+    "type" : "Duplicate Imports"
+  },
+  {
+    "character" : 53,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/Services/FileUploadManager.swift",
+    "line" : 255,
+    "reason" : "Force casts should be avoided",
+    "rule_id" : "force_cast",
+    "severity" : "Error",
+    "type" : "Force Cast"
+  },
+  {
+    "character" : 18,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/Services/FileUploadManager.swift",
+    "line" : 205,
+    "reason" : "Function body should span 50 lines or less excluding comments and whitespace: currently spans 57 lines",
+    "rule_id" : "function_body_length",
+    "severity" : "Warning",
+    "type" : "Function Body Length"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/Services/FileUploadManager.swift",
+    "line" : 346,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/Services/FileUploadManager.swift",
+    "line" : 350,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/Services/FileUploadManager.swift",
+    "line" : 354,
+    "reason" : "Prefer implicit returns in closures, functions and getters",
+    "rule_id" : "implicit_return",
+    "severity" : "Warning",
+    "type" : "Implicit Return"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/Services/FileUploadManager.swift",
+    "line" : 237,
+    "reason" : "Line should be 120 characters or less; currently it has 154 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/Services/FileUploadManager.swift",
+    "line" : 260,
+    "reason" : "Line should be 120 characters or less; currently it has 130 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : 41,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/Services/FileUploadManager.swift",
+    "line" : 106,
+    "reason" : "Initializing an optional variable with nil is redundant",
+    "rule_id" : "redundant_optional_initialization",
+    "severity" : "Warning",
+    "type" : "Redundant Optional Initialization"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileUploadView.swift",
+    "line" : 987,
+    "reason" : "File should contain 500 lines or less: currently contains 987",
+    "rule_id" : "file_length",
+    "severity" : "Warning",
+    "type" : "File Length"
+  },
+  {
+    "character" : 13,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileUploadView.swift",
+    "line" : 445,
+    "reason" : "`where` clauses are preferred over a single `if` inside a `for`",
+    "rule_id" : "for_where",
+    "severity" : "Warning",
+    "type" : "Prefer For-Where"
+  },
+  {
+    "character" : 1,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileUploadView.swift",
+    "line" : 12,
+    "reason" : "Type body should span 300 lines or less excluding comments and whitespace: currently spans 491 lines",
+    "rule_id" : "type_body_length",
+    "severity" : "Warning",
+    "type" : "Type Body Length"
+  },
+  {
+    "character" : 28,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/FileManagerServiceTests.swift",
+    "line" : 36,
+    "reason" : "Print statements should not be used in production code",
+    "rule_id" : "print_statements",
+    "severity" : "Warning",
+    "type" : "Print Statements"
+  },
+  {
+    "character" : 23,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/FileManagerServiceTests.swift",
+    "line" : 56,
+    "reason" : "Print statements should not be used in production code",
+    "rule_id" : "print_statements",
+    "severity" : "Warning",
+    "type" : "Print Statements"
+  },
+  {
+    "character" : 42,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/FileManagerServiceTests.swift",
+    "line" : 265,
+    "reason" : "Print statements should not be used in production code",
+    "rule_id" : "print_statements",
+    "severity" : "Warning",
+    "type" : "Print Statements"
+  },
+  {
+    "character" : 41,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/FileManagerServiceTests.swift",
+    "line" : 272,
+    "reason" : "Print statements should not be used in production code",
+    "rule_id" : "print_statements",
+    "severity" : "Warning",
+    "type" : "Print Statements"
+  },
+  {
+    "character" : 45,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/FileManagerServiceTests.swift",
+    "line" : 138,
+    "reason" : "Force unwrapping should be avoided",
+    "rule_id" : "force_unwrapping",
+    "severity" : "Error",
+    "type" : "Force Unwrapping"
+  },
+  {
+    "character" : 45,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/FileManagerServiceTests.swift",
+    "line" : 139,
+    "reason" : "Force unwrapping should be avoided",
+    "rule_id" : "force_unwrapping",
+    "severity" : "Error",
+    "type" : "Force Unwrapping"
+  },
+  {
+    "character" : 51,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/FileManagerServiceTests.swift",
+    "line" : 142,
+    "reason" : "Force unwrapping should be avoided",
+    "rule_id" : "force_unwrapping",
+    "severity" : "Error",
+    "type" : "Force Unwrapping"
+  },
+  {
+    "character" : 53,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/FileManagerServiceTests.swift",
+    "line" : 145,
+    "reason" : "Force unwrapping should be avoided",
+    "rule_id" : "force_unwrapping",
+    "severity" : "Error",
+    "type" : "Force Unwrapping"
+  },
+  {
+    "character" : 60,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/FileManagerServiceTests.swift",
+    "line" : 245,
+    "reason" : "Force unwrapping should be avoided",
+    "rule_id" : "force_unwrapping",
+    "severity" : "Error",
+    "type" : "Force Unwrapping"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/FileManagerServiceTests.swift",
+    "line" : 237,
+    "reason" : "Line should be 120 characters or less; currently it has 131 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/CodeAnalysisTests.swift",
+    "line" : 39,
+    "reason" : "Print statements should not be used in production code",
+    "rule_id" : "print_statements",
+    "severity" : "Warning",
+    "type" : "Print Statements"
+  },
+  {
+    "character" : 13,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/CodeAnalysisTests.swift",
+    "line" : 41,
+    "reason" : "Print statements should not be used in production code",
+    "rule_id" : "print_statements",
+    "severity" : "Warning",
+    "type" : "Print Statements"
+  },
+  {
+    "character" : 17,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/CodeAnalysisTests.swift",
+    "line" : 54,
+    "reason" : "Print statements should not be used in production code",
+    "rule_id" : "print_statements",
+    "severity" : "Warning",
+    "type" : "Print Statements"
+  },
+  {
+    "character" : 9,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/CodeAnalysisTests.swift",
+    "line" : 67,
+    "reason" : "Print statements should not be used in production code",
+    "rule_id" : "print_statements",
+    "severity" : "Warning",
+    "type" : "Print Statements"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/CodeAnalysisTests.swift",
+    "line" : 20,
+    "reason" : "Line should be 120 characters or less; currently it has 126 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : 28,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/CodingReviewerTests.swift",
+    "line" : 34,
+    "reason" : "Print statements should not be used in production code",
+    "rule_id" : "print_statements",
+    "severity" : "Warning",
+    "type" : "Print Statements"
+  },
+  {
+    "character" : 47,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/CodeReviewViewModelTests.swift",
+    "line" : 52,
+    "reason" : "Print statements should not be used in production code",
+    "rule_id" : "print_statements",
+    "severity" : "Warning",
+    "type" : "Print Statements"
+  },
+  {
+    "character" : 36,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/CodeReviewViewModelTests.swift",
+    "line" : 35,
+    "reason" : "Prefer checking `isEmpty` over comparing `string` to an empty string literal",
+    "rule_id" : "empty_string",
+    "severity" : "Warning",
+    "type" : "Empty String"
+  },
+  {
+    "character" : 41,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/CodeReviewViewModelTests.swift",
+    "line" : 208,
+    "reason" : "Prefer checking `isEmpty` over comparing `string` to an empty string literal",
+    "rule_id" : "empty_string",
+    "severity" : "Warning",
+    "type" : "Empty String"
+  },
+  {
+    "character" : 47,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/AIServiceTests.swift",
+    "line" : 193,
+    "reason" : "Force unwrapping should be avoided",
+    "rule_id" : "force_unwrapping",
+    "severity" : "Error",
+    "type" : "Force Unwrapping"
+  },
+  {
+    "character" : 55,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/AIServiceTests.swift",
+    "line" : 196,
+    "reason" : "Force unwrapping should be avoided",
+    "rule_id" : "force_unwrapping",
+    "severity" : "Error",
+    "type" : "Force Unwrapping"
+  },
+  {
+    "character" : 54,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/AIServiceTests.swift",
+    "line" : 199,
+    "reason" : "Force unwrapping should be avoided",
+    "rule_id" : "force_unwrapping",
+    "severity" : "Error",
+    "type" : "Force Unwrapping"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/AIServiceTests.swift",
+    "line" : 58,
+    "reason" : "Line should be 120 characters or less; currently it has 129 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  },
+  {
+    "character" : null,
+    "file" : "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewerTests/AIServiceTests.swift",
+    "line" : 189,
+    "reason" : "Line should be 120 characters or less; currently it has 128 characters",
+    "rule_id" : "line_length",
+    "severity" : "Warning",
+    "type" : "Line Length"
+  }
+]
