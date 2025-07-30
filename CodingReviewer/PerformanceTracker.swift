@@ -58,7 +58,7 @@ class PerformanceTracker {
     }
     
     func getSlowestOperations(limit: Int = 10) -> [PerformanceMetric] {
-        return performanceMetrics
+        performanceMetrics
             .sorted { $0.duration > $1.duration }
             .prefix(limit)
             .map { $0 }
@@ -120,7 +120,7 @@ struct PerformanceMetric {
     let memoryUsage: UInt64
     
     var formattedDuration: String {
-        return String(format: "%.3f", duration)
+        String(format: "%.3f", duration)
     }
     
     var formattedMemoryUsage: String {

@@ -165,7 +165,9 @@ actor PerformanceMonitor {
     func endMeasurement(for operation: String, startTime: Date) {
         let duration = Date().timeIntervalSince(startTime)
         analysisMetrics[operation] = duration
-        await AppLogger.shared.log("Performance: \(operation) took \(String(format: "%.2f", duration))s", level: .debug, category: .performance)
+        Task {
+            await AppLogger.shared.log("Performance: \(operation) took \(String(format: "%.2f", duration))s", level: .debug, category: .performance)
+        }
     }
 
     func getMetrics() -> [String: TimeInterval] {

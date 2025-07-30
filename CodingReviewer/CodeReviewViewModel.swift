@@ -263,11 +263,15 @@ final class CodeReviewViewModel: ObservableObject {
 
     /// Shows the API key setup screen
     func showAPIKeySetup() {
-        await AppLogger.shared.log("🧠 [DEBUG] CodeReviewViewModel.showAPIKeySetup() called", level: .debug)
-        await AppLogger.shared.log("🧠 [DEBUG] About to call keyManager.showKeySetup()", level: .debug)
+        Task {
+            await AppLogger.shared.log("🧠 [DEBUG] CodeReviewViewModel.showAPIKeySetup() called", level: .debug)
+            await AppLogger.shared.log("🧠 [DEBUG] About to call keyManager.showKeySetup()", level: .debug)
+        }
         osLogger.info("🧠 CodeReviewViewModel showAPIKeySetup called")
         keyManager.showKeySetup()
-        await AppLogger.shared.log("🧠 [DEBUG] Completed call to keyManager.showKeySetup()", level: .debug)
+        Task {
+            await AppLogger.shared.log("🧠 [DEBUG] Completed call to keyManager.showKeySetup()", level: .debug)
+        }
         osLogger.info("🧠 CodeReviewViewModel showAPIKeySetup completed")
     }
 
