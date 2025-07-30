@@ -1,0 +1,26 @@
+{
+  "code_patterns": {
+    "common_fixes": [],
+    "refactoring_patterns": [],
+    "error_patterns": [],
+    "optimization_patterns": []
+  },
+  "automation_patterns": {
+    "successful_sequences": [],
+    "failed_sequences": [],
+    "timing_patterns": [],
+    "dependency_patterns": []
+  },
+  "project_patterns": {
+    "development_cycles": [],
+    "complexity_evolution": [],
+    "performance_patterns": [],
+    "quality_patterns": []
+  },
+  "learning_metadata": {
+    "last_updated": "",
+    "total_patterns": 0,
+    "confidence_score": 0.0,
+    "prediction_accuracy": 0.0
+  }
+}

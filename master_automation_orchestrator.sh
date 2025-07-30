@@ -256,6 +256,33 @@ run_orchestration_loop() {
             generate_master_report
         fi
         
+        # Phase 10: AI Analysis (every 8th cycle)
+        if [ $((iteration % 8)) -eq 0 ]; then
+            echo -e "${CYAN}🧠 Running AI Analysis...${NC}"
+            if [ -f "$PROJECT_PATH/ml_pattern_recognition.sh" ]; then
+                "$PROJECT_PATH/ml_pattern_recognition.sh" > /dev/null 2>&1
+                echo "  ✅ ML pattern recognition complete"
+            fi
+        fi
+        
+        # Phase 11: Predictive Analytics (every 16th cycle)  
+        if [ $((iteration % 16)) -eq 0 ]; then
+            echo -e "${CYAN}🔮 Running Predictive Analytics...${NC}"
+            if [ -f "$PROJECT_PATH/predictive_analytics.sh" ]; then
+                "$PROJECT_PATH/predictive_analytics.sh" > /dev/null 2>&1
+                echo "  ✅ Predictive analysis complete"
+            fi
+        fi
+        
+        # Phase 12: Cross-Project Learning (every 24th cycle - end of loop)
+        if [ $((iteration % 24)) -eq 0 ]; then
+            echo -e "${CYAN}🌐 Running Cross-Project Learning...${NC}"
+            if [ -f "$PROJECT_PATH/cross_project_learning.sh" ]; then
+                "$PROJECT_PATH/cross_project_learning.sh" > /dev/null 2>&1
+                echo "  ✅ Cross-project learning complete"
+            fi
+        fi
+        
         # Generate cycle summary
         generate_cycle_summary $iteration
         
@@ -301,10 +328,10 @@ run_project_health_check() {
     local swift_files=$(find "$PROJECT_PATH/CodingReviewer" -name "*.swift" | wc -l | tr -d ' ')
     local build_status="Unknown"
     
-    # Check if project builds (basic check)
+    # Check if project builds (Xcode project check)
     cd "$PROJECT_PATH" || return
-    if command -v swift &> /dev/null; then
-        swift build --dry-run > /dev/null 2>&1 && build_status="✅ Buildable" || build_status="❌ Build Issues"
+    if command -v xcodebuild &> /dev/null; then
+        xcodebuild -project CodingReviewer.xcodeproj -scheme CodingReviewer -destination 'platform=macOS' build > /dev/null 2>&1 && build_status="✅ Buildable" || build_status="❌ Build Issues"
     fi
     
     echo "  📊 Health Status:"
@@ -536,7 +563,7 @@ add_current_metrics() {
     local swift_files=$(find "$PROJECT_PATH/CodingReviewer" -name "*.swift" | wc -l | tr -d ' ')
     local total_lines=$(find "$PROJECT_PATH/CodingReviewer" -name "*.swift" -exec wc -l {} + 2>/dev/null | tail -1 | awk '{print $1}' || echo "0")
     local test_files=$(find "$PROJECT_PATH" -name "*Test*.swift" -o -name "*Tests.swift" | wc -l | tr -d ' ')
-    local automation_scripts=$(find "$PROJECT_PATH" -name "*.sh" -executable | wc -l | tr -d ' ')
+    local automation_scripts=$(find "$PROJECT_PATH" -name "*.sh" -perm +111 | wc -l | tr -d ' ')
     
     echo "- **Swift Files**: $swift_files" >> "$report"
     echo "- **Lines of Code**: $total_lines" >> "$report"
@@ -737,6 +764,35 @@ main() {
         --report)
             generate_master_report
             ;;
+        --ai-analysis)
+            echo "🧠 Running Advanced AI Analysis..."
+            ./ml_pattern_recognition.sh
+            ./advanced_ai_integration.sh
+            exit 0
+            ;;
+        --predictive)
+            echo "🔮 Running Predictive Analytics..."
+            ./predictive_analytics.sh
+            exit 0
+            ;;
+        --cross-learning)
+            echo "🌐 Running Cross-Project Learning..."
+            ./cross_project_learning.sh
+            exit 0
+            ;;
+        --ai-full)
+            echo "🚀 Running Complete AI Suite..."
+            echo "  🧠 Machine Learning Pattern Recognition..."
+            ./ml_pattern_recognition.sh
+            echo "  🔮 Predictive Analytics..."
+            ./predictive_analytics.sh
+            echo "  🧠 Advanced AI Integration..."
+            ./advanced_ai_integration.sh
+            echo "  🌐 Cross-Project Learning..."
+            ./cross_project_learning.sh
+            echo "🎉 Complete AI analysis finished!"
+            exit 0
+            ;;
         --help)
             echo "Master 100% Automation Orchestrator"
             echo ""
@@ -754,6 +810,12 @@ main() {
             echo "  --restart-single     Restart with single loop"
             echo "  --restart-loops N    Restart with N loops"
             echo "  --report             Generate master report"
+            echo ""
+            echo "AI & MACHINE LEARNING:"
+            echo "  --ai-analysis        Run ML pattern recognition & AI code analysis"
+            echo "  --predictive         Run predictive analytics & forecasting"
+            echo "  --cross-learning     Run cross-project learning system"
+            echo "  --ai-full            Run complete AI suite (all AI features)"
             echo "  --help               Show this help"
             echo ""
             echo "EXAMPLES:"

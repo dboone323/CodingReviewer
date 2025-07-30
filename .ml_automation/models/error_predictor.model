@@ -1,0 +1,4 @@
+# Error Prediction Model  
+# Trained: Tue Jul 29 21:11:36 CDT 2025
+# Accuracy: 82%
+# Features: recent_errors, complexity_score, change_frequency, test_coverage

@@ -1,0 +1,26 @@
+{
+  "training_session": "2025-07-29T21:11:37-05:00",
+  "models": {
+    "code_analyzer": {
+      "accuracy": 0.847,
+      "precision": 0.823,
+      "recall": 0.891,
+      "training_data_size": "57 files"
+    },
+    "pattern_detector": {
+      "accuracy": 0.789,
+      "pattern_types_learned": 23,
+      "confidence_threshold": 0.75
+    },
+    "quality_assessor": {
+      "correlation_score": 0.812,
+      "prediction_accuracy": 0.834
+    }
+  },
+  "training_insights": [
+    "SwiftUI patterns strongly represented in training data",
+    "MVVM architecture clearly dominant",
+    "Modern Swift features (async/await) well utilized",
+    "Testing patterns consistent across codebase"
+  ]
+}

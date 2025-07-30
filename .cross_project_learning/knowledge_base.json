@@ -1,0 +1,28 @@
+{
+  "learning_system": {
+    "version": "1.0",
+    "initialized": "",
+    "projects_analyzed": 0,
+    "patterns_learned": 0,
+    "insights_generated": 0
+  },
+  "project_profiles": {},
+  "cross_patterns": {
+    "architectural_patterns": {},
+    "coding_standards": {},
+    "performance_patterns": {},
+    "error_handling_patterns": {},
+    "testing_strategies": {}
+  },
+  "learned_insights": {
+    "best_practices": [],
+    "anti_patterns": [],
+    "optimization_strategies": [],
+    "architectural_decisions": []
+  },
+  "knowledge_transfer": {
+    "successful_migrations": [],
+    "pattern_adaptations": [],
+    "lessons_learned": []
+  }
+}

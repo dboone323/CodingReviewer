@@ -1,0 +1,38 @@
+{
+  "ai_models": {
+    "code_analyzer": {
+      "type": "static_analysis",
+      "confidence_threshold": 0.75,
+      "enabled": true
+    },
+    "pattern_detector": {
+      "type": "machine_learning",
+      "training_data": "project_history",
+      "enabled": true
+    },
+    "code_generator": {
+      "type": "template_based",
+      "style_guide": "swift_standard",
+      "enabled": true
+    },
+    "quality_assessor": {
+      "type": "multi_metric",
+      "weight_complexity": 0.3,
+      "weight_maintainability": 0.4,
+      "weight_performance": 0.3,
+      "enabled": true
+    }
+  },
+  "analysis_settings": {
+    "deep_scan": true,
+    "performance_analysis": true,
+    "security_scan": true,
+    "architectural_review": true
+  },
+  "generation_settings": {
+    "auto_documentation": true,
+    "test_generation": true,
+    "refactoring_suggestions": true,
+    "optimization_proposals": true
+  }
+}

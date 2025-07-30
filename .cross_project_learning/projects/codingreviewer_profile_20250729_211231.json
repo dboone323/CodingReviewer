@@ -1,0 +1,47 @@
+{
+  "project_metadata": {
+    "name": "CodingReviewer",
+    "type": "macOS_app",
+    "framework": "SwiftUI",
+    "language": "Swift",
+    "analysis_date": "2025-07-29T21:12:31-05:00",
+    "project_size": "medium",
+    "team_size": "small"
+  },
+  "technical_profile": {
+    "statistics": {
+  "file_count": 57,
+  "total_lines": 12623,
+  "average_file_size": 221,
+  "complex_files": 33,
+  "modularization_score": 57,
+  "complexity_distribution": "moderate_with_some_high_complexity_files"
+},
+    "architecture": {
+  "primary_pattern": "MVVM",
+  "ui_framework": "SwiftUI",
+  "mvvm_compliance": 85,
+  "swiftui_adoption": "comprehensive",
+  "dependency_injection": "protocol_based_injection",
+  "navigation_strategy": "navigationview_with_programmatic_navigation",
+  "data_flow": "unidirectional_with_combine",
+  "state_management": "observableobject_with_published_properties"
+},
+    "coding_standards": {
+  "naming_conventions": "camelCase_with_descriptive_names",
+  "code_organization": "feature_based_with_mvvm_structure",
+  "documentation_coverage": 72,
+  "swift_style_compliance": "high_compliance",
+  "accessibility_implementation": "basic_implementation",
+  "error_handling_strategy": "result_types_with_localized_errors"
+},
+    "performance_patterns": ,
+    "testing_strategy": 
+  },
+  "learning_value": {
+    "transferable_patterns": 15,
+    "unique_solutions": 3,
+    "reusable_components": 8,
+    "lessons_learned": 5
+  }
+}
