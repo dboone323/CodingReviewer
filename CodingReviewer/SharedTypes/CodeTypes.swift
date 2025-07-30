@@ -1,9 +1,9 @@
 //
-//  CodeTypes.swift
-//  CodingReviewer
+// CodeTypes.swift
+// CodingReviewer
 //
-//  SharedTypes Module - Centralized type definitions
-//  Created on July 27, 2025
+// SharedTypes Module - Centralized type definitions
+// Created on July 27, 2025
 //
 
 import Foundation

@@ -1,10 +1,10 @@
 // SECURITY: API key handling - ensure proper encryption and keychain storage
 //
-//  APIKeySetupView.swift
-//  CodingReviewer
+// APIKeySetupView.swift
+// CodingReviewer
 //
-//  API Key setup and configuration view
-//  Created on July 25, 2025
+// API Key setup and configuration view
+// Created on July 25, 2025
 //
 
 import SwiftUI
@@ -60,11 +60,11 @@ struct APIKeySetupView: View {
                         .font(.system(.body, design: .monospaced))
 
                     if selectedProvider == "OpenAI" {
-                        Text("Get your API key from https://platform.openai.com/api-keys")
+                        Text("Get your API key from https:// platform.openai.com/api-keys")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {
-                        Text("Get your API key from https://makersuite.google.com/app/apikey")
+                        Text("Get your API key from https:// makersuite.google.com/app/apikey")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }

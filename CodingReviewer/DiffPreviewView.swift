@@ -1,9 +1,9 @@
 //
-//  DiffPreviewView.swift
-//  CodingReviewer
+// DiffPreviewView.swift
+// CodingReviewer
 //
-//  Phase 4: Diff Visualization for Fix Previews
-//  Created on July 25, 2025
+// Phase 4: Diff Visualization for Fix Previews
+// Created on July 25, 2025
 //
 
 import SwiftUI
@@ -632,12 +632,21 @@ enum DiffHighlightType {
 // MARK: - Fix History Tracking
 
 struct FixHistoryEntry: Identifiable, Codable {
-    let id = UUID()
+    let id: UUID
     let fixId: UUID
     let appliedAt: Date
     let originalCode: String
     let modifiedCode: String
     let fileName: String
+    
+    init(fixId: UUID, appliedAt: Date, originalCode: String, modifiedCode: String, fileName: String) {
+        self.id = UUID()
+        self.fixId = fixId
+        self.appliedAt = appliedAt
+        self.originalCode = originalCode
+        self.modifiedCode = modifiedCode
+        self.fileName = fileName
+    }
 
     var formattedDate: String {
         let formatter = DateFormatter()

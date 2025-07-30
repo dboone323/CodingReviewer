@@ -1,9 +1,9 @@
 //
-//  ContentView_AI.swift
-//  CodingReviewer
+// ContentView_AI.swift
+// CodingReviewer
 //
-//  Phase 4: Enhanced AI Interface with Intelligent Fix Generation
-//  Created on July 25, 2025
+// Phase 4: Enhanced AI Interface with Intelligent Fix Generation
+// Created on July 25, 2025
 //
 
 import SwiftUI
@@ -435,11 +435,11 @@ struct AIInsightsView: View {
             FixHistoryView(historyManager: fixHistory)
         }
     }
-    
+
     @MainActor
     private func analyzeUploadedFiles() async {
         guard !fileManager.uploadedFiles.isEmpty else { return }
-        
+
         do {
             // Use the file manager's analysis method to create analysis history
             _ = try await fileManager.analyzeMultipleFiles(fileManager.uploadedFiles, withAI: true)
@@ -688,7 +688,7 @@ struct AIAnalysisDetailView: View {
 
                     // Code Quality Metrics (temporarily disabled due to type mismatch)
                     // if let enhancedResult = record.enhancedResult {
-                    //     CodeQualityMetricsSection(result: enhancedResult)
+                    // CodeQualityMetricsSection(result: enhancedResult)
                     // }
 
                     // Traditional Analysis Results
@@ -961,7 +961,7 @@ extension AnalysisResult.Severity {
 struct AIUploadedFilesView: View {
     let uploadedFiles: [CodeFile]
     let onAnalyzeFiles: () -> Void
-    
+
     var body: some View {
         VStack(spacing: 24) {
             // Header
@@ -969,25 +969,25 @@ struct AIUploadedFilesView: View {
                 Image(systemName: "brain.head.profile")
                     .font(.system(size: 48))
                     .foregroundColor(.blue)
-                
+
                 Text("Files Ready for AI Analysis")
                     .font(.title2)
                     .fontWeight(.semibold)
-                
+
                 Text("Upload complete! Your files are ready to be analyzed by our AI systems.")
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
             }
-            
+
             // Files overview
             VStack(alignment: .leading, spacing: 16) {
                 HStack {
                     Text("Uploaded Files")
                         .font(.headline)
-                    
+
                     Spacer()
-                    
+
                     Text("\(uploadedFiles.count) files")
                         .font(.subheadline)
                         .padding(.horizontal, 12)
@@ -995,7 +995,7 @@ struct AIUploadedFilesView: View {
                         .background(Color.blue.opacity(0.1))
                         .cornerRadius(8)
                 }
-                
+
                 // Language breakdown
                 let languageGroups = Dictionary(grouping: uploadedFiles, by: { $0.language })
                 let sortedLanguages = Array(Set(uploadedFiles.map { $0.language })).sorted(by: { $0.displayName < $1.displayName })
@@ -1004,12 +1004,12 @@ struct AIUploadedFilesView: View {
                         HStack(spacing: 8) {
                             Image(systemName: language.iconName)
                                 .foregroundColor(.blue)
-                            
+
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(language.displayName)
                                     .font(.subheadline)
                                     .fontWeight(.medium)
-                                
+
                                 Text("\(languageGroups[language]?.count ?? 0) files")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
@@ -1021,35 +1021,35 @@ struct AIUploadedFilesView: View {
                         .cornerRadius(8)
                     }
                 }
-                
+
                 // Recent files preview
                 if !uploadedFiles.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Recent Files")
                             .font(.subheadline)
                             .fontWeight(.medium)
-                        
+
                         ForEach(Array(uploadedFiles.prefix(5)), id: \.id) { file in
                             HStack(spacing: 12) {
                                 Image(systemName: file.language.iconName)
                                     .foregroundColor(.blue)
                                     .frame(width: 20)
-                                
+
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(file.name)
                                         .font(.body)
                                         .lineLimit(1)
-                                    
+
                                     Text("\(file.displaySize) • \(file.language.displayName)")
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                 }
-                                
+
                                 Spacer()
                             }
                             .padding(.vertical, 4)
                         }
-                        
+
                         if uploadedFiles.count > 5 {
                             Text("... and \(uploadedFiles.count - 5) more files")
                                 .font(.caption)
@@ -1063,7 +1063,7 @@ struct AIUploadedFilesView: View {
                 }
             }
             .frame(maxWidth: 500)
-            
+
             // Action button
             Button("Start AI Analysis") {
                 onAnalyzeFiles()

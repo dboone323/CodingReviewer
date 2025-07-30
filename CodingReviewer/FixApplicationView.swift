@@ -1,9 +1,9 @@
 //
-//  FixApplicationView.swift
-//  CodingReviewer
+// FixApplicationView.swift
+// CodingReviewer
 //
-//  Phase 4: Interactive Fix Application UI
-//  Created on July 25, 2025
+// Phase 4: Interactive Fix Application UI
+// Created on July 25, 2025
 //
 
 import SwiftUI
@@ -93,7 +93,7 @@ struct FixApplicationView: View {
 
             _ = try await fixGenerator.generateFixes(for: analysis, context: context)
         } catch {
-            await AppLogger.shared.log("Failed to generate fixes: \(error)", level: .error, category: .ai)
+            AppLogger.shared.log("Failed to generate fixes: \(error)", level: .error, category: .ai)
         }
     }
 

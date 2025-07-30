@@ -1,10 +1,10 @@
 import OSLog
 //
-//  FileUploadManager.swift
-//  CodingReviewer
+// FileUploadManager.swift
+// CodingReviewer
 //
-//  Extracted from FileManagerService - Focused file upload operations
-//  Created on July 27, 2025
+// Extracted from FileManagerService - Focused file upload operations
+// Created on July 27, 2025
 //
 
 import Foundation

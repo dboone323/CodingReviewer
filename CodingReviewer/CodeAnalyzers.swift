@@ -1,12 +1,12 @@
 // SECURITY: API key handling - ensure proper encryption and keychain storage
 import Foundation
 
-/// Protocol for code analyzers to enable better testability and modularity
+// / Protocol for code analyzers to enable better testability and modularity
 protocol CodeAnalyzer {
     func analyze(_ code: String) async -> [AnalysisResult]
 }
 
-/// Represents a single analysis result
+// / Represents a single analysis result
 struct AnalysisResult {
     let type: ResultType
     let message: String
@@ -46,7 +46,7 @@ struct AnalysisResult {
     }
 }
 
-/// Analyzes code quality and style issues
+// / Analyzes code quality and style issues
 final class QualityAnalyzer: CodeAnalyzer {
 
     func analyze(_ code: String) async -> [AnalysisResult] {
@@ -144,7 +144,7 @@ final class QualityAnalyzer: CodeAnalyzer {
     }
 
     private func checkRetainCycles(in code: String) -> [AnalysisResult] {
-        let hasSelfInEscaping = code.contains("self.") && code.contains("@escaping")
+        let hasSelfInEscaping = code.contains("self?.") && code.contains("@escaping")
 
         return hasSelfInEscaping ? [
             AnalysisResult(
@@ -167,7 +167,7 @@ final class QualityAnalyzer: CodeAnalyzer {
     }
 }
 
-/// Analyzes potential security concerns
+// / Analyzes potential security concerns
 final class SecurityAnalyzer: CodeAnalyzer {
 
     func analyze(_ code: String) async -> [AnalysisResult] {
@@ -207,7 +207,7 @@ final class SecurityAnalyzer: CodeAnalyzer {
     }
 
     private func checkUnsafeNetwork(in code: String) -> [AnalysisResult] {
-        code.contains("https://") ? [
+        code.contains("https:// ") ? [
             AnalysisResult(
                 type: .security,
                 message: "Insecure HTTP connection detected - consider using HTTPS",
@@ -244,7 +244,7 @@ final class SecurityAnalyzer: CodeAnalyzer {
     }
 }
 
-/// Analyzes performance-related issues
+// / Analyzes performance-related issues
 final class PerformanceAnalyzer: CodeAnalyzer {
 
     func analyze(_ code: String) async -> [AnalysisResult] {

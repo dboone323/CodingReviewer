@@ -1,26 +1,26 @@
-import OSLog
 //
-//  SmartDocumentationGenerator.swift
-//  CodingReviewer
+// SmartDocumentationGenerator.swift
+// CodingReviewer
 //
-//  Phase 4: Smart Code Documentation Generator
-//  Created on July 25, 2025
+// Phase 4: Smart Code Documentation Generator
+// Created on July 25, 2025
 //
 
 import Foundation
-import SwiftUI
+import OSLog
 import Combine
 
 // MARK: - Simple Documentation Types
 
 struct GeneratedDocumentation: Codable {
-    let id = UUID()
+    let id: UUID
     let title: String
     let overview: String
     let sections: [DocumentationSection]
     let generatedAt: Date
-    
+
     init(title: String, overview: String, sections: [DocumentationSection]) {
+        self.id = UUID()
         self.title = title
         self.overview = overview
         self.sections = sections
@@ -29,27 +29,42 @@ struct GeneratedDocumentation: Codable {
 }
 
 struct DocumentationSection: Codable {
-    let id = UUID()
+    let id: UUID
     let title: String
     let content: String
     let type: DocumentationType
     
+    init(title: String, content: String, type: DocumentationType) {
+        self.id = UUID()
+        self.title = title
+        self.content = content
+        self.type = type
+    }
+
     enum DocumentationType: String, Codable {
         case overview, api, examples, notes
     }
 }
 
 struct DocumentationSuggestion: Codable, Identifiable {
-    let id = UUID()
+    let id: UUID
     let type: SuggestionType
     let message: String
     let priority: Priority
     let location: String?
     
+    init(type: SuggestionType, message: String, priority: Priority, location: String? = nil) {
+        self.id = UUID()
+        self.type = type
+        self.message = message
+        self.priority = priority
+        self.location = location
+    }
+
     enum SuggestionType: String, Codable {
         case missingDocumentation, improveClarity, addExamples, updateOutdated
     }
-    
+
     enum Priority: String, Codable {
         case low, medium, high
     }
@@ -66,15 +81,16 @@ final class SmartDocumentationGenerator: ObservableObject {
     init() {
         Logger().info("📚 Smart Documentation Generator initialized")
     }
-    
-    func generateDocumentation(for content: String, fileName: String) async -> GeneratedDocumentation {
+
+// / Function description needed
+func generateDocumentation(for content: String, fileName: String) async -> GeneratedDocumentation {
         await MainActor.run {
             isGenerating = true
             generationProgress = 0.0
         }
-        
+
         Logger().info("📚 Generating documentation for \(fileName)")
-        
+
         // Simple documentation generation
         let overview = "Documentation for \(fileName)"
         let sections = [
@@ -84,19 +100,19 @@ final class SmartDocumentationGenerator: ObservableObject {
                 type: .overview
             )
         ]
-        
+
         let documentation = GeneratedDocumentation(
             title: fileName,
             overview: overview,
             sections: sections
         )
-        
+
         await MainActor.run {
             self.generatedDocumentation = documentation
             isGenerating = false
             generationProgress = 1.0
         }
-        
+
         Logger().info("📚 Documentation generation complete for \(fileName)")
         return documentation
     }

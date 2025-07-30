@@ -1,8 +1,8 @@
 //
-//  CodingReviewerApp.swift
-//  CodingReviewer
+// CodingReviewerApp.swift
+// CodingReviewer
 //
-//  Created by Daniel Stevens on 7/16/25.
+// Created by Daniel Stevens on 7/16/25.
 //
 
 import SwiftUI

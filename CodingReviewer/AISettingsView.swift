@@ -9,14 +9,14 @@ struct AISettingsView: View {
     @State private var selectedProvider: AIProvider = .openai
     @State private var showAlert = false
     @State private var alertMessage = ""
-    
+
     enum AIProvider: String, CaseIterable {
         case openai = "OpenAI"
         case gemini = "Google Gemini"
-        
+
         var displayName: String { rawValue }
     }
-    
+
     var body: some View {
         Form {
             Section("AI Provider") {
@@ -30,14 +30,14 @@ struct AISettingsView: View {
                     Logger().info("Provider changed to: \(newValue.rawValue)")
                 }
             }
-            
+
             Section("API Keys") {
                 SecureField("OpenAI API Key", text: $openAIKey)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
-                
+
                 SecureField("Google Gemini API Key", text: $geminiKey)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
-                
+
                 Button("Save API Keys") {
                     saveAPIKeys()
                 }
@@ -54,22 +54,22 @@ struct AISettingsView: View {
             Text(alertMessage)
         }
     }
-    
+
     private func saveAPIKeys() {
         // Simple keychain storage simulation
         UserDefaults.standard.set(openAIKey, forKey: "openai_key")
         UserDefaults.standard.set(geminiKey, forKey: "gemini_key")
         UserDefaults.standard.set(selectedProvider.rawValue, forKey: "selected_provider")
-        
+
         alertMessage = "API keys saved successfully"
         showAlert = true
         Logger().info("API keys saved")
     }
-    
+
     private func loadAPIKeys() {
         openAIKey = UserDefaults.standard.string(forKey: "openai_key") ?? ""
         geminiKey = UserDefaults.standard.string(forKey: "gemini_key") ?? ""
-        
+
         if let provider = UserDefaults.standard.string(forKey: "selected_provider"),
            let aiProvider = AIProvider(rawValue: provider) {
             selectedProvider = aiProvider

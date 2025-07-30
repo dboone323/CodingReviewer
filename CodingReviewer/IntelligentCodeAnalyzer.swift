@@ -1,6 +1,5 @@
-// SECURITY: API key handling - ensure proper encryption and keychain storage
-import Foundation
 import OSLog
+// SECURITY: API key handling - ensure proper encryption and keychain storage
 
 // MARK: - Intelligent Code Issue Analyzer
 // TODO: Review error handling in this file - Consider wrapping force unwraps and try statements in proper error handling
@@ -260,40 +259,42 @@ import OSLog
 class IntelligentCodeAnalyzer {
     static let shared = IntelligentCodeAnalyzer()
     private let logger = OSLog(subsystem: "CodingReviewer", category: "CodeAnalyzer")
-    
+
     private init() {}
-    
+
     // MARK: - Main Analysis Methods
-    
-    func analyzeProject(at projectPath: String) async throws -> String {
+
+// / Function description needed
+func analyzeProject(at projectPath: String) async throws -> String {
         os_log("Starting intelligent code analysis for project at %@", log: logger, type: .info, projectPath)
-        
+
         let startTime = Date()
         let swiftFiles = try findSwiftFiles(in: projectPath)
         var totalIssues = 0
-        
+
         for filePath in swiftFiles {
             let fileIssues = try await analyzeFile(at: filePath)
             totalIssues += fileIssues.count
         }
-        
+
         let duration = Date().timeIntervalSince(startTime)
         let result = "Analyzed \(swiftFiles.count) files, found \(totalIssues) issues in \(String(format: "%.2f", duration)) seconds"
-        
+
         os_log("Analysis complete: %@", log: logger, type: .info, result)
         return result
     }
-    
-    func analyzeFile(at filePath: String) async throws -> [CodeIssue] {
+
+// / Function description needed
+func analyzeFile(at filePath: String) async throws -> [CodeIssue] {
         guard FileManager.default.fileExists(atPath: filePath) else {
             throw AnalyzerError.fileNotFound(filePath)
         }
-        
+
         let content = try String(contentsOfFile: filePath, encoding: .utf8)
         let lines = content.components(separatedBy: .newlines)
-        
+
         var issues: [CodeIssue] = []
-        
+
         // Run various analysis passes
         issues.append(contentsOf: analyzeSwiftConcurrency(lines: lines, filePath: filePath))
         issues.append(contentsOf: analyzeCodeQuality(lines: lines, filePath: filePath))
@@ -301,20 +302,20 @@ class IntelligentCodeAnalyzer {
         issues.append(contentsOf: analyzeSecurity(lines: lines, filePath: filePath))
         issues.append(contentsOf: analyzeSwiftBestPractices(lines: lines, filePath: filePath))
         issues.append(contentsOf: analyzeArchitecturalPatterns(lines: lines, filePath: filePath))
-        
+
         return issues
     }
-    
+
     // MARK: - Specific Analysis Methods
-    
+
     private func analyzeSwiftConcurrency(lines: [String], filePath: String) -> [CodeIssue] {
         var issues: [CodeIssue] = []
-        
+
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
-            
+
             // Check for main actor isolation issues
-            if line.contains(".shared.") && !line.contains("await") && 
+            if line.contains(".shared.") && !line.contains("await") &&
                (line.contains("AppLogger") || line.contains("PerformanceTracker")) {
                 issues.append(CodeIssue(
                     type: .concurrencyIssue,
@@ -328,7 +329,7 @@ class IntelligentCodeAnalyzer {
                     category: .concurrency
                 ))
             }
-            
+
             // Check for missing @MainActor annotations
             if line.contains("class") && line.contains("ObservableObject") && !line.contains("@MainActor") {
                 issues.append(CodeIssue(
@@ -344,25 +345,25 @@ class IntelligentCodeAnalyzer {
                 ))
             }
         }
-        
+
         return issues
     }
-    
+
     private func analyzeCodeQuality(lines: [String], filePath: String) -> [CodeIssue] {
         var issues: [CodeIssue] = []
-        
+
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
             let trimmedLine = line.trimmingCharacters(in: .whitespaces)
-            
+
             // Check for unused variables (let _ pattern)
             if let range = trimmedLine.range(of: #"let\s+([a-zA-Z_]\w*)\s*="#, options: .regularExpression) {
                 let variableName = String(trimmedLine[range]).replacingOccurrences(of: "let ", with: "").replacingOccurrences(of: " =", with: "")
-                
+
                 // Check if variable is used in subsequent lines (simple heuristic)
                 let remainingLines = Array(lines[(index + 1)...])
                 let isUsed = remainingLines.joined().contains(variableName)
-                
+
                 if !isUsed {
                     issues.append(CodeIssue(
                         type: .unusedVariable,
@@ -377,7 +378,7 @@ class IntelligentCodeAnalyzer {
                     ))
                 }
             }
-            
+
             // Check for var that should be let
             if trimmedLine.contains("var ") && !trimmedLine.contains("=") {
                 // Simple heuristic: if var is declared but never reassigned
@@ -393,7 +394,7 @@ class IntelligentCodeAnalyzer {
                     category: .codeQuality
                 ))
             }
-            
+
             // Check for long lines
             if line.count > 120 {
                 issues.append(CodeIssue(
@@ -409,16 +410,16 @@ class IntelligentCodeAnalyzer {
                 ))
             }
         }
-        
+
         return issues
     }
-    
+
     private func analyzePerformance(lines: [String], filePath: String) -> [CodeIssue] {
         var issues: [CodeIssue] = []
-        
+
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
-            
+
             // Check for string concatenation in loops
             if line.contains("for ") && lines.dropFirst(index).prefix(10).contains(where: { $0.contains("+") && $0.contains("\"") }) {
                 issues.append(CodeIssue(
@@ -433,9 +434,9 @@ class IntelligentCodeAnalyzer {
                     category: .performance
                 ))
             }
-            
+
             // Check for force unwrapping
-            if line.contains("!") && !line.contains("//") && !line.contains("\"") {
+            if line.contains("!") && !line.contains("// ") && !line.contains("\"") {
                 let forceUnwrapPattern = #"[a-zA-Z_]\w*!"#
                 if line.range(of: forceUnwrapPattern, options: .regularExpression) != nil {
                     issues.append(CodeIssue(
@@ -452,18 +453,18 @@ class IntelligentCodeAnalyzer {
                 }
             }
         }
-        
+
         return issues
     }
-    
+
     private func analyzeSecurity(lines: [String], filePath: String) -> [CodeIssue] {
         var issues: [CodeIssue] = []
-        
+
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
-            
+
             // Check for print statements (should use logging)
-            if line.contains("await AppLogger.shared.log(") && !line.contains("//") {
+            if line.contains("await AppLogger.shared.log(") && !line.contains("// ") {
                 issues.append(CodeIssue(
                     type: .insecureLogging,
                     severity: .warning,
@@ -476,9 +477,10 @@ class IntelligentCodeAnalyzer {
                     category: .security
                 ))
             }
-            
+
             // Check for hardcoded API keys or secrets
-            let secretPatterns = ["apikey", "secret", "password", "token"]
+            // TODO: Replace with secure storage
+            let secretPatterns = ["password", "key", "token", "secret"]
             for pattern in secretPatterns {
                 if line.lowercased().contains(pattern) && line.contains("=") && line.contains("\"") {
                     issues.append(CodeIssue(
@@ -495,20 +497,20 @@ class IntelligentCodeAnalyzer {
                 }
             }
         }
-        
+
         return issues
     }
-    
+
     private func analyzeSwiftBestPractices(lines: [String], filePath: String) -> [CodeIssue] {
         var issues: [CodeIssue] = []
-        
+
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
-            
+
             // Check for magic numbers
             let magicNumberPattern = #"\b([2-9]|[1-9][0-9]+)\b"#
-            if line.range(of: magicNumberPattern, options: .regularExpression) != nil && 
-               !line.contains("//") && !line.contains("case") && !line.contains("version") {
+            if line.range(of: magicNumberPattern, options: .regularExpression) != nil &&
+               !line.contains("// ") && !line.contains("case") && !line.contains("version") {
                 issues.append(CodeIssue(
                     type: .magicNumber,
                     severity: .info,
@@ -521,9 +523,9 @@ class IntelligentCodeAnalyzer {
                     category: .maintainability
                 ))
             }
-            
+
             // Check for missing access control
-            if (line.contains("class ") || line.contains("struct ") || line.contains("enum ")) && 
+            if (line.contains("class ") || line.contains("struct ") || line.contains("enum ")) &&
                !line.contains("private") && !line.contains("public") && !line.contains("internal") {
                 issues.append(CodeIssue(
                     type: .missingAccessControl,
@@ -538,20 +540,20 @@ class IntelligentCodeAnalyzer {
                 ))
             }
         }
-        
+
         return issues
     }
-    
+
     private func analyzeArchitecturalPatterns(lines: [String], filePath: String) -> [CodeIssue] {
         var issues: [CodeIssue] = []
-        
+
         // Check for large functions (simple heuristic)
         var currentFunctionStart: Int?
         var braceCount = 0
-        
+
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
-            
+
             // Detect function start
             if line.contains("func ") && line.contains("{") {
                 currentFunctionStart = lineNumber
@@ -559,7 +561,7 @@ class IntelligentCodeAnalyzer {
             } else if let _ = currentFunctionStart {
                 braceCount += line.filter { $0 == "{" }.count
                 braceCount -= line.filter { $0 == "}" }.count
-                
+
                 if braceCount == 0 {
                     // Function ended
                     let functionLength = lineNumber - (currentFunctionStart ?? 0)
@@ -580,35 +582,35 @@ class IntelligentCodeAnalyzer {
                 }
             }
         }
-        
+
         return issues
     }
-    
+
     // MARK: - Helper Methods
-    
+
     private func findSwiftFiles(in directory: String) throws -> [String] {
         let fileManager = FileManager.default
         let enumerator = fileManager.enumerator(atPath: directory)
         var swiftFiles: [String] = []
-        
+
         while let file = enumerator?.nextObject() as? String {
             if file.hasSuffix(".swift") && !file.contains("/.build/") && !file.contains("/DerivedData/") {
                 swiftFiles.append((directory as NSString).appendingPathComponent(file))
             }
         }
-        
+
         return swiftFiles
     }
-    
+
     private func generateRecommendations(from issues: [CodeIssue]) -> [Recommendation] {
         var recommendations: [Recommendation] = []
-        
+
         let issuesByCategory = Dictionary(grouping: issues) { $0.category }
-        
+
         for (category, categoryIssues) in issuesByCategory {
             let count = categoryIssues.count
             let autoFixable = categoryIssues.filter { $0.isAutoFixable }.count
-            
+
             recommendations.append(Recommendation(
                 category: category,
                 priority: count > 10 ? .high : count > 5 ? .medium : .low,
@@ -616,7 +618,7 @@ class IntelligentCodeAnalyzer {
                 action: autoFixable > 0 ? "Run automatic fixes" : "Manual review required"
             ))
         }
-        
+
         return recommendations.sorted { $0.priority.rawValue > $1.priority.rawValue }
     }
 }
@@ -633,7 +635,7 @@ struct CodeIssue {
     let suggestedFix: String
     let isAutoFixable: Bool
     let category: Category
-    
+
     enum IssueType {
         case concurrencyIssue
         case missingMainActor
@@ -648,13 +650,13 @@ struct CodeIssue {
         case missingAccessControl
         case longFunction
     }
-    
+
     enum Severity: Int {
         case error = 3
         case warning = 2
         case info = 1
     }
-    
+
     enum Category: String {
         case concurrency = "Concurrency"
         case codeQuality = "Code Quality"
@@ -671,7 +673,7 @@ struct Recommendation {
     let priority: Priority
     let description: String
     let action: String
-    
+
     enum Priority: Int {
         case high = 3
         case medium = 2
@@ -683,7 +685,7 @@ enum AnalyzerError: LocalizedError {
     case fileNotFound(String)
     case analysisTimeout
     case invalidSwiftFile(String)
-    
+
     var errorDescription: String? {
         switch self {
         case .fileNotFound(let path):
@@ -695,3 +697,4 @@ enum AnalyzerError: LocalizedError {
         }
     }
 }
+import Security

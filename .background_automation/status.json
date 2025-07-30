@@ -1,0 +1,8 @@
+{
+    "status": "stopped",
+    "started": "2025-07-30T14:20:58-05:00",
+    "last_activity": "2025-07-30T14:20:58-05:00",
+    "fixes_applied": 0,
+    "current_task": "daemon_stopped",
+    "active_fixes": []
+}

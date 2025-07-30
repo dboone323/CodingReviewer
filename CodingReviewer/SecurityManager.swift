@@ -3,21 +3,21 @@ import Security
 
 class SecurityManager {
     static let shared = SecurityManager()
-    
+
     private init() {}
-    
+
     // Secure API key storage in Keychain
     static func storeAPIKey(_ key: String, for service: String) -> Bool {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
-            kSecValueData as String: key.data(using: .utf8)!
+            kSecValueData as String: key.data(using: .utf8) ?? Data()
         ]
-        
+
         let status = SecItemAdd(query as CFDictionary, nil)
         return status == errSecSuccess
     }
-    
+
     func retrieveAPIKey(for service: String) -> String? {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -25,10 +25,10 @@ class SecurityManager {
             kSecReturnData as String: true,
             kSecMatchLimit as String: kSecMatchLimitOne
         ]
-        
+
         var result: AnyObject?
         let status = SecItemCopyMatching(query as CFDictionary, &result)
-        
+
         if status == errSecSuccess,
            let data = result as? Data,
            let key = String(data: data, encoding: .utf8) {
@@ -37,7 +37,7 @@ class SecurityManager {
             return nil
         }
     }
-    
+
     // Validate URLs for HTTPS
     func validateSecureURL(_ urlString: String) -> Bool {
         guard let url = URL(string: urlString),
@@ -46,7 +46,7 @@ class SecurityManager {
         }
         return true
     }
-    
+
     // Sanitize input strings
     func sanitizeInput(_ input: String) -> String {
         let allowedCharacters = CharacterSet.alphanumerics.union(.whitespaces).union(.punctuationCharacters)

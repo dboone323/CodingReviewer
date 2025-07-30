@@ -448,7 +448,7 @@ struct AINotEnabledView: View {
                 .buttonStyle(.borderedProminent)
 
                 Button("Learn More") {
-                    if let url = URL(string: "https://openai.com/api/") {
+                    if let url = URL(string: "https:// openai.com/api/") {
                         NSWorkspace.shared.open(url)
                     }
                 }
@@ -663,11 +663,8 @@ struct SettingsView: View {
 
                 if keyManager.hasValidKey && selectedAIProvider == "OpenAI" {
                     Button("Remove OpenAI API Key") {
-                        do {
-                            try keyManager.removeOpenAIKey()
-                        } catch {
-                            // Handle error
-                        }
+                        keyManager.removeOpenAIKey()
+                        AppLogger.shared.log("OpenAI API key removed", level: .info, category: .security)
                     }
                     .buttonStyle(.bordered)
                     .foregroundColor(.red)
@@ -675,11 +672,8 @@ struct SettingsView: View {
 
                 if keyManager.hasValidGeminiKey && selectedAIProvider == "Google Gemini" {
                     Button("Remove Gemini API Key") {
-                        do {
-                            try keyManager.removeGeminiKey()
-                        } catch {
-                            // Handle error
-                        }
+                        keyManager.removeGeminiKey()
+                        AppLogger.shared.log("Gemini API key removed", level: .info, category: .security)
                     }
                     .buttonStyle(.bordered)
                     .foregroundColor(.red)
@@ -717,7 +711,7 @@ struct GeminiKeyInputView: View {
                     .font(.headline)
                     .multilineTextAlignment(.center)
 
-                Text("Get your API key from https://makersuite.google.com/app/apikey")
+                Text("Get your API key from https:// makersuite.google.com/app/apikey")
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -776,13 +770,10 @@ struct GeminiKeyInputView: View {
     }
 
     private func saveKey() {
-        do {
-            try keyManager.setGeminiKey(tempKey)
-            UserDefaults.standard.set(tempKey, forKey: "gemini_api_key")
-            dismiss()
-        } catch {
-            validationResult = "❌ Error saving key: \(error.localizedDescription)"
-        }
+        keyManager.setGeminiKey(tempKey)
+        UserDefaults.standard.set(tempKey, forKey: "gemini_api_key")
+        AppLogger.shared.log("Gemini API key saved successfully", level: .info, category: .security)
+        dismiss()
     }
 }
 

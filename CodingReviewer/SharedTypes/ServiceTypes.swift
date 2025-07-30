@@ -1,9 +1,9 @@
 //
-//  ServiceTypes.swift
-//  CodingReviewer
+// ServiceTypes.swift
+// CodingReviewer
 //
-//  SharedTypes Module - Service and AI-related types
-//  Created on July 27, 2025
+// SharedTypes Module - Service and AI-related types
+// Created on July 27, 2025
 //
 
 import Foundation

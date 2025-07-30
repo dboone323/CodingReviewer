@@ -1,12 +1,12 @@
 //
-//  SharedTypes.swift
-//  CodingReviewer
+// SharedTypes.swift
+// CodingReviewer
 //
-//  SharedTypes Module - Main import file for all shared types
-//  Created on July 27, 2025
+// SharedTypes Module - Main import file for all shared types
+// Created on July 27, 2025
 //
-//  This file provides a single import point for all shared types used across the application.
-//  Import this file instead of individual type files for convenience.
+// This file provides a single import point for all shared types used across the application.
+// Import this file instead of individual type files for convenience.
 //
 
 import Foundation

@@ -4,79 +4,83 @@ import SwiftUI
 import Combine
 
 @MainActor
+// / EnhancedAIService class
+// / TODO: Add detailed documentation
 public class EnhancedAIService: ObservableObject {
     @Published public var isAnalyzing: Bool = false
     @Published public var analysisResult: String = ""
     @Published public var errorMessage: String?
-    
+
     private let apiKeyManager: APIKeyManager
     private let session: URLSession
-    
+
     init(apiKeyManager: APIKeyManager) {
         self.apiKeyManager = apiKeyManager
         self.session = URLSession.shared
     }
-    
+
+    // / analyzeCodeWithEnhancedAI function
+    // / TODO: Add detailed documentation
     public func analyzeCodeWithEnhancedAI(_ code: String, language: String = "swift") async {
         isAnalyzing = true
         errorMessage = nil
-        
+
         // Always perform local analysis first for immediate results
         let localResults = performLocalAnalysis(code, language: language)
-        
+
         DispatchQueue.main.async {
             self.analysisResult = localResults
         }
-        
+
         // Try AI analysis if API key is available
         if apiKeyManager.hasValidKey {
             await performAIAnalysis(code, language: language)
         }
-        
+
         DispatchQueue.main.async {
             self.isAnalyzing = false
         }
     }
-    
+
     private func performLocalAnalysis(_ code: String, language: String) -> String {
         var analysis = "🔍 Enhanced Local Code Analysis\n"
         analysis += String(repeating: "=", count: 40) + "\n\n"
-        
+
         // Basic metrics
         let lineCount = code.components(separatedBy: .newlines).count
         let charCount = code.count
         let functionCount = code.components(separatedBy: "func ").count - 1
-        
+
         analysis += "📊 Code Metrics:\n"
         analysis += "• Lines of code: \(lineCount)\n"
         analysis += "• Characters: \(charCount)\n"
         analysis += "• Functions: \(functionCount)\n\n"
-        
+
         // Quality checks
         var issues: [String] = []
         var suggestions: [String] = []
-        
+
         // Swift-specific analysis
         if language.lowercased() == "swift" {
-            if code.contains("!") && !code.contains("//") {
+            if code.contains("!") && !code.contains("// ") {
                 issues.append("⚠️ Force unwrapping detected - consider using optional binding")
             }
-            
+
             if code.contains("self.") && code.contains("{") {
                 suggestions.append("💡 Consider using [weak self] or [unowned self] in closures")
             }
-            
+
             if code.range(of: "var [A-Z]", options: .regularExpression) != nil {
                 suggestions.append("💡 Variable names should start with lowercase (camelCase)")
             }
         }
-        
+
         // Generic checks
         let longLines = code.components(separatedBy: .newlines).filter { $0.count > 120 }
         if !longLines.isEmpty {
             issues.append("⚠️ \(longLines.count) lines exceed 120 characters")
         }
-        
+
         // Security patterns
         let securityPatterns = ["password", "api_key", "secret", "token"]
         for pattern in securityPatterns {
@@ -84,14 +88,14 @@ public class EnhancedAIService: ObservableObject {
                 issues.append("🔒 Potential hardcoded \(pattern) detected")
             }
         }
-        
+
         // Calculate quality score
         _ = 10 // Total quality checks to perform
         let issuesFound = issues.count
         let qualityScore = max(0, 100 - (issuesFound * 10))
-        
+
         analysis += "🎯 Quality Score: \(qualityScore)/100\n\n"
-        
+
         if issues.isEmpty {
             analysis += "✅ No issues found! Your code looks great.\n\n"
         } else {
@@ -101,7 +105,7 @@ public class EnhancedAIService: ObservableObject {
             }
             analysis += "\n"
         }
-        
+
         if !suggestions.isEmpty {
             analysis += "💡 Suggestions (\(suggestions.count)):\n"
             for (index, suggestion) in suggestions.enumerated() {
@@ -109,21 +113,21 @@ public class EnhancedAIService: ObservableObject {
             }
             analysis += "\n"
         }
-        
+
         // Complexity analysis
         let complexity = calculateComplexity(code)
         analysis += "🧮 Complexity Analysis:\n"
         analysis += "• Cyclomatic Complexity: \(complexity)\n"
         analysis += "• Complexity Level: \(complexityLevel(complexity))\n\n"
-        
+
         return analysis
     }
-    
+
     private func performAIAnalysis(_ code: String, language: String) async {
         do {
             let prompt = createAnalysisPrompt(code: code, language: language)
             let response = try await callOpenAI(prompt: prompt)
-            
+
             DispatchQueue.main.async {
                 self.analysisResult += "🤖 AI Enhanced Analysis:\n"
                 self.analysisResult += String(repeating: "=", count: 40) + "\n"
@@ -135,15 +139,15 @@ public class EnhancedAIService: ObservableObject {
             }
         }
     }
-    
+
     private func createAnalysisPrompt(code: String, language: String) -> String {
         return """
         Analyze this \(language) code and provide actionable insights:
-        
+
         ```\(language)
         \(code)
         ```
-        
+
         Please provide:
         1. Code quality assessment with specific feedback
         2. Potential bugs or issues with line references if possible
@@ -151,22 +155,24 @@ public class EnhancedAIService: ObservableObject {
         4. Security considerations
         5. Best practice recommendations
         6. Refactoring suggestions if applicable
-        
+
         Keep the response concise but thorough, focusing on actionable improvements.
         """
     }
-    
+
     private func callOpenAI(prompt: String) async throws -> String {
         guard let apiKey = UserDefaults.standard.string(forKey: "openai_api_key") else {
             throw AIAnalysisError.noAPIKey
         }
-        
-        let url = URL(string: "https://api.openai.com/v1/chat/completions")!
+
+        guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else {
+            throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
+        }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
+
         let payload: [String: Any] = [
             "model": "gpt-3.5-turbo",
             "messages": [
@@ -175,31 +181,34 @@ public class EnhancedAIService: ObservableObject {
             "max_tokens": 1000,
             "temperature": 0.3
         ]
-        
+
         request.httpBody = try JSONSerialization.data(withJSONObject: payload)
-        
+
         let (data, response) = try await session.data(for: request)
-        
+
         guard let httpResponse = response as? HTTPURLResponse,
               httpResponse.statusCode == 200 else {
             throw AIAnalysisError.apiError("HTTP \((response as? HTTPURLResponse)?.statusCode ?? 0)")
         }
-        
+
         let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
         let choices = json?["choices"] as? [[String: Any]]
-        let message = choices?.first?["message"] as? [String: Any]
-        let content = message?["content"] as? String
-        
-        return content ?? "No response received from AI service"
+        guard let firstChoice = choices?.first,
+              let message = firstChoice["message"] as? [String: Any],
+              let content = message["content"] as? String else {
+            return "No response received from AI service"
+        }
+
+        return content
     }
-    
+
     private func calculateComplexity(_ code: String) -> Int {
         let keywords = ["if", "else", "for", "while", "switch", "case", "guard", "catch"]
         return keywords.reduce(1) { complexity, keyword in
             complexity + (code.components(separatedBy: keyword).count - 1)
         }
     }
-    
+
     private func complexityLevel(_ complexity: Int) -> String {
         switch complexity {
         case 1...5: return "Low ✅"
@@ -216,7 +225,7 @@ public enum AIAnalysisError: Error {
     case apiError(String)
     case invalidResponse
     case networkError
-    
+
     public var localizedDescription: String {
         switch self {
         case .noAPIKey:

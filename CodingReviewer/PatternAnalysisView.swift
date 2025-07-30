@@ -1,10 +1,10 @@
 // SECURITY: API key handling - ensure proper encryption and keychain storage
 //
-//  PatternAnalysisView.swift
-//  CodingReviewer
+// PatternAnalysisView.swift
+// CodingReviewer
 //
-//  Phase 4: Pattern Recognition UI
-//  Created on July 25, 2025
+// Phase 4: Pattern Recognition UI
+// Created on July 25, 2025
 //
 
 import SwiftUI
@@ -354,9 +354,9 @@ struct PatternAnalysisView: View {
                     Text("AI-powered design pattern detection and code smell analysis")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     Spacer()
-                    
+
                     if !fileManager.uploadedFiles.isEmpty {
                         Text("\(fileManager.uploadedFiles.count) files loaded")
                             .font(.caption)
@@ -420,7 +420,7 @@ struct PatternAnalysisView: View {
                     if !fileManager.uploadedFiles.isEmpty {
                         UploadedFilesInfoView(files: fileManager.uploadedFiles)
                     }
-                    
+
                     switch selectedTab {
                     case .patterns:
                         PatternsContentView(patterns: patternEngine.detectedPatterns)
@@ -455,30 +455,30 @@ struct PatternAnalysisView: View {
 
         isAnalyzing = false
     }
-    
+
     @MainActor
     private func analyzeUploadedFiles() async {
         guard !fileManager.uploadedFiles.isEmpty else { return }
-        
+
         isAnalyzing = true
-        
+
         // Combine all uploaded file content for analysis
         let combinedContent = fileManager.uploadedFiles.map { file in
             "// File: \(file.name) (\(file.language.displayName))\n\(file.content)"
         }.joined(separator: "\n\n")
-        
+
         // Detect patterns across all files
         _ = await patternEngine.detectDesignPatterns(
             in: combinedContent,
             language: .swift // Use primary language or most common
         )
-        
+
         // Analyze code smells
         _ = await patternEngine.identifyCodeSmells([])
-        
+
         // Analyze performance
         _ = await patternEngine.detectPerformanceBottlenecks(combinedContent)
-        
+
         isAnalyzing = false
     }
 }
@@ -762,19 +762,19 @@ struct EmptyPatternStateView: View {
 
 struct UploadedFilesInfoView: View {
     let files: [CodeFile]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: "folder.badge.checkmark")
                     .foregroundColor(.blue)
-                
+
                 Text("Uploaded Files Available for Analysis")
                     .font(.headline)
                     .fontWeight(.semibold)
-                
+
                 Spacer()
-                
+
                 Text("\(files.count) files")
                     .font(.caption)
                     .padding(.horizontal, 8)
@@ -782,14 +782,14 @@ struct UploadedFilesInfoView: View {
                     .background(Color.blue.opacity(0.1))
                     .cornerRadius(6)
             }
-            
+
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     ForEach(Array(files.prefix(10)), id: \.id) { file in
                         HStack(spacing: 6) {
                             Image(systemName: file.language.iconName)
                                 .foregroundColor(.blue)
-                            
+
                             Text(file.name)
                                 .font(.caption)
                                 .lineLimit(1)
@@ -799,7 +799,7 @@ struct UploadedFilesInfoView: View {
                         .background(Color(.controlBackgroundColor))
                         .cornerRadius(6)
                     }
-                    
+
                     if files.count > 10 {
                         Text("... +\(files.count - 10) more")
                             .font(.caption)
@@ -810,7 +810,7 @@ struct UploadedFilesInfoView: View {
                 }
                 .padding(.horizontal)
             }
-            
+
             HStack {
                 let languageGroups = Dictionary(grouping: files, by: { $0.language })
                 let sortedLanguages = languageGroups.keys.sorted(by: { $0.displayName < $1.displayName })
@@ -819,13 +819,13 @@ struct UploadedFilesInfoView: View {
                         Circle()
                             .fill(.blue)
                             .frame(width: 8, height: 8)
-                        
+
                         Text("\(languageGroups[language]?.count ?? 0) \(language.displayName)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
                 }
-                
+
                 Spacer()
             }
         }

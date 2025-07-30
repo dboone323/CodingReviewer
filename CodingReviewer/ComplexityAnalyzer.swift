@@ -2,20 +2,20 @@ import Foundation
 
 class ComplexityAnalyzer {
     static let shared = ComplexityAnalyzer()
-    
+
     private init() {}
-    
+
     func analyzeFunction(_ content: String, in file: String) -> FunctionComplexity {
         let lines = content.components(separatedBy: .newlines)
-        
+
         var cyclomaticComplexity = 1 // Base complexity
         var cognitiveComplexity = 0
         var nestingLevel = 0
         var maxNesting = 0
-        
+
         for line in lines {
             let trimmedLine = line.trimmingCharacters(in: .whitespaces)
-            
+
             // Count decision points for cyclomatic complexity
             if trimmedLine.contains("if ") || trimmedLine.contains("else") ||
                trimmedLine.contains("for ") || trimmedLine.contains("while ") ||
@@ -23,7 +23,7 @@ class ComplexityAnalyzer {
                trimmedLine.contains("catch ") || trimmedLine.contains("guard ") {
                 cyclomaticComplexity += 1
             }
-            
+
             // Track nesting for cognitive complexity
             if trimmedLine.hasSuffix("{") {
                 nestingLevel += 1
@@ -32,17 +32,17 @@ class ComplexityAnalyzer {
                     cognitiveComplexity += nestingLevel
                 }
             }
-            
+
             if trimmedLine.contains("}") {
                 nestingLevel = max(0, nestingLevel - 1)
             }
-            
+
             // Cognitive complexity penalties
             if trimmedLine.contains("&&") || trimmedLine.contains("||") {
                 cognitiveComplexity += 1
             }
         }
-        
+
         return FunctionComplexity(
             cyclomaticComplexity: cyclomaticComplexity,
             cognitiveComplexity: cognitiveComplexity,
@@ -50,10 +50,10 @@ class ComplexityAnalyzer {
             linesOfCode: lines.count
         )
     }
-    
+
     func generateRefactoringSuggestions(for complexity: FunctionComplexity) -> [RefactoringSuggestion] {
         var suggestions: [RefactoringSuggestion] = []
-        
+
         if complexity.cyclomaticComplexity > 10 {
             suggestions.append(RefactoringSuggestion(
                 type: .extractMethod,
@@ -62,7 +62,7 @@ class ComplexityAnalyzer {
                 effort: .medium
             ))
         }
-        
+
         if complexity.maxNestingLevel > 4 {
             suggestions.append(RefactoringSuggestion(
                 type: .reduceNesting,
@@ -71,7 +71,7 @@ class ComplexityAnalyzer {
                 effort: .low
             ))
         }
-        
+
         if complexity.cognitiveComplexity > 15 {
             suggestions.append(RefactoringSuggestion(
                 type: .simplifyConditionals,
@@ -80,7 +80,7 @@ class ComplexityAnalyzer {
                 effort: .medium
             ))
         }
-        
+
         if complexity.linesOfCode > 50 {
             suggestions.append(RefactoringSuggestion(
                 type: .extractMethod,
@@ -89,7 +89,7 @@ class ComplexityAnalyzer {
                 effort: .medium
             ))
         }
-        
+
         return suggestions
     }
 }
@@ -99,10 +99,10 @@ struct FunctionComplexity {
     let cognitiveComplexity: Int
     let maxNestingLevel: Int
     let linesOfCode: Int
-    
+
     var overallComplexity: ComplexityLevel {
         let score = cyclomaticComplexity + cognitiveComplexity + maxNestingLevel
-        
+
         switch score {
         case 0...10: return .low
         case 11...20: return .medium
@@ -110,10 +110,10 @@ struct FunctionComplexity {
         default: return .critical
         }
     }
-    
+
     enum ComplexityLevel {
         case low, medium, high, critical
-        
+
         var description: String {
             switch self {
             case .low: return "Low complexity - maintainable"

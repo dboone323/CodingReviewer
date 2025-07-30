@@ -1,9 +1,9 @@
 // SECURITY: API key handling - ensure proper encryption and keychain storage
 //
-//  AIServiceProtocol.swift
-//  CodingReviewer
+// AIServiceProtocol.swift
+// CodingReviewer
 //
-//  Created on July 17, 2025.
+// Created on July 17, 2025.
 //
 
 import Foundation

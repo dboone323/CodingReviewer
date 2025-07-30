@@ -1,9 +1,10 @@
+import OSLog
 //
-//  AICodeReviewService.swift
-//  CodingReviewer
+// AICodeReviewService.swift
+// CodingReviewer
 //
-//  Phase 3: Full AI Integration - Working Version
-//  Created on July 17, 2025, Enhanced July 23, 2025
+// Phase 3: Full AI Integration - Working Version
+// Created on July 17, 2025, Enhanced July 23, 2025
 //
 
 import Foundation
@@ -523,7 +524,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         }
 
         // Documentation
-        if !content.lowercased().contains("//") && !content.lowercased().contains("/*") {
+        if !content.lowercased().contains("// ") && !content.lowercased().contains("/*") {
             suggestions.append("📚 Consider adding comments to explain complex logic and improve code readability")
         }
 
@@ -567,7 +568,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         var maintainability = 100.0 - (Double(avgLineLength) / 2.0)
 
         // Boost for good practices
-        if code.contains("//") || code.contains("/*") { // Has comments
+        if code.contains("// ") || code.contains("/*") { // Has comments
             maintainability += 10.0
         }
 
@@ -752,7 +753,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
                 isAutoApplicable: false
             )
         }
-        
+
         if issue.contains("var") {
             return AIGeneratedFix(
                 title: "📦 Use Modern Variable Declaration",
@@ -763,7 +764,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
                 isAutoApplicable: true
             )
         }
-        
+
         if issue.contains("long") || issue.contains("Large") {
             return AIGeneratedFix(
                 title: "📏 Refactor Large Code Block",
@@ -774,7 +775,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
                 isAutoApplicable: false
             )
         }
-        
+
         if issue.contains("line length") || issue.contains("Long line") {
             return AIGeneratedFix(
                 title: "📝 Improve Line Length",
@@ -785,7 +786,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
                 isAutoApplicable: true
             )
         }
-        
+
         return nil
     }
 

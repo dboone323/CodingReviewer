@@ -1,8 +1,8 @@
 //
-//  FileUploadView.swift
-//  CodingReviewer
+// FileUploadView.swift
+// CodingReviewer
 //
-//  Created by AI Assistant on 7/17/25.
+// Created by AI Assistant on 7/17/25.
 //
 
 import SwiftUI
@@ -450,9 +450,10 @@ struct FileUploadView: View {
                         urls.append(url)
 
                         if urls.count == providers.count {
+                            let capturedUrls = urls
                             Task {
                                 do {
-                                    let result = try await fileManager.uploadFiles(from: urls)
+                                    let result = try await fileManager.uploadFiles(from: capturedUrls)
                                     await MainActor.run {
                                         self.uploadResult = result
                                         self.showingUploadResults = true
@@ -491,7 +492,7 @@ struct FileUploadView: View {
         Task {
             do {
                 let records = try await fileManager.analyzeMultipleFiles(filesToAnalyze, withAI: true)
-                await AppLogger.shared.debug("✅ Selected files analysis completed. Found \(records.count) records")
+                AppLogger.shared.debug("✅ Selected files analysis completed. Found \(records.count) records")
 
                 await MainActor.run {
                     // Clear any previous state first
@@ -503,8 +504,8 @@ struct FileUploadView: View {
                     // Force state update and show sheet immediately
                     self.showingAnalysisResults = true
                 }
-                
-                await AppLogger.shared.debug("🔍 Sheet should now be presented with \(records.count) records")
+
+                AppLogger.shared.debug("🔍 Sheet should now be presented with \(records.count) records")
             } catch {
                 await MainActor.run {
                     fileManager.errorMessage = error.localizedDescription
@@ -882,7 +883,10 @@ struct AnalysisResultsView: View {
 
     // Computed properties for summary statistics
     private var totalIssues: Int {
-        records.reduce(0) { $0 + $1.analysisResults.count }
+        records
+    .reduce(0) {
+         $0 + $1.analysisResults.count
+    }
     }
 
     private var criticalIssues: Int {

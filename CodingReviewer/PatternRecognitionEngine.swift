@@ -1,9 +1,9 @@
 //
-//  PatternRecognitionEngine.swift
-//  CodingReviewer
+// PatternRecognitionEngine.swift
+// CodingReviewer
 //
-//  Phase 4: Advanced Pattern Recognition Engine
-//  Created on July 25, 2025
+// Phase 4: Advanced Pattern Recognition Engine
+// Created on July 25, 2025
 //
 
 import Foundation
@@ -499,13 +499,23 @@ final class PatternRecognitionEngine: ObservableObject {
 // MARK: - Supporting Types
 
 struct DetectedPattern: Identifiable, Codable {
-    let id = UUID()
+    let id: UUID
     let name: String
     let description: String
     let codeLocation: CodeLocation
     let confidence: Double
     let suggestion: String?
     let relatedPatterns: [String]
+    
+    init(name: String, description: String, codeLocation: CodeLocation, confidence: Double, suggestion: String? = nil, relatedPatterns: [String] = []) {
+        self.id = UUID()
+        self.name = name
+        self.description = description
+        self.codeLocation = codeLocation
+        self.confidence = confidence
+        self.suggestion = suggestion
+        self.relatedPatterns = relatedPatterns
+    }
 
     var confidencePercentage: Int {
         Int(confidence * 100)
@@ -513,13 +523,23 @@ struct DetectedPattern: Identifiable, Codable {
 }
 
 struct CodeSmell: Identifiable, Codable {
-    let id = UUID()
+    let id: UUID
     let type: CodeSmellType
     let description: String
     let severity: CodeSmellSeverity
     let location: CodeLocation
     let suggestion: String
     let impact: CodeSmellImpact
+    
+    init(type: CodeSmellType, description: String, severity: CodeSmellSeverity, location: CodeLocation, suggestion: String, impact: CodeSmellImpact) {
+        self.id = UUID()
+        self.type = type
+        self.description = description
+        self.severity = severity
+        self.location = location
+        self.suggestion = suggestion
+        self.impact = impact
+    }
 }
 
 struct CodeLocation: Codable {
@@ -586,13 +606,23 @@ struct ArchitectureRecommendation: Codable {
 }
 
 struct PerformanceIssue: Identifiable, Codable {
-    let id = UUID()
+    let id: UUID
     let type: PerformanceIssueType
     let description: String
     let severity: PerformanceIssueSeverity
     let location: CodeLocation
     let suggestion: String
     let estimatedImpact: PerformanceImpact
+    
+    init(type: PerformanceIssueType, description: String, severity: PerformanceIssueSeverity, location: CodeLocation, suggestion: String, estimatedImpact: PerformanceImpact) {
+        self.id = UUID()
+        self.type = type
+        self.description = description
+        self.severity = severity
+        self.location = location
+        self.suggestion = suggestion
+        self.estimatedImpact = estimatedImpact
+    }
 }
 
 // MARK: - Enums

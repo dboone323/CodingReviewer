@@ -1,9 +1,9 @@
 //
-//  AnalysisTypes.swift
-//  CodingReviewer
+// AnalysisTypes.swift
+// CodingReviewer
 //
-//  SharedTypes Module - Analysis and result-specific types
-//  Created on July 27, 2025
+// SharedTypes Module - Analysis and result-specific types
+// Created on July 27, 2025
 //
 
 import Foundation
@@ -300,7 +300,7 @@ struct RefactoringSuggestion {
     let description: String
     let impact: Impact
     let effort: Effort
-    
+
     enum RefactoringType {
         case extractMethod
         case extractClass
@@ -308,11 +308,11 @@ struct RefactoringSuggestion {
         case simplifyConditionals
         case introduceParameterObject
     }
-    
+
     enum Impact {
         case high, medium, low
     }
-    
+
     enum Effort {
         case high, medium, low
     }

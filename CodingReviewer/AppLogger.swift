@@ -2,7 +2,7 @@
 import Foundation
 import os.log
 
-/// Comprehensive logging and error handling system
+// / Comprehensive logging and error handling system
 enum LogLevel: String, CaseIterable {
     case debug = "DEBUG"
     case info = "INFO"
@@ -11,7 +11,7 @@ enum LogLevel: String, CaseIterable {
     case critical = "CRITICAL"
 }
 
-/// Log categories for better organization
+// / Log categories for better organization
 enum LogCategory: String, CaseIterable {
     case general = "General"
     case analysis = "Analysis"
@@ -34,7 +34,7 @@ enum LogCategory: String, CaseIterable {
     }
 }
 
-/// Enhanced application logger with categorization and performance tracking
+// / Enhanced application logger with categorization and performance tracking
 final class AppLogger {
     private let logger = Logger(subsystem: "com.DanielStevens.CodingReviewer", category: "CodeAnalysis")
     private var performanceMetrics: [String: Date] = [:]
@@ -103,24 +103,24 @@ final class AppLogger {
         log("AI \(type) response \(status) in \(String(format: "%.2f", duration))s",
             level: success ? .info : .warning, category: .ai)
     }
-    
+
     // Convenience method for debug logging
     func debug(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
         log(message, level: .debug, category: .general, file: file, function: function, line: line)
     }
-    
+
     // Convenience method for warning logging
     func logWarning(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
         log(message, level: .warning, category: .general, file: file, function: function, line: line)
     }
-    
+
     // Convenience method for security logging
     func logSecurity(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
         log(message, level: .info, category: .security, file: file, function: function, line: line)
     }
 }
 
-/// Enhanced error types for better error handling
+// / Enhanced error types for better error handling
 enum CodeReviewError: LocalizedError {
     case analysisTimeout
     case invalidInput(String)
@@ -154,7 +154,7 @@ enum CodeReviewError: LocalizedError {
     }
 }
 
-/// Performance monitoring for analysis operations
+// / Performance monitoring for analysis operations
 actor PerformanceMonitor {
     private var analysisMetrics: [String: TimeInterval] = [:]
 

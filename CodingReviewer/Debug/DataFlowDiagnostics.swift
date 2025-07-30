@@ -1,9 +1,9 @@
 //
-//  DataFlowDiagnostics.swift
-//  CodingReviewer
+// DataFlowDiagnostics.swift
+// CodingReviewer
 //
-//  Runtime diagnostics to verify data sharing between views
-//  Created on July 29, 2025
+// Runtime diagnostics to verify data sharing between views
+// Created on July 29, 2025
 //
 
 import SwiftUI
@@ -15,16 +15,16 @@ struct DataFlowDiagnosticsView: View {
     @EnvironmentObject var fileManager: FileManagerService
     @State private var diagnosticResults: [DiagnosticResult] = []
     @State private var isRunning = false
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
                 Text("Data Flow Diagnostics")
                     .font(.title2)
                     .fontWeight(.bold)
-                
+
                 Spacer()
-                
+
                 Button(action: runDiagnostics) {
                     HStack {
                         if isRunning {
@@ -36,9 +36,9 @@ struct DataFlowDiagnosticsView: View {
                 }
                 .disabled(isRunning)
             }
-            
+
             Divider()
-            
+
             if diagnosticResults.isEmpty {
                 Text("Click 'Run Diagnostics' to test data flow between views")
                     .foregroundColor(.secondary)
@@ -56,11 +56,11 @@ struct DataFlowDiagnosticsView: View {
         }
         .padding()
     }
-    
+
     private func runDiagnostics() {
         isRunning = true
         diagnosticResults.removeAll()
-        
+
         Task {
             await performDiagnostics()
             await MainActor.run {
@@ -68,47 +68,47 @@ struct DataFlowDiagnosticsView: View {
             }
         }
     }
-    
+
     private func performDiagnostics() async {
         var results: [DiagnosticResult] = []
-        
+
         // Test 1: Verify SharedDataManager singleton
         let test1 = await testSharedDataManagerSingleton()
         results.append(test1)
-        
+
         // Test 2: Verify FileManagerService consistency
         let test2 = await testFileManagerConsistency()
         results.append(test2)
-        
+
         // Test 3: Test uploaded files accessibility
         let test3 = await testUploadedFilesAccess()
         results.append(test3)
-        
+
         // Test 4: Test cross-view data sharing
         let test4 = await testCrossViewDataSharing()
         results.append(test4)
-        
+
         // Test 5: Test AI Insights view state
         let test5 = await testAIInsightsViewState()
         results.append(test5)
-        
+
         // Test 6: Test Pattern Analysis view state
         let test6 = await testPatternAnalysisViewState()
         results.append(test6)
-        
+
         await MainActor.run {
             self.diagnosticResults = results
         }
     }
-    
+
     // MARK: - Individual Diagnostic Tests
-    
+
     private func testSharedDataManagerSingleton() async -> DiagnosticResult {
         let manager1 = SharedDataManager.shared
         let manager2 = SharedDataManager.shared
-        
+
         let isEqualReference = manager1 === manager2
-        
+
         return DiagnosticResult(
             id: UUID(),
             testName: "SharedDataManager Singleton",
@@ -118,14 +118,14 @@ struct DataFlowDiagnosticsView: View {
             severity: isEqualReference ? .success : .critical
         )
     }
-    
+
     private func testFileManagerConsistency() async -> DiagnosticResult {
         let sharedManager = SharedDataManager.shared
         let fileManager1 = sharedManager.fileManager
         let fileManager2 = sharedManager.getFileManager()
-        
+
         let isConsistent = fileManager1 === fileManager2
-        
+
         return DiagnosticResult(
             id: UUID(),
             testName: "FileManager Consistency",
@@ -135,10 +135,10 @@ struct DataFlowDiagnosticsView: View {
             severity: isConsistent ? .success : .critical
         )
     }
-    
+
     private func testUploadedFilesAccess() async -> DiagnosticResult {
         let initialCount = fileManager.uploadedFiles.count
-        
+
         // Add a test file
         let testFile = CodeFile(
             name: "DiagnosticTest.swift",
@@ -146,21 +146,21 @@ struct DataFlowDiagnosticsView: View {
             content: "// Diagnostic test file",
             language: .swift
         )
-        
+
         await MainActor.run {
             fileManager.uploadedFiles.append(testFile)
         }
-        
+
         let newCount = fileManager.uploadedFiles.count
         let canAccess = newCount == initialCount + 1
-        
+
         // Clean up test file
         await MainActor.run {
             if let index = fileManager.uploadedFiles.firstIndex(where: { $0.id == testFile.id }) {
                 fileManager.uploadedFiles.remove(at: index)
             }
         }
-        
+
         return DiagnosticResult(
             id: UUID(),
             testName: "Uploaded Files Access",
@@ -170,13 +170,13 @@ struct DataFlowDiagnosticsView: View {
             severity: canAccess ? .success : .critical
         )
     }
-    
+
     private func testCrossViewDataSharing() async -> DiagnosticResult {
         let sharedManager = SharedDataManager.shared
         let environmentFileManager = fileManager
-        
+
         let isSameInstance = sharedManager.fileManager === environmentFileManager
-        
+
         return DiagnosticResult(
             id: UUID(),
             testName: "Cross-View Data Sharing",
@@ -186,11 +186,11 @@ struct DataFlowDiagnosticsView: View {
             severity: isSameInstance ? .success : .critical
         )
     }
-    
+
     private func testAIInsightsViewState() async -> DiagnosticResult {
         let hasFiles = !fileManager.uploadedFiles.isEmpty
         let hasAnalysis = !fileManager.analysisHistory.isEmpty
-        
+
         let expectedState: String
         if hasFiles && !hasAnalysis {
             expectedState = "Should show uploaded files for analysis"
@@ -199,7 +199,7 @@ struct DataFlowDiagnosticsView: View {
         } else {
             expectedState = "Should show empty state"
         }
-        
+
         return DiagnosticResult(
             id: UUID(),
             testName: "AI Insights View State",
@@ -209,14 +209,14 @@ struct DataFlowDiagnosticsView: View {
             severity: .info
         )
     }
-    
+
     private func testPatternAnalysisViewState() async -> DiagnosticResult {
         let files = fileManager.uploadedFiles
         let languageGroups = Dictionary(grouping: files, by: { $0.language })
         let uniqueLanguages = languageGroups.keys.count
-        
+
         let canGroup = !files.isEmpty && uniqueLanguages > 0
-        
+
         return DiagnosticResult(
             id: UUID(),
             testName: "Pattern Analysis View State",
@@ -244,7 +244,7 @@ enum DiagnosticSeverity {
     case warning
     case critical
     case info
-    
+
     var color: Color {
         switch self {
         case .success: return .green
@@ -253,7 +253,7 @@ enum DiagnosticSeverity {
         case .info: return .blue
         }
     }
-    
+
     var icon: String {
         switch self {
         case .success: return "checkmark.circle.fill"
@@ -266,19 +266,19 @@ enum DiagnosticSeverity {
 
 struct DiagnosticResultRow: View {
     let result: DiagnosticResult
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: result.severity.icon)
                     .foregroundColor(result.severity.color)
-                
+
                 Text(result.testName)
                     .font(.headline)
                     .fontWeight(.medium)
-                
+
                 Spacer()
-                
+
                 Text(result.passed ? "PASS" : "FAIL")
                     .font(.caption)
                     .fontWeight(.bold)
@@ -288,11 +288,11 @@ struct DiagnosticResultRow: View {
                     .background(result.passed ? Color.green.opacity(0.1) : Color.red.opacity(0.1))
                     .cornerRadius(4)
             }
-            
+
             Text(result.description)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
-            
+
             Text(result.details)
                 .font(.caption)
                 .padding(.horizontal, 12)
@@ -310,15 +310,15 @@ struct DiagnosticResultRow: View {
 
 struct DebugDataStateView: View {
     @EnvironmentObject var fileManager: FileManagerService
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Debug: Data State")
                 .font(.headline)
                 .fontWeight(.bold)
-            
+
             Divider()
-            
+
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
                     Text("Uploaded Files:")
@@ -328,7 +328,7 @@ struct DebugDataStateView: View {
                         .fontWeight(.bold)
                         .foregroundColor(.blue)
                 }
-                
+
                 HStack {
                     Text("Analysis History:")
                         .fontWeight(.medium)
@@ -337,13 +337,13 @@ struct DebugDataStateView: View {
                         .fontWeight(.bold)
                         .foregroundColor(.green)
                 }
-                
+
                 if !fileManager.uploadedFiles.isEmpty {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Files by Language:")
                             .fontWeight(.medium)
                             .padding(.top, 8)
-                        
+
                         let languageGroups = Dictionary(grouping: fileManager.uploadedFiles, by: { $0.language })
                         ForEach(Array(languageGroups.keys.sorted(by: { $0.displayName < $1.displayName })), id: \.self) { language in
                             HStack {
@@ -373,7 +373,7 @@ extension ContentView {
         // This would be added as a debug tab in development builds
         TabView {
             // ... existing tabs
-            
+
             #if DEBUG
             DataFlowDiagnosticsView()
                 .environmentObject(SharedDataManager.shared.fileManager)

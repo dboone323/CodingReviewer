@@ -6,19 +6,19 @@ struct SecurityConfig {
     static let maxFailedAttempts = 3
     static let requiredHTTPS = true
     static let logSecurityEvents = true
-    
+
     // Secure defaults
     static let allowedAPIEndpoints = [
-        "https://api.openai.com",
-        "https://api.anthropic.com",
-        "https://api.github.com"
+        "https:// api.openai.com",
+        "https:// api.anthropic.com",
+        "https:// api.github.com"
     ]
-    
+
     static func validateEndpoint(_ endpoint: String) -> Bool {
         guard SecurityManager.shared.validateSecureURL(endpoint) else {
             return false
         }
-        
+
         return allowedAPIEndpoints.contains { endpoint.hasPrefix($0) }
     }
 }

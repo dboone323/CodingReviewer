@@ -8,19 +8,19 @@ import Combine
 @MainActor
 final class SharedDataManager: ObservableObject {
     static let shared = SharedDataManager()
-    
+
     // Shared FileManagerService instance
     @Published var fileManager: FileManagerService
-    
+
     private init() {
         self.fileManager = FileManagerService()
     }
-    
+
     // Method to get the shared file manager
     func getFileManager() -> FileManagerService {
         fileManager
     }
-    
+
     // Method to explicitly refresh all views
     func refreshAllViews() {
         objectWillChange.send()
@@ -31,7 +31,7 @@ final class SharedDataManager: ObservableObject {
 // MARK: - View Extensions for Shared Data
 
 extension View {
-    /// Access the shared file manager service
+    // / Access the shared file manager service
     var sharedFileManager: FileManagerService {
         SharedDataManager.shared.fileManager
     }

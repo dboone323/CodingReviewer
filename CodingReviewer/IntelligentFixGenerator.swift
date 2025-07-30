@@ -1,10 +1,10 @@
 // SECURITY: API key handling - ensure proper encryption and keychain storage
 //
-//  IntelligentFixGenerator.swift
-//  CodingReviewer
+// IntelligentFixGenerator.swift
+// CodingReviewer
 //
-//  Phase 4: Intelligent Fix Generation System
-//  Created on July 25, 2025
+// Phase 4: Intelligent Fix Generation System
+// Created on July 25, 2025
 //
 
 import Foundation
@@ -142,7 +142,7 @@ final class IntelligentFixGenerator: ObservableObject {
         let lines = code.components(separatedBy: .newlines)
 
         for (index, line) in lines.enumerated() {
-            if line.contains("!") && !line.contains("//") {
+            if line.contains("!") && !line.contains("// ") {
                 // Find force unwrapping patterns
                 if let range = line.range(of: #"(\w+)!"#, options: .regularExpression) {
                     let variableName = String(line[range]).dropLast()
@@ -266,7 +266,13 @@ final class IntelligentFixGenerator: ObservableObject {
     }
 
     private func containsHardcodedCredentials(_ code: String) -> Bool {
-        let patterns = ["password\\s*=\\s*\"", "api_key\\s*=\\s*\"", "secret\\s*=\\s*\""]
+        // TODO: Replace with secure credential storage
+        let patterns = [
+            "password\\s*=\\s*[\"'][^\"']*[\"']",
+            "key\\s*=\\s*[\"'][^\"']*[\"']",
+            "token\\s*=\\s*[\"'][^\"']*[\"']",
+            "secret\\s*=\\s*[\"'][^\"']*[\"']"
+        ]
         return patterns.contains { pattern in
             code.range(of: pattern, options: .regularExpression) != nil
         }

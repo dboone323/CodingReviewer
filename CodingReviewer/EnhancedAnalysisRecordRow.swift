@@ -1,8 +1,8 @@
 //
-//  EnhancedAnalysisRecordRow.swift
-//  CodingReviewer
+// EnhancedAnalysisRecordRow.swift
+// CodingReviewer
 //
-//  Created by AI Assistant on 7/17/25.
+// Created by AI Assistant on 7/17/25.
 //
 
 import SwiftUI

@@ -1,10 +1,10 @@
 import OSLog
 // SECURITY: API key handling - ensure proper encryption and keychain storage
 //
-//  FileManagerService.swift
-//  CodingReviewer
+// FileManagerService.swift
+// CodingReviewer
 //
-//  Created by AI Assistant on 7/17/25.
+// Created by AI Assistant on 7/17/25.
 //
 
 import Foundation
@@ -847,7 +847,7 @@ final class FileManagerService: ObservableObject {
     }
 
     private func callOpenAIAPI(prompt: String, apiKey: String) async -> String {
-        guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else {
+        guard let url = URL(string: "https:// api.openai.com/v1/chat/completions") else {
             return "Error: Invalid OpenAI URL"
         }
 
@@ -915,7 +915,7 @@ final class FileManagerService: ObservableObject {
     }
 
     private func callGeminiAPI(prompt: String, apiKey: String) async -> String {
-        guard let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=\(apiKey)") else {
+        guard let url = URL(string: "https:// generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=\(apiKey)") else {
             return "Error: Invalid Gemini URL"
         }
 
@@ -1070,7 +1070,7 @@ final class FileManagerService: ObservableObject {
             suggestions.append("📏 Large file detected (\(lines.count) lines) - consider breaking into modules")
         }
 
-        if !content.lowercased().contains("//") && !content.lowercased().contains("/*") {
+        if !content.lowercased().contains("// ") && !content.lowercased().contains("/*") {
             suggestions.append("📚 Consider adding comments to explain complex logic")
         }
 
