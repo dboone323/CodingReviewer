@@ -5,7 +5,7 @@ import SwiftUI
 import Combine
 
 @MainActor
-class APIKeyManager: ObservableObject {
+public class APIKeyManager: ObservableObject {
     static let shared = APIKeyManager()
     
     @Published var showingKeySetup = false

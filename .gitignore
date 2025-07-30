@@ -146,3 +146,22 @@ Temporary Items
 
 # Documentation build artifacts
 docs/_build/
+
+# Automation Reports and Generated Files
+.advanced_cicd_enhancement/
+.automation_enhancements/reports/
+.intelligent_*/reports/
+.master_automation/
+.proactive_error_prevention/predictions_log.txt
+.cross_project_learning/recommendations/
+automation_*.log
+*_report_*.md
+*_log.txt
+*.pid
+.orchestrator_cycle
+.last_*_backup
+.*_complete
+
+# Backup directories
+*_backup_*/
+*_refactoring_backup_*/
