@@ -13,9 +13,9 @@ import Combine
 
 final class EnhancedAICodeReviewService: ObservableObject {
 
-    @Published var isAnalyzing = false
-    @Published var analysisProgress: Double = 0.0
-    @Published var aiInsightsAvailable = false
+    @Published var isAnalyzing = false;
+    @Published var analysisProgress: Double = 0.0;
+    @Published var aiInsightsAvailable = false;
     @Published var lastAnalysisTimestamp: Date?
 
     private func log(_ message: String) {
@@ -38,7 +38,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         isAnalyzing = true
         analysisProgress = 0.0
 
-        var results: [EnhancedAnalysisResult] = []
+        var results: [EnhancedAnalysisResult] = [];
         let totalFiles = fileContents.count
 
         log("🤖 Starting Phase 3 AI analysis for \(totalFiles) files")
@@ -122,7 +122,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
     // MARK: - Phase 3 Intelligent Analysis Methods
 
     private func generateIntelligentSuggestions(content: String, language: String) -> [String] {
-        var suggestions: [String] = []
+        var suggestions: [String] = [];
 
         // Language-specific intelligent suggestions
         switch language {
@@ -142,7 +142,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
     }
 
     private func generateSwiftSuggestions(content: String) -> [String] {
-        var suggestions: [String] = []
+        var suggestions: [String] = [];
 
         // Force unwrapping detection
         if content.contains("!") && !content.contains("// Force unwrap necessary") {
@@ -168,7 +168,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
     }
 
     private func generatePythonSuggestions(content: String) -> [String] {
-        var suggestions: [String] = []
+        var suggestions: [String] = [];
 
         // Type hints
         if !content.contains("->") && content.contains("def ") {
@@ -189,7 +189,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
     }
 
     private func generateJavaScriptSuggestions(content: String) -> [String] {
-        var suggestions: [String] = []
+        var suggestions: [String] = [];
 
         // Modern JavaScript features
         if content.contains("var ") {
@@ -210,7 +210,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
     }
 
     private func generateJavaSuggestions(content: String) -> [String] {
-        var suggestions: [String] = []
+        var suggestions: [String] = [];
 
         // Modern Java features
         if content.contains("new ArrayList<>()") {
@@ -226,7 +226,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
     }
 
     private func generateGenericSuggestions(content: String) -> [String] {
-        var suggestions: [String] = []
+        var suggestions: [String] = [];
 
         // General code quality
         let lines = content.components(separatedBy: CharacterSet.newlines)
@@ -252,7 +252,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         let nonEmptyLines = lines.filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
 
         // Enhanced complexity calculation
-        var complexity = Double(nonEmptyLines.count) / 50.0
+        var complexity = Double(nonEmptyLines.count) / 50.0;
 
         // Count conditional statements
         let conditionals = (code.components(separatedBy: " if ").count - 1) +
@@ -276,7 +276,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         let avgLineLength = nonEmptyLines.map { $0.count }.reduce(0, +) / max(nonEmptyLines.count, 1)
 
         // Enhanced maintainability calculation
-        var maintainability = 100.0 - (Double(avgLineLength) / 2.0)
+        var maintainability = 100.0 - (Double(avgLineLength) / 2.0);
 
         // Boost for good practices
         if code.contains("//") || code.contains("/*") { // Has comments
@@ -302,7 +302,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         let lines = content.components(separatedBy: CharacterSet.newlines)
         let wordCount = content.components(separatedBy: CharacterSet.whitespacesAndNewlines).filter { !$0.isEmpty }.count
 
-        var explanation = "📋 **Code Analysis Summary:**\n\n"
+        var explanation = "📋 **Code Analysis Summary:**\n\n";
         explanation += "This code file contains \(lines.count) lines and approximately \(wordCount) words. "
 
         if suggestions.isEmpty {
@@ -327,7 +327,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
     }
 
     private func generateAutomatedFixes(content: String, language: String) -> [String] {
-        var fixes: [String] = []
+        var fixes: [String] = [];
 
         switch language {
         case "swift":
@@ -362,13 +362,13 @@ final class EnhancedAICodeReviewService: ObservableObject {
     }
 
     private func generateRefactoringSuggestions(content: String) -> [String] {
-        var suggestions: [String] = []
+        var suggestions: [String] = [];
 
         let lines = content.components(separatedBy: CharacterSet.newlines)
 
         // Long functions detection
-        var currentFunctionLines = 0
-        var inFunction = false
+        var currentFunctionLines = 0;
+        var inFunction = false;
 
         for line in lines {
             let trimmedLine = line.trimmingCharacters(in: .whitespaces)
@@ -399,7 +399,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
             let pattern = Array(codeBlocks[i..<(i + duplicateThreshold)])
             let patternString = pattern.joined(separator: "\n")
 
-            var occurrences = 0
+            var occurrences = 0;
             for j in (i + duplicateThreshold)..<(codeBlocks.count - duplicateThreshold) {
                 let checkPattern = Array(codeBlocks[j..<(j + duplicateThreshold)])
                 let checkString = checkPattern.joined(separator: "\n")
@@ -419,7 +419,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
     }
 
     private func generateSmartFixes(content: String, language: String) -> [AIGeneratedFix] {
-        var fixes: [AIGeneratedFix] = []
+        var fixes: [AIGeneratedFix] = [];
 
         // Analyze content for common issues and generate fixes
         let issues = detectCommonIssues(content: content, language: language)
@@ -434,7 +434,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
     }
 
     private func detectCommonIssues(content: String, language: String) -> [CodeIssue] {
-        var issues: [CodeIssue] = []
+        var issues: [CodeIssue] = [];
 
         switch language {
         case "swift":

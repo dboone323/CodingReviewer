@@ -14,15 +14,15 @@ import Combine
 
 @MainActor
 final class MLIntegrationService: ObservableObject {
-    @Published var isAnalyzing = false
-    @Published var mlInsights: [MLInsight] = []
+    @Published var isAnalyzing = false;
+    @Published var mlInsights: [MLInsight] = [];
     @Published var predictiveData: PredictiveAnalysis?
-    @Published var crossProjectLearnings: [CrossProjectLearning] = []
-    @Published var analysisProgress: Double = 0.0
+    @Published var crossProjectLearnings: [CrossProjectLearning] = [];
+    @Published var analysisProgress: Double = 0.0;
     @Published var lastUpdate: Date?
 
     private let logger = AppLogger.shared
-    private var cancellables = Set<AnyCancellable>()
+    private var cancellables = Set<AnyCancellable>();
 
     init() {
         logger.log("🧠 ML Integration Service initialized", level: .info, category: .ai)
@@ -250,7 +250,7 @@ final class MLIntegrationService: ObservableObject {
     // MARK: - Parsing Methods
 
     private func parseMLRecommendations(_ content: String) -> [MLInsight] {
-        var insights: [MLInsight] = []
+        var insights: [MLInsight] = [];
 
         // Parse code quality patterns
         if content.contains("High Complexity Files") {
@@ -316,7 +316,7 @@ final class MLIntegrationService: ObservableObject {
     }
 
     private func parseCrossProjectInsights(_ content: String) -> [CrossProjectLearning] {
-        var learnings: [CrossProjectLearning] = []
+        var learnings: [CrossProjectLearning] = [];
 
         // Parse MVVM+SwiftUI patterns
         if content.contains("MVVM + SwiftUI") {

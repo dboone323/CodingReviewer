@@ -77,10 +77,10 @@ struct RefactoringSuggestion {
 // MARK: - Builder Pattern for Complex Configurations
 
 class AnalysisRequestBuilder {
-    private var filePath: String = ""
-    private var analysisType: CodeAnalysisRequest.AnalysisType = .quality
-    private var options: AnalysisOptions = .default
-    private var completion: (Result<AnalysisResult, Error>) -> Void = { _ in }
+    private var filePath: String = "";
+    private var analysisType: CodeAnalysisRequest.AnalysisType = .quality;
+    private var options: AnalysisOptions = .default;
+    private var completion: (Result<AnalysisResult, Error>) -> Void = { _ in };
     
     func setFilePath(_ path: String) -> AnalysisRequestBuilder {
         self.filePath = path
@@ -174,7 +174,7 @@ class ExtractMethodCommand: RefactoringCommand {
 }
 
 class RefactoringCommandInvoker {
-    private var commands: [RefactoringCommand] = []
+    private var commands: [RefactoringCommand] = [];
     
     func execute(command: RefactoringCommand) throws {
         try command.execute()
@@ -203,7 +203,7 @@ protocol AnalysisProgressObserver {
 }
 
 class AnalysisProgressNotifier {
-    private var observers: [AnalysisProgressObserver] = []
+    private var observers: [AnalysisProgressObserver] = [];
     
     func addObserver(_ observer: AnalysisProgressObserver) {
         observers.append(observer)

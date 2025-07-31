@@ -10,10 +10,10 @@
 import SwiftUI
 
 struct APIKeySetupView: View {
-    @State private var tempKey = ""
-    @State private var isValidating = false
-    @State private var validationResult: String? = nil
-    @State private var selectedProvider = "OpenAI"
+    @State private var tempKey = "";
+    @State private var isValidating = false;
+    @State private var validationResult: String? = nil;
+    @State private var selectedProvider = "OpenAI";
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {

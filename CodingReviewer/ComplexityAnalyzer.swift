@@ -8,10 +8,10 @@ class ComplexityAnalyzer {
     func analyzeFunction(_ content: String, in file: String) -> FunctionComplexity {
         let lines = content.components(separatedBy: .newlines)
 
-        var cyclomaticComplexity = 1 // Base complexity
-        var cognitiveComplexity = 0
-        var nestingLevel = 0
-        var maxNesting = 0
+        var cyclomaticComplexity = 1 // Base complexity;
+        var cognitiveComplexity = 0;
+        var nestingLevel = 0;
+        var maxNesting = 0;
 
         for line in lines {
             let trimmedLine = line.trimmingCharacters(in: .whitespaces)
@@ -52,7 +52,7 @@ class ComplexityAnalyzer {
     }
 
     func generateRefactoringSuggestions(for complexity: FunctionComplexity) -> [RefactoringSuggestion] {
-        var suggestions: [RefactoringSuggestion] = []
+        var suggestions: [RefactoringSuggestion] = [];
 
         if complexity.cyclomaticComplexity > 10 {
             suggestions.append(RefactoringSuggestion(

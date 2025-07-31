@@ -29,17 +29,17 @@ enum AIInsightsTab: String, CaseIterable {
 // MARK: - Enhanced AI Insights View
 
 struct AIInsightsView: View {
-    @StateObject private var fileManager = FileManagerService()
-    @StateObject private var fixGenerator = IntelligentFixGenerator()
-    @StateObject private var fixHistory = FixHistoryManager()
-    @StateObject private var patternEngine = PatternRecognitionEngine()
+    @StateObject private var fileManager = FileManagerService();
+    @StateObject private var fixGenerator = IntelligentFixGenerator();
+    @StateObject private var fixHistory = FixHistoryManager();
+    @StateObject private var patternEngine = PatternRecognitionEngine();
 
     @State private var selectedAnalysisRecord: FileAnalysisRecord?
-    @State private var showingFixApplication = false
-    @State private var showingFixHistory = false
-    @State private var showingPatternAnalysis = false
-    @State private var currentModifiedCode: String = ""
-    @State private var selectedTab: AIInsightsTab = .analysis
+    @State private var showingFixApplication = false;
+    @State private var showingFixHistory = false;
+    @State private var showingPatternAnalysis = false;
+    @State private var currentModifiedCode: String = "";
+    @State private var selectedTab: AIInsightsTab = .analysis;
 
     var body: some View {
         VStack(spacing: 0) {

@@ -14,12 +14,12 @@ import Combine
 
 final class PatternRecognitionEngine: ObservableObject {
 
-    @Published var isAnalyzing = false
-    @Published var analysisProgress: Double = 0.0
-    @Published var detectedPatterns: [DetectedPattern] = []
-    @Published var codeSmells: [CodeSmell] = []
+    @Published var isAnalyzing = false;
+    @Published var analysisProgress: Double = 0.0;
+    @Published var detectedPatterns: [DetectedPattern] = [];
+    @Published var codeSmells: [CodeSmell] = [];
     @Published var architectureInsights: ArchitectureInsights?
-    @Published var performanceIssues: [PerformanceIssue] = []
+    @Published var performanceIssues: [PerformanceIssue] = [];
 
     private let logger = AppLogger.shared
 
@@ -40,7 +40,7 @@ final class PatternRecognitionEngine: ObservableObject {
 
         logger.log("🔍 Detecting design patterns in \(language.rawValue) code", level: .info, category: .ai)
 
-        var patterns: [DetectedPattern] = []
+        var patterns: [DetectedPattern] = [];
 
         // Detect common design patterns
         patterns.append(contentsOf: await detectSingletonPattern(in: code, language: language))
@@ -70,7 +70,7 @@ final class PatternRecognitionEngine: ObservableObject {
 
         logger.log("🔍 Identifying code smells in analysis results", level: .info, category: .ai)
 
-        var smells: [CodeSmell] = []
+        var smells: [CodeSmell] = [];
 
         // Analyze for common code smells
         smells.append(contentsOf: detectLongMethodSmells(analysis))
@@ -110,7 +110,7 @@ final class PatternRecognitionEngine: ObservableObject {
 
         logger.log("🔍 Detecting performance bottlenecks", level: .info, category: .ai)
 
-        var issues: [PerformanceIssue] = []
+        var issues: [PerformanceIssue] = [];
 
         // Detect common performance issues
         issues.append(contentsOf: detectInefficiientLoops(in: code))
@@ -128,7 +128,7 @@ final class PatternRecognitionEngine: ObservableObject {
     // MARK: - Design Pattern Detection
 
     private func detectSingletonPattern(in code: String, language: CodeLanguage) async -> [DetectedPattern] {
-        var patterns: [DetectedPattern] = []
+        var patterns: [DetectedPattern] = [];
 
         switch language {
         case .swift:
@@ -169,7 +169,7 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     private func detectObserverPattern(in code: String, language: CodeLanguage) async -> [DetectedPattern] {
-        var patterns: [DetectedPattern] = []
+        var patterns: [DetectedPattern] = [];
 
         if code.contains("addObserver") || code.contains("removeObserver") ||
            code.contains("NotificationCenter") || code.contains("@Published") {
@@ -189,7 +189,7 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     private func detectFactoryPattern(in code: String, language: CodeLanguage) async -> [DetectedPattern] {
-        var patterns: [DetectedPattern] = []
+        var patterns: [DetectedPattern] = [];
 
         if code.contains("create") && (code.contains("factory") || code.contains("Factory")) {
             let location = findCodeLocation(for: "Factory", in: code)
@@ -208,7 +208,7 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     private func detectMVVMPattern(in code: String, language: CodeLanguage) async -> [DetectedPattern] {
-        var patterns: [DetectedPattern] = []
+        var patterns: [DetectedPattern] = [];
 
         if code.contains("ViewModel") && (code.contains("@Published") || code.contains("ObservableObject")) {
             let location = findCodeLocation(for: "ViewModel", in: code)
@@ -227,7 +227,7 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     private func detectDependencyInjectionPattern(in code: String, language: CodeLanguage) async -> [DetectedPattern] {
-        var patterns: [DetectedPattern] = []
+        var patterns: [DetectedPattern] = [];
 
         if code.contains("inject") || code.contains("dependency") ||
            (code.contains("init(") && code.components(separatedBy: "init(").count > 3) {
@@ -321,7 +321,7 @@ final class PatternRecognitionEngine: ObservableObject {
         let fileCount = files.count
         let averageFileSize = files.map { $0.size }.reduce(0, +) / max(fileCount, 1)
 
-        var score = 80.0 // Base score
+        var score = 80.0 // Base score;
 
         // Adjust score based on metrics
         if averageFileSize > 10000 {
@@ -396,7 +396,7 @@ final class PatternRecognitionEngine: ObservableObject {
     // MARK: - Performance Analysis
 
     private func detectInefficiientLoops(in code: String) -> [PerformanceIssue] {
-        var issues: [PerformanceIssue] = []
+        var issues: [PerformanceIssue] = [];
 
         if code.contains("for") && code.contains("for") {
             // Nested loops detection
@@ -416,7 +416,7 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     private func detectMemoryLeaks(in code: String) -> [PerformanceIssue] {
-        var issues: [PerformanceIssue] = []
+        var issues: [PerformanceIssue] = [];
 
         if code.contains("strong") && code.contains("self") {
             issues.append(
@@ -435,7 +435,7 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     private func detectUnnecessaryComputations(in code: String) -> [PerformanceIssue] {
-        var issues: [PerformanceIssue] = []
+        var issues: [PerformanceIssue] = [];
 
         if code.contains("computed") && code.contains("get") {
             issues.append(
@@ -454,7 +454,7 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     private func detectIOBottlenecks(in code: String) -> [PerformanceIssue] {
-        var issues: [PerformanceIssue] = []
+        var issues: [PerformanceIssue] = [];
 
         if code.contains("URLSession") && !code.contains("async") {
             issues.append(

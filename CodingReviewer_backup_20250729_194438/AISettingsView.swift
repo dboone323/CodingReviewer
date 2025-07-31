@@ -4,11 +4,11 @@ import SwiftUI
 import Foundation
 
 struct AISettingsView: View {
-    @State private var openAIKey = ""
-    @State private var geminiKey = ""
-    @State private var selectedProvider: AIProvider = .openai
-    @State private var showAlert = false
-    @State private var alertMessage = ""
+    @State private var openAIKey = "";
+    @State private var geminiKey = "";
+    @State private var selectedProvider: AIProvider = .openai;
+    @State private var showAlert = false;
+    @State private var alertMessage = "";
     
     enum AIProvider: String, CaseIterable {
         case openai = "OpenAI"

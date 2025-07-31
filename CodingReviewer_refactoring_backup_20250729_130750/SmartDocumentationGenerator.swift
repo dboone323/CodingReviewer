@@ -6,18 +6,14 @@
 //  Created on July 25, 2025
 //
 
-import Foundation
-import SwiftUI
-import Combine
 
-// MARK: - Smart Documentation Generator
 
 final class SmartDocumentationGenerator: ObservableObject {
 
-    @Published var isGenerating = false
-    @Published var generationProgress: Double = 0.0
+    @Published var isGenerating = false;
+    @Published var generationProgress: Double = 0.0;
     @Published var generatedDocumentation: GeneratedDocumentation?
-    @Published var documentationSuggestions: [DocumentationSuggestion] = []
+    @Published var documentationSuggestions: [DocumentationSuggestion] = [];
 
     private let logger = AppLogger.shared
     private let aiService: any AIServiceProtocol
@@ -48,7 +44,7 @@ final class SmartDocumentationGenerator: ObservableObject {
         )
 
         // Generate different sections based on content analysis
-        var sections: [DocumentationSection] = []
+        var sections: [DocumentationSection] = [];
 
         // Overview section
         sections.append(await generateOverviewSection(for: codeFile))
@@ -113,7 +109,7 @@ final class SmartDocumentationGenerator: ObservableObject {
 
         logger.log("📚 Analyzing documentation improvements for \(codeFile.name)", level: .info, category: .ai)
 
-        var suggestions: [DocumentationSuggestion] = []
+        var suggestions: [DocumentationSuggestion] = [];
 
         // Analyze code for missing documentation
         suggestions.append(contentsOf: analyzeMissingDocumentation(in: codeFile))
@@ -141,7 +137,7 @@ final class SmartDocumentationGenerator: ObservableObject {
     }
 
     private func generateAPIDocumentation(for codeFile: CodeFile) async -> [DocumentationSection] {
-        var sections: [DocumentationSection] = []
+        var sections: [DocumentationSection] = [];
 
         // Extract classes, methods, and properties
         let apiElements = extractAPIElements(from: codeFile.content, language: codeFile.language)
@@ -245,7 +241,7 @@ final class SmartDocumentationGenerator: ObservableObject {
     }
 
     private func generateAPIReference(for files: [CodeFile]) async -> String {
-        var apiRef = """
+        var apiRef = """;
         # API Reference
 
         This document provides detailed information about the public API.
@@ -364,7 +360,7 @@ final class SmartDocumentationGenerator: ObservableObject {
     // MARK: - Code Analysis Helpers
 
     private func extractAPIElements(from code: String, language: CodeLanguage) -> [APIElement] {
-        var elements: [APIElement] = []
+        var elements: [APIElement] = [];
 
         switch language {
         case .swift:
@@ -381,7 +377,7 @@ final class SmartDocumentationGenerator: ObservableObject {
     }
 
     private func extractSwiftAPIElements(from code: String) -> [APIElement] {
-        var elements: [APIElement] = []
+        var elements: [APIElement] = [];
         let lines = code.components(separatedBy: .newlines)
 
         for (index, line) in lines.enumerated() {
@@ -430,7 +426,7 @@ final class SmartDocumentationGenerator: ObservableObject {
     }
 
     private func extractPythonAPIElements(from code: String) -> [APIElement] {
-        var elements: [APIElement] = []
+        var elements: [APIElement] = [];
         let lines = code.components(separatedBy: .newlines)
 
         for (index, line) in lines.enumerated() {
@@ -465,7 +461,7 @@ final class SmartDocumentationGenerator: ObservableObject {
     }
 
     private func extractJavaScriptAPIElements(from code: String) -> [APIElement] {
-        var elements: [APIElement] = []
+        var elements: [APIElement] = [];
         let lines = code.components(separatedBy: .newlines)
 
         for (index, line) in lines.enumerated() {
@@ -507,7 +503,7 @@ final class SmartDocumentationGenerator: ObservableObject {
     // MARK: - Documentation Analysis
 
     private func analyzeMissingDocumentation(in codeFile: CodeFile) -> [DocumentationSuggestion] {
-        var suggestions: [DocumentationSuggestion] = []
+        var suggestions: [DocumentationSuggestion] = [];
         let elements = extractAPIElements(from: codeFile.content, language: codeFile.language)
 
         for element in elements {
@@ -527,7 +523,7 @@ final class SmartDocumentationGenerator: ObservableObject {
     }
 
     private func analyzeDocumentationQuality(in codeFile: CodeFile) -> [DocumentationSuggestion] {
-        var suggestions: [DocumentationSuggestion] = []
+        var suggestions: [DocumentationSuggestion] = [];
 
         // Check for README file
         if codeFile.name.lowercased().contains("readme") {
@@ -548,7 +544,7 @@ final class SmartDocumentationGenerator: ObservableObject {
     }
 
     private func suggestDocumentationStructure(for codeFile: CodeFile) -> [DocumentationSuggestion] {
-        var suggestions: [DocumentationSuggestion] = []
+        var suggestions: [DocumentationSuggestion] = [];
 
         let elements = extractAPIElements(from: codeFile.content, language: codeFile.language)
         let classCount = elements.filter { $0.type == .classType }.count
@@ -590,7 +586,7 @@ final class SmartDocumentationGenerator: ObservableObject {
         let words = line.components(separatedBy: .whitespaces)
 
         for (index, word) in words.enumerated() {
-            if word == "var" || word == "let", index + 1 < words.count {
+            if word == "var" || word == "let", index + 1 < words.count {;
                 return words[index + 1].trimmingCharacters(in: CharacterSet(charactersIn: ":"))
             }
         }
@@ -645,7 +641,7 @@ final class SmartDocumentationGenerator: ObservableObject {
     }
 
     private func generateFeatureList(_ files: [CodeFile]) async -> String {
-        var features: [String] = []
+        var features: [String] = [];
 
         // Analyze files for common features
         for file in files {
@@ -735,7 +731,7 @@ final class SmartDocumentationGenerator: ObservableObject {
     }
 
     private func generateComponentDocumentation(_ files: [CodeFile]) async -> String {
-        var components: [String] = []
+        var components: [String] = [];
 
         for file in files {
             if file.name.contains("Service") {

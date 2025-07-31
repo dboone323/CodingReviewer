@@ -13,13 +13,13 @@ import Accessibility
 
 struct FixApplicationView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
-    @StateObject private var fixGenerator = IntelligentFixGenerator()
-    @State private var selectedFixes: Set<UUID> = []
-    @State private var showingDiffPreview = false
+    @State private var isLoading = false;
+    @StateObject private var fixGenerator = IntelligentFixGenerator();
+    @State private var selectedFixes: Set<UUID> = [];
+    @State private var showingDiffPreview = false;
     @State private var previewFix: IntelligentFix?
-    @State private var appliedFixes: [UUID] = []
-    @State private var showingApplyConfirmation = false
+    @State private var appliedFixes: [UUID] = [];
+    @State private var showingApplyConfirmation = false;
 
     let analysis: EnhancedAnalysisResult
     let originalCode: String
@@ -118,7 +118,7 @@ struct FixApplicationView: View {
     }
 
     private func applyConfirmedFixes() {
-        var modifiedCode = originalCode
+        var modifiedCode = originalCode;
         let sortedFixes = fixGenerator.generatedFixes
             .filter { selectedFixes.contains($0.id) }
             .sorted { $0.startLine > $1.startLine } // Apply from bottom to top
@@ -141,7 +141,7 @@ struct FixApplicationView: View {
 
 struct FixApplicationHeader: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let totalFixes: Int
     let selectedCount: Int
     let onSelectAll: () -> Void
@@ -188,7 +188,7 @@ struct FixApplicationHeader: View {
 
 struct FixGenerationProgressView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let progress: Double
 
     var body: some View {
@@ -209,7 +209,7 @@ struct FixGenerationProgressView: View {
 
 struct EmptyFixesView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     var body: some View {
         VStack(spacing: 16) {
             Image(systemName: "checkmark.circle.fill")
@@ -234,7 +234,7 @@ struct EmptyFixesView: View {
 
 struct FixesList: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let fixes: [IntelligentFix]
     @Binding var selectedFixes: Set<UUID>
     let appliedFixes: [UUID]
@@ -274,7 +274,7 @@ struct FixesList: View {
 
 struct FixRowView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let fix: IntelligentFix
     let isSelected: Bool
     let isApplied: Bool
@@ -364,7 +364,7 @@ struct FixRowView: View {
 
 struct ConfidenceBadge: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let confidence: Double
 
     var body: some View {
@@ -391,7 +391,7 @@ struct ConfidenceBadge: View {
 
 struct ImpactIndicator: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let impact: FixImpact
 
     var body: some View {
@@ -423,7 +423,7 @@ struct ImpactIndicator: View {
 
 struct FixActionBar: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let hasSelectedFixes: Bool
     let onApplySelected: () -> Void
     let onPreviewSelected: () -> Void

@@ -12,10 +12,10 @@ import Foundation
 // MARK: - Enhanced AI Insights View
 
 struct EnhancedAIInsightsView: View {
-    @StateObject private var mlService = MLIntegrationService()
+    @StateObject private var mlService = MLIntegrationService();
     @EnvironmentObject private var fileManager: FileManagerService
-    @State private var selectedTab: AIMLTab = .insights
-    @State private var showingFullAnalysis = false
+    @State private var selectedTab: AIMLTab = .insights;
+    @State private var showingFullAnalysis = false;
 
     enum AIMLTab: String, CaseIterable {
         case insights = "ML Insights"
@@ -229,7 +229,7 @@ struct MLInsightsView: View {
 
 struct MLInsightCard: View {
     let insight: MLInsight
-    @State private var isExpanded = false
+    @State private var isExpanded = false;
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -503,7 +503,7 @@ struct CrossProjectLearningView: View {
 
 struct CrossProjectLearningCard: View {
     let learning: CrossProjectLearning
-    @State private var isExpanded = false
+    @State private var isExpanded = false;
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {

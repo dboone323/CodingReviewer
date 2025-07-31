@@ -14,7 +14,7 @@ protocol CodeReviewService {
 
 // / Performance-optimized analysis with debouncing
 actor AnalysisDebouncer {
-    private var lastAnalysisTime: Date = .distantPast
+    private var lastAnalysisTime: Date = .distantPast;
     private let debounceInterval: TimeInterval = 0.5
 
     func shouldAnalyze() -> Bool {
@@ -66,28 +66,28 @@ final class CodeReviewViewModel: ObservableObject {
 
     // MARK: - Published Properties
 
-    @Published var codeInput: String = ""
-    @Published var analysisResults: [AnalysisResult] = []
+    @Published var codeInput: String = "";
+    @Published var analysisResults: [AnalysisResult] = [];
     @Published var aiAnalysisResult: AIAnalysisResponse?
-    @Published var aiSuggestions: [AISuggestion] = []
-    @Published var availableFixes: [CodeFix] = []
-    @Published var isAnalyzing: Bool = false
-    @Published var isAIAnalyzing: Bool = false
+    @Published var aiSuggestions: [AISuggestion] = [];
+    @Published var availableFixes: [CodeFix] = [];
+    @Published var isAnalyzing: Bool = false;
+    @Published var isAIAnalyzing: Bool = false;
     @Published var errorMessage: String?
-    @Published var showingResults: Bool = false
-    @Published var selectedLanguage: CodeLanguage = .swift
-    @Published var aiEnabled: Bool = false
+    @Published var showingResults: Bool = false;
+    @Published var selectedLanguage: CodeLanguage = .swift;
+    @Published var aiEnabled: Bool = false;
     @Published var analysisReport: CodeAnalysisReport?
 
     // For legacy support
-    @Published var analysisResult: String = ""
+    @Published var analysisResult: String = "";
 
     // MARK: - Private Properties
 
     private let codeReviewService: CodeReviewService
     private var aiService: EnhancedAICodeReviewService?
     private let keyManager: APIKeyManager
-    private var cancellables = Set<AnyCancellable>()
+    private var cancellables = Set<AnyCancellable>();
     private let debouncer = AnalysisDebouncer()
     private let logger = AppLogger.shared
     private let osLogger = Logger(subsystem: "com.DanielStevens.CodingReviewer", category: "CodeReviewViewModel")
@@ -302,7 +302,7 @@ final class CodeReviewViewModel: ObservableObject {
     }
 
     private func generateReportString(from report: CodeAnalysisReport) -> String {
-        var reportString = "📊 Code Analysis Report\n"
+        var reportString = "📊 Code Analysis Report\n";
         reportString += String(repeating: "=", count: 50) + "\n\n"
 
         // Basic metrics
@@ -453,7 +453,7 @@ final class DefaultCodeReviewService: CodeReviewService {
 
         // Run analysis on background queue
         return await withTaskGroup(of: [AnalysisResult].self) { group in
-            var allResults: [AnalysisResult] = []
+            var allResults: [AnalysisResult] = [];
 
             // Add analysis tasks to group
             for analyzer in analyzers {
@@ -491,7 +491,7 @@ final class DefaultCodeReviewService: CodeReviewService {
 
     private func calculateComplexity(_ code: String) -> Int {
         let complexityKeywords = ["if", "else", "for", "while", "switch", "case", "catch", "&&", "||"]
-        var complexity = 1 // Base complexity
+        var complexity = 1 // Base complexity;
 
         for keyword in complexityKeywords {
             complexity += code.components(separatedBy: keyword).count - 1

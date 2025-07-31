@@ -1,0 +1,30 @@
+{
+  "validation_runs": 1,
+  "successful_validations": 0,
+  "failed_validations": 1,
+  "last_validation": "2025-07-31T13:03:31.618297Z",
+  "project_hash": "8c09b460316b4a9b9f4f290ecfc88dd0",
+  "validation_history": [
+    {
+      "timestamp": "2025-07-31T13:03:31.643488Z",
+      "result": "failed",
+      "checks_total": 4,
+      "checks_passed": 3,
+      "accuracy": 75.0
+    }
+  ],
+  "error_patterns": {
+    "missing_file": [
+      {
+        "timestamp": "2025-07-31T13:03:27.523500Z",
+        "context": "CodingReviewer/Info.plist",
+        "details": "Required file not found"
+      }
+    ]
+  },
+  "accuracy_metrics": {
+    "total_checks": 4,
+    "passed_checks": 3,
+    "accuracy_percentage": 75.0
+  }
+}

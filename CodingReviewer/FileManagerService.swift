@@ -214,7 +214,7 @@ extension FileAnalysisRecord {
             )
         )
     }
-    var hasAIAnalysis: Bool { aiAnalysisResult != nil }
+    var hasAIAnalysis: Bool { aiAnalysisResult != nil };
 
     private func mapSeverity(_ severity: String) -> AnalysisResult.Severity {
         switch severity.lowercased() {
@@ -346,18 +346,18 @@ struct FileUploadResult {
 
 @MainActor
 final class FileManagerService: ObservableObject {
-    @Published var uploadedFiles: [CodeFile] = []
-    @Published var analysisHistory: [FileAnalysisRecord] = []
-    @Published var projects: [ProjectStructure] = []
-    @Published var isUploading: Bool = false
-    @Published var uploadProgress: Double = 0.0
+    @Published var uploadedFiles: [CodeFile] = [];
+    @Published var analysisHistory: [FileAnalysisRecord] = [];
+    @Published var projects: [ProjectStructure] = [];
+    @Published var isUploading: Bool = false;
+    @Published var uploadProgress: Double = 0.0;
     @Published var errorMessage: String?
-    @Published var recentFiles: [CodeFile] = []
+    @Published var recentFiles: [CodeFile] = [];
 
     // MARK: - Phase 3 AI Integration (Simple Start)
-    @Published var isAIAnalyzing = false
-    @Published var aiInsightsAvailable = false
-    @Published var showingAIInsights = false
+    @Published var isAIAnalyzing = false;
+    @Published var aiInsightsAvailable = false;
+    @Published var showingAIInsights = false;
     @Published var lastAIAnalysis: String?
 
     private let logger = FileManagerLogger()
@@ -393,7 +393,7 @@ final class FileManagerService: ObservableObject {
         let uploadResult = try await fileUploadManager.uploadFiles(from: urls)
 
         // Convert FileData results to CodeFile format for compatibility
-        var successfulFiles: [CodeFile] = []
+        var successfulFiles: [CodeFile] = [];
 
         for fileData in uploadResult.successfulFiles {
             // Detect language for each file
@@ -475,7 +475,7 @@ final class FileManagerService: ObservableObject {
         let contentPrefix = lines.joined(separator: "\n").lowercased()
 
         // Weighted scoring system for language detection
-        var scores: [CodeLanguage: Int] = [:]
+        var scores: [CodeLanguage: Int] = [:];
 
         // Swift patterns
         if contentPrefix.contains("import swift") || contentPrefix.contains("import foundation") {
@@ -593,7 +593,7 @@ final class FileManagerService: ObservableObject {
     }
 
     private func performLanguageSpecificAnalysis(for file: CodeFile) async -> [EnhancedAnalysisItem] {
-        var results: [EnhancedAnalysisItem] = []
+        var results: [EnhancedAnalysisItem] = [];
 
         // Basic file metrics
         let lineCount = file.content.components(separatedBy: .newlines).count
@@ -626,7 +626,7 @@ final class FileManagerService: ObservableObject {
     }
 
     private func analyzeSwiftCode(_ content: String, lineCount: Int) -> [EnhancedAnalysisItem] {
-        var results: [EnhancedAnalysisItem] = []
+        var results: [EnhancedAnalysisItem] = [];
 
         // Check for force unwrapping
         if content.contains("!") {
@@ -672,7 +672,7 @@ final class FileManagerService: ObservableObject {
     }
 
     private func analyzePythonCode(_ content: String, lineCount: Int) -> [EnhancedAnalysisItem] {
-        var results: [EnhancedAnalysisItem] = []
+        var results: [EnhancedAnalysisItem] = [];
 
         // Check for proper imports
         if !content.contains("import ") && lineCount > 10 {
@@ -697,7 +697,7 @@ final class FileManagerService: ObservableObject {
     }
 
     private func analyzeJavaScriptCode(_ content: String, lineCount: Int) -> [EnhancedAnalysisItem] {
-        var results: [EnhancedAnalysisItem] = []
+        var results: [EnhancedAnalysisItem] = [];
 
         // Check for console.log statements
         let consoleLogCount = content.components(separatedBy: "console.log").count - 1
@@ -722,7 +722,7 @@ final class FileManagerService: ObservableObject {
     }
 
     private func analyzeJavaCode(_ content: String, lineCount: Int) -> [EnhancedAnalysisItem] {
-        var results: [EnhancedAnalysisItem] = []
+        var results: [EnhancedAnalysisItem] = [];
 
         // Check for System.out.println
         let printCount = content.components(separatedBy: "System.out.println").count - 1
@@ -738,7 +738,7 @@ final class FileManagerService: ObservableObject {
     }
 
     private func analyzeGenericCode(_ content: String, lineCount: Int) -> [EnhancedAnalysisItem] {
-        var results: [EnhancedAnalysisItem] = []
+        var results: [EnhancedAnalysisItem] = [];
 
         // Basic analysis for any code type
         let averageLineLength = content.count / max(lineCount, 1)
@@ -756,7 +756,7 @@ final class FileManagerService: ObservableObject {
     func analyzeMultipleFiles(_ files: [CodeFile], withAI: Bool = false) async throws -> [FileAnalysisRecord] {
         logger.log("🔍 Starting batch analysis for \(files.count) files")
 
-        var results: [FileAnalysisRecord] = []
+        var results: [FileAnalysisRecord] = [];
 
         for file in files {
             do {
@@ -807,7 +807,7 @@ final class FileManagerService: ObservableObject {
         }
 
         // Perform AI analysis
-        var allInsights: [String] = []
+        var allInsights: [String] = [];
 
         for file in files {
             let analysis = await performSimpleAIAnalysis(
@@ -851,7 +851,7 @@ final class FileManagerService: ObservableObject {
             return "Error: Invalid OpenAI URL"
         }
 
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: url);
         request.httpMethod = "POST"
         request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -919,7 +919,7 @@ final class FileManagerService: ObservableObject {
             return "Error: Invalid Gemini URL"
         }
 
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: url);
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
@@ -988,7 +988,7 @@ final class FileManagerService: ObservableObject {
 
     private func generateIntelligentSuggestions(for file: CodeFile) async -> [String] {
         // Use the same intelligent analysis logic from Phase 3 AI service
-        var suggestions: [String] = []
+        var suggestions: [String] = [];
 
         switch file.language {
         case .swift:
@@ -1007,7 +1007,7 @@ final class FileManagerService: ObservableObject {
     }
 
     private func generateSwiftSuggestions(content: String) -> [String] {
-        var suggestions: [String] = []
+        var suggestions: [String] = [];
 
         if content.contains("!") && !content.contains("// Force unwrap necessary") {
             suggestions.append("🔒 Consider using safe unwrapping patterns (if let, guard let) instead of force unwrapping")
@@ -1025,7 +1025,7 @@ final class FileManagerService: ObservableObject {
     }
 
     private func generatePythonSuggestions(content: String) -> [String] {
-        var suggestions: [String] = []
+        var suggestions: [String] = [];
 
         if !content.contains("->") && content.contains("def ") {
             suggestions.append("📝 Consider adding type hints to function definitions")
@@ -1039,7 +1039,7 @@ final class FileManagerService: ObservableObject {
     }
 
     private func generateJavaScriptSuggestions(content: String) -> [String] {
-        var suggestions: [String] = []
+        var suggestions: [String] = [];
 
         if content.contains("var ") {
             suggestions.append("📦 Consider using 'const' or 'let' instead of 'var' for better scoping")
@@ -1053,7 +1053,7 @@ final class FileManagerService: ObservableObject {
     }
 
     private func generateJavaSuggestions(content: String) -> [String] {
-        var suggestions: [String] = []
+        var suggestions: [String] = [];
 
         if content.contains("new ArrayList<>()") {
             suggestions.append("📋 Consider using List.of() for immutable collections")
@@ -1063,7 +1063,7 @@ final class FileManagerService: ObservableObject {
     }
 
     private func generateGenericSuggestions(content: String) -> [String] {
-        var suggestions: [String] = []
+        var suggestions: [String] = [];
 
         let lines = content.components(separatedBy: CharacterSet.newlines)
         if lines.count > 500 {
@@ -1083,7 +1083,7 @@ final class FileManagerService: ObservableObject {
         logger.log("🏗️ Starting project analysis for \(project.name)")
 
         let startTime = Date()
-        var allAnalysisResults: [FileAnalysisRecord] = []
+        var allAnalysisResults: [FileAnalysisRecord] = [];
 
         // Analyze all files in the project
         for file in project.files {
@@ -1109,7 +1109,7 @@ final class FileManagerService: ObservableObject {
     }
 
     private func generateProjectInsights(from analyses: [FileAnalysisRecord], project: ProjectStructure) -> [ProjectInsight] {
-        var insights: [ProjectInsight] = []
+        var insights: [ProjectInsight] = [];
 
         // Language distribution analysis
         let languageStats = project.files.reduce(into: [:]) { counts, file in
@@ -1192,7 +1192,7 @@ final class FileManagerService: ObservableObject {
     // MARK: - Export and Reporting
 
     func generateAnalysisReport(for analyses: [FileAnalysisRecord]) -> String {
-        var report = "# Code Analysis Report\n\n"
+        var report = "# Code Analysis Report\n\n";
         report += "Generated on: \(DateFormatter.reportFormatter.string(from: Date()))\n\n"
 
         // Summary

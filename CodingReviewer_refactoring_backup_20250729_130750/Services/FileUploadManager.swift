@@ -101,9 +101,9 @@ struct SimpleUploadResult {
 
 @MainActor
 class FileUploadManager: ObservableObject {
-    @Published var isUploading: Bool = false
-    @Published var uploadProgress: Double = 0.0
-    @Published var errorMessage: String? = nil
+    @Published var isUploading: Bool = false;
+    @Published var uploadProgress: Double = 0.0;
+    @Published var errorMessage: String? = nil;
 
     private let configuration: FileUploadConfiguration
     private let logger = FileUploadLogger()
@@ -130,9 +130,9 @@ class FileUploadManager: ObservableObject {
             }
         }
 
-        var successfulFiles: [FileData] = []
-        var failedFiles: [(String, Error)] = []
-        var warnings: [String] = []
+        var successfulFiles: [FileData] = [];
+        var failedFiles: [(String, Error)] = [];
+        var warnings: [String] = [];
 
         let totalFiles = urls.count
 
@@ -205,9 +205,9 @@ class FileUploadManager: ObservableObject {
     private func uploadDirectory(at url: URL) async throws -> SimpleUploadResult {
         logger.log("📁 Scanning directory: \(url.lastPathComponent)")
 
-        var successfulFiles: [FileData] = []
-        var failedFiles: [(String, Error)] = []
-        var warnings: [String] = []
+        var successfulFiles: [FileData] = [];
+        var failedFiles: [(String, Error)] = [];
+        var warnings: [String] = [];
 
         let fileManager = Foundation.FileManager.default
 
@@ -251,7 +251,7 @@ class FileUploadManager: ObservableObject {
         }
 
         // Enumerate through directory - convert to array first to avoid async issues
-        var fileCount = 0
+        var fileCount = 0;
         let enumeratorArray = enumerator.allObjects as! [URL]
 
         for fileURL in enumeratorArray {

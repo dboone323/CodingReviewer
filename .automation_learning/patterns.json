@@ -1,0 +1,17 @@
+{
+  "code_patterns": {
+    "known_good": [],
+    "known_problematic": [],
+    "context_dependent": []
+  },
+  "fix_patterns": {
+    "high_success_rate": [],
+    "low_success_rate": [],
+    "context_specific": []
+  },
+  "file_patterns": {
+    "stable_files": [],
+    "frequently_changed": [],
+    "error_prone": []
+  }
+}

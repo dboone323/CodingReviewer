@@ -165,3 +165,8 @@ automation_*.log
 # Backup directories
 *_backup_*/
 *_refactoring_backup_*/
+# Performance optimization caches
+.build_cache/
+.security_cache/
+.ai_cache/
+.performance_monitoring/

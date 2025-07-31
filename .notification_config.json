@@ -1,0 +1,75 @@
+{
+  "system_info": {
+    "version": "2.0",
+    "last_updated": "2024-01-01",
+    "ai_filtering": true,
+    "intelligent_routing": true,
+    "performance_score": 0
+  },
+  "notification_channels": {
+    "console": {
+      "enabled": true,
+      "priority_threshold": "info",
+      "formatting": "enhanced"
+    },
+    "system": {
+      "enabled": true,
+      "priority_threshold": "warning",
+      "sound": false
+    },
+    "file": {
+      "enabled": true,
+      "log_file": "./notifications.log",
+      "rotation": "daily"
+    },
+    "webhook": {
+      "enabled": false,
+      "url": "",
+      "authentication": ""
+    }
+  },
+  "ai_filters": {
+    "duplicate_detection": true,
+    "spam_filtering": true,
+    "priority_learning": true,
+    "context_awareness": true
+  },
+  "message_categories": {
+    "system": {
+      "icon": "⚙️",
+      "color": "blue",
+      "priority": "medium"
+    },
+    "security": {
+      "icon": "🔒",
+      "color": "red",
+      "priority": "high"
+    },
+    "performance": {
+      "icon": "⚡",
+      "color": "yellow",
+      "priority": "medium"
+    },
+    "ai": {
+      "icon": "🧠",
+      "color": "purple",
+      "priority": "high"
+    },
+    "build": {
+      "icon": "🔨",
+      "color": "green",
+      "priority": "low"
+    },
+    "test": {
+      "icon": "🧪",
+      "color": "cyan",
+      "priority": "medium"
+    }
+  },
+  "statistics": {
+    "total_sent": 0,
+    "filtered_messages": 0,
+    "ai_predictions": 0,
+    "system_alerts": 0
+  }
+}

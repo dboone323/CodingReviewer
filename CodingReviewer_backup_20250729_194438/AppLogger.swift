@@ -37,7 +37,7 @@ enum LogCategory: String, CaseIterable {
 /// Enhanced application logger with categorization and performance tracking
 final class AppLogger {
     private let logger = Logger(subsystem: "com.DanielStevens.CodingReviewer", category: "CodeAnalysis")
-    private var performanceMetrics: [String: Date] = [:]
+    private var performanceMetrics: [String: Date] = [:];
 
     static let shared = AppLogger()
     private init() {}
@@ -156,7 +156,7 @@ enum CodeReviewError: LocalizedError {
 
 /// Performance monitoring for analysis operations
 actor PerformanceMonitor {
-    private var analysisMetrics: [String: TimeInterval] = [:]
+    private var analysisMetrics: [String: TimeInterval] = [:];
 
     func startMeasurement(for operation: String) -> Date {
         Date()

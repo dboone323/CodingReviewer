@@ -11,17 +11,17 @@ import UniformTypeIdentifiers
 
 struct FileUploadView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
-    @StateObject private var fileManager = FileManagerService()
-    @State private var showingFileImporter = false
-    @State private var showingFolderPicker = false
-    @State private var isTargeted = false
+    @State private var isLoading = false;
+    @StateObject private var fileManager = FileManagerService();
+    @State private var showingFileImporter = false;
+    @State private var showingFolderPicker = false;
+    @State private var isTargeted = false;
     @State private var uploadResult: FileUploadResult?
-    @State private var showingUploadResults = false
-    @State private var selectedFiles: Set<CodeFile.ID> = []
-    @State private var showingAnalysisResults = false
-    @State private var analysisRecords: [FileAnalysisRecord] = []
-    @State private var sheetAnalysisRecords: [FileAnalysisRecord] = []
+    @State private var showingUploadResults = false;
+    @State private var selectedFiles: Set<CodeFile.ID> = [];
+    @State private var showingAnalysisResults = false;
+    @State private var analysisRecords: [FileAnalysisRecord] = [];
+    @State private var sheetAnalysisRecords: [FileAnalysisRecord] = [];
 
     var body: some View {
         VStack(spacing: 0) {
@@ -441,7 +441,7 @@ struct FileUploadView: View {
     }
 
     private func handleDrop(providers: [NSItemProvider]) -> Bool {
-        var urls: [URL] = []
+        var urls: [URL] = [];
 
         for provider in providers {
             if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
@@ -577,7 +577,7 @@ struct FileUploadView: View {
     }
 
     private func uploadResultMessage(_ result: FileUploadResult) -> String {
-        var message = ""
+        var message = "";
 
         if !result.successfulFiles.isEmpty {
             message += "Successfully uploaded \(result.successfulFiles.count) files.\n"
@@ -611,7 +611,7 @@ struct FileUploadView: View {
 
 struct StatisticItem: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let icon: String
     let title: String
     let value: String
@@ -637,7 +637,7 @@ struct StatisticItem: View {
 
 struct SectionHeaderView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let title: String
     let icon: String
 
@@ -661,7 +661,7 @@ struct SectionHeaderView: View {
 
 struct FileRowView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let file: CodeFile
     let isSelected: Bool
     let onTap: () -> Void
@@ -714,7 +714,7 @@ struct FileRowView: View {
 
 struct ProjectRowView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let project: ProjectStructure
     let onSelect: () -> Void
     let onDelete: () -> Void
@@ -784,7 +784,7 @@ struct ProjectRowView: View {
 
 struct FileDetailCard: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let file: CodeFile
     let onDelete: () -> Void
 
@@ -876,7 +876,7 @@ struct FileDetailCard: View {
 
 struct AnalysisResultsView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     @Binding var records: [FileAnalysisRecord]
     @Environment(\.dismiss) private var dismiss
 

@@ -10,10 +10,10 @@ import Combine
 public class APIKeyManager: ObservableObject {
     static let shared = APIKeyManager()
 
-    @Published var showingKeySetup = false
-    @Published var hasValidKey = false
-    @Published var isConfigured = false
-    @Published var hasValidGeminiKey = false
+    @Published var showingKeySetup = false;
+    @Published var hasValidKey = false;
+    @Published var isConfigured = false;
+    @Published var hasValidGeminiKey = false;
 
     // Keys
     private let openAIKeyAccount = "openai_api_key"

@@ -118,7 +118,7 @@ final class CrossViewDataSharingTests: XCTestCase {
     
     func testRealTimeDataUpdates() async throws {
         let expectation = XCTestExpectation(description: "Real-time update received")
-        var updateReceived = false
+        var updateReceived = false;
         
         // Subscribe to changes
         sharedDataManager.fileManager.objectWillChange
@@ -142,9 +142,9 @@ final class CrossViewDataSharingTests: XCTestCase {
         let analyticsViewExpectation = XCTestExpectation(description: "Analytics view update")
         let aiViewExpectation = XCTestExpectation(description: "AI view update")
         
-        var uploadViewUpdated = false
-        var analyticsViewUpdated = false
-        var aiViewUpdated = false
+        var uploadViewUpdated = false;
+        var analyticsViewUpdated = false;
+        var aiViewUpdated = false;
         
         // Simulate multiple view subscriptions
         sharedDataManager.fileManager.objectWillChange
@@ -259,7 +259,7 @@ extension CrossViewDataSharingTests {
     
     func testDataSharingPerformance() throws {
         // Test performance of data sharing with large datasets
-        var largeDataset: [CodeFile] = []
+        var largeDataset: [CodeFile] = [];
         
         for i in 1...1000 {
             largeDataset.append(

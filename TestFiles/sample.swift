@@ -1,4 +1,3 @@
-import Foundation
 
 // Sample Swift file for testing
 class TestClass {

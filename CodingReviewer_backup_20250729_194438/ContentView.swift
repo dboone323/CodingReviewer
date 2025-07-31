@@ -5,10 +5,10 @@ import os
 
 struct ContentView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     @StateObject private var keyManager: APIKeyManager
     @StateObject private var viewModel: CodeReviewViewModel
-    @State private var selectedTab: Tab = .analysis
+    @State private var selectedTab: Tab = .analysis;
 
     init() {
         let keyManager = APIKeyManager()
@@ -106,9 +106,9 @@ struct ContentView: View {
 
 struct AnalysisView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     @ObservedObject var viewModel: CodeReviewViewModel
-    @State private var showingLanguagePicker = false
+    @State private var showingLanguagePicker = false;
 
     var body: some View {
         VStack(spacing: 16) {
@@ -197,9 +197,9 @@ struct AnalysisView: View {
 
 struct AISuggestionRow: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let suggestion: AISuggestion
-    @State private var isExpanded = false
+    @State private var isExpanded = false;
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -280,7 +280,7 @@ struct AISuggestionRow: View {
 
 struct ContentAnalysisResultsView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     @ObservedObject var viewModel: CodeReviewViewModel
 
     var body: some View {
@@ -333,7 +333,7 @@ struct ContentAnalysisResultsView: View {
 
 struct AnalysisResultRow: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let result: AnalysisResult
     @ObservedObject var viewModel: CodeReviewViewModel
 
@@ -376,7 +376,7 @@ struct AnalysisResultRow: View {
 
 struct AIFixRow: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let fix: CodeFix
     @ObservedObject var viewModel: CodeReviewViewModel
 
@@ -414,9 +414,9 @@ struct AIFixRow: View {
 
 struct AINotEnabledView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     @ObservedObject var keyManager: APIKeyManager
-    @State private var showingSettings = false
+    @State private var showingSettings = false;
 
     var body: some View {
         VStack(spacing: 20) {
@@ -471,7 +471,7 @@ struct AINotEnabledView: View {
 
 struct FeaturePreviewRow: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let icon: String
     let title: String
     let description: String
@@ -501,7 +501,7 @@ struct FeaturePreviewRow: View {
 
 struct AIAnalysisResultView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let aiResult: AIAnalysisResponse
     @ObservedObject var viewModel: CodeReviewViewModel
 
@@ -549,7 +549,7 @@ struct AIAnalysisResultView: View {
 
 struct EmptyAIStateView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     var body: some View {
         VStack(spacing: 16) {
             Image(systemName: "sparkles")
@@ -574,13 +574,13 @@ struct EmptyAIStateView: View {
 
 struct SettingsView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     @ObservedObject var keyManager: APIKeyManager
     @ObservedObject var viewModel: CodeReviewViewModel
-    @State private var selectedAIProvider = "OpenAI"
-    @State private var showingProviderPicker = false
-    @State private var showingGeminiKeyInput = false
-    @State private var tempGeminiKey = ""
+    @State private var selectedAIProvider = "OpenAI";
+    @State private var showingProviderPicker = false;
+    @State private var showingGeminiKeyInput = false;
+    @State private var tempGeminiKey = "";
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -697,11 +697,11 @@ struct SettingsView: View {
 
 struct GeminiKeyInputView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     @Binding var tempKey: String
     @ObservedObject var keyManager: APIKeyManager
     @Environment(\.dismiss) private var dismiss
-    @State private var isValidating = false
+    @State private var isValidating = false;
     @State private var validationResult: String?
 
     var body: some View {
@@ -784,7 +784,7 @@ struct GeminiKeyInputView: View {
 
 struct AIProviderPickerView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     @Binding var selectedProvider: String
     @Environment(\.dismiss) private var dismiss
 
@@ -833,7 +833,7 @@ struct AIProviderPickerView: View {
 
 struct LanguagePickerView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     @Binding var selectedLanguage: CodeLanguage
     @Environment(\.dismiss) private var dismiss
 

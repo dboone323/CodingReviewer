@@ -1,0 +1,12 @@
+{
+  "version": "3.0",
+  "daily_stats": [],
+  "fix_patterns": {},
+  "performance_metrics": {
+    "avg_analysis_time": 0,
+    "avg_fix_time": 0,
+    "total_time_saved": 0
+  },
+  "prediction_accuracy": 0,
+  "automation_confidence": 100
+}

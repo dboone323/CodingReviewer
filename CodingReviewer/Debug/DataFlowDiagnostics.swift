@@ -13,8 +13,8 @@ import Foundation
 
 struct DataFlowDiagnosticsView: View {
     @EnvironmentObject var fileManager: FileManagerService
-    @State private var diagnosticResults: [DiagnosticResult] = []
-    @State private var isRunning = false
+    @State private var diagnosticResults: [DiagnosticResult] = [];
+    @State private var isRunning = false;
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -70,7 +70,7 @@ struct DataFlowDiagnosticsView: View {
     }
 
     private func performDiagnostics() async {
-        var results: [DiagnosticResult] = []
+        var results: [DiagnosticResult] = [];
 
         // Test 1: Verify SharedDataManager singleton
         let test1 = await testSharedDataManagerSingleton()

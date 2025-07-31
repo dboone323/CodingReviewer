@@ -6,16 +6,13 @@
 //  Created on July 25, 2025
 //
 
-import SwiftUI
-import Combine
-
 // MARK: - Diff Preview View
 
 struct DiffPreviewView: View {
     let fix: IntelligentFix
     let originalCode: String
     @Environment(\.dismiss) private var dismiss
-    @State private var showingApplyConfirmation = false
+    @State private var showingApplyConfirmation = false;
 
     var body: some View {
         NavigationView {
@@ -75,7 +72,7 @@ struct DiffPreviewView: View {
 
     private func getModifiedContextualCode() -> String {
         let lines = originalCode.components(separatedBy: .newlines)
-        var modifiedLines = lines
+        var modifiedLines = lines;
 
         // Apply the fix
         if fix.startLine == fix.endLine {
@@ -344,7 +341,7 @@ struct FixHistoryEntry: Identifiable, Codable {
 
 @MainActor
 class FixHistoryManager: ObservableObject {
-    @Published var history: [FixHistoryEntry] = []
+    @Published var history: [FixHistoryEntry] = [];
 
     func recordAppliedFix(_ fix: IntelligentFix, originalCode: String, modifiedCode: String, fileName: String) {
         let entry = FixHistoryEntry(

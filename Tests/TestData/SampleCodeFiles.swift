@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 
 class UserManager: ObservableObject {
-    @Published var users: [User] = []
+    @Published var users: [User] = [];
     private let networkService = NetworkService()
     
     func fetchUsers() async {
@@ -422,7 +422,7 @@ class GenericRepository<T: Identifiable & Codable>: Repository {
     private let cacheService: CacheServiceProtocol
     private let endpoint: String
     
-    private var cancellables = Set<AnyCancellable>()
+    private var cancellables = Set<AnyCancellable>();
     
     init(networkService: NetworkServiceProtocol, 
          cacheService: CacheServiceProtocol, 
@@ -516,9 +516,9 @@ enum RepositoryError: Error, LocalizedError {
 
 @MainActor
 class ProjectAnalysisEngine: ObservableObject {
-    @Published var analysisState: AnalysisState = .idle
-    @Published var currentProgress: Double = 0.0
-    @Published var analysisResults: [AnalysisResult] = []
+    @Published var analysisState: AnalysisState = .idle;
+    @Published var currentProgress: Double = 0.0;
+    @Published var analysisResults: [AnalysisResult] = [];
     
     private let fileRepository: GenericRepository<CodeFile>
     private let analysisService: AnalysisServiceProtocol
@@ -613,6 +613,6 @@ struct AnalysisResult: Identifiable {
     let issues: [CodeIssue]
     let suggestions: [Suggestion]
     let timestamp: Date
-    var mlInsights: [MLInsight] = []
+    var mlInsights: [MLInsight] = [];
 }
 """

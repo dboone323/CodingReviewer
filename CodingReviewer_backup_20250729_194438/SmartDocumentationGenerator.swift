@@ -58,10 +58,10 @@ struct DocumentationSuggestion: Codable, Identifiable {
 // MARK: - Smart Documentation Generator
 
 final class SmartDocumentationGenerator: ObservableObject {
-    @Published var isGenerating = false
-    @Published var generationProgress: Double = 0.0
+    @Published var isGenerating = false;
+    @Published var generationProgress: Double = 0.0;
     @Published var generatedDocumentation: GeneratedDocumentation?
-    @Published var documentationSuggestions: [DocumentationSuggestion] = []
+    @Published var documentationSuggestions: [DocumentationSuggestion] = [];
 
     init() {
         Logger().info("📚 Smart Documentation Generator initialized")

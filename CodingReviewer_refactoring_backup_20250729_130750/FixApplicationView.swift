@@ -11,12 +11,12 @@ import SwiftUI
 // MARK: - Interactive Fix Application View
 
 struct FixApplicationView: View {
-    @StateObject private var fixGenerator = IntelligentFixGenerator()
-    @State private var selectedFixes: Set<UUID> = []
-    @State private var showingDiffPreview = false
+    @StateObject private var fixGenerator = IntelligentFixGenerator();
+    @State private var selectedFixes: Set<UUID> = [];
+    @State private var showingDiffPreview = false;
     @State private var previewFix: IntelligentFix?
-    @State private var appliedFixes: [UUID] = []
-    @State private var showingApplyConfirmation = false
+    @State private var appliedFixes: [UUID] = [];
+    @State private var showingApplyConfirmation = false;
 
     let analysis: EnhancedAnalysisResult
     let originalCode: String
@@ -115,7 +115,7 @@ struct FixApplicationView: View {
     }
 
     private func applyConfirmedFixes() {
-        var modifiedCode = originalCode
+        var modifiedCode = originalCode;
         let sortedFixes = fixGenerator.generatedFixes
             .filter { selectedFixes.contains($0.id) }
             .sorted { $0.startLine > $1.startLine } // Apply from bottom to top

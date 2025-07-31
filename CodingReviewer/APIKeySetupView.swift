@@ -12,11 +12,11 @@ import Accessibility
 
 struct APIKeySetupView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
-    @State private var tempKey = ""
-    @State private var isValidating = false
+    @State private var isLoading = false;
+    @State private var tempKey = "";
+    @State private var isValidating = false;
     @State private var validationResult: String?
-    @State private var selectedProvider = "OpenAI"
+    @State private var selectedProvider = "OpenAI";
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {

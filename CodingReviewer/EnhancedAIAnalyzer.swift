@@ -7,8 +7,8 @@ import Combine
 // / EnhancedAIService class
 // / TODO: Add detailed documentation
 public class EnhancedAIService: ObservableObject {
-    @Published public var isAnalyzing: Bool = false
-    @Published public var analysisResult: String = ""
+    @Published public var isAnalyzing: Bool = false;
+    @Published public var analysisResult: String = "";
     @Published public var errorMessage: String?
 
     private let apiKeyManager: APIKeyManager
@@ -43,7 +43,7 @@ public class EnhancedAIService: ObservableObject {
     }
 
     private func performLocalAnalysis(_ code: String, language: String) -> String {
-        var analysis = "🔍 Enhanced Local Code Analysis\n"
+        var analysis = "🔍 Enhanced Local Code Analysis\n";
         analysis += String(repeating: "=", count: 40) + "\n\n"
 
         // Basic metrics
@@ -57,8 +57,8 @@ public class EnhancedAIService: ObservableObject {
         analysis += "• Functions: \(functionCount)\n\n"
 
         // Quality checks
-        var issues: [String] = []
-        var suggestions: [String] = []
+        var issues: [String] = [];
+        var suggestions: [String] = [];
 
         // Swift-specific analysis
         if language.lowercased() == "swift" {
@@ -168,7 +168,7 @@ public class EnhancedAIService: ObservableObject {
         guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else {
             throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
         }
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: url);
         request.httpMethod = "POST"
         request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

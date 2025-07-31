@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EnhancedAnalysisRecordRow: View {
     let record: FileAnalysisRecord
-    @State private var isExpanded = true  // Start expanded so users can see results immediately
+    @State private var isExpanded = true  // Start expanded so users can see results immediately;
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {

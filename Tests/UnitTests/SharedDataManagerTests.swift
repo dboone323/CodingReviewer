@@ -45,7 +45,7 @@ final class SharedDataManagerTests: XCTestCase {
     
     func testRefreshAllViews() throws {
         let expectation = XCTestExpectation(description: "Views should refresh")
-        var receivedUpdate = false
+        var receivedUpdate = false;
         
         sharedDataManager.objectWillChange
             .sink { _ in

@@ -39,8 +39,8 @@ final class AIServiceTests: XCTestCase {
             suggestionId: suggestion.id,
             title: "Use lazy initialization",
             description: "Replace with lazy var",
-            originalCode: "var x = getValue()",
-            fixedCode: "lazy var x = getValue()",
+            originalCode: "var x = getValue()",;
+            fixedCode: "lazy var x = getValue()",;
             explanation: "Use lazy initialization for better performance",
             confidence: 0.9,
             isAutoApplicable: true

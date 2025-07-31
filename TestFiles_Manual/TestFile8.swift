@@ -7,7 +7,7 @@ import Foundation
 import SwiftUI
 
 class TestClass8: ObservableObject {
-    @Published var data: [String] = []
+    @Published var data: [String] = [];
     
     func loadData() {
         data = Array(1...10).map { "Item $0 from TestFile8" }
@@ -30,7 +30,7 @@ class TestClass8: ObservableObject {
 }
 
 struct TestView8: View {
-    @StateObject private var testClass = TestClass8()
+    @StateObject private var testClass = TestClass8();
     
     var body: some View {
         VStack {

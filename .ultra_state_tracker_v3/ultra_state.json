@@ -1,0 +1,59 @@
+{
+  "version": "3.0",
+  "project_hash": "",
+  "last_analysis": "",
+  "total_runs": 0,
+  "successful_runs": 0,
+  "failed_runs": 0,
+  "accuracy_percentage": 100,
+  "fixes_applied": {
+    "syntax_errors": {
+      "count": 0,
+      "last_fixed": "",
+      "files_fixed": [],
+      "success_rate": 100
+    },
+    "import_issues": {
+      "count": 0,
+      "last_fixed": "",
+      "files_fixed": [],
+      "success_rate": 100
+    },
+    "force_unwrapping": {
+      "count": 0,
+      "last_fixed": "",
+      "files_fixed": [],
+      "success_rate": 100
+    },
+    "missing_semicolons": {
+      "count": 0,
+      "last_fixed": "",
+      "files_fixed": [],
+      "success_rate": 100
+    },
+    "unused_variables": {
+      "count": 0,
+      "last_fixed": "",
+      "files_fixed": [],
+      "success_rate": 100
+    },
+    "code_style": {
+      "count": 0,
+      "last_fixed": "",
+      "files_fixed": [],
+      "success_rate": 100
+    }
+  },
+  "ai_learning_integration": {
+    "enabled": true,
+    "learning_accuracy": 0,
+    "recommendations_followed": 0,
+    "recommendations_ignored": 0
+  },
+  "project_metrics": {
+    "swift_files": 64,
+    "lines_of_code": 15388,
+    "complexity_score": 153,
+    "last_calculated": "Thu Jul 31 14:23:36 CDT 2025"
+  }
+}

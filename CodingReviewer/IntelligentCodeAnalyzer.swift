@@ -270,7 +270,7 @@ func analyzeProject(at projectPath: String) async throws -> String {
 
         let startTime = Date()
         let swiftFiles = try findSwiftFiles(in: projectPath)
-        var totalIssues = 0
+        var totalIssues = 0;
 
         for filePath in swiftFiles {
             let fileIssues = try await analyzeFile(at: filePath)
@@ -293,7 +293,7 @@ func analyzeFile(at filePath: String) async throws -> [CodeIssue] {
         let content = try String(contentsOfFile: filePath, encoding: .utf8)
         let lines = content.components(separatedBy: .newlines)
 
-        var issues: [CodeIssue] = []
+        var issues: [CodeIssue] = [];
 
         // Run various analysis passes
         issues.append(contentsOf: analyzeSwiftConcurrency(lines: lines, filePath: filePath))
@@ -309,7 +309,7 @@ func analyzeFile(at filePath: String) async throws -> [CodeIssue] {
     // MARK: - Specific Analysis Methods
 
     private func analyzeSwiftConcurrency(lines: [String], filePath: String) -> [CodeIssue] {
-        var issues: [CodeIssue] = []
+        var issues: [CodeIssue] = [];
 
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
@@ -350,7 +350,7 @@ func analyzeFile(at filePath: String) async throws -> [CodeIssue] {
     }
 
     private func analyzeCodeQuality(lines: [String], filePath: String) -> [CodeIssue] {
-        var issues: [CodeIssue] = []
+        var issues: [CodeIssue] = [];
 
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
@@ -358,7 +358,7 @@ func analyzeFile(at filePath: String) async throws -> [CodeIssue] {
 
             // Check for unused variables (let _ pattern)
             if let range = trimmedLine.range(of: #"let\s+([a-zA-Z_]\w*)\s*="#, options: .regularExpression) {
-                let variableName = String(trimmedLine[range]).replacingOccurrences(of: "let ", with: "").replacingOccurrences(of: " =", with: "")
+                let variableName = String(trimmedLine[range]).replacingOccurrences(of: "let ", with: "").replacingOccurrences(of: " =", with: "");
 
                 // Check if variable is used in subsequent lines (simple heuristic)
                 let remainingLines = Array(lines[(index + 1)...])
@@ -415,7 +415,7 @@ func analyzeFile(at filePath: String) async throws -> [CodeIssue] {
     }
 
     private func analyzePerformance(lines: [String], filePath: String) -> [CodeIssue] {
-        var issues: [CodeIssue] = []
+        var issues: [CodeIssue] = [];
 
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
@@ -458,7 +458,7 @@ func analyzeFile(at filePath: String) async throws -> [CodeIssue] {
     }
 
     private func analyzeSecurity(lines: [String], filePath: String) -> [CodeIssue] {
-        var issues: [CodeIssue] = []
+        var issues: [CodeIssue] = [];
 
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
@@ -502,7 +502,7 @@ func analyzeFile(at filePath: String) async throws -> [CodeIssue] {
     }
 
     private func analyzeSwiftBestPractices(lines: [String], filePath: String) -> [CodeIssue] {
-        var issues: [CodeIssue] = []
+        var issues: [CodeIssue] = [];
 
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
@@ -545,11 +545,11 @@ func analyzeFile(at filePath: String) async throws -> [CodeIssue] {
     }
 
     private func analyzeArchitecturalPatterns(lines: [String], filePath: String) -> [CodeIssue] {
-        var issues: [CodeIssue] = []
+        var issues: [CodeIssue] = [];
 
         // Check for large functions (simple heuristic)
         var currentFunctionStart: Int?
-        var braceCount = 0
+        var braceCount = 0;
 
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
@@ -591,7 +591,7 @@ func analyzeFile(at filePath: String) async throws -> [CodeIssue] {
     private func findSwiftFiles(in directory: String) throws -> [String] {
         let fileManager = FileManager.default
         let enumerator = fileManager.enumerator(atPath: directory)
-        var swiftFiles: [String] = []
+        var swiftFiles: [String] = [];
 
         while let file = enumerator?.nextObject() as? String {
             if file.hasSuffix(".swift") && !file.contains("/.build/") && !file.contains("/DerivedData/") {
@@ -603,7 +603,7 @@ func analyzeFile(at filePath: String) async throws -> [CodeIssue] {
     }
 
     private func generateRecommendations(from issues: [CodeIssue]) -> [Recommendation] {
-        var recommendations: [Recommendation] = []
+        var recommendations: [Recommendation] = [];
 
         let issuesByCategory = Dictionary(grouping: issues) { $0.category }
 

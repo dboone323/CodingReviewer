@@ -50,7 +50,7 @@ struct AnalysisResult {
 final class QualityAnalyzer: CodeAnalyzer {
 
     func analyze(_ code: String) async -> [AnalysisResult] {
-        var results: [AnalysisResult] = []
+        var results: [AnalysisResult] = [];
         let lines = code.components(separatedBy: .newlines)
 
         // Force unwrapping detection
@@ -171,7 +171,7 @@ final class QualityAnalyzer: CodeAnalyzer {
 final class SecurityAnalyzer: CodeAnalyzer {
 
     func analyze(_ code: String) async -> [AnalysisResult] {
-        var results: [AnalysisResult] = []
+        var results: [AnalysisResult] = [];
 
         // Check for hardcoded sensitive information
         results.append(contentsOf: checkSensitiveInformation(in: code))
@@ -190,7 +190,7 @@ final class SecurityAnalyzer: CodeAnalyzer {
 
     private func checkSensitiveInformation(in code: String) -> [AnalysisResult] {
         let sensitivePatterns = ["password", "secret", "token", "key", "credential"]
-        var results: [AnalysisResult] = []
+        var results: [AnalysisResult] = [];
 
         for pattern in sensitivePatterns {
             if code.lowercased().contains(pattern) && code.contains("=") {
@@ -248,7 +248,7 @@ final class SecurityAnalyzer: CodeAnalyzer {
 final class PerformanceAnalyzer: CodeAnalyzer {
 
     func analyze(_ code: String) async -> [AnalysisResult] {
-        var results: [AnalysisResult] = []
+        var results: [AnalysisResult] = [];
 
         // Check for potential performance issues
         results.append(contentsOf: checkMainThreadBlocking(in: code))
@@ -259,7 +259,7 @@ final class PerformanceAnalyzer: CodeAnalyzer {
 
     private func checkMainThreadBlocking(in code: String) -> [AnalysisResult] {
         let blockingPatterns = ["Thread.sleep", "sleep(", "usleep"]
-        var results: [AnalysisResult] = []
+        var results: [AnalysisResult] = [];
 
         for pattern in blockingPatterns where code.contains(pattern) {
             results.append(AnalysisResult(
@@ -275,7 +275,7 @@ final class PerformanceAnalyzer: CodeAnalyzer {
 
     private func checkExpensiveOperations(in code: String) -> [AnalysisResult] {
         let expensivePatterns = ["for.*in.*{", "while.*{"]
-        var results: [AnalysisResult] = []
+        var results: [AnalysisResult] = [];
 
         for pattern in expensivePatterns where findMatches(pattern: pattern, in: code).count > 10 {
             results.append(AnalysisResult(

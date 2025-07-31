@@ -144,14 +144,14 @@ final class CodeReviewViewModelTests {
     @Test
     func testApplyFix() async throws {
         // Given
-        viewModel.codeInput = "var x = getValue()"
+        viewModel.codeInput = "var x = getValue()";
         let fix = CodeFix(
             id: UUID(),
             suggestionId: UUID(),
             title: "Use lazy initialization",
             description: "Apply lazy keyword",
-            originalCode: "var x = getValue()",
-            fixedCode: "lazy var x = getValue()",
+            originalCode: "var x = getValue()",;
+            fixedCode: "lazy var x = getValue()",;
             explanation: "Using lazy initialization improves performance",
             confidence: 0.9,
             isAutoApplicable: true
@@ -161,7 +161,7 @@ final class CodeReviewViewModelTests {
         viewModel.applyFix(fix)
         
         // Then
-        #expect(viewModel.codeInput == "lazy var x = getValue()")
+        #expect(viewModel.codeInput == "lazy var x = getValue()");
     }
     
     @Test
@@ -173,8 +173,8 @@ final class CodeReviewViewModelTests {
             suggestionId: UUID(),
             title: "Test fix",
             description: "Test description",
-            originalCode: "var x = getValue()",
-            fixedCode: "lazy var x = getValue()",
+            originalCode: "var x = getValue()",;
+            fixedCode: "lazy var x = getValue()",;
             explanation: "Test explanation for improvement",
             confidence: 0.9,
             isAutoApplicable: true
@@ -256,9 +256,9 @@ final class CodeReviewViewModelTests {
 import Foundation
 
 class MockCodeReviewService: CodeReviewService {
-    var mockResults: [AnalysisResult] = []
-    var shouldThrowError: Bool = false
-    var delayDuration: Foundation.TimeInterval = 0
+    var mockResults: [AnalysisResult] = [];
+    var shouldThrowError: Bool = false;
+    var delayDuration: Foundation.TimeInterval = 0;
     
     func analyzeCode(_ code: String) async -> CodeAnalysisReport {
         if delayDuration > 0 {

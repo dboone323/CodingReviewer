@@ -312,11 +312,11 @@ import Foundation
 
 struct PatternAnalysisView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
-    @StateObject private var patternEngine = PatternRecognitionEngine()
+    @State private var isLoading = false;
+    @StateObject private var patternEngine = PatternRecognitionEngine();
     @ObservedObject var viewModel: CodeReviewViewModel
-    @State private var selectedTab: PatternTab = .patterns
-    @State private var isAnalyzing = false
+    @State private var selectedTab: PatternTab = .patterns;
+    @State private var isAnalyzing = false;
 
     enum PatternTab: String, CaseIterable {
         case patterns = "Design Patterns"
@@ -431,7 +431,7 @@ struct PatternAnalysisView: View {
 
 struct PatternsContentView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let patterns: [DetectedPattern]
 
     var body: some View {
@@ -458,7 +458,7 @@ struct PatternsContentView: View {
 
 struct CodeSmellsContentView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let smells: [CodeSmell]
 
     var body: some View {
@@ -485,7 +485,7 @@ struct CodeSmellsContentView: View {
 
 struct PerformanceContentView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let issues: [PerformanceIssue]
 
     var body: some View {
@@ -512,9 +512,9 @@ struct PerformanceContentView: View {
 
 struct PatternCard: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let pattern: DetectedPattern
-    @State private var isExpanded = false
+    @State private var isExpanded = false;
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -581,7 +581,7 @@ struct PatternCard: View {
 
 struct CodeSmellCard: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let smell: CodeSmell
 
     var body: some View {
@@ -627,7 +627,7 @@ struct CodeSmellCard: View {
 
 struct PerformanceIssueCard: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let issue: PerformanceIssue
 
     var body: some View {
@@ -675,7 +675,7 @@ struct PerformanceIssueCard: View {
 
 struct EmptyPatternStateView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false
+    @State private var isLoading = false;
     let icon: String
     let title: String
     let description: String

@@ -14,7 +14,7 @@ public class BugPredictor {
         let complexity = features.complexityScore
         let probability = min(1.0, complexity / 20.0) // Simplified calculation
 
-        var riskFactors: [BugRiskFactor] = []
+        var riskFactors: [BugRiskFactor] = [];
         if complexity > 10 { riskFactors.append(.highComplexity) }
         if features.functionCount > 50 { riskFactors.append(.lackOfTests) }
 
@@ -56,8 +56,8 @@ public class MLComplexityAnalyzer {
     private func calculateCognitiveComplexity(_ code: String) -> Double {
         // Cognitive complexity considers nesting levels
         let lines = code.components(separatedBy: .newlines)
-        var complexity = 0.0
-        var nestingLevel = 0
+        var complexity = 0.0;
+        var nestingLevel = 0;
 
         for line in lines {
             let trimmed = line.trimmingCharacters(in: .whitespaces)
@@ -111,7 +111,7 @@ public struct CodeFeatures {
     public init(linesOfCode: Int, functionCount: Int, variableCount: Int, complexityScore: Double, dependencyCount: Int) {
         self.linesOfCode = linesOfCode
         self.functionCount = functionCount
-        self.variableCount = variableCount
+        self.variableCount = variableCount;
         self.complexityScore = complexityScore
         self.dependencyCount = dependencyCount
     }

@@ -151,7 +151,7 @@ final class AnalyticsAndAIFeaturesTests: XCTestCase {
     
     func testRealTimeAnalyticsUpdates() async throws {
         let expectation = XCTestExpectation(description: "Analytics update received")
-        var analyticsUpdated = false
+        var analyticsUpdated = false;
         
         // Subscribe to analytics updates
         sharedDataManager.fileManager.objectWillChange
@@ -206,7 +206,7 @@ final class AnalyticsAndAIFeaturesTests: XCTestCase {
     
     func testAnalyticsPerformanceWithLargeDataset() throws {
         // Create large dataset for performance testing
-        var largeDataset: [CodeFile] = []
+        var largeDataset: [CodeFile] = [];
         
         for i in 1...500 {
             largeDataset.append(
@@ -283,7 +283,7 @@ extension AnalyticsAndAIFeaturesTests {
         
         // Performance test file \(fileNumber)
         class PerformanceTestClass\(fileNumber) {
-            private var data: [String] = []
+            private var data: [String] = [];
             
             func processData() {
                 for i in 1...100 {
@@ -292,7 +292,7 @@ extension AnalyticsAndAIFeaturesTests {
             }
             
             func analyzeData() -> [String: Int] {
-                var analysis: [String: Int] = [:]
+                var analysis: [String: Int] = [:];
                 for item in data {
                     analysis[item] = item.count
                 }
@@ -359,7 +359,7 @@ private let complexSwiftCode = """
 import Foundation
 
 class ComplexClass {
-    private var data: [String: Any] = [:]
+    private var data: [String: Any] = [:];
     
     func complexMethod(param1: String, param2: Int, param3: Bool, param4: [String]) -> Result<String, Error> {
         guard !param1.isEmpty else {

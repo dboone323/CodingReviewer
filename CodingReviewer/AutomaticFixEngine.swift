@@ -25,7 +25,7 @@ class AutomaticFixEngine {
     }
 
     func detectIssues(in content: String, filePath: String) async throws -> [DetectedIssue] {
-        var issues: [DetectedIssue] = []
+        var issues: [DetectedIssue] = [];
         let lines = content.components(separatedBy: .newlines)
 
         for (index, line) in lines.enumerated() {
@@ -70,9 +70,9 @@ class AutomaticFixEngine {
     }
 
     private func applyFixes(_ fixes: [AutomaticFix], to content: String, filePath: String) async throws -> FixApplicationResult {
-        var modifiedContent = content
-        var appliedFixes: [AutomaticFix] = []
-        var failedFixes: [FixFailure] = []
+        var modifiedContent = content;
+        var appliedFixes: [AutomaticFix] = [];
+        var failedFixes: [FixFailure] = [];
 
         // Sort fixes by line number (descending) to avoid line number shifts
         let sortedFixes = fixes.sorted { $0.lineNumber > $1.lineNumber }
@@ -103,7 +103,7 @@ class AutomaticFixEngine {
     }
 
     private func applyFix(_ fix: AutomaticFix, to content: String) throws -> String {
-        var lines = content.components(separatedBy: .newlines)
+        var lines = content.components(separatedBy: .newlines);
 
         guard fix.lineNumber > 0 && fix.lineNumber <= lines.count else {
             throw FixEngineError.invalidLineNumber(fix.lineNumber)
@@ -138,7 +138,7 @@ class AutomaticFixEngine {
 extension AutomaticFixEngine {
 
     private func detectSwiftConcurrencyIssues(line: String, lineNumber: Int) -> [DetectedIssue] {
-        var issues: [DetectedIssue] = []
+        var issues: [DetectedIssue] = [];
 
         // Detect main actor isolation warnings
         if line.contains("call to main actor-isolated") && line.contains("in a synchronous") {
@@ -155,7 +155,7 @@ extension AutomaticFixEngine {
     }
 
     private func detectPerformanceIssues(line: String, lineNumber: Int) -> [DetectedIssue] {
-        var issues: [DetectedIssue] = []
+        var issues: [DetectedIssue] = [];
 
         // Detect unused variables
         if line.contains("initialization of immutable value") && line.contains("was never used") {
@@ -172,7 +172,7 @@ extension AutomaticFixEngine {
     }
 
     private func detectSecurityIssues(line: String, lineNumber: Int) -> [DetectedIssue] {
-        var issues: [DetectedIssue] = []
+        var issues: [DetectedIssue] = [];
 
         // Detect force unwrapping
         if line.contains("!") && !line.contains("// ") && !line.contains("\"") {
@@ -192,7 +192,7 @@ extension AutomaticFixEngine {
     }
 
     private func detectCodeQualityIssues(line: String, lineNumber: Int) -> [DetectedIssue] {
-        var issues: [DetectedIssue] = []
+        var issues: [DetectedIssue] = [];
 
         // Detect mutable variables that should be immutable
         if line.contains("variable") && line.contains("was never mutated") && line.contains("consider changing to 'let'") {
@@ -209,7 +209,7 @@ extension AutomaticFixEngine {
     }
 
     private func detectSwiftBestPractices(line: String, lineNumber: Int) -> [DetectedIssue] {
-        var issues: [DetectedIssue] = []
+        var issues: [DetectedIssue] = [];
 
         // Detect redundant returns
         if line.trimmed.hasPrefix("return ") && line.contains("single expression") {

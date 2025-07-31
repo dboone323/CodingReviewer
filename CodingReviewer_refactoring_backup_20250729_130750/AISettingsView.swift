@@ -2,11 +2,11 @@
 import SwiftUI
 
 struct AISettingsView: View {
-    @State private var openAIKey: String = ""
-    @State private var geminiKey: String = ""
-    @State private var selectedProvider: AIProvider = .openai
-    @State private var showAlert = false
-    @State private var alertMessage = ""
+    @State private var openAIKey: String = "";
+    @State private var geminiKey: String = "";
+    @State private var selectedProvider: AIProvider = .openai;
+    @State private var showAlert = false;
+    @State private var alertMessage = "";
 
     private let keyManager = APIKeyManager()
 

@@ -38,7 +38,7 @@ class AICodeFixAssistant {
 }
     
     private func createFixPlan(from analysis: ProjectAnalysisResult) -> FixPlan {
-        var fixes: [TargetedFix] = []
+        var fixes: [TargetedFix] = [];
         
         // Group issues by file for efficient processing
         let issuesByFile = Dictionary(grouping: analysis.issues) { $0.filePath }
@@ -217,9 +217,9 @@ class AICodeFixAssistant {
     // MARK: - Fix Application
     
     private func applyFixPlan(_ plan: FixPlan, projectPath: String) async throws -> FixApplicationResult {
-        var appliedFixes: [TargetedFix] = []
-        var failedFixes: [FixFailure] = []
-        var modifiedFiles: Set<String> = []
+        var appliedFixes: [TargetedFix] = [];
+        var failedFixes: [FixFailure] = [];
+        var modifiedFiles: Set<String> = [];
         
         os_log("Applying %d targeted fixes", log: logger, type: .info, plan.targetedFixes.count)
         
@@ -255,10 +255,10 @@ class AICodeFixAssistant {
             throw FixError.fileReadError(filePath)
         }
         
-        var modifiedContent = content
-        var applied: [TargetedFix] = []
-        var failed: [FixFailure] = []
-        var needsImports: Set<String> = []
+        var modifiedContent = content;
+        var applied: [TargetedFix] = [];
+        var failed: [FixFailure] = [];
+        var needsImports: Set<String> = [];
         
         // Sort fixes by line number (descending) to avoid line shift issues
         let sortedFixes = fixes.sorted { $0.issue.lineNumber > $1.issue.lineNumber }
@@ -288,7 +288,7 @@ class AICodeFixAssistant {
     }
     
     private func applyFixToContent(_ fix: TargetedFix, content: String) throws -> (String, Set<String>) {
-        var needsImports: Set<String> = []
+        var needsImports: Set<String> = [];
         
         // Add any additional imports needed
         for change in fix.additionalChanges {
@@ -333,7 +333,7 @@ class AICodeFixAssistant {
     
     private func addImports(_ imports: Set<String>, to content: String) -> String {
         let lines = content.components(separatedBy: .newlines)
-        var modifiedLines = lines
+        var modifiedLines = lines;
         
         for importName in imports.sorted() {
             let importStatement = "import \(importName)"
@@ -341,7 +341,7 @@ class AICodeFixAssistant {
             // Check if import already exists
             if !content.contains(importStatement) {
                 // Find the best place to insert the import
-                var insertIndex = 0
+                var insertIndex = 0;
                 
                 // Look for existing imports
                 for (index, line) in lines.enumerated() {

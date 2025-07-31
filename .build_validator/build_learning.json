@@ -1,0 +1,13 @@
+{
+  "learned_patterns": {
+    "common_errors": {
+      "missing_file": 1
+    },
+    "build_optimizations": {},
+    "dependency_issues": {},
+    "configuration_problems": {}
+  },
+  "prediction_accuracy": 0.0,
+  "learning_iterations": 1,
+  "optimization_suggestions": []
+}

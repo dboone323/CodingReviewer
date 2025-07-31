@@ -48,7 +48,7 @@ final class FileManagerServiceTests: XCTestCase {
         
         // Monitor upload state changes
         let expectation = XCTestExpectation(description: "Upload state changes")
-        var stateChanges: [Bool] = []
+        var stateChanges: [Bool] = [];
         
         fileManagerService.$isUploading
             .sink { isUploading in
@@ -89,7 +89,7 @@ final class FileManagerServiceTests: XCTestCase {
     }
     
     func testMultipleFileUpload() async throws {
-        var testFiles: [URL] = []
+        var testFiles: [URL] = [];
         let fileContents = [
             ("file1.swift", "// Swift file\nprint(\"Swift\")", CodeLanguage.swift),
             ("file2.js", "// JavaScript file\nconsole.log('JavaScript');", CodeLanguage.javascript),
@@ -119,7 +119,7 @@ final class FileManagerServiceTests: XCTestCase {
     }
     
     func testFileUploadWithLargeDataset() async throws {
-        var testFiles: [URL] = []
+        var testFiles: [URL] = [];
         
         // Create 50 test files
         for i in 1...50 {
@@ -130,7 +130,7 @@ final class FileManagerServiceTests: XCTestCase {
             import Foundation
             
             class TestClass\(i) {
-                private var data: [String] = []
+                private var data: [String] = [];
                 
                 func processData() {
                     for j in 1...100 {
@@ -264,7 +264,7 @@ final class FileManagerServiceTests: XCTestCase {
     
     func testObservableObjectUpdates() async throws {
         let expectation = XCTestExpectation(description: "Observable object update")
-        var updateReceived = false
+        var updateReceived = false;
         
         fileManagerService.objectWillChange
             .sink { _ in
@@ -288,9 +288,9 @@ final class FileManagerServiceTests: XCTestCase {
         let subscriber2Expectation = XCTestExpectation(description: "Subscriber 2 update")
         let subscriber3Expectation = XCTestExpectation(description: "Subscriber 3 update")
         
-        var subscriber1Updated = false
-        var subscriber2Updated = false
-        var subscriber3Updated = false
+        var subscriber1Updated = false;
+        var subscriber2Updated = false;
+        var subscriber3Updated = false;
         
         // Multiple subscribers
         fileManagerService.objectWillChange
@@ -366,7 +366,7 @@ extension FileManagerServiceTests {
     
     func testUploadPerformance() throws {
         // Test upload performance with moderate dataset
-        var testFiles: [URL] = []
+        var testFiles: [URL] = [];
         
         for i in 1...20 {
             let fileName = "perf\(i).swift"
@@ -385,7 +385,7 @@ extension FileManagerServiceTests {
     
     func testDataAccessPerformance() throws {
         // Setup large dataset
-        var largeDataset: [CodeFile] = []
+        var largeDataset: [CodeFile] = [];
         for i in 1...100 {
             largeDataset.append(
                 CodeFile(

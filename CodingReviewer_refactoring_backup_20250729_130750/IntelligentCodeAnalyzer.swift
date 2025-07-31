@@ -1,5 +1,4 @@
 // SECURITY: API key handling - ensure proper encryption and keychain storage
-import Foundation
 import OSLog
 
 // MARK: - Intelligent Code Issue Analyzer
@@ -16,8 +15,8 @@ class IntelligentCodeAnalyzer {
         os_log("Starting intelligent code analysis for project at %@", log: logger, type: .info, projectPath)
         
         let swiftFiles = try findSwiftFiles(in: projectPath)
-        var allIssues: [CodeIssue] = []
-        var fixableIssues: [CodeIssue] = []
+        var allIssues: [CodeIssue] = [];
+        var fixableIssues: [CodeIssue] = [];
         
         for filePath in swiftFiles {
             let fileIssues = try await analyzeFile(at: filePath)
@@ -47,7 +46,7 @@ class IntelligentCodeAnalyzer {
         let content = try String(contentsOfFile: filePath, encoding: .utf8)
         let lines = content.components(separatedBy: .newlines)
         
-        var issues: [CodeIssue] = []
+        var issues: [CodeIssue] = [];
         
         // Run various analysis passes
         issues.append(contentsOf: analyzeSwiftConcurrency(lines: lines, filePath: filePath))
@@ -63,7 +62,7 @@ class IntelligentCodeAnalyzer {
     // MARK: - Specific Analysis Methods
     
     private func analyzeSwiftConcurrency(lines: [String], filePath: String) -> [CodeIssue] {
-        var issues: [CodeIssue] = []
+        var issues: [CodeIssue] = [];
         
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
@@ -104,7 +103,7 @@ class IntelligentCodeAnalyzer {
     }
     
     private func analyzeCodeQuality(lines: [String], filePath: String) -> [CodeIssue] {
-        var issues: [CodeIssue] = []
+        var issues: [CodeIssue] = [];
         
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
@@ -112,7 +111,7 @@ class IntelligentCodeAnalyzer {
             
             // Check for unused variables (let _ pattern)
             if let range = trimmedLine.range(of: #"let\s+([a-zA-Z_]\w*)\s*="#, options: .regularExpression) {
-                let variableName = String(trimmedLine[range]).replacingOccurrences(of: "let ", with: "").replacingOccurrences(of: " =", with: "")
+                let variableName = String(trimmedLine[range]).replacingOccurrences(of: "let ", with: "").replacingOccurrences(of: " =", with: "");
                 
                 // Check if variable is used in subsequent lines (simple heuristic)
                 let remainingLines = Array(lines[(index + 1)...])
@@ -134,7 +133,7 @@ class IntelligentCodeAnalyzer {
             }
             
             // Check for var that should be let
-            if trimmedLine.contains("var ") && !trimmedLine.contains("=") {
+            if trimmedLine.contains("var ") && !trimmedLine.contains("=") {;
                 // Simple heuristic: if var is declared but never reassigned
                 issues.append(CodeIssue(
                     type: .mutableToImmutable,
@@ -169,7 +168,7 @@ class IntelligentCodeAnalyzer {
     }
     
     private func analyzePerformance(lines: [String], filePath: String) -> [CodeIssue] {
-        var issues: [CodeIssue] = []
+        var issues: [CodeIssue] = [];
         
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
@@ -212,7 +211,7 @@ class IntelligentCodeAnalyzer {
     }
     
     private func analyzeSecurity(lines: [String], filePath: String) -> [CodeIssue] {
-        var issues: [CodeIssue] = []
+        var issues: [CodeIssue] = [];
         
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
@@ -255,7 +254,7 @@ class IntelligentCodeAnalyzer {
     }
     
     private func analyzeSwiftBestPractices(lines: [String], filePath: String) -> [CodeIssue] {
-        var issues: [CodeIssue] = []
+        var issues: [CodeIssue] = [];
         
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
@@ -298,11 +297,11 @@ class IntelligentCodeAnalyzer {
     }
     
     private func analyzeArchitecturalPatterns(lines: [String], filePath: String) -> [CodeIssue] {
-        var issues: [CodeIssue] = []
+        var issues: [CodeIssue] = [];
         
         // Check for large functions (simple heuristic)
         var currentFunctionStart: Int?
-        var braceCount = 0
+        var braceCount = 0;
         
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
@@ -344,7 +343,7 @@ class IntelligentCodeAnalyzer {
     private func findSwiftFiles(in directory: String) throws -> [String] {
         let fileManager = FileManager.default
         let enumerator = fileManager.enumerator(atPath: directory)
-        var swiftFiles: [String] = []
+        var swiftFiles: [String] = [];
         
         while let file = enumerator?.nextObject() as? String {
             if file.hasSuffix(".swift") && !file.contains("/.build/") && !file.contains("/DerivedData/") {
@@ -356,7 +355,7 @@ class IntelligentCodeAnalyzer {
     }
     
     private func generateRecommendations(from issues: [CodeIssue]) -> [Recommendation] {
-        var recommendations: [Recommendation] = []
+        var recommendations: [Recommendation] = [];
         
         let issuesByCategory = Dictionary(grouping: issues) { $0.category }
         

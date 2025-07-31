@@ -74,7 +74,7 @@ final class OpenAIService: AIServiceProtocol {
 
     private func sendChatRequest(prompt: String) async throws -> OpenAIChatResponse {
         let url = URL(string: "\(baseURL)/chat/completions")!
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: url);
         request.httpMethod = "POST"
         request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -261,7 +261,7 @@ final class OpenAIService: AIServiceProtocol {
     private func buildContextInfo(for context: AIAnalysisRequest.AnalysisContext?) -> String {
         guard let context = context else { return "" }
 
-        var info = "Context Information:\n"
+        var info = "Context Information:\n";
         if let fileName = context.fileName {
             info += "- File: \(fileName)\n"
         }
@@ -378,8 +378,8 @@ final class OpenAIService: AIServiceProtocol {
 
     private func extractJSON(from content: String) -> String? {
         let lines = content.components(separatedBy: .newlines)
-        var jsonLines: [String] = []
-        var inJSON = false
+        var jsonLines: [String] = [];
+        var inJSON = false;
 
         for line in lines {
             if line.trimmingCharacters(in: .whitespaces).hasPrefix("{") || line.trimmingCharacters(in: .whitespaces).hasPrefix("[") {
@@ -465,7 +465,7 @@ final class OpenAIService: AIServiceProtocol {
 // MARK: - Token Manager
 
 private class TokenManager {
-    private var tokenUsage: [Date: Int] = [:]
+    private var tokenUsage: [Date: Int] = [:];
     private let maxTokensPerMinute = 1000
 
     func canUseTokens(_ count: Int) -> Bool {

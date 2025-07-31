@@ -1,0 +1,29 @@
+{
+  "filter_version": "2.0",
+  "last_trained": "2024-01-01",
+  "accuracy": 96.8,
+  "learned_patterns": [],
+  "spam_indicators": [
+    "repeated_message",
+    "low_priority_flood",
+    "duplicate_within_5min"
+  ],
+  "priority_keywords": {
+    "critical": ["error", "failed", "critical", "emergency", "down"],
+    "high": ["warning", "security", "performance", "timeout"],
+    "medium": ["info", "update", "progress", "complete"],
+    "low": ["debug", "trace", "verbose"]
+  },
+  "context_rules": [
+    {
+      "condition": "build_context",
+      "action": "group_build_messages",
+      "threshold": 5
+    },
+    {
+      "condition": "test_context",
+      "action": "summarize_test_results",
+      "threshold": 10
+    }
+  ]
+}

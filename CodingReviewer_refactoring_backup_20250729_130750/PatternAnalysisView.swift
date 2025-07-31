@@ -7,16 +7,13 @@
 //  Created on July 25, 2025
 //
 
-import SwiftUI
-import Foundation
-
 // MARK: - Pattern Analysis View
 
 struct PatternAnalysisView: View {
-    @StateObject private var patternEngine = PatternRecognitionEngine()
+    @StateObject private var patternEngine = PatternRecognitionEngine();
     @ObservedObject var viewModel: CodeReviewViewModel
-    @State private var selectedTab: PatternTab = .patterns
-    @State private var isAnalyzing = false
+    @State private var selectedTab: PatternTab = .patterns;
+    @State private var isAnalyzing = false;
 
     enum PatternTab: String, CaseIterable {
         case patterns = "Design Patterns"
@@ -206,7 +203,7 @@ struct PerformanceContentView: View {
 
 struct PatternCard: View {
     let pattern: DetectedPattern
-    @State private var isExpanded = false
+    @State private var isExpanded = false;
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {

@@ -10,8 +10,8 @@ import Foundation
 class FeatureFlagManager {
     static let shared = FeatureFlagManager()
     
-    private var flags: [String: Bool] = [:]
-    private var remoteFlags: [String: Any] = [:]
+    private var flags: [String: Bool] = [:];
+    private var remoteFlags: [String: Any] = [:];
     
     private init() {
         loadDefaultFlags()

@@ -5,7 +5,7 @@ import os
 struct ContentView: View {
     @StateObject private var keyManager: APIKeyManager
     @StateObject private var viewModel: CodeReviewViewModel
-    @State private var selectedTab: Tab = .analysis
+    @State private var selectedTab: Tab = .analysis;
 
     init() {
         let keyManager = APIKeyManager()
@@ -103,7 +103,7 @@ struct ContentView: View {
 
 struct AnalysisView: View {
     @ObservedObject var viewModel: CodeReviewViewModel
-    @State private var showingLanguagePicker = false
+    @State private var showingLanguagePicker = false;
 
     var body: some View {
         VStack(spacing: 16) {
@@ -192,7 +192,7 @@ struct AnalysisView: View {
 
 struct AISuggestionRow: View {
     let suggestion: AISuggestion
-    @State private var isExpanded = false
+    @State private var isExpanded = false;
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -401,7 +401,7 @@ struct AIFixRow: View {
 
 struct AINotEnabledView: View {
     @ObservedObject var keyManager: APIKeyManager
-    @State private var showingSettings = false
+    @State private var showingSettings = false;
 
     var body: some View {
         VStack(spacing: 20) {
@@ -554,10 +554,10 @@ struct EmptyAIStateView: View {
 struct SettingsView: View {
     @ObservedObject var keyManager: APIKeyManager
     @ObservedObject var viewModel: CodeReviewViewModel
-    @State private var selectedAIProvider = "OpenAI"
-    @State private var showingProviderPicker = false
-    @State private var showingGeminiKeyInput = false
-    @State private var tempGeminiKey = ""
+    @State private var selectedAIProvider = "OpenAI";
+    @State private var showingProviderPicker = false;
+    @State private var showingGeminiKeyInput = false;
+    @State private var tempGeminiKey = "";
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -676,8 +676,8 @@ struct GeminiKeyInputView: View {
     @Binding var tempKey: String
     @ObservedObject var keyManager: APIKeyManager
     @Environment(\.dismiss) private var dismiss
-    @State private var isValidating = false
-    @State private var validationResult: String? = nil
+    @State private var isValidating = false;
+    @State private var validationResult: String? = nil;
 
     var body: some View {
         NavigationView {

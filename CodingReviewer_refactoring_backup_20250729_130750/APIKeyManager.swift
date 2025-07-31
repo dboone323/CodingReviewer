@@ -23,11 +23,11 @@ final class APIKeyManager: ObservableObject {
 
     // MARK: - Published Properties
 
-    @Published var hasValidKey: Bool = false
-    @Published var isConfigured: Bool = false
-    @Published var showingKeySetup: Bool = false
-    @Published var hasValidGeminiKey: Bool = false
-    @Published var selectedAIProvider: AIProvider = .openai
+    @Published var hasValidKey: Bool = false;
+    @Published var isConfigured: Bool = false;
+    @Published var showingKeySetup: Bool = false;
+    @Published var hasValidGeminiKey: Bool = false;
+    @Published var selectedAIProvider: AIProvider = .openai;
 
     enum AIProvider: String, CaseIterable {
         case openai = "OpenAI"
@@ -206,7 +206,7 @@ private extension APIKeyManager {
             throw APIKeyError.invalidURL
         }
 
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: url);
         request.setValue("Bearer \(key)", forHTTPHeaderField: "Authorization")
         request.timeoutInterval = 10
 
@@ -224,7 +224,7 @@ private extension APIKeyManager {
             throw APIKeyError.invalidURL
         }
 
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: url);
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.timeoutInterval = 10
 

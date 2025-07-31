@@ -15,9 +15,9 @@ import Combine
 
 final class IntelligentFixGenerator: ObservableObject {
 
-    @Published var isGeneratingFixes = false
-    @Published var fixGenerationProgress: Double = 0.0
-    @Published var generatedFixes: [IntelligentFix] = []
+    @Published var isGeneratingFixes = false;
+    @Published var fixGenerationProgress: Double = 0.0;
+    @Published var generatedFixes: [IntelligentFix] = [];
 
     private let logger = AppLogger.shared
 
@@ -38,7 +38,7 @@ final class IntelligentFixGenerator: ObservableObject {
 
         logger.log("🔧 Generating intelligent fixes for \(analysis.fileName)", level: .info, category: .ai)
 
-        var fixes: [IntelligentFix] = []
+        var fixes: [IntelligentFix] = [];
 
         // Generate different types of fixes based on analysis
         let securityFixes = generateSecurityFixes(analysis: analysis, context: context)
@@ -78,7 +78,7 @@ final class IntelligentFixGenerator: ObservableObject {
             throw FixApplicationError.invalidLineRange
         }
 
-        var modifiedLines = lines
+        var modifiedLines = lines;
 
         // Handle single-line fixes
         if fix.startLine == fix.endLine {
@@ -116,7 +116,7 @@ final class IntelligentFixGenerator: ObservableObject {
         context: CodeContext
     ) -> [IntelligentFix] {
 
-        var fixes: [IntelligentFix] = []
+        var fixes: [IntelligentFix] = [];
         let code = context.originalCode
 
         // Force unwrapping fixes for Swift
@@ -138,14 +138,14 @@ final class IntelligentFixGenerator: ObservableObject {
     }
 
     private func generateForceUnwrappingFixes(code: String, context: CodeContext) -> [IntelligentFix] {
-        var fixes: [IntelligentFix] = []
+        var fixes: [IntelligentFix] = [];
         let lines = code.components(separatedBy: .newlines)
 
         for (index, line) in lines.enumerated() {
             if line.contains("!") && !line.contains("// ") {
                 // Find force unwrapping patterns
                 if let range = line.range(of: #"(\w+)!"#, options: .regularExpression) {
-                    let variableName = String(line[range]).dropLast()
+                    let variableName = String(line[range]).dropLast();
                     let safeFix = line.replacingOccurrences(of: "\(variableName)!", with: "\(variableName) ?? defaultValue")
 
                     let fix = IntelligentFix(
@@ -176,7 +176,7 @@ final class IntelligentFixGenerator: ObservableObject {
         context: CodeContext
     ) -> [IntelligentFix] {
 
-        var fixes: [IntelligentFix] = []
+        var fixes: [IntelligentFix] = [];
         let code = context.originalCode
 
         // String concatenation in loops
@@ -189,7 +189,7 @@ final class IntelligentFixGenerator: ObservableObject {
     }
 
     private func generateStringConcatenationFixes(code: String, context: CodeContext) -> [IntelligentFix] {
-        var fixes: [IntelligentFix] = []
+        var fixes: [IntelligentFix] = [];
         let lines = code.components(separatedBy: .newlines)
 
         for (index, line) in lines.enumerated() {
@@ -226,7 +226,7 @@ final class IntelligentFixGenerator: ObservableObject {
         context: CodeContext
     ) -> [IntelligentFix] {
 
-        var fixes: [IntelligentFix] = []
+        var fixes: [IntelligentFix] = [];
         let code = context.originalCode
 
         // Naming convention fixes
@@ -245,7 +245,7 @@ final class IntelligentFixGenerator: ObservableObject {
         context: CodeContext
     ) -> [IntelligentFix] {
 
-        var fixes: [IntelligentFix] = []
+        var fixes: [IntelligentFix] = [];
         let code = context.originalCode
 
         // Null check fixes
@@ -280,7 +280,7 @@ final class IntelligentFixGenerator: ObservableObject {
 
     private func generateStringBuilderFix(forLoop: String, concatenation: String) -> String {
         """
-        var components: [String] = []
+        var components: [String] = [];
         \(forLoop)
             components.append(/* value */)
         }

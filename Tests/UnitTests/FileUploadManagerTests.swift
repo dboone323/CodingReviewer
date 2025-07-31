@@ -65,7 +65,7 @@ final class FileUploadManagerTests: XCTestCase {
     }
     
     func testMultipleFileUpload() async throws {
-        var testFiles: [URL] = []
+        var testFiles: [URL] = [];
         
         // Create multiple test files
         for i in 1...10 {
@@ -89,7 +89,7 @@ final class FileUploadManagerTests: XCTestCase {
     }
     
     func testLargeFileUpload() async throws {
-        var testFiles: [URL] = []
+        var testFiles: [URL] = [];
         
         // Create 100 test files to test performance
         for i in 1...100 {
