@@ -1,317 +1,17 @@
 //
-// DiffPreviewView.swift
-// CodingReviewer
+//  DiffPreviewView.swift
+//  CodingReviewer
 //
-// Phase 4: Diff Visualization for Fix Previews
-// Created on July 25, 2025
+//  Phase 4: Diff Visualization for Fix Previews
+//  Created on July 25, 2025
 //
 
 import SwiftUI
-import Accessibility
-import Foundation
 import Combine
 
 // MARK: - Diff Preview View
 
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
 struct DiffPreviewView: View {
-    @State private var errorMessage: String?
     let fix: IntelligentFix
     let originalCode: String
     @Environment(\.dismiss) private var dismiss
@@ -405,7 +105,6 @@ struct DiffPreviewView: View {
 // MARK: - Fix Details Header
 
 struct FixDetailsHeader: View {
-    @State private var errorMessage: String?
     let fix: IntelligentFix
 
     var body: some View {
@@ -462,7 +161,6 @@ struct FixDetailsHeader: View {
 // MARK: - Diff Comparison View
 
 struct DiffComparisonView: View {
-    @State private var errorMessage: String?
     let originalCode: String
     let modifiedCode: String
     let changedLineRange: ClosedRange<Int>
@@ -505,7 +203,6 @@ struct DiffComparisonView: View {
 // MARK: - Diff Header
 
 struct DiffHeaderView: View {
-    @State private var errorMessage: String?
     let title: String
     let color: Color
 
@@ -526,7 +223,6 @@ struct DiffHeaderView: View {
 // MARK: - Code View with Highlighting
 
 struct CodeView: View {
-    @State private var errorMessage: String?
     let code: String
     let highlightType: DiffHighlightType
     let changedLineRange: ClosedRange<Int>
@@ -551,7 +247,6 @@ struct CodeView: View {
 // MARK: - Code Line View
 
 struct CodeLineView: View {
-    @State private var errorMessage: String?
     let lineNumber: Int
     let content: String
     let isChanged: Bool
@@ -632,7 +327,7 @@ enum DiffHighlightType {
 // MARK: - Fix History Tracking
 
 struct FixHistoryEntry: Identifiable, Codable {
-    let id: UUID
+    var id: UUID
     let fixId: UUID
     let appliedAt: Date
     let originalCode: String

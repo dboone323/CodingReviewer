@@ -4,11 +4,15 @@ import Foundation
 // MARK: - Bug Prediction Models
 // / BugPredictor class
 // / TODO: Add detailed documentation
+/// BugPredictor class
+/// TODO: Add detailed documentation
 public class BugPredictor {
     public init() {}
 
     // / predict function
     // / TODO: Add detailed documentation
+    /// predict function
+    /// TODO: Add detailed documentation
     public func predict(features: CodeFeatures) async -> BugPredictionResult {
         // Real implementation of bug prediction
         let complexity = features.complexityScore
@@ -28,11 +32,15 @@ public class BugPredictor {
 
 // / MLComplexityAnalyzer class
 // / TODO: Add detailed documentation
+/// MLComplexityAnalyzer class
+/// TODO: Add detailed documentation
 public class MLComplexityAnalyzer {
     public init() {}
 
     // / analyze function
     // / TODO: Add detailed documentation
+    /// analyze function
+    /// TODO: Add detailed documentation
     public func analyze(_ code: String) async -> ComplexityAnalysisResult {
         let cyclomatic = calculateCyclomaticComplexity(code)
         let cognitive = calculateCognitiveComplexity(code)
@@ -229,11 +237,15 @@ public enum ImplementationEffort {
 // MARK: - Pattern Analysis Models
 // / CodePatternAnalyzer class
 // / TODO: Add detailed documentation
+/// CodePatternAnalyzer class
+/// TODO: Add detailed documentation
 public class CodePatternAnalyzer {
     public init() {}
 
     // / analyzePatterns function
     // / TODO: Add detailed documentation
+    /// analyzePatterns function
+    /// TODO: Add detailed documentation
     public func analyzePatterns(_ code: String) async -> CodePatterns {
         return CodePatterns(
             complexity: calculateComplexity(code),
@@ -289,11 +301,15 @@ public struct CodePatterns {
 // MARK: - Performance Impact Predictor
 // / PerformanceImpactPredictor class
 // / TODO: Add detailed documentation
+/// PerformanceImpactPredictor class
+/// TODO: Add detailed documentation
 public class PerformanceImpactPredictor {
     public init() {}
 
     // / predict function
     // / TODO: Add detailed documentation
+    /// predict function
+    /// TODO: Add detailed documentation
     public func predict(changes: [CodeChange]) async -> PerformanceImpactPrediction {
         let features = changes.map { extractPerformanceFeatures($0) }
         let aggregatedFeatures = aggregateFeatures(features)

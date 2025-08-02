@@ -7,6 +7,8 @@ import Combine
 @MainActor
 // / APIKeyManager class
 // / TODO: Add detailed documentation
+/// APIKeyManager class
+/// TODO: Add detailed documentation
 public class APIKeyManager: ObservableObject {
     static let shared = APIKeyManager()
 

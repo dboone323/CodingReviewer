@@ -1,10 +1,10 @@
 // SECURITY: API key handling - ensure proper encryption and keychain storage
 //
-// IntelligentFixGenerator.swift
-// CodingReviewer
+//  IntelligentFixGenerator.swift
+//  CodingReviewer
 //
-// Phase 4: Intelligent Fix Generation System
-// Created on July 25, 2025
+//  Phase 4: Intelligent Fix Generation System
+//  Created on July 25, 2025
 //
 
 import Foundation
@@ -142,7 +142,7 @@ final class IntelligentFixGenerator: ObservableObject {
         let lines = code.components(separatedBy: .newlines)
 
         for (index, line) in lines.enumerated() {
-            if line.contains("!") && !line.contains("// ") {
+            if line.contains("!") && !line.contains("//") {
                 // Find force unwrapping patterns
                 if let range = line.range(of: #"(\w+)!"#, options: .regularExpression) {
                     let variableName = String(line[range]).dropLast();
@@ -266,20 +266,14 @@ final class IntelligentFixGenerator: ObservableObject {
     }
 
     private func containsHardcodedCredentials(_ code: String) -> Bool {
-        // TODO: Replace with secure credential storage
-        let patterns = [
-            "password\\s*=\\s*[\"'][^\"']*[\"']",
-            "key\\s*=\\s*[\"'][^\"']*[\"']",
-            "token\\s*=\\s*[\"'][^\"']*[\"']",
-            "secret\\s*=\\s*[\"'][^\"']*[\"']"
-        ]
+        let patterns = ["password\\s*=\\s*\"", "api_key\\s*=\\s*\"", "secret\\s*=\\s*\""]
         return patterns.contains { pattern in
             code.range(of: pattern, options: .regularExpression) != nil
         }
     }
 
     private func generateStringBuilderFix(forLoop: String, concatenation: String) -> String {
-        """
+        return """
         var components: [String] = [];
         \(forLoop)
             components.append(/* value */)
@@ -290,42 +284,42 @@ final class IntelligentFixGenerator: ObservableObject {
 
     private func generateNamingFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for naming convention fixes
-        []
+        return []
     }
 
     private func generateFormattingFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for formatting fixes
-        []
+        return []
     }
 
     private func generateNullCheckFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for null check fixes
-        []
+        return []
     }
 
     private func generateExceptionHandlingFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for exception handling fixes
-        []
+        return []
     }
 
     private func generateSQLInjectionFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for SQL injection fixes
-        []
+        return []
     }
 
     private func generateCredentialFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for credential fixes
-        []
+        return []
     }
 
     private func generateCollectionOptimizationFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for collection optimization fixes
-        []
+        return []
     }
 
     private func performCompilationCheck(fix: IntelligentFix, context: CodeContext) async -> CompilationCheck {
         // Simulate compilation check
-        CompilationCheck(
+        return CompilationCheck(
             passes: fix.confidence > 0.8,
             errors: [],
             warnings: [],

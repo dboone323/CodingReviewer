@@ -1,19 +1,14 @@
-import OSLog
 // SECURITY: API key handling - ensure proper encryption and keychain storage
 //
-// FileManagerService.swift
-// CodingReviewer
+//  FileManagerService.swift
+//  CodingReviewer
 //
-// Created by AI Assistant on 7/17/25.
+//  Created by AI Assistant on 7/17/25.
 //
 
-import Foundation
 import SwiftUI
-import UniformTypeIdentifiers
 import Combine
 import CryptoKit
-
-// MARK: - File Models
 // Note: CodeLanguage enum is now defined in Services/LanguageDetectionService.swift
 // Importing it here for compatibility during transition
 
@@ -370,7 +365,7 @@ final class FileManagerService: ObservableObject {
     // private let languageDetectionService = LanguageDetectionService()
 
     init() {
-        loadPersistedData()
+        // loadPersistedData() // Skip persistence loading in init - implement when needed
         setupFileUploadBinding()
     }
 
@@ -417,7 +412,7 @@ final class FileManagerService: ObservableObject {
 
         uploadedFiles.append(contentsOf: newFiles)
         updateRecentFiles(with: newFiles)
-        savePersistedData()
+        await savePersistedData()
 
         // Return result in expected format
         let result = FileUploadResult(
@@ -430,6 +425,7 @@ final class FileManagerService: ObservableObject {
 
         return result
     }
+
 
     // MARK: - Enhanced Language Detection
 
@@ -550,7 +546,7 @@ final class FileManagerService: ObservableObject {
 
     private func detectLanguageByContent(_ content: String) -> CodeLanguage? {
         // Keep the original method for backward compatibility
-        detectLanguageByContentAdvanced(content)
+        return detectLanguageByContentAdvanced(content)
     }
 
     // MARK: - File Analysis
@@ -585,7 +581,7 @@ final class FileManagerService: ObservableObject {
         )
 
         analysisHistory.append(record)
-        savePersistedData()
+        await savePersistedData()
 
         logger.log("✅ Analysis completed for \(file.name) in \(String(format: "%.2f", duration))s with \(record.analysisResults.count) results")
 
@@ -847,7 +843,7 @@ final class FileManagerService: ObservableObject {
     }
 
     private func callOpenAIAPI(prompt: String, apiKey: String) async -> String {
-        guard let url = URL(string: "https:// api.openai.com/v1/chat/completions") else {
+        guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else {
             return "Error: Invalid OpenAI URL"
         }
 
@@ -915,7 +911,7 @@ final class FileManagerService: ObservableObject {
     }
 
     private func callGeminiAPI(prompt: String, apiKey: String) async -> String {
-        guard let url = URL(string: "https:// generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=\(apiKey)") else {
+        guard let url = URL(string: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=\(apiKey)") else {
             return "Error: Invalid Gemini URL"
         }
 
@@ -1070,7 +1066,7 @@ final class FileManagerService: ObservableObject {
             suggestions.append("📏 Large file detected (\(lines.count) lines) - consider breaking into modules")
         }
 
-        if !content.lowercased().contains("// ") && !content.lowercased().contains("/*") {
+        if !content.lowercased().contains("//") && !content.lowercased().contains("/*") {
             suggestions.append("📚 Consider adding comments to explain complex logic")
         }
 
@@ -1180,11 +1176,11 @@ final class FileManagerService: ObservableObject {
     }
 
     func filterFilesByLanguage(_ language: CodeLanguage) -> [CodeFile] {
-        uploadedFiles.filter { $0.language == language }
+        return uploadedFiles.filter { $0.language == language }
     }
 
     func filterFilesBySize(minSize: Int = 0, maxSize: Int = Int.max) -> [CodeFile] {
-        uploadedFiles.filter { file in
+        return uploadedFiles.filter { file in
             file.size >= minSize && file.size <= maxSize
         }
     }
@@ -1239,16 +1235,16 @@ final class FileManagerService: ObservableObject {
 
     // MARK: - File Management
 
-    func removeFile(_ file: CodeFile) {
+    func removeFile(_ file: CodeFile) async {
         uploadedFiles.removeAll { $0.id == file.id }
         recentFiles.removeAll { $0.id == file.id }
         analysisHistory.removeAll { $0.file.id == file.id }
-        savePersistedData()
+        await savePersistedData()
 
         logger.log("🗑️ Removed file: \(file.name)")
     }
 
-    func removeProject(_ project: ProjectStructure) {
+    func removeProject(_ project: ProjectStructure) async {
         projects.removeAll { $0.id == project.id }
 
         // Remove associated files
@@ -1257,17 +1253,17 @@ final class FileManagerService: ObservableObject {
         recentFiles.removeAll { projectFileIds.contains($0.id) }
         analysisHistory.removeAll { projectFileIds.contains($0.file.id) }
 
-        savePersistedData()
+        await savePersistedData()
 
         logger.log("🗑️ Removed project: \(project.name)")
     }
 
-    func clearAllFiles() {
+    func clearAllFiles() async {
         uploadedFiles.removeAll()
         recentFiles.removeAll()
         analysisHistory.removeAll()
         projects.removeAll()
-        savePersistedData()
+        await savePersistedData()
 
         logger.log("🗑️ Cleared all files and projects")
     }
@@ -1289,13 +1285,13 @@ final class FileManagerService: ObservableObject {
 
     // MARK: - Persistence
 
-    private func savePersistedData() {
+    private func savePersistedData() async {
         // Note: Simplified persistence - in production, consider Core Data or SQLite
         // For now, we'll skip persistence to avoid Codable complexity
         logger.log("📝 Data persistence skipped - implement when needed")
     }
 
-    private func loadPersistedData() {
+    private func loadPersistedData() async {
         // Note: Simplified persistence - in production, consider Core Data or SQLite
         // For now, we'll skip persistence to avoid Codable complexity
         logger.log("📝 Data loading skipped - implement when needed")
@@ -1353,7 +1349,7 @@ internal class FileManagerLogger {
     func log(_ message: String, file: String = #file, line: Int = #line) {
         let fileName = (file as NSString).lastPathComponent
         let timestamp = DateFormatter.logFormatter.string(from: Date())
-        AppLogger.shared.log("[\(timestamp)] [\(fileName):\(line)] \(message)", level: .debug, category: .general)
+        AppLogger.shared.debug("[\(timestamp)] [\(fileName):\(line)] \(message)")
     }
 }
 
@@ -1374,6 +1370,6 @@ extension DateFormatter {
 // Simple logger for FileManagerService
 struct SimpleLogger {
     func log(_ message: String) {
-        AppLogger.shared.log("FileManagerService: \(message)", level: .debug, category: .general)
+        AppLogger.shared.debug("FileManagerService: \(message)")
     }
 }

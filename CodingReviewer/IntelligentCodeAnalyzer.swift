@@ -1,641 +1,41 @@
+import Foundation
 import OSLog
-// SECURITY: API key handling - ensure proper encryption and keychain storage
-
-// MARK: - Intelligent Code Issue Analyzer
-// TODO: Review error handling in this file - Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-// TODO: Review error handling in this file
-// Consider wrapping force unwraps and try statements in proper error handling
-
-class IntelligentCodeAnalyzer {
-    static let shared = IntelligentCodeAnalyzer()
-    private let logger = OSLog(subsystem: "CodingReviewer", category: "CodeAnalyzer")
-
-    private init() {}
-
-    // MARK: - Main Analysis Methods
-
-// / Function description needed
-func analyzeProject(at projectPath: String) async throws -> String {
-        os_log("Starting intelligent code analysis for project at %@", log: logger, type: .info, projectPath)
-
-        let startTime = Date()
-        let swiftFiles = try findSwiftFiles(in: projectPath)
-        var totalIssues = 0;
-
-        for filePath in swiftFiles {
-            let fileIssues = try await analyzeFile(at: filePath)
-            totalIssues += fileIssues.count
+import SwiftUI
+import Combine
+
+// MARK: - Analysis Error Types
+
+enum AnalyzerError: LocalizedError {
+    case fileNotFound(String)
+    case invalidPath(String)
+    case analysisTimeout
+    case networkError(Error)
+    
+    var errorDescription: String? {
+        switch self {
+        case .fileNotFound(let path):
+            return "File not found: \(path)"
+        case .invalidPath(let path):
+            return "Invalid path: \(path)"
+        case .analysisTimeout:
+            return "Analysis timed out"
+        case .networkError(let error):
+            return "Network error: \(error.localizedDescription)"
         }
-
-        let duration = Date().timeIntervalSince(startTime)
-        let result = "Analyzed \(swiftFiles.count) files, found \(totalIssues) issues in \(String(format: "%.2f", duration)) seconds"
-
-        os_log("Analysis complete: %@", log: logger, type: .info, result)
-        return result
-    }
-
-// / Function description needed
-func analyzeFile(at filePath: String) async throws -> [CodeIssue] {
-        guard FileManager.default.fileExists(atPath: filePath) else {
-            throw AnalyzerError.fileNotFound(filePath)
-        }
-
-        let content = try String(contentsOfFile: filePath, encoding: .utf8)
-        let lines = content.components(separatedBy: .newlines)
-
-        var issues: [CodeIssue] = [];
-
-        // Run various analysis passes
-        issues.append(contentsOf: analyzeSwiftConcurrency(lines: lines, filePath: filePath))
-        issues.append(contentsOf: analyzeCodeQuality(lines: lines, filePath: filePath))
-        issues.append(contentsOf: analyzePerformance(lines: lines, filePath: filePath))
-        issues.append(contentsOf: analyzeSecurity(lines: lines, filePath: filePath))
-        issues.append(contentsOf: analyzeSwiftBestPractices(lines: lines, filePath: filePath))
-        issues.append(contentsOf: analyzeArchitecturalPatterns(lines: lines, filePath: filePath))
-
-        return issues
-    }
-
-    // MARK: - Specific Analysis Methods
-
-    private func analyzeSwiftConcurrency(lines: [String], filePath: String) -> [CodeIssue] {
-        var issues: [CodeIssue] = [];
-
-        for (index, line) in lines.enumerated() {
-            let lineNumber = index + 1
-
-            // Check for main actor isolation issues
-            if line.contains(".shared.") && !line.contains("await") &&
-               (line.contains("AppLogger") || line.contains("PerformanceTracker")) {
-                issues.append(CodeIssue(
-                    type: .concurrencyIssue,
-                    severity: .warning,
-                    filePath: filePath,
-                    lineNumber: lineNumber,
-                    message: "Main actor-isolated property access should use await",
-                    originalCode: line.trimmingCharacters(in: .whitespaces),
-                    suggestedFix: line.replacingOccurrences(of: ".shared.", with: "await .shared."),
-                    isAutoFixable: true,
-                    category: .concurrency
-                ))
-            }
-
-            // Check for missing @MainActor annotations
-            if line.contains("class") && line.contains("ObservableObject") && !line.contains("@MainActor") {
-                issues.append(CodeIssue(
-                    type: .missingMainActor,
-                    severity: .warning,
-                    filePath: filePath,
-                    lineNumber: lineNumber,
-                    message: "ObservableObject classes should be marked with @MainActor",
-                    originalCode: line.trimmingCharacters(in: .whitespaces),
-                    suggestedFix: "@MainActor\n" + line,
-                    isAutoFixable: true,
-                    category: .concurrency
-                ))
-            }
-        }
-
-        return issues
-    }
-
-    private func analyzeCodeQuality(lines: [String], filePath: String) -> [CodeIssue] {
-        var issues: [CodeIssue] = [];
-
-        for (index, line) in lines.enumerated() {
-            let lineNumber = index + 1
-            let trimmedLine = line.trimmingCharacters(in: .whitespaces)
-
-            // Check for unused variables (let _ pattern)
-            if let range = trimmedLine.range(of: #"let\s+([a-zA-Z_]\w*)\s*="#, options: .regularExpression) {
-                let variableName = String(trimmedLine[range]).replacingOccurrences(of: "let ", with: "").replacingOccurrences(of: " =", with: "");
-
-                // Check if variable is used in subsequent lines (simple heuristic)
-                let remainingLines = Array(lines[(index + 1)...])
-                let isUsed = remainingLines.joined().contains(variableName)
-
-                if !isUsed {
-                    issues.append(CodeIssue(
-                        type: .unusedVariable,
-                        severity: .warning,
-                        filePath: filePath,
-                        lineNumber: lineNumber,
-                        message: "Variable '\(variableName)' is never used",
-                        originalCode: trimmedLine,
-                        suggestedFix: trimmedLine.replacingOccurrences(of: "let \(variableName)", with: "let _"),
-                        isAutoFixable: true,
-                        category: .codeQuality
-                    ))
-                }
-            }
-
-            // Check for var that should be let
-            if trimmedLine.contains("var ") && !trimmedLine.contains("=") {
-                // Simple heuristic: if var is declared but never reassigned
-                issues.append(CodeIssue(
-                    type: .mutableToImmutable,
-                    severity: .info,
-                    filePath: filePath,
-                    lineNumber: lineNumber,
-                    message: "Consider using 'let' instead of 'var' if value doesn't change",
-                    originalCode: trimmedLine,
-                    suggestedFix: trimmedLine.replacingOccurrences(of: "var ", with: "let "),
-                    isAutoFixable: false, // Requires semantic analysis
-                    category: .codeQuality
-                ))
-            }
-
-            // Check for long lines
-            if line.count > 120 {
-                issues.append(CodeIssue(
-                    type: .longLine,
-                    severity: .info,
-                    filePath: filePath,
-                    lineNumber: lineNumber,
-                    message: "Line exceeds 120 characters (\(line.count) chars)",
-                    originalCode: String(line.prefix(50)) + "...",
-                    suggestedFix: "Consider breaking this line into multiple lines",
-                    isAutoFixable: false,
-                    category: .formatting
-                ))
-            }
-        }
-
-        return issues
-    }
-
-    private func analyzePerformance(lines: [String], filePath: String) -> [CodeIssue] {
-        var issues: [CodeIssue] = [];
-
-        for (index, line) in lines.enumerated() {
-            let lineNumber = index + 1
-
-            // Check for string concatenation in loops
-            if line.contains("for ") && lines.dropFirst(index).prefix(10).contains(where: { $0.contains("+") && $0.contains("\"") }) {
-                issues.append(CodeIssue(
-                    type: .inefficientStringConcatenation,
-                    severity: .warning,
-                    filePath: filePath,
-                    lineNumber: lineNumber,
-                    message: "String concatenation in loop can be inefficient",
-                    originalCode: line.trimmingCharacters(in: .whitespaces),
-                    suggestedFix: "Consider using StringBuilder or array.joined()",
-                    isAutoFixable: false,
-                    category: .performance
-                ))
-            }
-
-            // Check for force unwrapping
-            if line.contains("!") && !line.contains("// ") && !line.contains("\"") {
-                let forceUnwrapPattern = #"[a-zA-Z_]\w*!"#
-                if line.range(of: forceUnwrapPattern, options: .regularExpression) != nil {
-                    issues.append(CodeIssue(
-                        type: .forceUnwrapping,
-                        severity: .warning,
-                        filePath: filePath,
-                        lineNumber: lineNumber,
-                        message: "Force unwrapping can cause crashes",
-                        originalCode: line.trimmingCharacters(in: .whitespaces),
-                        suggestedFix: "Use optional binding or nil coalescing operator",
-                        isAutoFixable: false, // Requires context
-                        category: .safety
-                    ))
-                }
-            }
-        }
-
-        return issues
-    }
-
-    private func analyzeSecurity(lines: [String], filePath: String) -> [CodeIssue] {
-        var issues: [CodeIssue] = [];
-
-        for (index, line) in lines.enumerated() {
-            let lineNumber = index + 1
-
-            // Check for print statements (should use logging)
-            if line.contains("await AppLogger.shared.log(") && !line.contains("// ") {
-                issues.append(CodeIssue(
-                    type: .insecureLogging,
-                    severity: .warning,
-                    filePath: filePath,
-                    lineNumber: lineNumber,
-                    message: "Use secure logging instead of print statements",
-                    originalCode: line.trimmingCharacters(in: .whitespaces),
-                    suggestedFix: line.replacingOccurrences(of: "await AppLogger.shared.log(", with: "os_log("),
-                    isAutoFixable: true,
-                    category: .security
-                ))
-            }
-
-            // Check for hardcoded API keys or secrets
-            // TODO: Replace with secure storage
-            let secretPatterns = ["password", "key", "token", "secret"]
-            for pattern in secretPatterns {
-                if line.lowercased().contains(pattern) && line.contains("=") && line.contains("\"") {
-                    issues.append(CodeIssue(
-                        type: .hardcodedSecret,
-                        severity: .error,
-                        filePath: filePath,
-                        lineNumber: lineNumber,
-                        message: "Potential hardcoded secret detected",
-                        originalCode: "*** REDACTED ***",
-                        suggestedFix: "Move sensitive data to secure storage (Keychain)",
-                        isAutoFixable: false,
-                        category: .security
-                    ))
-                }
-            }
-        }
-
-        return issues
-    }
-
-    private func analyzeSwiftBestPractices(lines: [String], filePath: String) -> [CodeIssue] {
-        var issues: [CodeIssue] = [];
-
-        for (index, line) in lines.enumerated() {
-            let lineNumber = index + 1
-
-            // Check for magic numbers
-            let magicNumberPattern = #"\b([2-9]|[1-9][0-9]+)\b"#
-            if line.range(of: magicNumberPattern, options: .regularExpression) != nil &&
-               !line.contains("// ") && !line.contains("case") && !line.contains("version") {
-                issues.append(CodeIssue(
-                    type: .magicNumber,
-                    severity: .info,
-                    filePath: filePath,
-                    lineNumber: lineNumber,
-                    message: "Consider extracting magic numbers to named constants",
-                    originalCode: line.trimmingCharacters(in: .whitespaces),
-                    suggestedFix: "Extract to a named constant",
-                    isAutoFixable: false,
-                    category: .maintainability
-                ))
-            }
-
-            // Check for missing access control
-            if (line.contains("class ") || line.contains("struct ") || line.contains("enum ")) &&
-               !line.contains("private") && !line.contains("public") && !line.contains("internal") {
-                issues.append(CodeIssue(
-                    type: .missingAccessControl,
-                    severity: .info,
-                    filePath: filePath,
-                    lineNumber: lineNumber,
-                    message: "Consider adding explicit access control",
-                    originalCode: line.trimmingCharacters(in: .whitespaces),
-                    suggestedFix: "Add appropriate access modifier (private, internal, public)",
-                    isAutoFixable: false,
-                    category: .codeQuality
-                ))
-            }
-        }
-
-        return issues
-    }
-
-    private func analyzeArchitecturalPatterns(lines: [String], filePath: String) -> [CodeIssue] {
-        var issues: [CodeIssue] = [];
-
-        // Check for large functions (simple heuristic)
-        var currentFunctionStart: Int?
-        var braceCount = 0;
-
-        for (index, line) in lines.enumerated() {
-            let lineNumber = index + 1
-
-            // Detect function start
-            if line.contains("func ") && line.contains("{") {
-                currentFunctionStart = lineNumber
-                braceCount = 1
-            } else if let _ = currentFunctionStart {
-                braceCount += line.filter { $0 == "{" }.count
-                braceCount -= line.filter { $0 == "}" }.count
-
-                if braceCount == 0 {
-                    // Function ended
-                    let functionLength = lineNumber - (currentFunctionStart ?? 0)
-                    if functionLength > 30 {
-                        issues.append(CodeIssue(
-                            type: .longFunction,
-                            severity: .warning,
-                            filePath: filePath,
-                            lineNumber: currentFunctionStart ?? lineNumber,
-                            message: "Function is \(functionLength) lines long, consider refactoring",
-                            originalCode: "Function at line \(currentFunctionStart ?? 0)",
-                            suggestedFix: "Break into smaller, focused functions",
-                            isAutoFixable: false,
-                            category: .maintainability
-                        ))
-                    }
-                    currentFunctionStart = nil
-                }
-            }
-        }
-
-        return issues
-    }
-
-    // MARK: - Helper Methods
-
-    private func findSwiftFiles(in directory: String) throws -> [String] {
-        let fileManager = FileManager.default
-        let enumerator = fileManager.enumerator(atPath: directory)
-        var swiftFiles: [String] = [];
-
-        while let file = enumerator?.nextObject() as? String {
-            if file.hasSuffix(".swift") && !file.contains("/.build/") && !file.contains("/DerivedData/") {
-                swiftFiles.append((directory as NSString).appendingPathComponent(file))
-            }
-        }
-
-        return swiftFiles
-    }
-
-    private func generateRecommendations(from issues: [CodeIssue]) -> [Recommendation] {
-        var recommendations: [Recommendation] = [];
-
-        let issuesByCategory = Dictionary(grouping: issues) { $0.category }
-
-        for (category, categoryIssues) in issuesByCategory {
-            let count = categoryIssues.count
-            let autoFixable = categoryIssues.filter { $0.isAutoFixable }.count
-
-            recommendations.append(Recommendation(
-                category: category,
-                priority: count > 10 ? .high : count > 5 ? .medium : .low,
-                description: "\(count) \(category.rawValue) issues found (\(autoFixable) auto-fixable)",
-                action: autoFixable > 0 ? "Run automatic fixes" : "Manual review required"
-            ))
-        }
-
-        return recommendations.sorted { $0.priority.rawValue > $1.priority.rawValue }
     }
 }
 
-// MARK: - Supporting Types
+// MARK: - Code Issue Types
 
 struct CodeIssue {
     let type: IssueType
     let severity: Severity
-    let filePath: String
     let lineNumber: Int
-    let message: String
-    let originalCode: String
-    let suggestedFix: String
-    let isAutoFixable: Bool
+    let description: String
+    let filePath: String
+    let suggestedFix: String?
     let category: Category
-
+    
     enum IssueType {
         case concurrencyIssue
         case missingMainActor
@@ -650,14 +50,12 @@ struct CodeIssue {
         case missingAccessControl
         case longFunction
     }
-
-    enum Severity: Int {
-        case error = 3
-        case warning = 2
-        case info = 1
+    
+    enum Severity {
+        case error, warning, info
     }
-
-    enum Category: String {
+    
+    enum Category: String, CaseIterable {
         case concurrency = "Concurrency"
         case codeQuality = "Code Quality"
         case formatting = "Formatting"
@@ -668,33 +66,366 @@ struct CodeIssue {
     }
 }
 
-struct Recommendation {
-    let category: CodeIssue.Category
-    let priority: Priority
-    let description: String
-    let action: String
+// MARK: - Recommendation Types
 
-    enum Priority: Int {
+struct Recommendation {
+    let title: String
+    let description: String
+    let priority: Priority
+    let category: String
+    let actionable: Bool
+    
+    enum Priority: Int, CaseIterable {
         case high = 3
         case medium = 2
         case low = 1
-    }
-}
-
-enum AnalyzerError: LocalizedError {
-    case fileNotFound(String)
-    case analysisTimeout
-    case invalidSwiftFile(String)
-
-    var errorDescription: String? {
-        switch self {
-        case .fileNotFound(let path):
-            return "File not found: \(path)"
-        case .analysisTimeout:
-            return "Analysis timed out"
-        case .invalidSwiftFile(let path):
-            return "Invalid Swift file: \(path)"
+        
+        var rawValue: Int {
+            switch self {
+            case .high: return 3
+            case .medium: return 2
+            case .low: return 1
+            }
         }
     }
 }
-import Security
+
+// MARK: - Intelligent Code Analyzer
+
+class IntelligentCodeAnalyzer: ObservableObject {
+    @Published var isAnalyzing = false
+    @Published var analysisProgress: Double = 0.0
+    @Published var lastAnalysisResult: ProjectAnalysisResult?
+    
+    private let logger = OSLog(subsystem: "CodingReviewer", category: "IntelligentCodeAnalyzer")
+    
+    func analyzeProject(at projectPath: String, completion: @escaping (ProjectAnalysisResult) -> Void) {
+        Task {
+            isAnalyzing = true
+            analysisProgress = 0.0
+            
+            let startTime = Date()
+            let projectStructure = ProjectStructure(name: URL(fileURLWithPath: projectPath).lastPathComponent, rootPath: projectPath, files: [])
+            
+            let result = ProjectAnalysisResult(
+                project: projectStructure,
+                fileAnalyses: [],
+                insights: [],
+                duration: Date().timeIntervalSince(startTime)
+            )
+            
+            lastAnalysisResult = result
+            
+            os_log("Project analysis completed with %d total files", log: logger, type: .info, result.project.files.count)
+            
+            DispatchQueue.main.async {
+                completion(result)
+            }
+            
+            isAnalyzing = false
+        }
+    }
+    
+    func analyzeFile(at filePath: String) async throws -> [CodeIssue] {
+        guard FileManager.default.fileExists(atPath: filePath) else {
+            throw AnalyzerError.fileNotFound(filePath)
+        }
+        
+        let content = try String(contentsOfFile: filePath, encoding: .utf8)
+        let lines = content.components(separatedBy: .newlines)
+        
+        var issues: [CodeIssue] = []
+        
+        // Run various analysis passes
+        issues.append(contentsOf: analyzeSwiftConcurrency(lines: lines, filePath: filePath))
+        issues.append(contentsOf: analyzeCodeQuality(lines: lines, filePath: filePath))
+        issues.append(contentsOf: analyzePerformance(lines: lines, filePath: filePath))
+        issues.append(contentsOf: analyzeSecurity(lines: lines, filePath: filePath))
+        issues.append(contentsOf: analyzeSwiftBestPractices(lines: lines, filePath: filePath))
+        issues.append(contentsOf: analyzeArchitecturalPatterns(lines: lines, filePath: filePath))
+        
+        return issues
+    }
+    
+    private func analyzeSwiftConcurrency(lines: [String], filePath: String) -> [CodeIssue] {
+        var issues: [CodeIssue] = []
+        
+        for (index, line) in lines.enumerated() {
+            let lineNumber = index + 1
+            
+            // Check for main actor isolation issues
+            if line.contains(".shared.") && !line.contains("await") && 
+               (line.contains("AppLogger") || line.contains("PerformanceTracker")) {
+                issues.append(CodeIssue(
+                    type: .concurrencyIssue,
+                    severity: .warning,
+                    lineNumber: lineNumber,
+                    description: "Main actor-isolated property access should use await",
+                    filePath: filePath,
+                    suggestedFix: line.replacingOccurrences(of: ".shared.", with: "await .shared."),
+                    category: .concurrency
+                ))
+            }
+            
+            // Check for missing @MainActor annotations
+            if line.contains("@Published") && !lines[max(0, index-1)].contains("@MainActor") {
+                issues.append(CodeIssue(
+                    type: .missingMainActor,
+                    severity: .warning,
+                    lineNumber: lineNumber,
+                    description: "Published properties should be main actor isolated",
+                    filePath: filePath,
+                    suggestedFix: "@MainActor\n" + line,
+                    category: .concurrency
+                ))
+            }
+        }
+        
+        return issues
+    }
+    
+    private func analyzeCodeQuality(lines: [String], filePath: String) -> [CodeIssue] {
+        var issues: [CodeIssue] = []
+        
+        for (index, line) in lines.enumerated() {
+            let lineNumber = index + 1
+            
+            // Check for unused variables
+            let regex = try? NSRegularExpression(pattern: "\\b(let|var)\\s+(\\w+)\\s*=")
+            if let regex = regex {
+                let range = NSRange(line.startIndex..<line.endIndex, in: line)
+                if let match = regex.firstMatch(in: line, options: [], range: range) {
+                    let variableName = String(line[Range(match.range(at: 2), in: line)!])
+                    
+                    // Simple heuristic: if variable isn't used elsewhere
+                    let usageCount = lines.filter { $0.contains(variableName) }.count
+                    if usageCount == 1 { // Only the declaration line
+                        issues.append(CodeIssue(
+                            type: .unusedVariable,
+                            severity: .warning,
+                            lineNumber: lineNumber,
+                            description: "Variable '\(variableName)' is declared but never used",
+                            filePath: filePath,
+                            suggestedFix: nil,
+                            category: .codeQuality
+                        ))
+                    }
+                }
+            }
+            
+            // Check for var that should be let
+            if line.contains("var ") && !line.contains(" = ") {
+                issues.append(CodeIssue(
+                    type: .mutableToImmutable,
+                    severity: .info,
+                    lineNumber: lineNumber,
+                    description: "Consider using 'let' if this variable is never modified",
+                    filePath: filePath,
+                    suggestedFix: line.replacingOccurrences(of: "var ", with: "let "),
+                    category: .codeQuality
+                ))
+            }
+            
+            // Check for long lines
+            if line.count > 120 {
+                issues.append(CodeIssue(
+                    type: .longLine,
+                    severity: .info,
+                    lineNumber: lineNumber,
+                    description: "Line exceeds 120 characters (\(line.count) characters)",
+                    filePath: filePath,
+                    suggestedFix: nil,
+                    category: .formatting
+                ))
+            }
+        }
+        
+        return issues
+    }
+    
+    private func analyzePerformance(lines: [String], filePath: String) -> [CodeIssue] {
+        var issues: [CodeIssue] = []
+        
+        for (index, line) in lines.enumerated() {
+            let lineNumber = index + 1
+            
+            // Check for inefficient string concatenation
+            if line.contains("+") && line.contains("\"") && !line.contains("\\(") {
+                issues.append(CodeIssue(
+                    type: .inefficientStringConcatenation,
+                    severity: .warning,
+                    lineNumber: lineNumber,
+                    description: "Consider using string interpolation instead of concatenation",
+                    filePath: filePath,
+                    suggestedFix: nil,
+                    category: .performance
+                ))
+            }
+            
+            // Check for force unwrapping
+            if line.contains("!") && !line.contains("!=") && !line.contains("//") {
+                let forceUnwrapCount = line.components(separatedBy: "!").count - 1
+                if forceUnwrapCount > 0 {
+                    issues.append(CodeIssue(
+                        type: .forceUnwrapping,
+                        severity: .warning,
+                        lineNumber: lineNumber,
+                        description: "Force unwrapping can cause crashes - consider using optional binding",
+                        filePath: filePath,
+                        suggestedFix: nil,
+                        category: .safety
+                    ))
+                }
+            }
+        }
+        
+        return issues
+    }
+    
+    private func analyzeSecurity(lines: [String], filePath: String) -> [CodeIssue] {
+        var issues: [CodeIssue] = []
+        
+        for (index, line) in lines.enumerated() {
+            let lineNumber = index + 1
+            
+            // Check for potential logging of sensitive data
+            if line.contains("log") && (line.contains("password") || line.contains("token") || line.contains("key")) {
+                issues.append(CodeIssue(
+                    type: .insecureLogging,
+                    severity: .warning,
+                    lineNumber: lineNumber,
+                    description: "Potential logging of sensitive information",
+                    filePath: filePath,
+                    suggestedFix: nil,
+                    category: .security
+                ))
+            }
+            
+            // Check for hardcoded secrets
+            let secretPatterns = ["password", "token", "apikey", "secret"]
+            for pattern in secretPatterns {
+                if line.lowercased().contains("\(pattern) = \"") || line.lowercased().contains("\(pattern): \"") {
+                    issues.append(CodeIssue(
+                        type: .hardcodedSecret,
+                        severity: .error,
+                        lineNumber: lineNumber,
+                        description: "Hardcoded secret detected - move to secure storage",
+                        filePath: filePath,
+                        suggestedFix: nil,
+                        category: .security
+                    ))
+                }
+            }
+        }
+        
+        return issues
+    }
+    
+    private func analyzeSwiftBestPractices(lines: [String], filePath: String) -> [CodeIssue] {
+        var issues: [CodeIssue] = []
+        
+        for (index, line) in lines.enumerated() {
+            let lineNumber = index + 1
+            
+            // Check for magic numbers
+            let numberRegex = try? NSRegularExpression(pattern: "\\b\\d+\\b")
+            if let regex = numberRegex {
+                let range = NSRange(line.startIndex..<line.endIndex, in: line)
+                let matches = regex.matches(in: line, options: [], range: range)
+                for match in matches {
+                    let numberString = String(line[Range(match.range, in: line)!])
+                    if let number = Int(numberString), number > 1 && number != 0 && number != 100 {
+                        issues.append(CodeIssue(
+                            type: .magicNumber,
+                            severity: .info,
+                            lineNumber: lineNumber,
+                            description: "Magic number '\(number)' should be named constant",
+                            filePath: filePath,
+                            suggestedFix: nil,
+                            category: .maintainability
+                        ))
+                    }
+                }
+            }
+            
+            // Check for missing access control
+            if (line.contains("class ") || line.contains("struct ") || line.contains("func ")) && 
+               !line.contains("private") && !line.contains("public") && !line.contains("internal") {
+                issues.append(CodeIssue(
+                    type: .missingAccessControl,
+                    severity: .info,
+                    lineNumber: lineNumber,
+                    description: "Consider adding explicit access control",
+                    filePath: filePath,
+                    suggestedFix: nil,
+                    category: .codeQuality
+                ))
+            }
+        }
+        
+        return issues
+    }
+    
+    private func analyzeArchitecturalPatterns(lines: [String], filePath: String) -> [CodeIssue] {
+        var issues: [CodeIssue] = []
+        
+        // Check for long functions
+        var currentFunctionStart: Int?
+        var braceCount = 0
+        
+        for (index, line) in lines.enumerated() {
+            let lineNumber = index + 1
+            let trimmedLine = line.trimmingCharacters(in: .whitespaces)
+            
+            // Detect function start
+            if trimmedLine.contains("func ") && trimmedLine.contains("{") {
+                currentFunctionStart = lineNumber
+                braceCount = 1
+            } else if let functionStart = currentFunctionStart {
+                // Count braces to find function end
+                braceCount += trimmedLine.components(separatedBy: "{").count - 1
+                braceCount -= trimmedLine.components(separatedBy: "}").count - 1
+                
+                if braceCount == 0 {
+                    let functionLength = lineNumber - functionStart
+                    if functionLength > 50 {
+                        issues.append(CodeIssue(
+                            type: .longFunction,
+                            severity: .warning,
+                            lineNumber: functionStart,
+                            description: "Function is \(functionLength) lines long - consider breaking it down",
+                            filePath: filePath,
+                            suggestedFix: nil,
+                            category: .maintainability
+                        ))
+                    }
+                    currentFunctionStart = nil
+                }
+            }
+        }
+        
+        return issues
+    }
+    
+    private func generateRecommendations(from issues: [CodeIssue]) -> [Recommendation] {
+        var recommendations: [Recommendation] = []
+        
+        // Group issues by category
+        let groupedIssues = Dictionary(grouping: issues, by: { $0.category })
+        
+        for (category, categoryIssues) in groupedIssues {
+            let count = categoryIssues.count
+            let highPriorityCount = categoryIssues.filter { $0.severity == .error }.count
+            
+            recommendations.append(Recommendation(
+                title: "\(category.rawValue) Issues",
+                description: "\(count) \(category.rawValue.lowercased()) issues found (\(highPriorityCount) high-priority)",
+                priority: highPriorityCount > 0 ? .high : (count > 5 ? .medium : .low),
+                category: category.rawValue,
+                actionable: true
+            ))
+        }
+        
+        return recommendations.sorted { $0.priority.rawValue > $1.priority.rawValue }
+    }
+}

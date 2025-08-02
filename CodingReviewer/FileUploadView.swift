@@ -1,18 +1,15 @@
 //
-// FileUploadView.swift
-// CodingReviewer
+//  FileUploadView.swift
+//  CodingReviewer
 //
-// Created by AI Assistant on 7/17/25.
+//  Created by AI Assistant on 7/17/25.
 //
 
 import SwiftUI
-import Foundation
 import UniformTypeIdentifiers
 
 struct FileUploadView: View {
-    @State private var errorMessage: String?
-    @State private var isLoading = false;
-    @EnvironmentObject private var fileManager: FileManagerService
+    @StateObject private var fileManager = FileManagerService();
     @State private var showingFileImporter = false;
     @State private var showingFolderPicker = false;
     @State private var isTargeted = false;
@@ -242,7 +239,7 @@ struct FileUploadView: View {
                         ProjectRowView(project: project) {
                             selectProjectFiles(project)
                         } onDelete: {
-                            fileManager.removeProject(project)
+                            await fileManager.removeProject(project)
                         }
                     }
                 }
@@ -350,7 +347,7 @@ struct FileUploadView: View {
                 ForEach(selectedFilesList) { file in
                     FileDetailCard(file: file) {
                         // Remove file
-                        fileManager.removeFile(file)
+                        await fileManager.removeFile(file)
                         selectedFiles.remove(file.id)
                     }
                 }
@@ -379,8 +376,10 @@ struct FileUploadView: View {
                     }
 
                     Button("Clear All Files") {
-                        fileManager.clearAllFiles()
-                        selectedFiles.removeAll()
+                        Task {
+                            await fileManager.clearAllFiles()
+                            selectedFiles.removeAll()
+                        }
                     }
 
                     Divider()
@@ -450,10 +449,10 @@ struct FileUploadView: View {
                         urls.append(url)
 
                         if urls.count == providers.count {
-                            let capturedUrls = urls
+                            let urlsCopy = urls  // Capture urls to avoid concurrency warning
                             Task {
                                 do {
-                                    let result = try await fileManager.uploadFiles(from: capturedUrls)
+                                    let result = try await fileManager.uploadFiles(from: urlsCopy)
                                     await MainActor.run {
                                         self.uploadResult = result
                                         self.showingUploadResults = true
@@ -492,9 +491,9 @@ struct FileUploadView: View {
         Task {
             do {
                 let records = try await fileManager.analyzeMultipleFiles(filesToAnalyze, withAI: true)
-                AppLogger.shared.debug("✅ Selected files analysis completed. Found \(records.count) records")
-
                 await MainActor.run {
+                    AppLogger.shared.debug("✅ Selected files analysis completed. Found \(records.count) records")
+
                     // Clear any previous state first
                     self.showingAnalysisResults = false
 
@@ -502,10 +501,11 @@ struct FileUploadView: View {
                     self.analysisRecords = records
 
                     // Force state update and show sheet immediately
-                    self.showingAnalysisResults = true
+                    DispatchQueue.main.async {
+                        self.showingAnalysisResults = true
+                        AppLogger.shared.debug("🔍 Sheet should now be presented with \(records.count) records")
+                    }
                 }
-
-                AppLogger.shared.debug("🔍 Sheet should now be presented with \(records.count) records")
             } catch {
                 await MainActor.run {
                     fileManager.errorMessage = error.localizedDescription
@@ -611,8 +611,6 @@ struct FileUploadView: View {
 // MARK: - Supporting Views
 
 struct StatisticItem: View {
-    @State private var errorMessage: String?
-    @State private var isLoading = false;
     let icon: String
     let title: String
     let value: String
@@ -637,8 +635,6 @@ struct StatisticItem: View {
 }
 
 struct SectionHeaderView: View {
-    @State private var errorMessage: String?
-    @State private var isLoading = false;
     let title: String
     let icon: String
 
@@ -661,8 +657,6 @@ struct SectionHeaderView: View {
 }
 
 struct FileRowView: View {
-    @State private var errorMessage: String?
-    @State private var isLoading = false;
     let file: CodeFile
     let isSelected: Bool
     let onTap: () -> Void
@@ -714,11 +708,9 @@ struct FileRowView: View {
 }
 
 struct ProjectRowView: View {
-    @State private var errorMessage: String?
-    @State private var isLoading = false;
     let project: ProjectStructure
     let onSelect: () -> Void
-    let onDelete: () -> Void
+    let onDelete: () async -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -740,7 +732,11 @@ struct ProjectRowView: View {
 
                 Menu {
                     Button("Select All Files", action: onSelect)
-                    Button("Remove Project", role: .destructive, action: onDelete)
+                    Button("Remove Project", role: .destructive) {
+                        Task {
+                            await onDelete()
+                        }
+                    }
                 } label: {
                     Image(systemName: "ellipsis.circle")
                         .foregroundColor(.secondary)
@@ -784,10 +780,8 @@ struct ProjectRowView: View {
 }
 
 struct FileDetailCard: View {
-    @State private var errorMessage: String?
-    @State private var isLoading = false;
     let file: CodeFile
-    let onDelete: () -> Void
+    let onDelete: () async -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -826,7 +820,11 @@ struct FileDetailCard: View {
 
                 Spacer()
 
-                Button(action: onDelete) {
+                Button {
+                    Task {
+                        await onDelete()
+                    }
+                } label: {
                     Image(systemName: "trash")
                         .foregroundColor(.red)
                 }
@@ -876,17 +874,12 @@ struct FileDetailCard: View {
 }
 
 struct AnalysisResultsView: View {
-    @State private var errorMessage: String?
-    @State private var isLoading = false;
     @Binding var records: [FileAnalysisRecord]
     @Environment(\.dismiss) private var dismiss
 
     // Computed properties for summary statistics
     private var totalIssues: Int {
-        records
-    .reduce(0) {
-         $0 + $1.analysisResults.count
-    }
+        records.reduce(0) { $0 + $1.analysisResults.count }
     }
 
     private var criticalIssues: Int {

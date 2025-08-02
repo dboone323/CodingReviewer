@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct CodingReviewerApp: App {
+    @StateObject private var fileManager = FileManagerService()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(fileManager)
         }
         .windowResizability(.contentSize)
         .defaultSize(width: 900, height: 700)

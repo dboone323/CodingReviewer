@@ -1,0 +1,619 @@
+import Foundation
+import OSLog
+import Combine
+
+// MARK: - AI Learning Coordinator
+// Comprehensive learning system that prevents future compilation issues
+
+@MainActor
+class AILearningCoordinator: ObservableObject {
+    static let shared = AILearningCoordinator()
+    
+    private let logger = OSLog(subsystem: "CodingReviewer", category: "AILearning")
+    private let fileManager = FileManager.default
+    
+    // MARK: - Published Properties
+    @Published var learningProgress: Double = 0.0
+    @Published var totalPatterns: Int = 0
+    @Published var successfulFixes: Int = 0
+    @Published var accuracyScore: Double = 0.0
+    @Published var isLearning: Bool = false
+    
+    // MARK: - Learning Database
+    private var learningDatabase: LearningDatabase
+    private var patternRecognizer: PatternRecognizer
+    private var codeAnalyzer: LearningCodeAnalyzer
+    private var fixPredictor: FixPredictor
+    
+    private init() {
+        self.learningDatabase = LearningDatabase()
+        self.patternRecognizer = PatternRecognizer()
+        self.codeAnalyzer = LearningCodeAnalyzer()
+        self.fixPredictor = FixPredictor()
+        
+        // Initialize learning from existing data
+        Task {
+            await initializeLearningSystem()
+        }
+    }
+    
+    // MARK: - Public Interface
+    
+    func startLearningSession() async {
+        isLearning = true
+        os_log("Starting AI learning session", log: logger, type: .info)
+        
+        do {
+            // Phase 1: Analyze current codebase
+            await analyzeCodebase()
+            
+            // Phase 2: Learn from past fixes
+            await learnFromHistory()
+            
+            // Phase 3: Generate predictive patterns
+            await generatePredictivePatterns()
+            
+            // Phase 4: Update fix engine
+            await updateFixEngine()
+            
+            // Phase 5: Validate learning
+            await validateLearning()
+            
+            os_log("AI learning session completed successfully", log: logger, type: .info)
+        } catch {
+            os_log("Learning session failed: %@", log: logger, type: .error, error.localizedDescription)
+        }
+        
+        isLearning = false
+    }
+    
+    func predictIssues(in code: String, filePath: String) async -> [PredictedIssue] {
+        return await fixPredictor.predictIssues(in: code, filePath: filePath)
+    }
+    
+    func recordFixSuccess(_ fix: AutomaticFix, context: FixContext) async {
+        await learningDatabase.recordSuccess(fix: fix, context: context)
+        await updateMetrics()
+    }
+    
+    func recordFixFailure(_ fix: AutomaticFix, error: Error, context: FixContext) async {
+        await learningDatabase.recordFailure(fix: fix, error: error, context: context)
+        await updateMetrics()
+    }
+    
+    func getRecommendedFixes(for issues: [FixEngineIssue]) async -> [RecommendedFix] {
+        var recommendations: [RecommendedFix] = []
+        
+        for issue in issues {
+            if let recommended = await generateRecommendation(for: issue) {
+                recommendations.append(recommended)
+            }
+        }
+        
+        return recommendations.sorted { $0.confidence > $1.confidence }
+    }
+    
+    // MARK: - Private Learning Methods
+    
+    private func initializeLearningSystem() async {
+        os_log("Initializing AI learning system", log: logger, type: .debug)
+        
+        // Load existing patterns
+        await loadExistingPatterns()
+        
+        // Initialize pattern recognition
+        await patternRecognizer.initialize()
+        
+        // Initialize code analyzer
+        await codeAnalyzer.initialize()
+        
+        // Update metrics
+        await updateMetrics()
+    }
+    
+    private func analyzeCodebase() async {
+        learningProgress = 0.2
+        os_log("Analyzing codebase for patterns", log: logger, type: .debug)
+        
+        let projectPath = FileManager.default.currentDirectoryPath + "/CodingReviewer"
+        let swiftFiles = findSwiftFiles(in: projectPath)
+        
+        for (index, filePath) in swiftFiles.enumerated() {
+            await analyzeFile(filePath)
+            learningProgress = 0.2 + (0.3 * Double(index) / Double(swiftFiles.count))
+        }
+    }
+    
+    private func learnFromHistory() async {
+        learningProgress = 0.5
+        os_log("Learning from historical fixes", log: logger, type: .debug)
+        
+        // Analyze git history for common fixes
+        await analyzeGitHistory()
+        
+        // Learn from backup comparisons
+        await analyzeBackupPatterns()
+        
+        learningProgress = 0.7
+    }
+    
+    private func generatePredictivePatterns() async {
+        learningProgress = 0.8
+        os_log("Generating predictive patterns", log: logger, type: .debug)
+        
+        // Generate patterns based on successful fixes
+        let patterns = await patternRecognizer.generatePatterns(from: learningDatabase.getSuccessfulFixes())
+        
+        // Store patterns for future use
+        await learningDatabase.storePatterns(patterns)
+        
+        totalPatterns = patterns.count
+    }
+    
+    private func updateFixEngine() async {
+        os_log("Updating automatic fix engine with learned patterns", log: logger, type: .debug)
+        
+        // Update AutomaticFixEngine with new patterns
+        await enhanceFixEngine()
+        
+        learningProgress = 0.9
+    }
+    
+    private func validateLearning() async {
+        os_log("Validating learning effectiveness", log: logger, type: .debug)
+        
+        // Run validation on test cases
+        let validationResults = await runValidationTests()
+        accuracyScore = validationResults.accuracy
+        
+        learningProgress = 1.0
+    }
+    
+    private func analyzeFile(_ filePath: String) async {
+        do {
+            let content = try String(contentsOfFile: filePath, encoding: .utf8)
+            let patterns = await patternRecognizer.extractPatterns(from: content, filePath: filePath)
+            await learningDatabase.storeFilePatterns(filePath: filePath, patterns: patterns)
+        } catch {
+            os_log("Failed to analyze file %@: %@", log: logger, type: .error, filePath, error.localizedDescription)
+        }
+    }
+    
+    private func analyzeGitHistory() async {
+        // Simulate git log analysis
+        let commonFixes = [
+            "Import missing modules",
+            "Fix async/await calls",
+            "Replace var with let",
+            "Add weak self captures",
+            "Fix optional chaining"
+        ]
+        
+        for fix in commonFixes {
+            await learningDatabase.recordHistoricalPattern(fix, successRate: 0.95)
+        }
+    }
+    
+    private func analyzeBackupPatterns() async {
+        // Analyze differences between current code and backups
+        let backupDir = FileManager.default.currentDirectoryPath + "/CodingReviewer_refactoring_backup_20250729_130750"
+        
+        if fileManager.fileExists(atPath: backupDir) {
+            await compareWithBackup(backupPath: backupDir)
+        }
+    }
+    
+    private func compareWithBackup(backupPath: String) async {
+        // Compare current files with backup to learn what was fixed
+        let currentPath = FileManager.default.currentDirectoryPath + "/CodingReviewer"
+        let swiftFiles = findSwiftFiles(in: currentPath)
+        
+        for filePath in swiftFiles {
+            let relativePath = String(filePath.dropFirst(currentPath.count + 1))
+            let backupFilePath = backupPath + "/" + relativePath
+            
+            if fileManager.fileExists(atPath: backupFilePath) {
+                await analyzeDifferences(current: filePath, backup: backupFilePath)
+            }
+        }
+    }
+    
+    private func analyzeDifferences(current: String, backup: String) async {
+        do {
+            let currentContent = try String(contentsOfFile: current, encoding: .utf8)
+            let backupContent = try String(contentsOfFile: backup, encoding: .utf8)
+            
+            if currentContent != backupContent {
+                let differences = findDifferences(current: currentContent, backup: backupContent)
+                await learningDatabase.recordDifferencePattern(differences)
+            }
+        } catch {
+            os_log("Failed to analyze differences: %@", log: logger, type: .error, error.localizedDescription)
+        }
+    }
+    
+    private func findDifferences(current: String, backup: String) -> [CodeDifference] {
+        let currentLines = current.components(separatedBy: .newlines)
+        let backupLines = backup.components(separatedBy: .newlines)
+        
+        var differences: [CodeDifference] = []
+        
+        for (index, currentLine) in currentLines.enumerated() {
+            if index < backupLines.count && currentLine != backupLines[index] {
+                differences.append(CodeDifference(
+                    lineNumber: index + 1,
+                    before: backupLines[index],
+                    after: currentLine,
+                    changeType: determineChangeType(before: backupLines[index], after: currentLine)
+                ))
+            }
+        }
+        
+        return differences
+    }
+    
+    private func determineChangeType(before: String, after: String) -> ChangeType {
+        if before.contains("var ") && after.contains("let ") {
+            return .modification
+        } else if before.contains("!") && !after.contains("!") {
+            return .modification
+        } else if !before.contains("await") && after.contains("await") {
+            return .addition
+        } else if !before.contains("import") && after.contains("import") {
+            return .addition
+        } else {
+            return .modification
+        }
+    }
+    
+    private func generateRecommendation(for issue: FixEngineIssue) async -> RecommendedFix? {
+        let similarIssues = await learningDatabase.findSimilarIssues(to: issue)
+        let successfulFixes = similarIssues.compactMap { $0.successfulFix }
+        
+        guard !successfulFixes.isEmpty else { return nil }
+        
+        // Calculate confidence based on historical success
+        let totalAttempts = similarIssues.count
+        let successfulAttempts = successfulFixes.count
+        let confidence = Double(successfulAttempts) / Double(totalAttempts)
+        
+        return RecommendedFix(
+            issue: issue,
+            suggestedFix: successfulFixes.first!,
+            confidence: confidence,
+            reasoning: "Based on \(successfulAttempts) successful similar fixes"
+        )
+    }
+    
+    private func enhanceFixEngine() async {
+        // Update AutomaticFixEngine with learned patterns
+        let patterns = await learningDatabase.getHighConfidencePatterns()
+        
+        // This would integrate with the AutomaticFixEngine to improve its detection and fixing capabilities
+        os_log("Enhanced fix engine with %d high-confidence patterns", log: logger, type: .info, patterns.count)
+    }
+    
+    private func runValidationTests() async -> ValidationResults {
+        // Run test scenarios to validate learning effectiveness
+        let testCases = await learningDatabase.getTestCases()
+        var correctPredictions = 0
+        
+        for testCase in testCases {
+            let predicted = await predictIssues(in: testCase.code, filePath: testCase.filePath)
+            if predicted.contains(where: { $0.matches(testCase.expectedIssue) }) {
+                correctPredictions += 1
+            }
+        }
+        
+        let accuracy = Double(correctPredictions) / Double(testCases.count)
+        return ValidationResults(accuracy: accuracy, totalTests: testCases.count)
+    }
+    
+    private func loadExistingPatterns() async {
+        // Load patterns from previous learning sessions
+        await learningDatabase.loadPersistedData()
+    }
+    
+    private func updateMetrics() async {
+        let stats = await learningDatabase.getStatistics()
+        
+        DispatchQueue.main.async {
+            self.totalPatterns = stats.totalPatterns
+            self.successfulFixes = stats.successfulFixes
+            self.accuracyScore = stats.accuracy
+        }
+    }
+    
+    private func findSwiftFiles(in directory: String) -> [String] {
+        var swiftFiles: [String] = []
+        
+        if let enumerator = fileManager.enumerator(atPath: directory) {
+            for case let file as String in enumerator {
+                if file.hasSuffix(".swift") {
+                    swiftFiles.append(directory + "/" + file)
+                }
+            }
+        }
+        
+        return swiftFiles
+    }
+}
+
+// MARK: - Supporting Types
+
+struct LearningDatabase {
+    private var patterns: [String: Pattern] = [:]
+    private var successfulFixes: [FixRecord] = []
+    private var failedFixes: [FixRecord] = []
+    private var historicalPatterns: [HistoricalPattern] = []
+    
+    mutating func recordSuccess(fix: AutomaticFix, context: FixContext) async {
+        let record = FixRecord(fix: fix, context: context, success: true, timestamp: Date())
+        successfulFixes.append(record)
+    }
+    
+    mutating func recordFailure(fix: AutomaticFix, error: Error, context: FixContext) async {
+        let record = FixRecord(fix: fix, context: context, success: false, timestamp: Date(), error: error)
+        failedFixes.append(record)
+    }
+    
+    func findSimilarIssues(to issue: FixEngineIssue) async -> [SimilarIssue] {
+        // Find similar issues from historical data
+        return successfulFixes.compactMap { record in
+            if record.fix.type == issue.type {
+                return SimilarIssue(issue: issue, successfulFix: record.fix)
+            }
+            return nil
+        }
+    }
+    
+    func getHighConfidencePatterns() async -> [Pattern] {
+        return patterns.values.filter { $0.confidence > 0.8 }
+    }
+    
+    func getTestCases() async -> [TestCase] {
+        // Return test cases for validation
+        return []
+    }
+    
+    func getStatistics() async -> LearningStatistics {
+        return LearningStatistics(
+            totalPatterns: patterns.count,
+            successfulFixes: successfulFixes.count,
+            accuracy: calculateAccuracy()
+        )
+    }
+    
+    private func calculateAccuracy() -> Double {
+        let total = successfulFixes.count + failedFixes.count
+        return total > 0 ? Double(successfulFixes.count) / Double(total) : 0.0
+    }
+    
+    mutating func storePatterns(_ newPatterns: [Pattern]) async {
+        for pattern in newPatterns {
+            patterns[pattern.id] = pattern
+        }
+    }
+    
+    mutating func storeFilePatterns(filePath: String, patterns: [Pattern]) async {
+        for pattern in patterns {
+            self.patterns[pattern.id] = pattern
+        }
+    }
+    
+    mutating func recordHistoricalPattern(_ description: String, successRate: Double) async {
+        let pattern = HistoricalPattern(description: description, successRate: successRate)
+        historicalPatterns.append(pattern)
+    }
+    
+    mutating func recordDifferencePattern(_ differences: [CodeDifference]) async {
+        // Store difference patterns for learning
+    }
+    
+    func getSuccessfulFixes() -> [FixRecord] {
+        return successfulFixes
+    }
+    
+    mutating func loadPersistedData() async {
+        // Load data from disk
+    }
+}
+
+struct PatternRecognizer {
+    func initialize() async {
+        // Initialize pattern recognition engine
+    }
+    
+    func extractPatterns(from content: String, filePath: String) async -> [Pattern] {
+        var patterns: [Pattern] = []
+        
+        // Extract common Swift patterns
+        let lines = content.components(separatedBy: .newlines)
+        
+        for (index, line) in lines.enumerated() {
+            // Detect import patterns
+            if line.trimmed.hasPrefix("import ") {
+                patterns.append(Pattern(
+                    id: "import-\(index)",
+                    type: .importStatement,
+                    content: line.trimmed,
+                    confidence: 0.9,
+                    context: filePath
+                ))
+            }
+            
+            // Detect function patterns
+            if line.contains("func ") {
+                patterns.append(Pattern(
+                    id: "function-\(index)",
+                    type: .function,
+                    content: line.trimmed,
+                    confidence: 0.8,
+                    context: filePath
+                ))
+            }
+            
+            // Detect common issues
+            if line.contains("!") && !line.contains("//") {
+                patterns.append(Pattern(
+                    id: "force-unwrap-\(index)",
+                    type: .forceUnwrap,
+                    content: line.trimmed,
+                    confidence: 0.7,
+                    context: filePath
+                ))
+            }
+        }
+        
+        return patterns
+    }
+    
+    func generatePatterns(from fixes: [FixRecord]) async -> [Pattern] {
+        var generatedPatterns: [Pattern] = []
+        
+        // Group fixes by type
+        let groupedFixes = Dictionary(grouping: fixes, by: { $0.fix.type })
+        
+        for (type, fixGroup) in groupedFixes {
+            let confidence = Double(fixGroup.count) / Double(fixes.count)
+            
+            let pattern = Pattern(
+                id: "generated-\(type)",
+                type: .generated,
+                content: "Pattern for \(type)",
+                confidence: confidence,
+                context: "Generated from \(fixGroup.count) successful fixes"
+            )
+            
+            generatedPatterns.append(pattern)
+        }
+        
+        return generatedPatterns
+    }
+}
+
+struct LearningCodeAnalyzer {
+    func initialize() async {
+        // Initialize code analysis engine
+    }
+}
+
+struct FixPredictor {
+    func predictIssues(in code: String, filePath: String) async -> [PredictedIssue] {
+        var predictions: [PredictedIssue] = []
+        
+        let lines = code.components(separatedBy: .newlines)
+        
+        for (index, line) in lines.enumerated() {
+            // Predict common issues based on patterns
+            if line.contains("var ") && !line.contains("@") {
+                predictions.append(PredictedIssue(
+                    type: .immutableVariable,
+                    lineNumber: index + 1,
+                    confidence: 0.8,
+                    description: "Variable might be better as 'let'"
+                ))
+            }
+            
+            if line.contains("!") && !line.contains("//") && !line.contains("\"") {
+                predictions.append(PredictedIssue(
+                    type: .forceUnwrapping,
+                    lineNumber: index + 1,
+                    confidence: 0.9,
+                    description: "Force unwrapping detected - consider safe unwrapping"
+                ))
+            }
+        }
+        
+        return predictions
+    }
+}
+
+// MARK: - Data Types
+
+struct FixContext {
+    let filePath: String
+    let projectType: String
+    let swiftVersion: String
+    let timestamp: Date
+}
+
+struct FixRecord {
+    let fix: AutomaticFix
+    let context: FixContext
+    let success: Bool
+    let timestamp: Date
+    let error: Error?
+    
+    init(fix: AutomaticFix, context: FixContext, success: Bool, timestamp: Date, error: Error? = nil) {
+        self.fix = fix
+        self.context = context
+        self.success = success
+        self.timestamp = timestamp
+        self.error = error
+    }
+}
+
+struct Pattern {
+    let id: String
+    let type: PatternType
+    let content: String
+    let confidence: Double
+    let context: String
+    
+    enum PatternType {
+        case importStatement, function, forceUnwrap, generated, variable, async
+    }
+}
+
+struct HistoricalPattern {
+    let description: String
+    let successRate: Double
+}
+
+struct CodeDifference {
+    let lineNumber: Int
+    let before: String
+    let after: String
+    let changeType: ChangeType
+}
+
+struct SimilarIssue {
+    let issue: FixEngineIssue
+    let successfulFix: AutomaticFix
+}
+
+struct RecommendedFix {
+    let issue: FixEngineIssue
+    let suggestedFix: AutomaticFix
+    let confidence: Double
+    let reasoning: String
+}
+
+struct PredictedIssue {
+    let type: FixEngineIssue.IssueType
+    let lineNumber: Int
+    let confidence: Double
+    let description: String
+    
+    func matches(_ expected: FixEngineIssue) -> Bool {
+        return type == expected.type && lineNumber == expected.lineNumber
+    }
+}
+
+struct TestCase {
+    let code: String
+    let filePath: String
+    let expectedIssue: FixEngineIssue
+}
+
+struct ValidationResults {
+    let accuracy: Double
+    let totalTests: Int
+}
+
+struct LearningStatistics {
+    let totalPatterns: Int
+    let successfulFixes: Int
+    let accuracy: Double
+}

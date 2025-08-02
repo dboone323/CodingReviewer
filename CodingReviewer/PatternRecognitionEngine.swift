@@ -1,9 +1,9 @@
 //
-// PatternRecognitionEngine.swift
-// CodingReviewer
+//  PatternRecognitionEngine.swift
+//  CodingReviewer
 //
-// Phase 4: Advanced Pattern Recognition Engine
-// Created on July 25, 2025
+//  Phase 4: Advanced Pattern Recognition Engine
+//  Created on July 25, 2025
 //
 
 import Foundation
@@ -250,7 +250,7 @@ final class PatternRecognitionEngine: ObservableObject {
 
     private func detectLongMethodSmells(_ analysis: [AnalysisResult]) -> [CodeSmell] {
         // Simulate detection logic - in reality this would analyze actual code metrics
-        [
+        return [
             CodeSmell(
                 type: .longMethod,
                 description: "Method with more than 20 lines detected",
@@ -263,7 +263,7 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     private func detectLargeClassSmells(_ analysis: [AnalysisResult]) -> [CodeSmell] {
-        [
+        return [
             CodeSmell(
                 type: .largeClass,
                 description: "Class with more than 300 lines detected",
@@ -276,7 +276,7 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     private func detectDuplicateCodeSmells(_ analysis: [AnalysisResult]) -> [CodeSmell] {
-        [
+        return [
             CodeSmell(
                 type: .duplicateCode,
                 description: "Similar code blocks detected in multiple locations",
@@ -289,7 +289,7 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     private func detectGodObjectSmells(_ analysis: [AnalysisResult]) -> [CodeSmell] {
-        [
+        return [
             CodeSmell(
                 type: .godObject,
                 description: "Class with too many responsibilities detected",
@@ -302,7 +302,7 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     private func detectDeadCodeSmells(_ analysis: [AnalysisResult]) -> [CodeSmell] {
-        [
+        return [
             CodeSmell(
                 type: .deadCode,
                 description: "Unused variables or methods detected",
@@ -336,7 +336,7 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     private func analyzeLayers(_ files: [CodeFile]) -> [LayeringSuggestion] {
-        [
+        return [
             LayeringSuggestion(
                 layer: "Presentation Layer",
                 description: "UI components and ViewModels",
@@ -355,7 +355,7 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     private func analyzeCoupling(_ files: [CodeFile]) -> CouplingAnalysis {
-        CouplingAnalysis(
+        return CouplingAnalysis(
             overallLevel: .medium,
             tightlyCooupledModules: [],
             suggestions: ["Reduce dependencies between UI and data layers"],
@@ -364,7 +364,7 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     private func analyzeCohesion(_ files: [CodeFile]) -> CohesionAnalysis {
-        CohesionAnalysis(
+        return CohesionAnalysis(
             overallLevel: .high,
             lowCohesionModules: [],
             suggestions: ["Maintain current cohesion levels"],
@@ -373,7 +373,7 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     private func buildDependencyGraph(_ files: [CodeFile]) -> DependencyGraph {
-        DependencyGraph(
+        return DependencyGraph(
             nodes: files.map { DependencyNode(name: $0.name, type: .classType) },
             edges: [],
             cyclicDependencies: [],
@@ -382,7 +382,7 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     private func generateArchitectureRecommendations(_ files: [CodeFile]) -> [ArchitectureRecommendation] {
-        [
+        return [
             ArchitectureRecommendation(
                 type: .modularization,
                 priority: .medium,
@@ -473,7 +473,7 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     private func detectAlgorithmicComplexity(in code: String) -> [PerformanceIssue] {
-        [] // Placeholder for complex algorithmic analysis
+        return [] // Placeholder for complex algorithmic analysis
     }
 
     // MARK: - Helper Methods
@@ -499,7 +499,7 @@ final class PatternRecognitionEngine: ObservableObject {
 // MARK: - Supporting Types
 
 struct DetectedPattern: Identifiable, Codable {
-    let id: UUID
+    var id: UUID
     let name: String
     let description: String
     let codeLocation: CodeLocation
@@ -507,7 +507,7 @@ struct DetectedPattern: Identifiable, Codable {
     let suggestion: String?
     let relatedPatterns: [String]
     
-    init(name: String, description: String, codeLocation: CodeLocation, confidence: Double, suggestion: String? = nil, relatedPatterns: [String] = []) {
+    init(name: String, description: String, codeLocation: CodeLocation, confidence: Double, suggestion: String?, relatedPatterns: [String]) {
         self.id = UUID()
         self.name = name
         self.description = description
@@ -523,7 +523,7 @@ struct DetectedPattern: Identifiable, Codable {
 }
 
 struct CodeSmell: Identifiable, Codable {
-    let id: UUID
+    var id: UUID
     let type: CodeSmellType
     let description: String
     let severity: CodeSmellSeverity
@@ -606,7 +606,7 @@ struct ArchitectureRecommendation: Codable {
 }
 
 struct PerformanceIssue: Identifiable, Codable {
-    let id: UUID
+    var id: UUID
     let type: PerformanceIssueType
     let description: String
     let severity: PerformanceIssueSeverity

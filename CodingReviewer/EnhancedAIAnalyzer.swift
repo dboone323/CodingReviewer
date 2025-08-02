@@ -6,6 +6,8 @@ import Combine
 @MainActor
 // / EnhancedAIService class
 // / TODO: Add detailed documentation
+/// EnhancedAIService class
+/// TODO: Add detailed documentation
 public class EnhancedAIService: ObservableObject {
     @Published public var isAnalyzing: Bool = false;
     @Published public var analysisResult: String = "";
@@ -21,6 +23,8 @@ public class EnhancedAIService: ObservableObject {
 
     // / analyzeCodeWithEnhancedAI function
     // / TODO: Add detailed documentation
+    /// analyzeCodeWithEnhancedAI function
+    /// TODO: Add detailed documentation
     public func analyzeCodeWithEnhancedAI(_ code: String, language: String = "swift") async {
         isAnalyzing = true
         errorMessage = nil
@@ -66,7 +70,7 @@ public class EnhancedAIService: ObservableObject {
                 issues.append("⚠️ Force unwrapping detected - consider using optional binding")
             }
 
-            if code.contains("self.") && code.contains("{") {
+            if code.contains("self?.") && code.contains("{") {
                 suggestions.append("💡 Consider using [weak self] or [unowned self] in closures")
             }
 
