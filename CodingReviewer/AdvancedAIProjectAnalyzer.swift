@@ -8,19 +8,19 @@ import Combine
 @MainActor
 class AdvancedAIProjectAnalyzer: ObservableObject {
     static let shared = AdvancedAIProjectAnalyzer()
-    
+
     private let logger = OSLog(subsystem: "CodingReviewer", category: "AIProjectAnalyzer")
     private let learningCoordinator = AILearningCoordinator.shared
     private let codeGenerator = EnhancedAICodeGenerator.shared
     private let fixEngine = AutomaticFixEngine.shared
-    
+
     // MARK: - Published Properties
     @Published var isAnalyzing: Bool = false
     @Published var analysisProgress: Double = 0.0
     @Published var projectHealth: ProjectHealth = ProjectHealth()
     @Published var riskAssessment: RiskAssessment = RiskAssessment(overallRisk: 0.0, criticalRisks: [], mitigation: "No assessment available")
     @Published var recommendations: [ProjectRecommendation] = []
-    
+
     // MARK: - Analysis Components
     private var dependencyAnalyzer: DependencyAnalyzer
     private var architectureAnalyzer: ArchitectureAnalyzer
@@ -28,9 +28,9 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
     private var securityAnalyzer: SecurityAnalyzer
     private var qualityAnalyzer: QualityAnalyzer
     private var predictiveAnalyzer: PredictiveAnalyzer
-    
+
     private var analysisTimer: Timer?
-    
+
     private init() {
         self.dependencyAnalyzer = DependencyAnalyzer()
         self.architectureAnalyzer = ArchitectureAnalyzer()
@@ -38,67 +38,67 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
         self.securityAnalyzer = SecurityAnalyzer()
         self.qualityAnalyzer = QualityAnalyzer()
         self.predictiveAnalyzer = PredictiveAnalyzer()
-        
+
         startContinuousAnalysis()
     }
-    
+
     // MARK: - Public Interface
-    
+
     func performComprehensiveAnalysis() async -> ComprehensiveAnalysisResult {
         isAnalyzing = true
         analysisProgress = 0.0
-        
+
         os_log("Starting comprehensive project analysis", log: logger, type: .info)
-        
+
         var results = ComprehensiveAnalysisResult()
-        
+
         do {
             // Phase 1: Dependency Analysis
             analysisProgress = 0.1
             results.dependencies = await dependencyAnalyzer.analyze()
-            
+
             // Phase 2: Architecture Analysis
             analysisProgress = 0.2
             results.architecture = await architectureAnalyzer.analyze()
-            
+
             // Phase 3: Performance Analysis
             analysisProgress = 0.4
             results.performance = await performanceAnalyzer.analyze()
-            
+
             // Phase 4: Security Analysis
             analysisProgress = 0.5
             results.security = await securityAnalyzer.analyze()
-            
+
             // Phase 5: Code Quality Analysis
             analysisProgress = 0.7
             results.quality = await qualityAnalyzer.analyze()
-            
+
             // Phase 6: Predictive Analysis
             analysisProgress = 0.8
             results.predictions = await predictiveAnalyzer.analyze()
-            
+
             // Phase 7: Generate Recommendations
             analysisProgress = 0.9
             results.recommendations = await generateRecommendations(from: results)
-            
+
             // Phase 8: Update Project Health
             analysisProgress = 1.0
             await updateProjectHealth(from: results)
-            
+
             os_log("Comprehensive analysis completed successfully", log: logger, type: .info)
-            
+
         } catch {
             os_log("Analysis failed: %@", log: logger, type: .error, error.localizedDescription)
             results.error = error
         }
-        
+
         isAnalyzing = false
         return results
     }
-    
+
     func analyzeFile(_ filePath: String) async -> FileAnalysisResult {
         os_log("Analyzing file: %@", log: logger, type: .debug, filePath)
-        
+
         guard let content = try? String(contentsOfFile: filePath, encoding: .utf8) else {
             return FileAnalysisResult(
                 fileName: (filePath as NSString).lastPathComponent,
@@ -108,10 +108,10 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
                 issues: []
             )
         }
-        
+
         // Use AI to predict potential issues
         let predictedIssues = await learningCoordinator.predictIssues(in: filePath)
-        
+
         // Convert predicted issues to analysis issues
         let analysisIssues = predictedIssues.map { predictedIssue in
             AnalysisIssue(
@@ -122,10 +122,10 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
                 line: ""
             )
         }
-        
+
         // Get improvement suggestions
         let improvements = await codeGenerator.suggestImprovements(for: content, filePath: filePath)
-        
+
         // Convert to recommendations
         let recommendations = improvements.map { improvement in
             FileRecommendation(
@@ -135,10 +135,10 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
                 suggestion: improvement.suggestion
             )
         }
-        
+
         // Calculate confidence based on AI predictions
         let confidence = calculateConfidence(predictedIssues: predictedIssues, improvements: improvements)
-        
+
         return FileAnalysisResult(
             fileName: (filePath as NSString).lastPathComponent,
             filePath: filePath,
@@ -147,27 +147,27 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
             issues: analysisIssues
         )
     }
-    
+
     func performHealthCheck() async -> HealthCheckResult {
         os_log("Performing project health check", log: logger, type: .debug)
-        
+
         let projectPath = FileManager.default.currentDirectoryPath + "/CodingReviewer"
         let swiftFiles = findSwiftFiles(in: projectPath)
-        
+
         var healthMetrics = HealthMetrics()
         var issues: [ProjectIssue] = []
-        
+
         // Analyze each file
         for filePath in swiftFiles {
             let fileResult = await analyzeFile(filePath)
             healthMetrics.totalFiles += 1
-            
+
             if !fileResult.issues.isEmpty {
                 healthMetrics.filesWithIssues += 1
-                
+
                 // Get the predicted issues again for ProjectIssue creation
                 let predictedIssues = await learningCoordinator.predictIssues(in: filePath)
-                
+
                 issues.append(contentsOf: predictedIssues.map { predictedIssue in
                     ProjectIssue(
                         type: .codeIssue(predictedIssue),
@@ -178,20 +178,20 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
                 })
             }
         }
-        
+
         // Check build system health
         let buildHealth = await checkBuildSystemHealth()
         healthMetrics.buildSystemHealth = buildHealth.score
         issues.append(contentsOf: buildHealth.issues)
-        
+
         // Check dependency health
         let dependencyHealth = await checkDependencyHealth()
         healthMetrics.dependencyHealth = dependencyHealth.score
         issues.append(contentsOf: dependencyHealth.issues)
-        
+
         // Calculate overall health score
         let overallHealth = calculateOverallHealth(metrics: healthMetrics)
-        
+
         return HealthCheckResult(
             overallHealth: overallHealth,
             metrics: healthMetrics,
@@ -199,26 +199,26 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
             timestamp: Date()
         )
     }
-    
+
     func preventPotentialIssues() async -> PreventionResult {
         os_log("Running issue prevention analysis", log: logger, type: .info)
-        
+
         var preventedIssues: [PreventedIssue] = []
         var appliedFixes: [AutomaticFix] = []
-        
+
         let projectPath = FileManager.default.currentDirectoryPath + "/CodingReviewer"
         let swiftFiles = findSwiftFiles(in: projectPath)
-        
+
         for filePath in swiftFiles {
             let fileAnalysis = await analyzeFile(filePath)
             let predictedIssues = await learningCoordinator.predictIssues(in: filePath)
-            
+
             // Apply preventive fixes for high-severity issues
             for (index, issue) in fileAnalysis.issues.enumerated() where issue.severity == "High" {
                 do {
                     let fixResult = try await fixEngine.applyAutomaticFixes(to: filePath)
                     appliedFixes.append(contentsOf: fixResult.appliedFixes)
-                    
+
                     // Use the corresponding predicted issue if available
                     if index < predictedIssues.count {
                         preventedIssues.append(PreventedIssue(
@@ -232,16 +232,16 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
                 }
             }
         }
-        
+
         return PreventionResult(
             preventedIssues: preventedIssues,
             appliedFixes: appliedFixes,
             preventionScore: calculatePreventionScore(preventedIssues.count, appliedFixes.count)
         )
     }
-    
+
     // MARK: - Private Methods
-    
+
     private func startContinuousAnalysis() {
         // Run analysis every 5 minutes
         analysisTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { _ in
@@ -251,10 +251,10 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
             }
         }
     }
-    
+
     private func generateRecommendations(from results: ComprehensiveAnalysisResult) async -> [ProjectRecommendation] {
         var recommendations: [ProjectRecommendation] = []
-        
+
         // Architecture recommendations
         if results.architecture.score < 0.8 {
             recommendations.append(ProjectRecommendation(
@@ -266,7 +266,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
                 estimatedEffort: .medium
             ))
         }
-        
+
         // Performance recommendations
         if results.performance.score < 0.7 {
             recommendations.append(ProjectRecommendation(
@@ -278,7 +278,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
                 estimatedEffort: .low
             ))
         }
-        
+
         // Security recommendations
         if !results.security.vulnerabilities.isEmpty {
             recommendations.append(ProjectRecommendation(
@@ -290,7 +290,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
                 estimatedEffort: .high
             ))
         }
-        
+
         // Quality recommendations based on AI predictions
         if results.predictions.overallRisk > 0.6 {
             recommendations.append(ProjectRecommendation(
@@ -302,10 +302,10 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
                 estimatedEffort: .medium
             ))
         }
-        
+
         return recommendations.sorted { $0.priority.rawValue > $1.priority.rawValue }
     }
-    
+
     private func updateProjectHealth(from results: ComprehensiveAnalysisResult) async {
         let newHealth = ProjectHealth(
             overallScore: calculateOverallScore(from: results),
@@ -317,17 +317,17 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
             riskLevel: results.predictions.overallRisk,
             lastUpdated: Date()
         )
-        
+
         projectHealth = newHealth
         riskAssessment = results.predictions
         recommendations = results.recommendations
     }
-    
+
     private func checkBuildSystemHealth() async -> (score: Double, issues: [ProjectIssue]) {
         // Check build configuration, dependencies, etc.
         var score = 1.0
         var issues: [ProjectIssue] = []
-        
+
         // Check for common build issues
         let buildLogPath = FileManager.default.currentDirectoryPath + "/build_status.log"
         if FileManager.default.fileExists(atPath: buildLogPath) {
@@ -341,7 +341,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
                         description: "Build errors detected in build log"
                     ))
                 }
-                
+
                 if buildLog.contains("warning:") {
                     score -= 0.1
                     issues.append(ProjectIssue(
@@ -353,28 +353,28 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
                 }
             }
         }
-        
+
         return (max(score, 0.0), issues)
     }
-    
+
     private func checkDependencyHealth() async -> (score: Double, issues: [ProjectIssue]) {
         // Check Package.swift, Podfile, etc. for dependency issues
         var score = 1.0
         var issues: [ProjectIssue] = []
-        
+
         // This would check for outdated dependencies, conflicts, etc.
         // For now, return a good score
-        
+
         return (score, issues)
     }
-    
+
     private func calculateOverallHealth(metrics: HealthMetrics) -> Double {
         let issueRatio = metrics.totalFiles > 0 ? Double(metrics.filesWithIssues) / Double(metrics.totalFiles) : 0.0
         let healthScore = 1.0 - issueRatio
-        
+
         return (healthScore + metrics.buildSystemHealth + metrics.dependencyHealth) / 3.0
     }
-    
+
     private func calculateOverallScore(from results: ComprehensiveAnalysisResult) -> Double {
         let scores = [
             results.dependencies.score,
@@ -383,27 +383,27 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
             results.security.score,
             results.quality.score
         ]
-        
+
         return scores.reduce(0.0, +) / Double(scores.count)
     }
-    
+
     private func calculateConfidence(predictedIssues: [PredictedIssue], improvements: [CodeImprovement]) -> Double {
         guard !predictedIssues.isEmpty || !improvements.isEmpty else { return 1.0 }
-        
-        let avgPredictionConfidence = predictedIssues.isEmpty ? 1.0 : 
+
+        let avgPredictionConfidence = predictedIssues.isEmpty ? 1.0 :
             predictedIssues.reduce(0.0) { $0 + $1.confidence } / Double(predictedIssues.count)
-        
+
         // Factor in number of improvements suggested (more suggestions = more room for improvement)
         let improvementFactor = max(0.5, 1.0 - (Double(improvements.count) * 0.1))
-        
+
         return avgPredictionConfidence * improvementFactor
     }
-    
+
     private func calculatePreventionScore(_ preventedCount: Int, _ fixesCount: Int) -> Double {
         // Higher score for more prevented issues and applied fixes
         return min(1.0, (Double(preventedCount) * 0.1) + (Double(fixesCount) * 0.05))
     }
-    
+
     private func mapSeverityToPriority(_ severity: CodeImprovement.Severity) -> FileRecommendation.Priority {
         switch severity {
         case .error: return .high
@@ -411,7 +411,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
         case .info: return .low
         }
     }
-    
+
     private func mapConfidenceToSeverity(_ confidence: Double) -> String {
         if confidence > 0.8 {
             return "High"
@@ -421,7 +421,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
             return "Low"
         }
     }
-    
+
     private func mapConfidenceToSeverityEnum(_ confidence: Double) -> ProjectIssue.Severity {
         if confidence > 0.8 {
             return .error
@@ -431,7 +431,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
             return .info
         }
     }
-    
+
     private func mapIssueTypeToString(_ issueType: PredictedIssue.IssueType) -> String {
         switch issueType {
         case .immutableVariable:
@@ -444,11 +444,11 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
             return "Other"
         }
     }
-    
+
     private func findSwiftFiles(in directory: String) -> [String] {
         var swiftFiles: [String] = []
         let fileManager = FileManager.default
-        
+
         if let enumerator = fileManager.enumerator(atPath: directory) {
             for case let file as String in enumerator {
                 if file.hasSuffix(".swift") && !file.contains("/.") {
@@ -456,7 +456,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
                 }
             }
         }
-        
+
         return swiftFiles
     }
 }
@@ -542,7 +542,7 @@ struct ProjectHealth {
     let qualityHealth: Double
     let riskLevel: Double
     let lastUpdated: Date
-    
+
     init() {
         self.overallScore = 0.0
         self.dependencyHealth = 0.0
@@ -553,7 +553,7 @@ struct ProjectHealth {
         self.riskLevel = 0.0
         self.lastUpdated = Date()
     }
-    
+
     init(overallScore: Double, dependencyHealth: Double, architectureHealth: Double, performanceHealth: Double, securityHealth: Double, qualityHealth: Double, riskLevel: Double, lastUpdated: Date) {
         self.overallScore = overallScore
         self.dependencyHealth = dependencyHealth
@@ -582,14 +582,14 @@ struct FileRecommendation {
     let priority: Priority
     let description: String
     let suggestion: String
-    
+
     enum RecommendationType {
         case codeImprovement(CodeImprovement)
         case performance
         case security
         case style
     }
-    
+
     enum Priority: Int, CaseIterable {
         case low = 1
         case medium = 2
@@ -616,7 +616,7 @@ struct ProjectIssue {
     let severity: Severity
     let filePath: String
     let description: String
-    
+
     enum IssueType {
         case codeIssue(PredictedIssue)
         case buildSystem
@@ -625,7 +625,7 @@ struct ProjectIssue {
         case performance
         case security
     }
-    
+
     enum Severity: String, CaseIterable {
         case info = "Info"
         case warning = "Warning"
@@ -643,7 +643,7 @@ struct PreventedIssue {
     let originalIssue: PredictedIssue
     let preventionMethod: PreventionMethod
     let filePath: String
-    
+
     enum PreventionMethod {
         case automaticFix
         case codeGeneration
@@ -658,7 +658,7 @@ struct ProjectRecommendation {
     let description: String
     let estimatedImpact: Impact
     let estimatedEffort: Effort
-    
+
     enum RecommendationType {
         case architecture
         case performance
@@ -666,17 +666,17 @@ struct ProjectRecommendation {
         case quality
         case dependency
     }
-    
+
     enum Priority: Int, CaseIterable {
         case low = 1
         case medium = 2
         case high = 3
     }
-    
+
     enum Impact {
         case low, medium, high
     }
-    
+
     enum Effort {
         case low, medium, high
     }

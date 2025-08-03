@@ -24,7 +24,7 @@ enum FileUploadError: LocalizedError {
     case encodingError(String)
     case networkError(Error)
 
-    var errorDescription: String? {
+    nonisolated var errorDescription: String? {
         switch self {
         case .accessDenied(let filename):
             return "Access denied to file: \(filename)"

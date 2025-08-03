@@ -12,7 +12,7 @@ import Combine
 
 // MARK: - Simple Documentation Types
 
-struct GeneratedDocumentation: Codable {
+struct GeneratedDocumentation: @preconcurrency Codable, Sendable {
     let id: UUID
     let title: String
     let overview: String
@@ -28,12 +28,12 @@ struct GeneratedDocumentation: Codable {
     }
 }
 
-struct DocumentationSection: Codable {
+struct DocumentationSection: @preconcurrency Codable, Sendable {
     let id: UUID
     let title: String
     let content: String
     let type: DocumentationType
-    
+
     init(title: String, content: String, type: DocumentationType) {
         self.id = UUID()
         self.title = title
@@ -46,13 +46,13 @@ struct DocumentationSection: Codable {
     }
 }
 
-struct DocumentationSuggestion: Codable, Identifiable {
+struct DocumentationSuggestion: @preconcurrency Codable, Sendable, Identifiable {
     let id: UUID
     let type: SuggestionType
     let message: String
     let priority: Priority
     let location: String?
-    
+
     init(type: SuggestionType, message: String, priority: Priority, location: String? = nil) {
         self.id = UUID()
         self.type = type
@@ -72,6 +72,7 @@ struct DocumentationSuggestion: Codable, Identifiable {
 
 // MARK: - Smart Documentation Generator
 
+@MainActor
 final class SmartDocumentationGenerator: ObservableObject {
     @Published var isGenerating = false;
     @Published var generationProgress: Double = 0.0;

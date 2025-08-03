@@ -212,8 +212,23 @@ final class MLIntegrationService: ObservableObject {
     // MARK: - Data Loading Methods
 
     private func loadMLInsights() async {
-        // Load from ML automation recommendations
-        let mlDataPath = ".ml_automation/recommendations_\(getCurrentDateString()).md"
+        // Try to load from today's ML automation data first
+        let todayString = getCurrentDateString()
+        var mlDataPath = ".ml_automation/recommendations_\(todayString).md"
+
+        // If today's data doesn't exist, try the latest available data
+        if !FileManager.default.fileExists(atPath: mlDataPath) {
+            // Find the most recent ML data file
+            if let latestFile = findLatestMLFile(in: ".ml_automation/data", pattern: "code_analysis_") {
+                if let content = try? String(contentsOfFile: latestFile, encoding: .utf8) {
+                    let insights = parseMLJSONData(content)
+                    await MainActor.run {
+                        self.mlInsights = insights
+                    }
+                    return
+                }
+            }
+        }
 
         if let content = try? String(contentsOfFile: mlDataPath, encoding: .utf8) {
             let insights = parseMLRecommendations(content)
@@ -224,8 +239,16 @@ final class MLIntegrationService: ObservableObject {
     }
 
     private func loadPredictiveAnalysis() async {
-        // Load from predictive analytics dashboard
-        let dashboardPath = ".predictive_analytics/dashboard_\(getCurrentDateString()).html"
+        // Try to load from today's predictive analytics first
+        let todayString = getCurrentDateString()
+        var dashboardPath = ".predictive_analytics/dashboard_\(todayString).html"
+
+        // If today's data doesn't exist, try the latest available data
+        if !FileManager.default.fileExists(atPath: dashboardPath) {
+            if let latestFile = findLatestMLFile(in: ".predictive_analytics", pattern: "dashboard_") {
+                dashboardPath = latestFile
+            }
+        }
 
         if let htmlContent = try? String(contentsOfFile: dashboardPath, encoding: .utf8) {
             let analysis = parsePredictiveAnalysis(htmlContent)
@@ -236,8 +259,16 @@ final class MLIntegrationService: ObservableObject {
     }
 
     private func loadCrossProjectLearnings() async {
-        // Load from cross-project learning insights
-        let insightsPath = ".cross_project_learning/insights/cross_patterns_\(getCurrentDateString()).md"
+        // Try to load from today's cross-project insights first
+        let todayString = getCurrentDateString()
+        var insightsPath = ".cross_project_learning/insights/cross_patterns_\(todayString).md"
+
+        // If today's data doesn't exist, try the latest available data
+        if !FileManager.default.fileExists(atPath: insightsPath) {
+            if let latestFile = findLatestMLFile(in: ".cross_project_learning/insights", pattern: "cross_patterns_") {
+                insightsPath = latestFile
+            }
+        }
 
         if let content = try? String(contentsOfFile: insightsPath, encoding: .utf8) {
             let learnings = parseCrossProjectInsights(content)
@@ -364,6 +395,84 @@ final class MLIntegrationService: ObservableObject {
         return formatter.string(from: Date())
     }
 
+    private func findLatestMLFile(in directory: String, pattern: String) -> String? {
+        let fileManager = FileManager.default
+
+        guard let enumerator = fileManager.enumerator(atPath: directory) else {
+            return nil
+        }
+
+        var latestFile: String?
+        var latestDate: Date?
+
+        for case let file as String in enumerator {
+            if file.contains(pattern) {
+                let fullPath = "\(directory)/\(file)"
+                if let attributes = try? fileManager.attributesOfItem(atPath: fullPath),
+                   let modDate = attributes[.modificationDate] as? Date {
+                    if latestDate == nil || modDate > latestDate! {
+                        latestDate = modDate
+                        latestFile = fullPath
+                    }
+                }
+            }
+        }
+
+        return latestFile
+    }
+
+    private func parseMLJSONData(_ jsonContent: String) -> [MLInsight] {
+        var insights: [MLInsight] = []
+
+        // Parse JSON data from ML automation
+        if let data = jsonContent.data(using: .utf8),
+           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+
+            // Extract insights from JSON structure
+            if let analysisResults = json["analysis_results"] as? [String: Any] {
+
+                // Code quality insights
+                if let qualityScore = analysisResults["code_quality_score"] as? Double, qualityScore < 0.8 {
+                    insights.append(MLInsight(
+                        type: .codeQuality,
+                        title: "Code Quality Analysis",
+                        description: "Overall code quality score: \(Int(qualityScore * 100))%",
+                        confidence: 0.9,
+                        recommendation: "Focus on improving code complexity and maintainability",
+                        impact: qualityScore < 0.6 ? .high : .medium
+                    ))
+                }
+
+                // Performance insights
+                if let perfMetrics = analysisResults["performance_metrics"] as? [String: Any],
+                   let buildTime = perfMetrics["estimated_build_time"] as? Double, buildTime > 30 {
+                    insights.append(MLInsight(
+                        type: .performance,
+                        title: "Build Performance",
+                        description: "Estimated build time: \(Int(buildTime))s",
+                        confidence: 0.85,
+                        recommendation: "Consider optimizing build dependencies and compilation targets",
+                        impact: .medium
+                    ))
+                }
+
+                // Security insights
+                if let securityFlags = analysisResults["security_flags"] as? [String], !securityFlags.isEmpty {
+                    insights.append(MLInsight(
+                        type: .security,
+                        title: "Security Analysis",
+                        description: "Found \(securityFlags.count) potential security considerations",
+                        confidence: 0.75,
+                        recommendation: "Review and address identified security patterns",
+                        impact: .high
+                    ))
+                }
+            }
+        }
+
+        return insights
+    }
+
     private func startPeriodicUpdates() {
         // Auto-refresh ML insights every 5 minutes
         Timer.publish(every: 300, on: .main, in: .common)
@@ -388,7 +497,7 @@ final class MLIntegrationService: ObservableObject {
 
 // MARK: - Data Models
 
-struct MLInsight: Identifiable {
+struct MLInsight: Identifiable, Sendable {
     let id = UUID()
     let type: InsightType
     let title: String
@@ -462,7 +571,7 @@ struct PerformanceForecasting {
     let recommendations: [String]
 }
 
-struct CrossProjectLearning: Identifiable {
+struct CrossProjectLearning: Identifiable, Sendable {
     let id = UUID()
     let pattern: String
     let transferability: Double

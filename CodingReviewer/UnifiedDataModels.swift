@@ -4,14 +4,14 @@ import Foundation
 // This file contains the single source of truth for all analysis-related data structures
 
 /// Represents a single analysis result from code examination
-struct AnalysisResult: Identifiable, Codable, Hashable {
+struct AnalysisResult: Identifiable, Sendable, @preconcurrency Codable, Hashable {
     let id: UUID
     let type: String // "Security", "Performance", "Quality", etc.
     let severity: String // "High", "Medium", "Low"
     let message: String
     let lineNumber: Int
     let suggestion: String
-    
+
     init(id: UUID = UUID(), type: String, severity: String, message: String, lineNumber: Int, suggestion: String = "") {
         self.id = id
         self.type = type
@@ -20,14 +20,14 @@ struct AnalysisResult: Identifiable, Codable, Hashable {
         self.lineNumber = lineNumber
         self.suggestion = suggestion
     }
-    
+
     /// Severity level for sorting and UI display
     enum SeverityLevel: String, CaseIterable, Codable {
         case critical = "Critical"
         case high = "High"
         case medium = "Medium"
         case low = "Low"
-        
+
         var priority: Int {
             switch self {
             case .critical: return 4
@@ -36,7 +36,7 @@ struct AnalysisResult: Identifiable, Codable, Hashable {
             case .low: return 1
             }
         }
-        
+
         var color: String {
             switch self {
             case .critical: return "red"
@@ -46,14 +46,14 @@ struct AnalysisResult: Identifiable, Codable, Hashable {
             }
         }
     }
-    
+
     var severityLevel: SeverityLevel {
         SeverityLevel(rawValue: severity) ?? .low
     }
 }
 
 /// File-specific analysis result for batch operations
-struct FileAnalysisResult: Identifiable, Codable {
+struct FileAnalysisResult: Identifiable, Sendable, @preconcurrency Codable {
     let id: UUID
     let fileName: String
     let filePath: String
@@ -61,7 +61,7 @@ struct FileAnalysisResult: Identifiable, Codable {
     let issuesFound: Int
     let issues: [AnalysisIssue]
     let analysisDate: Date
-    
+
     init(id: UUID = UUID(), fileName: String, filePath: String, fileType: String, issuesFound: Int, issues: [AnalysisIssue], analysisDate: Date = Date()) {
         self.id = id
         self.fileName = fileName
@@ -74,14 +74,14 @@ struct FileAnalysisResult: Identifiable, Codable {
 }
 
 /// Individual issue within a file analysis
-struct AnalysisIssue: Identifiable, Codable {
+struct AnalysisIssue: Identifiable, Sendable, @preconcurrency Codable {
     let id: UUID
     let type: String
     let severity: String
     let message: String
     let lineNumber: Int
     let line: String
-    
+
     init(id: UUID = UUID(), type: String, severity: String, message: String, lineNumber: Int, line: String = "") {
         self.id = id
         self.type = type
@@ -93,7 +93,7 @@ struct AnalysisIssue: Identifiable, Codable {
 }
 
 /// File upload and management
-struct UploadedFile: Identifiable, Codable {
+struct UploadedFile: Identifiable, Sendable, @preconcurrency Codable {
     let id: UUID
     let name: String
     let path: String
@@ -101,7 +101,7 @@ struct UploadedFile: Identifiable, Codable {
     let content: String
     let type: String
     let uploadDate: Date
-    
+
     init(id: UUID = UUID(), name: String, path: String, size: Int, content: String, type: String, uploadDate: Date = Date()) {
         self.id = id
         self.name = name
@@ -126,13 +126,13 @@ extension AnalysisResult {
         self.lineNumber = line ?? 0
         self.suggestion = ""
     }
-    
+
     enum ResultType {
         case quality
         case security
         case suggestion
         case performance
-        
+
         var displayName: String {
             switch self {
             case .quality: return "Quality"
@@ -142,13 +142,13 @@ extension AnalysisResult {
             }
         }
     }
-    
+
     enum Severity {
         case low
         case medium
         case high
         case critical
-        
+
         var displayName: String {
             switch self {
             case .low: return "Low"
@@ -170,15 +170,15 @@ extension Array where Element == AnalysisResult {
     var highSeverityCount: Int {
         filter { $0.severityLevel == .high || $0.severityLevel == .critical }.count
     }
-    
+
     var mediumSeverityCount: Int {
         filter { $0.severityLevel == .medium }.count
     }
-    
+
     var lowSeverityCount: Int {
         filter { $0.severityLevel == .low }.count
     }
-    
+
     func sortedBySeverity() -> [AnalysisResult] {
         sorted { $0.severityLevel.priority > $1.severityLevel.priority }
     }

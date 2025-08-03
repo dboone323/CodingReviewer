@@ -7,7 +7,8 @@ struct ContentView: View {
     @State private var isAnalyzing = false
     @State private var showWelcome = true
     @StateObject private var fileUploadManager = FileUploadManager()
-    
+    @StateObject private var mlHealthMonitor = MLHealthMonitor()
+
     enum Tab: String, CaseIterable {
         case quickStart = "Quick Start"
         case files = "Files"
@@ -16,7 +17,7 @@ struct ContentView: View {
         case patterns = "Patterns"
         case enhancement = "Smart Enhancement"
         case settings = "Settings"
-        
+
         var icon: String {
             switch self {
             case .quickStart: return "bolt.circle.fill"
@@ -28,7 +29,7 @@ struct ContentView: View {
             case .settings: return "gearshape.fill"
             }
         }
-        
+
         var color: Color {
             switch self {
             case .quickStart: return .blue
@@ -41,7 +42,7 @@ struct ContentView: View {
             }
         }
     }
-    
+
     var body: some View {
         NavigationView {
             // SIDEBAR NAVIGATION (Replaces segmented picker)
@@ -52,24 +53,24 @@ struct ContentView: View {
                         Image(systemName: "sparkles")
                             .font(.title2)
                             .foregroundColor(.blue)
-                        
+
                         VStack(alignment: .leading, spacing: 2) {
                             Text("CodeReviewer")
                                 .font(.title2)
                                 .fontWeight(.bold)
-                            
+
                             Text("AI-Powered Analysis")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
-                        
+
                         Spacer()
                     }
-                    
+
                     Divider()
                 }
                 .padding()
-                
+
                 // Navigation Tabs
                 VStack(spacing: 4) {
                     ForEach(Tab.allCases, id: \.self) { tab in
@@ -83,22 +84,22 @@ struct ContentView: View {
                     }
                 }
                 .padding(.horizontal)
-                
+
                 Spacer()
-                
+
                 // Status Indicator
                 VStack(alignment: .leading, spacing: 8) {
                     Divider()
-                    
+
                     HStack {
                         Circle()
                             .fill(isAnalyzing ? Color.orange : Color.green)
                             .frame(width: 8, height: 8)
-                        
+
                         Text(isAnalyzing ? "Analyzing..." : "Ready")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        
+
                         Spacer()
                     }
                 }
@@ -106,7 +107,7 @@ struct ContentView: View {
             }
             .frame(width: 200)
             .background(Color(NSColor.controlBackgroundColor))
-            
+
             // MAIN CONTENT AREA
             Group {
                 if showWelcome {
@@ -135,6 +136,7 @@ struct ContentView: View {
                         SmartEnhancementView()
                     case .settings:
                         SettingsView()
+                            .environmentObject(mlHealthMonitor)
                     }
                 }
             }
@@ -151,7 +153,7 @@ struct ContentView: View {
                     Spacer()
                 }
             }
-            
+
             ToolbarItem(placement: .primaryAction) {
                 Button(action: {
                     // Quick action based on current tab
@@ -163,7 +165,7 @@ struct ContentView: View {
             }
         }
     }
-    
+
     private func handleQuickAction() {
         switch selectedTab {
         case .quickStart:
@@ -190,10 +192,10 @@ struct ContentView: View {
             break
         }
     }
-    
+
     private func runAnalysis() {
         isAnalyzing = true
-        
+
         // Simulate analysis
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             analysisResults = [
@@ -224,7 +226,7 @@ struct NavigationTabButton: View {
     let tab: ContentView.Tab
     let isSelected: Bool
     let action: () -> Void
-    
+
     var body: some View {
         Button(action: action) {
             HStack(spacing: 12) {
@@ -232,11 +234,11 @@ struct NavigationTabButton: View {
                     .font(.system(size: 16, weight: .medium))
                     .foregroundColor(isSelected ? tab.color : .secondary)
                     .frame(width: 20)
-                
+
                 Text(tab.rawValue)
                     .font(.system(size: 14, weight: isSelected ? .semibold : .regular))
                     .foregroundColor(isSelected ? .primary : .secondary)
-                
+
                 Spacer()
             }
             .padding(.horizontal, 12)
@@ -257,33 +259,33 @@ struct NavigationTabButton: View {
 // WELCOME SCREEN
 struct WelcomeView: View {
     let onGetStarted: () -> Void
-    
+
     var body: some View {
         VStack(spacing: 30) {
             Spacer()
-            
+
             // Welcome Icon
             Image(systemName: "sparkles.rectangle.stack.fill")
                 .font(.system(size: 80))
                 .foregroundColor(.blue)
-            
+
             // Welcome Text
             VStack(spacing: 16) {
                 Text("Welcome to CodeReviewer")
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                
+
                 Text("AI-powered code analysis made simple")
                     .font(.title3)
                     .foregroundColor(.secondary)
-                
+
                 Text("Paste your code, upload files, or explore AI insights to get started")
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 40)
             }
-            
+
             // Get Started Button
             Button(action: onGetStarted) {
                 HStack {
@@ -298,7 +300,7 @@ struct WelcomeView: View {
                 .cornerRadius(25)
             }
             .buttonStyle(PlainButtonStyle())
-            
+
             // Feature Highlights
             HStack(spacing: 40) {
                 FeatureHighlight(
@@ -306,13 +308,13 @@ struct WelcomeView: View {
                     title: "Smart Analysis",
                     description: "AI-powered code review"
                 )
-                
+
                 FeatureHighlight(
                     icon: "folder.badge.gearshape",
                     title: "Batch Processing",
                     description: "Analyze entire projects"
                 )
-                
+
                 FeatureHighlight(
                     icon: "chart.line.uptrend.xyaxis",
                     title: "Pattern Recognition",
@@ -320,7 +322,7 @@ struct WelcomeView: View {
                 )
             }
             .padding(.top, 20)
-            
+
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -332,17 +334,17 @@ struct FeatureHighlight: View {
     let icon: String
     let title: String
     let description: String
-    
+
     var body: some View {
         VStack(spacing: 8) {
             Image(systemName: icon)
                 .font(.title2)
                 .foregroundColor(.blue)
-            
+
             Text(title)
                 .font(.headline)
                 .fontWeight(.semibold)
-            
+
             Text(description)
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -357,11 +359,11 @@ struct QuickStartView: View {
     @Binding var codeInput: String
     @Binding var analysisResults: [AnalysisResult]
     @Binding var isAnalyzing: Bool
-    
+
     @State private var selectedLanguage: String = "Auto-detect"
-    
+
     private let languages = ["Auto-detect", "Swift", "Python", "JavaScript", "Java", "C++", "Go", "Rust"]
-    
+
     var body: some View {
         VStack(spacing: 20) {
             // Header with language picker
@@ -370,14 +372,14 @@ struct QuickStartView: View {
                     Text("Code Analysis")
                         .font(.title2)
                         .fontWeight(.bold)
-                    
+
                     Text("Paste your code below for instant AI-powered analysis")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
-                
+
                 Spacer()
-                
+
                 Picker("Language", selection: $selectedLanguage) {
                     ForEach(languages, id: \.self) { language in
                         Text(language).tag(language)
@@ -388,15 +390,15 @@ struct QuickStartView: View {
             }
             .padding(.horizontal)
             .padding(.top)
-            
+
             // Code Input Area
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
                     Text("Code Input")
                         .font(.headline)
-                    
+
                     Spacer()
-                    
+
                     if !codeInput.isEmpty {
                         Button("Clear") {
                             codeInput = ""
@@ -406,7 +408,7 @@ struct QuickStartView: View {
                         .foregroundColor(.blue)
                     }
                 }
-                
+
                 TextEditor(text: $codeInput)
                     .font(.system(.body, design: .monospaced))
                     .padding(8)
@@ -417,13 +419,13 @@ struct QuickStartView: View {
                             .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                     )
                     .frame(minHeight: 200)
-                
+
                 if codeInput.isEmpty {
                     VStack(spacing: 8) {
                         Text("💡 Try pasting some code here")
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        
+
                         HStack(spacing: 16) {
                             SampleCodeButton(title: "Python Example") {
                                 codeInput = """
@@ -432,14 +434,14 @@ struct QuickStartView: View {
                                     for item in items:
                                         total = total + item['price']
                                     return total
-                                
+
                                 # Usage
                                 items = [{'price': 10}, {'price': 20}]
                                 result = calculate_total(items)
                                 // AppLogger.shared.log(result) // TODO: Replace print with proper logging
                                 """
                             }
-                            
+
                             SampleCodeButton(title: "Swift Example") {
                                 codeInput = """
                                 func processUserData(users: [String]) {
@@ -457,7 +459,7 @@ struct QuickStartView: View {
                 }
             }
             .padding(.horizontal)
-            
+
             // Analyze Button
             Button(action: {
                 if !codeInput.isEmpty {
@@ -482,25 +484,25 @@ struct QuickStartView: View {
             }
             .disabled(codeInput.isEmpty || isAnalyzing)
             .buttonStyle(PlainButtonStyle())
-            
+
             // Results Section
             if !analysisResults.isEmpty {
                 SimpleAnalysisResultsView(results: analysisResults)
                     .padding(.horizontal)
             }
-            
+
             Spacer()
         }
     }
-    
+
     private func runAnalysis() {
         isAnalyzing = true
-        
+
         // Simulate analysis with realistic delay
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             // Generate sample results based on code content
             var results: [AnalysisResult] = []
-            
+
             if codeInput.contains("SELECT") && codeInput.contains("+") {
                 results.append(AnalysisResult(
                     id: UUID(),
@@ -511,7 +513,7 @@ struct QuickStartView: View {
                     suggestion: "Use parameterized queries to prevent SQL injection"
                 ))
             }
-            
+
             if codeInput.contains("for") && codeInput.contains("total") {
                 results.append(AnalysisResult(
                     id: UUID(),
@@ -522,7 +524,7 @@ struct QuickStartView: View {
                     suggestion: "Use sum(item['price'] for item in items) for better performance"
                 ))
             }
-            
+
             if results.isEmpty {
                 results.append(AnalysisResult(
                     id: UUID(),
@@ -533,12 +535,12 @@ struct QuickStartView: View {
                     suggestion: "Consider adding comments for better documentation"
                 ))
             }
-            
+
             analysisResults = results
             isAnalyzing = false
         }
     }
-    
+
     private func findLineNumber(for text: String) -> Int {
         let lines = codeInput.components(separatedBy: .newlines)
         for (index, line) in lines.enumerated() {
@@ -553,7 +555,7 @@ struct QuickStartView: View {
 struct SampleCodeButton: View {
     let title: String
     let action: () -> Void
-    
+
     var body: some View {
         Button(action: action) {
             Text(title)
@@ -570,7 +572,7 @@ struct SampleCodeButton: View {
 
 struct AnalysisResultCard: View {
     let result: AnalysisResult
-    
+
     private var severityColor: Color {
         switch result.severity.lowercased() {
         case "high": return .red
@@ -579,7 +581,7 @@ struct AnalysisResultCard: View {
         default: return .blue
         }
     }
-    
+
     private var severityIcon: String {
         switch result.severity.lowercased() {
         case "high": return "exclamationmark.triangle.fill"
@@ -588,23 +590,23 @@ struct AnalysisResultCard: View {
         default: return "checkmark.circle.fill"
         }
     }
-    
+
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             // Severity Icon
             Image(systemName: severityIcon)
                 .foregroundColor(severityColor)
                 .font(.title3)
-            
+
             // Content
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Text(result.type)
                         .font(.headline)
                         .foregroundColor(.primary)
-                    
+
                     Spacer()
-                    
+
                     Text("Line \(result.lineNumber)")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -613,11 +615,11 @@ struct AnalysisResultCard: View {
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(4)
                 }
-                
+
                 Text(result.message)
                     .font(.body)
                     .foregroundColor(.primary)
-                
+
                 if !result.suggestion.isEmpty {
                     Text("💡 \(result.suggestion)")
                         .font(.caption)
@@ -641,14 +643,49 @@ struct SettingsView: View {
     @State private var enableRealTimeAnalysis = true
     @State private var analysisDepth = 2.0
     @State private var selectedTheme = "System"
-    
+    @EnvironmentObject var mlHealthMonitor: MLHealthMonitor
+
     private let themes = ["Light", "Dark", "System"]
-    
+
     var body: some View {
         Form {
+            Section("ML Health Monitoring") {
+                HStack {
+                    Image(systemName: mlHealthMonitor.healthStatus.icon)
+                        .foregroundColor(mlHealthMonitor.healthStatus.color)
+                    VStack(alignment: .leading) {
+                        Text("ML System Status")
+                            .font(.headline)
+                        Text(mlHealthMonitor.healthStatus.description)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    Spacer()
+                    Text("\(Int(mlHealthMonitor.healthScore * 100))%")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                }
+
+                if let lastCheck = mlHealthMonitor.lastCheck {
+                    HStack {
+                        Text("Last Check")
+                        Spacer()
+                        Text(lastCheck, style: .relative)
+                            .foregroundColor(.secondary)
+                    }
+                }
+
+                HStack {
+                    Text("Active Monitors")
+                    Spacer()
+                    Text("\(mlHealthMonitor.activeMonitors)")
+                        .foregroundColor(.secondary)
+                }
+            }
+
             Section("Analysis Settings") {
                 Toggle("Enable Real-time Analysis", isOn: $enableRealTimeAnalysis)
-                
+
                 VStack(alignment: .leading) {
                     Text("Analysis Depth")
                     Slider(value: $analysisDepth, in: 1...5, step: 1) {
@@ -660,7 +697,7 @@ struct SettingsView: View {
                     }
                 }
             }
-            
+
             Section("Appearance") {
                 Picker("Theme", selection: $selectedTheme) {
                     ForEach(themes, id: \.self) { theme in
@@ -669,7 +706,7 @@ struct SettingsView: View {
                 }
                 .pickerStyle(SegmentedPickerStyle())
             }
-            
+
             Section("About") {
                 HStack {
                     Text("Version")
@@ -677,7 +714,7 @@ struct SettingsView: View {
                     Text("2.0")
                         .foregroundColor(.secondary)
                 }
-                
+
                 HStack {
                     Text("Build")
                     Spacer()
@@ -696,20 +733,20 @@ struct SettingsView: View {
 // Simple Analysis Results View for ContentView
 struct SimpleAnalysisResultsView: View {
     let results: [AnalysisResult]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
                 Text("Analysis Results")
                     .font(.headline)
-                
+
                 Spacer()
-                
+
                 Text("\(results.count) issue\(results.count == 1 ? "" : "s") found")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            
+
             LazyVStack(spacing: 12) {
                 ForEach(results) { result in
                     AnalysisResultCard(result: result)

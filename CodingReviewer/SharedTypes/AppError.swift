@@ -15,7 +15,7 @@ enum AppError: LocalizedError {
     case invalidConfiguration(String)
     case unknown
 
-    var errorDescription: String? {
+    nonisolated var errorDescription: String? {
         switch self {
         case .invalidInput(let message):
             return "Invalid input: \(message)"

@@ -127,7 +127,7 @@ enum CodeReviewError: LocalizedError {
     case analysisInterrupted
     case systemResourceExhausted
 
-    var errorDescription: String? {
+    nonisolated var errorDescription: String? {
         switch self {
         case .analysisTimeout:
             return "Analysis timed out. Please try with a smaller code sample."
@@ -140,7 +140,7 @@ enum CodeReviewError: LocalizedError {
         }
     }
 
-    var recoverySuggestion: String? {
+    nonisolated var recoverySuggestion: String? {
         switch self {
         case .analysisTimeout:
             return "Try reducing the code size or simplifying the analysis."

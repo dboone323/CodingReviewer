@@ -139,7 +139,7 @@ enum AIServiceError: LocalizedError {
     case serviceUnavailable
     case insufficientCredits
 
-    var errorDescription: String? {
+    nonisolated var errorDescription: String? {
         switch self {
         case .invalidAPIKey:
             return "Invalid API key. Please check your OpenAI API key in settings."
@@ -190,7 +190,7 @@ extension CodeLanguage {
 
 // MARK: - API Usage Statistics
 
-struct APIUsageStats: Codable {
+struct APIUsageStats: @preconcurrency Codable, Sendable {
     let tokensUsed: Int
     let requestsCount: Int
     let totalCost: Double

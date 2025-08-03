@@ -498,7 +498,7 @@ final class PatternRecognitionEngine: ObservableObject {
 
 // MARK: - Supporting Types
 
-struct DetectedPattern: Identifiable, Codable {
+struct DetectedPattern: Identifiable, Sendable, @preconcurrency Codable {
     var id: UUID
     let name: String
     let description: String
@@ -506,7 +506,7 @@ struct DetectedPattern: Identifiable, Codable {
     let confidence: Double
     let suggestion: String?
     let relatedPatterns: [String]
-    
+
     init(name: String, description: String, codeLocation: CodeLocation, confidence: Double, suggestion: String?, relatedPatterns: [String]) {
         self.id = UUID()
         self.name = name
@@ -522,7 +522,7 @@ struct DetectedPattern: Identifiable, Codable {
     }
 }
 
-struct CodeSmell: Identifiable, Codable {
+struct CodeSmell: Identifiable, Sendable, @preconcurrency Codable {
     var id: UUID
     let type: CodeSmellType
     let description: String
@@ -530,7 +530,7 @@ struct CodeSmell: Identifiable, Codable {
     let location: CodeLocation
     let suggestion: String
     let impact: CodeSmellImpact
-    
+
     init(type: CodeSmellType, description: String, severity: CodeSmellSeverity, location: CodeLocation, suggestion: String, impact: CodeSmellImpact) {
         self.id = UUID()
         self.type = type
@@ -542,13 +542,13 @@ struct CodeSmell: Identifiable, Codable {
     }
 }
 
-struct CodeLocation: Codable {
+struct CodeLocation: @preconcurrency Codable, Sendable {
     let line: Int
     let column: Int
     let fileName: String
 }
 
-struct ArchitectureInsights: Codable {
+struct ArchitectureInsights: @preconcurrency Codable, Sendable {
     let overallScore: Double
     let layeringSuggestions: [LayeringSuggestion]
     let couplingAnalysis: CouplingAnalysis
@@ -557,7 +557,7 @@ struct ArchitectureInsights: Codable {
     let recommendations: [ArchitectureRecommendation]
 }
 
-struct LayeringSuggestion: Codable {
+struct LayeringSuggestion: @preconcurrency Codable, Sendable {
     let layer: String
     let description: String
     let files: [CodeFile]
@@ -565,39 +565,39 @@ struct LayeringSuggestion: Codable {
     let suggestions: [String]
 }
 
-struct CouplingAnalysis: Codable {
+struct CouplingAnalysis: @preconcurrency Codable, Sendable {
     let overallLevel: CouplingLevel
     let tightlyCooupledModules: [String]
     let suggestions: [String]
     let score: Double
 }
 
-struct CohesionAnalysis: Codable {
+struct CohesionAnalysis: @preconcurrency Codable, Sendable {
     let overallLevel: CohesionLevel
     let lowCohesionModules: [String]
     let suggestions: [String]
     let score: Double
 }
 
-struct DependencyGraph: Codable {
+struct DependencyGraph: @preconcurrency Codable, Sendable {
     let nodes: [DependencyNode]
     let edges: [DependencyEdge]
     let cyclicDependencies: [String]
     let criticalPath: [String]
 }
 
-struct DependencyNode: Codable {
+struct DependencyNode: @preconcurrency Codable, Sendable {
     let name: String
     let type: NodeType
 }
 
-struct DependencyEdge: Codable {
+struct DependencyEdge: @preconcurrency Codable, Sendable {
     let from: String
     let to: String
     let type: EdgeType
 }
 
-struct ArchitectureRecommendation: Codable {
+struct ArchitectureRecommendation: @preconcurrency Codable, Sendable {
     let type: RecommendationType
     let priority: Priority
     let description: String
@@ -605,7 +605,7 @@ struct ArchitectureRecommendation: Codable {
     let effort: Effort
 }
 
-struct PerformanceIssue: Identifiable, Codable {
+struct PerformanceIssue: Identifiable, Sendable, @preconcurrency Codable {
     var id: UUID
     let type: PerformanceIssueType
     let description: String
@@ -613,7 +613,7 @@ struct PerformanceIssue: Identifiable, Codable {
     let location: CodeLocation
     let suggestion: String
     let estimatedImpact: PerformanceImpact
-    
+
     init(type: PerformanceIssueType, description: String, severity: PerformanceIssueSeverity, location: CodeLocation, suggestion: String, estimatedImpact: PerformanceImpact) {
         self.id = UUID()
         self.type = type

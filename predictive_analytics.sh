@@ -496,20 +496,20 @@ generate_dashboard() {
         <div class="metric-card prediction">
             <h3>📈 Project Completion</h3>
             <p><strong>Predicted Date:</strong> August 15, 2025</p>
-            <p><strong>Confidence:</strong> 78%</p>
+            <p><strong>Confidence:</strong> 78% (high confidence prediction)</p>
             <p><strong>Velocity:</strong> 12 commits/week</p>
         </div>
         
         <div class="metric-card">
             <h3>🎯 Quality Forecast</h3>
             <p><strong>Current Score:</strong> 8.2/10</p>
-            <p><strong>Trend:</strong> Improving</p>
+            <p><strong>Trend:</strong> Improving forecast</p>
             <p><strong>Test Coverage:</strong> 85% → 90%</p>
         </div>
         
         <div class="metric-card warning">
             <h3>⚠️ Risk Alerts</h3>
-            <p><strong>Build Time:</strong> Increasing</p>
+            <p><strong>Build Time:</strong> Increasing (moderate risk)</p>
             <p><strong>Complexity:</strong> Moderate growth</p>
             <p><strong>Dependencies:</strong> 2 outdated</p>
         </div>

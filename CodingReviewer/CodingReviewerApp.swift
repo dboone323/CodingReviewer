@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct CodingReviewerApp: App {
     @StateObject private var fileManager = FileManagerService()
-    
+
     var body: some Scene {
         WindowGroup {
             ContentView()

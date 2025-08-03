@@ -2,17 +2,17 @@ import SwiftUI
 
 struct PatternAnalysisView: View {
     @EnvironmentObject private var fileManager: FileManagerService
-    
+
     var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "chart.line.uptrend.xyaxis")
                 .font(.system(size: 48))
                 .foregroundColor(.blue)
-            
+
             Text("Pattern Analysis")
                 .font(.title)
                 .fontWeight(.bold)
-            
+
             if fileManager.uploadedFiles.isEmpty {
                 Text("Upload code files to start pattern analysis")
                     .font(.subheadline)
@@ -24,7 +24,7 @@ struct PatternAnalysisView: View {
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
             }
-            
+
             VStack(alignment: .leading, spacing: 12) {
                 AnalysisFeatureItem(icon: "magnifyingglass", title: "Code Smell Detection", description: "Identify code smells automatically")
                 AnalysisFeatureItem(icon: "arrow.triangle.2.circlepath", title: "Refactoring Suggestions", description: "Smart refactoring recommendations")
@@ -34,7 +34,7 @@ struct PatternAnalysisView: View {
             .padding()
             .background(Color.gray.opacity(0.1))
             .cornerRadius(12)
-            
+
             if !fileManager.uploadedFiles.isEmpty {
                 Text("Advanced pattern analysis features are being developed and will be available in the next update")
                     .font(.caption)
@@ -52,24 +52,24 @@ struct AnalysisFeatureItem: View {
     let icon: String
     let title: String
     let description: String
-    
+
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .font(.title3)
                 .foregroundColor(.blue)
                 .frame(width: 24)
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(.headline)
                     .fontWeight(.semibold)
-                
+
                 Text(description)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            
+
             Spacer()
         }
     }
@@ -79,24 +79,24 @@ struct FeatureItem: View {
     let icon: String
     let title: String
     let description: String
-    
+
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .font(.title3)
                 .foregroundColor(.blue)
                 .frame(width: 24)
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(.headline)
                     .fontWeight(.semibold)
-                
+
                 Text(description)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            
+
             Spacer()
         }
     }

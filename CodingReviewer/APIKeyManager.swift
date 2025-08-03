@@ -123,7 +123,7 @@ public class APIKeyManager: ObservableObject {
     func showKeySetup() {
         os_log("%@", "🔑 [DEBUG] APIKeyManager.showKeySetup() called")
         os_log("%@", "🔑 [DEBUG] Before change - showingKeySetup: \(showingKeySetup)")
-        DispatchQueue.main.async {
+        Task { @MainActor in
             self.showingKeySetup = true
         }
         os_log("%@", "🔑 [DEBUG] After change - showingKeySetup: \(showingKeySetup)")

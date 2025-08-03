@@ -2,14 +2,14 @@ import Foundation
 
 struct CodeAnalyzers {
     // Simple static analyzers that work with our unified data models
-    
+
     static func analyzeSwiftCode(_ code: String, filename: String) -> [AnalysisResult] {
         var results: [AnalysisResult] = []
         let lines = code.components(separatedBy: .newlines)
-        
+
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
-            
+
             // Basic Swift code analysis
             if line.contains("TODO") || line.contains("FIXME") {
                 results.append(AnalysisResult(
@@ -19,7 +19,7 @@ struct CodeAnalyzers {
                     lineNumber: lineNumber
                 ))
             }
-            
+
             if line.contains("print(") && !line.contains("//") {
                 results.append(AnalysisResult(
                     type: "Debug",
@@ -28,9 +28,9 @@ struct CodeAnalyzers {
                     lineNumber: lineNumber
                 ))
             }
-            
-            if line.trimmingCharacters(in: .whitespaces).isEmpty && 
-               index < lines.count - 1 && 
+
+            if line.trimmingCharacters(in: .whitespaces).isEmpty &&
+               index < lines.count - 1 &&
                lines[index + 1].trimmingCharacters(in: .whitespaces).isEmpty {
                 results.append(AnalysisResult(
                     type: "Formatting",
@@ -40,17 +40,17 @@ struct CodeAnalyzers {
                 ))
             }
         }
-        
+
         return results
     }
-    
+
     static func analyzeGenericCode(_ code: String, filename: String) -> [AnalysisResult] {
         var results: [AnalysisResult] = []
         let lines = code.components(separatedBy: .newlines)
-        
+
         for (index, line) in lines.enumerated() {
             let lineNumber = index + 1
-            
+
             // Generic code analysis
             if line.count > 120 {
                 results.append(AnalysisResult(
@@ -60,7 +60,7 @@ struct CodeAnalyzers {
                     lineNumber: lineNumber
                 ))
             }
-            
+
             if line.contains("TODO") || line.contains("FIXME") || line.contains("HACK") {
                 results.append(AnalysisResult(
                     type: "Documentation",
@@ -70,10 +70,10 @@ struct CodeAnalyzers {
                 ))
             }
         }
-        
+
         return results
     }
-    
+
     static func performQuickAnalysis(for file: UploadedFile) -> [AnalysisResult] {
         guard !file.content.isEmpty else {
             return [AnalysisResult(
@@ -83,9 +83,9 @@ struct CodeAnalyzers {
                 lineNumber: 1
             )]
         }
-        
+
         let fileExtension = (file.name as NSString).pathExtension.lowercased()
-        
+
         switch fileExtension {
         case "swift":
             return analyzeSwiftCode(file.content, filename: file.name)

@@ -326,14 +326,14 @@ enum DiffHighlightType {
 
 // MARK: - Fix History Tracking
 
-struct FixHistoryEntry: Identifiable, Codable {
+struct FixHistoryEntry: Identifiable, Sendable, @preconcurrency Codable {
     var id: UUID
     let fixId: UUID
     let appliedAt: Date
     let originalCode: String
     let modifiedCode: String
     let fileName: String
-    
+
     init(fixId: UUID, appliedAt: Date, originalCode: String, modifiedCode: String, fileName: String) {
         self.id = UUID()
         self.fixId = fixId

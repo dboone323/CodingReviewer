@@ -2,22 +2,23 @@ import Foundation
 import SwiftUI
 import Combine
 
+@MainActor
 class IssueDetector: ObservableObject {
     @Published var detectedIssues: [DetectedIssue] = []
     @Published var isScanning = false
     @Published var scanProgress: Double = 0.0
     @Published var autoFixes: [AutoFix] = []
-    
+
     // Shared instance
     static let shared = IssueDetector()
-    
+
     func scanFiles(_ files: [CodeFile]) async {
         await MainActor.run {
             isScanning = true
             scanProgress = 0.0
             detectedIssues.removeAll()
         }
-        
+
         let totalFiles = files.count
         for (index, file) in files.enumerated() {
             let issues = await scanFile(file)
@@ -26,33 +27,33 @@ class IssueDetector: ObservableObject {
                 scanProgress = Double(index + 1) / Double(totalFiles)
             }
         }
-        
+
         await MainActor.run {
             isScanning = false
             // Generate auto-fixes for detected issues
             autoFixes = generateAutoFixes(for: detectedIssues)
         }
     }
-    
+
     private func scanFile(_ file: CodeFile) async -> [DetectedIssue] {
         let lines = file.content.components(separatedBy: .newlines)
         var issues: [DetectedIssue] = []
-        
+
         for (lineNumber, line) in lines.enumerated() {
             let lineIndex = lineNumber + 1 // 1-based line numbers
-            
+
             // Detect various types of issues
             issues.append(contentsOf: detectSecurityIssues(line: line, lineNumber: lineIndex, file: file))
             issues.append(contentsOf: detectPerformanceIssues(line: line, lineNumber: lineIndex, file: file))
             issues.append(contentsOf: detectQualityIssues(line: line, lineNumber: lineIndex, file: file))
         }
-        
+
         return issues
     }
-    
+
     private func detectSecurityIssues(line: String, lineNumber: Int, file: CodeFile) -> [DetectedIssue] {
         var issues: [DetectedIssue] = []
-        
+
         // SQL Injection patterns
         if line.localizedCaseInsensitiveContains("SELECT * FROM") && !line.contains("prepared") {
             issues.append(DetectedIssue(
@@ -67,7 +68,7 @@ class IssueDetector: ObservableObject {
                 suggestion: "Use prepared statements or parameterized queries"
             ))
         }
-        
+
         // Hardcoded credentials
         if line.contains("password =") || line.contains("api_key =") {
             issues.append(DetectedIssue(
@@ -82,7 +83,7 @@ class IssueDetector: ObservableObject {
                 suggestion: "Use environment variables or secure storage"
             ))
         }
-        
+
         // Insecure HTTP
         if line.contains("https://") && !line.contains("localhost") {
             issues.append(DetectedIssue(
@@ -97,13 +98,13 @@ class IssueDetector: ObservableObject {
                 suggestion: "Replace https:// with https://"
             ))
         }
-        
+
         return issues
     }
-    
+
     private func detectPerformanceIssues(line: String, lineNumber: Int, file: CodeFile) -> [DetectedIssue] {
         var issues: [DetectedIssue] = []
-        
+
         // N+1 query pattern
         if line.contains("for") && line.contains(".query(") {
             issues.append(DetectedIssue(
@@ -118,7 +119,7 @@ class IssueDetector: ObservableObject {
                 suggestion: "Consider using batch queries or eager loading"
             ))
         }
-        
+
         // Large file operations
         if line.contains("readFile") || line.contains("writeFile") {
             if line.contains("sync") {
@@ -135,13 +136,13 @@ class IssueDetector: ObservableObject {
                 ))
             }
         }
-        
+
         return issues
     }
-    
+
     private func detectQualityIssues(line: String, lineNumber: Int, file: CodeFile) -> [DetectedIssue] {
         var issues: [DetectedIssue] = []
-        
+
         // Long lines
         if line.count > 120 {
             issues.append(DetectedIssue(
@@ -156,7 +157,7 @@ class IssueDetector: ObservableObject {
                 suggestion: "Break long lines into multiple lines"
             ))
         }
-        
+
         // TODO comments
         if line.localizedCaseInsensitiveContains("TODO") {
             issues.append(DetectedIssue(
@@ -171,10 +172,10 @@ class IssueDetector: ObservableObject {
                 suggestion: "Address TODO or create a proper issue"
             ))
         }
-        
+
         return issues
     }
-    
+
     func generateAutoFixes(for issues: [DetectedIssue]) -> [AutoFix] {
         return issues.compactMap { issue in
             switch issue.type {
@@ -189,7 +190,7 @@ class IssueDetector: ObservableObject {
             }
         }
     }
-    
+
     private func generateSecurityFix(for issue: DetectedIssue) -> AutoFix? {
         switch issue.title {
         case "Insecure HTTP":
@@ -204,12 +205,12 @@ class IssueDetector: ObservableObject {
             return nil
         }
     }
-    
+
     private func generatePerformanceFix(for issue: DetectedIssue) -> AutoFix? {
         // Implementation for performance fixes
         return nil
     }
-    
+
     private func generateQualityFix(for issue: DetectedIssue) -> AutoFix? {
         // Implementation for quality fixes
         return nil
@@ -218,7 +219,7 @@ class IssueDetector: ObservableObject {
 
 // MARK: - Data Models
 
-struct DetectedIssue: Identifiable, Codable {
+struct DetectedIssue: Identifiable, Sendable, @preconcurrency Codable {
     let id: UUID
     let type: IssueType
     let severity: IssueSeverity
@@ -228,23 +229,23 @@ struct DetectedIssue: Identifiable, Codable {
     let column: Int
     let file: String
     let suggestion: String
-    
+
     enum IssueType: String, Codable, CaseIterable {
         case security = "Security"
-        case performance = "Performance"  
+        case performance = "Performance"
         case codeQuality = "Code Quality"
         case syntax = "Syntax"
         case style = "Style"
         case documentation = "Documentation"
     }
-    
+
     enum IssueSeverity: String, Codable, CaseIterable {
         case critical = "Critical"
         case high = "High"
         case medium = "Medium"
         case low = "Low"
         case info = "Info"
-        
+
         var color: Color {
             switch self {
             case .critical: return .red
@@ -257,7 +258,7 @@ struct DetectedIssue: Identifiable, Codable {
     }
 }
 
-struct AutoFix: Identifiable, Codable {
+struct AutoFix: Identifiable, Sendable, @preconcurrency Codable {
     let id: UUID
     let issueId: UUID
     let title: String
@@ -271,14 +272,14 @@ struct SmartEnhancementView: View {
     @StateObject private var issueDetector = IssueDetector.shared
     @EnvironmentObject private var fileManager: FileManagerService
     @State private var selectedType: DetectedIssue.IssueType?
-    
+
     var filteredIssues: [DetectedIssue] {
         if let selectedType = selectedType {
             return issueDetector.detectedIssues.filter { $0.type == selectedType }
         }
         return issueDetector.detectedIssues
     }
-    
+
     var body: some View {
         NavigationView {
             VStack {
@@ -292,7 +293,7 @@ struct SmartEnhancementView: View {
                     }
                     .padding()
                 }
-                
+
                 // Issue type filter
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 12) {
@@ -301,7 +302,7 @@ struct SmartEnhancementView: View {
                         }
                         .buttonStyle(.bordered)
                         .background(selectedType == nil ? Color.accentColor : Color.clear)
-                        
+
                         ForEach(DetectedIssue.IssueType.allCases, id: \.self) { type in
                             Button(type.rawValue) {
                                 selectedType = type
@@ -312,7 +313,7 @@ struct SmartEnhancementView: View {
                     }
                     .padding(.horizontal)
                 }
-                
+
                 // Issues list
                 List {
                     ForEach(filteredIssues) { issue in
@@ -320,7 +321,7 @@ struct SmartEnhancementView: View {
                     }
                 }
                 .listStyle(PlainListStyle())
-                
+
                 // Action buttons
                 HStack {
                     Button("Scan Files") {
@@ -330,9 +331,9 @@ struct SmartEnhancementView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .disabled(issueDetector.isScanning || fileManager.uploadedFiles.isEmpty)
-                    
+
                     Spacer()
-                    
+
                     if !issueDetector.autoFixes.isEmpty {
                         Button("Apply Auto-Fixes") {
                             // Implementation for applying fixes
@@ -349,7 +350,7 @@ struct SmartEnhancementView: View {
 
 struct IssueRowView: View {
     let issue: DetectedIssue
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -357,13 +358,13 @@ struct IssueRowView: View {
                 Circle()
                     .fill(issue.severity.color)
                     .frame(width: 8, height: 8)
-                
+
                 Text(issue.title)
                     .font(.headline)
                     .fontWeight(.medium)
-                
+
                 Spacer()
-                
+
                 Text(issue.type.rawValue)
                     .font(.caption)
                     .padding(.horizontal, 8)
@@ -371,18 +372,18 @@ struct IssueRowView: View {
                     .background(Color.secondary.opacity(0.2))
                     .cornerRadius(4)
             }
-            
+
             Text(issue.description)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
-            
+
             HStack {
                 Text("\(issue.file):\(issue.line)")
                     .font(.caption)
                     .foregroundColor(.secondary)
-                
+
                 Spacer()
-                
+
                 if !issue.suggestion.isEmpty {
                     Text("💡 \(issue.suggestion)")
                         .font(.caption)
@@ -397,18 +398,18 @@ struct IssueRowView: View {
 struct ScanControlsView: View {
     @StateObject private var issueDetector = IssueDetector.shared
     @EnvironmentObject private var fileManager: FileManagerService
-    
+
     var body: some View {
         VStack(spacing: 20) {
             Text("Scan Controls")
                 .font(.title2)
                 .fontWeight(.bold)
-            
+
             Text("Analyze uploaded files for security vulnerabilities, performance issues, and code quality problems.")
                 .font(.body)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.secondary)
-            
+
             Button(action: {
                 Task {
                     await issueDetector.scanFiles(fileManager.uploadedFiles)
@@ -425,7 +426,7 @@ struct ScanControlsView: View {
                 .cornerRadius(10)
             }
             .disabled(issueDetector.isScanning || fileManager.uploadedFiles.isEmpty)
-            
+
             if issueDetector.isScanning {
                 ProgressView(value: issueDetector.scanProgress)
                     .progressViewStyle(LinearProgressViewStyle())

@@ -330,7 +330,7 @@ final class IntelligentFixGenerator: ObservableObject {
 
 // MARK: - Supporting Types
 
-struct IntelligentFix: Identifiable, Codable {
+struct IntelligentFix: Identifiable, Sendable, @preconcurrency Codable {
     let id: UUID
     let description: String
     let originalCode: String
@@ -434,7 +434,7 @@ enum FixApplicationError: Error, LocalizedError {
     case compilationFailure
     case contextMismatch
 
-    var errorDescription: String? {
+    nonisolated var errorDescription: String? {
         switch self {
         case .invalidLineRange:
             return "Fix references invalid line range"

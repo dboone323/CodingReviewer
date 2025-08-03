@@ -32,7 +32,7 @@ public class EnhancedAIService: ObservableObject {
         // Always perform local analysis first for immediate results
         let localResults = performLocalAnalysis(code, language: language)
 
-        DispatchQueue.main.async {
+        Task { @MainActor in
             self.analysisResult = localResults
         }
 
@@ -41,7 +41,7 @@ public class EnhancedAIService: ObservableObject {
             await performAIAnalysis(code, language: language)
         }
 
-        DispatchQueue.main.async {
+        Task { @MainActor in
             self.isAnalyzing = false
         }
     }
@@ -132,13 +132,13 @@ public class EnhancedAIService: ObservableObject {
             let prompt = createAnalysisPrompt(code: code, language: language)
             let response = try await callOpenAI(prompt: prompt)
 
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 self.analysisResult += "🤖 AI Enhanced Analysis:\n"
                 self.analysisResult += String(repeating: "=", count: 40) + "\n"
                 self.analysisResult += response + "\n"
             }
         } catch {
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 self.errorMessage = "AI analysis failed: \(error.localizedDescription)"
             }
         }

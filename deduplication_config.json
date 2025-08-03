@@ -1,0 +1,7 @@
+{
+    "monitored_extensions": [".swift", ".js", ".ts", ".py", ".java", ".kt"],
+    "similarity_threshold": 0.85,
+    "exclude_patterns": ["test", "backup", "temp", ".git"],
+    "alert_threshold": 3,
+    "max_duplicates_allowed": 2
+}

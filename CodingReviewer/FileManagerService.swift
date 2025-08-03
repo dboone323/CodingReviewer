@@ -84,7 +84,7 @@ extension CodeLanguage {
     }
 }
 
-struct CodeFile: Identifiable, Hashable, Codable {
+struct CodeFile: Identifiable, Sendable, Hashable, @preconcurrency Codable {
     let id: UUID
     let name: String
     let path: String
@@ -115,7 +115,7 @@ struct CodeFile: Identifiable, Hashable, Codable {
 }
 
 // Enhanced structure to preserve analysis data while remaining Codable
-struct EnhancedAnalysisItem: Codable {
+struct EnhancedAnalysisItem: @preconcurrency Codable, Sendable {
     let message: String
     let severity: String
     let lineNumber: Int?
@@ -129,7 +129,7 @@ struct EnhancedAnalysisItem: Codable {
     }
 }
 
-struct FileAnalysisRecord: Identifiable, Codable {
+struct FileAnalysisRecord: Identifiable, Sendable, @preconcurrency Codable {
     let id: UUID
     let file: CodeFile
     let analysisResults: [EnhancedAnalysisItem] // Rich analysis data
@@ -149,7 +149,7 @@ struct FileAnalysisRecord: Identifiable, Codable {
 
 // MARK: - Phase 4 Enhanced Analysis Types
 
-struct Phase4EnhancedAnalysisResult: Codable {
+struct Phase4EnhancedAnalysisResult: @preconcurrency Codable, Sendable {
     let fileName: String
     let fileSize: Int
     let language: String
@@ -161,7 +161,7 @@ struct Phase4EnhancedAnalysisResult: Codable {
     let summary: Phase4AnalysisSummary
 }
 
-struct Phase4AnalysisSummary: Codable {
+struct Phase4AnalysisSummary: @preconcurrency Codable, Sendable {
     let totalSuggestions: Int
     let criticalIssues: Int
     let errors: Int
@@ -232,7 +232,7 @@ extension FileAnalysisRecord: Hashable {
     }
 }
 
-struct ProjectStructure: Identifiable {
+struct ProjectStructure: Identifiable, Sendable {
     let id: UUID
     let name: String
     let rootPath: String
@@ -863,7 +863,14 @@ final class FileManagerService: ObservableObject {
 
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
-            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            // Use enhanced URLSession with timeout configuration for OpenAI
+            let configuration = URLSessionConfiguration.default
+            configuration.timeoutIntervalForRequest = 30.0
+            configuration.timeoutIntervalForResource = 60.0
+            let session = URLSession(configuration: configuration)
+            
+            let (data, response) = try await session.data(for: request)
 
             // Check HTTP status code for specific errors
             if let httpResponse = response as? HTTPURLResponse {
@@ -935,7 +942,14 @@ final class FileManagerService: ObservableObject {
 
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
-            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            // Use enhanced URLSession with timeout configuration for Gemini
+            let configuration = URLSessionConfiguration.default
+            configuration.timeoutIntervalForRequest = 30.0
+            configuration.timeoutIntervalForResource = 60.0
+            let session = URLSession(configuration: configuration)
+            
+            let (data, response) = try await session.data(for: request)
 
             // Check HTTP status code for specific errors
             if let httpResponse = response as? HTTPURLResponse {
@@ -1310,7 +1324,7 @@ enum FileManagerError: LocalizedError {
     case encodingError(String)
     case networkError(Error)
 
-    var errorDescription: String? {
+    nonisolated var errorDescription: String? {
         switch self {
         case .accessDenied(let filename):
             return "Access denied to file: \(filename)"

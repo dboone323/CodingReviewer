@@ -1,0 +1,8 @@
+{
+    "timestamp": "2025-08-03T11:07:14-05:00",
+    "health_score": 100,
+    "status": "HEALTHY",
+    "total_checks": 4,
+    "passed_checks": 4,
+    "last_refresh": "2025-08-03T11:07:14-05:00"
+}

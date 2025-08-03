@@ -501,7 +501,7 @@ struct FileUploadView: View {
                     self.analysisRecords = records
 
                     // Force state update and show sheet immediately
-                    DispatchQueue.main.async {
+                    Task { @MainActor in
                         self.showingAnalysisResults = true
                         AppLogger.shared.debug("🔍 Sheet should now be presented with \(records.count) records")
                     }
@@ -549,7 +549,7 @@ struct FileUploadView: View {
         if panel.runModal() == .OK, let url = panel.url {
             do {
                 // Create a simplified exportable format
-                struct ExportFileInfo: Codable {
+                struct ExportFileInfo: @preconcurrency Codable, Sendable {
                     let name: String
                     let path: String
                     let language: String

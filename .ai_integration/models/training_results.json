@@ -1,11 +1,11 @@
 {
-  "training_session": "2025-07-29T21:11:37-05:00",
+  "training_session": "2025-08-03T10:19:26-05:00",
   "models": {
     "code_analyzer": {
       "accuracy": 0.847,
       "precision": 0.823,
       "recall": 0.891,
-      "training_data_size": "57 files"
+      "training_data_size": "68 files"
     },
     "pattern_detector": {
       "accuracy": 0.789,

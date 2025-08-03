@@ -1,0 +1,40 @@
+{
+  "timestamp": "2025-08-03T10:28:08-05:00",
+  "collection_period": "last_30_days",
+  "metrics": {
+    "development_velocity":     📝 Commit velocity: 14 this week, 0 daily average
+{
+  "commits_last_week": 14,
+  "commits_last_month": 22,
+  "daily_average": 0,
+  "velocity_trend": "increasing"
+},
+    "codebase_evolution":     📁 Codebase: 69 files, 17973 lines, 260 avg lines/file
+{
+  "total_files": 69,
+  "total_lines": 17973,
+  "average_file_size": 260,
+  "growth_rate": "stable"
+},
+    "complexity_trends":     🧮 Analyzing complexity trends...
+{
+  "complex_functions": 0,
+  "nested_loops": 25,
+  "long_functions": 198,
+  "complexity_trend": "increasing_complexity"
+},
+    "build_performance":     ⚡ Analyzing build performance...
+{
+  "average_build_time": 45,
+  "success_rate": 94,
+  "automation_efficiency": 87,
+  "performance_trend": "excellent"
+},
+    "automation_metrics": {
+  "automation_scripts": 30,
+  "last_run_success": true,
+  "frequency": "daily",
+  "efficiency_score": 87
+}
+  }
+}

@@ -1,0 +1,181 @@
+{
+  "timestamp": "2025-08-03T10:18:54-05:00",
+  "analysis": {
+    "file_count": 68,
+    "complexity_patterns": ,
+    "naming_patterns":     Analyzing naming in SmartDocumentationGenerator.swift: camelCase(44), PascalCase(32), snake_case(0)
+    Analyzing naming in UnifiedDataModels.swift: camelCase(67), PascalCase(40), snake_case(1)
+    Analyzing naming in SimpleAISettingsView.swift: camelCase(0), PascalCase(0), snake_case(0)
+    Analyzing naming in IntelligentCodeAnalyzer.swift: camelCase(286), PascalCase(96), snake_case(1)
+    Analyzing naming in MLCodeInsightsModels.swift: camelCase(274), PascalCase(145), snake_case(18)
+    Analyzing naming in PatternAnalysisView.swift: camelCase(39), PascalCase(19), snake_case(0)
+    Analyzing naming in DiffPreviewView.swift: camelCase(209), PascalCase(93), snake_case(1)
+    Analyzing naming in FileManagerService.swift: camelCase(766), PascalCase(448), snake_case(29)
+    Analyzing naming in Item.swift: camelCase(2), PascalCase(2), snake_case(0)
+    Analyzing naming in OpenAIService.swift: camelCase(234), PascalCase(141), snake_case(21)
+    Analyzing naming in AutomatedTestSuiteClean.swift: camelCase(0), PascalCase(0), snake_case(0)
+    Analyzing naming in AISettingsView.swift: camelCase(68), PascalCase(44), snake_case(7)
+    Analyzing naming in RefactoringHelpers_New.swift: camelCase(0), PascalCase(0), snake_case(0)
+    Analyzing naming in AICodeReviewService.swift: camelCase(239), PascalCase(222), snake_case(11)
+    Analyzing naming in AutomatedTestSuite.swift: camelCase(149), PascalCase(77), snake_case(11)
+    Analyzing naming in ComplexityAnalyzer.swift: camelCase(74), PascalCase(24), snake_case(1)
+    Analyzing naming in ViewDataSharingTests.swift: camelCase(0), PascalCase(0), snake_case(0)
+    Analyzing naming in CodingReviewerApp.swift: camelCase(16), PascalCase(9), snake_case(0)
+    Analyzing naming in EnhancedAIAnalyzer.swift: camelCase(105), PascalCase(67), snake_case(9)
+    Analyzing naming in CodeAnalyzers.swift: camelCase(41), PascalCase(26), snake_case(2)
+    Analyzing naming in FileAnalysisModels.swift: camelCase(0), PascalCase(0), snake_case(0)
+    Analyzing naming in AIServiceProtocol.swift: camelCase(85), PascalCase(78), snake_case(4)
+    Analyzing naming in APIKeySetupView.swift: camelCase(86), PascalCase(46), snake_case(5)
+    Analyzing naming in AILearningCoordinator.swift: camelCase(45), PascalCase(25), snake_case(2)
+    Analyzing naming in EnhancedAIInsightsView.swift: camelCase(342), PascalCase(209), snake_case(2)
+    Analyzing naming in SmartDocumentationGenerator_Simple.swift: camelCase(0), PascalCase(0), snake_case(0)
+    Analyzing naming in QuantumAnalysisEngine.swift: camelCase(0), PascalCase(0), snake_case(0)
+    Analyzing naming in AutomaticFixEngine.swift: camelCase(399), PascalCase(160), snake_case(27)
+    Analyzing naming in AnalysisViews.swift: camelCase(0), PascalCase(0), snake_case(0)
+    Analyzing naming in AIComponents.swift: camelCase(0), PascalCase(0), snake_case(0)
+    Analyzing naming in MLIntegrationService.swift: camelCase(232), PascalCase(191), snake_case(20)
+    Analyzing naming in SecurityManager.swift: camelCase(28), PascalCase(27), snake_case(3)
+    Analyzing naming in EnhancedFileUploadView.swift: camelCase(0), PascalCase(0), snake_case(0)
+    Analyzing naming in APIKeyManager.swift: camelCase(89), PascalCase(100), snake_case(24)
+    Analyzing naming in SecurityConfig.swift: camelCase(13), PascalCase(10), snake_case(1)
+    Analyzing naming in IntelligentCodeAnalyzer_Fixed.swift: camelCase(0), PascalCase(0), snake_case(0)
+    Analyzing naming in AdvancedAIProjectAnalyzer.swift: camelCase(501), PascalCase(213), snake_case(16)
+    Analyzing naming in AnalysisTypes.swift: camelCase(58), PascalCase(40), snake_case(0)
+    Analyzing naming in CodeTypes_Fixed.swift: camelCase(0), PascalCase(0), snake_case(0)
+    Analyzing naming in ServiceTypes.swift: camelCase(46), PascalCase(37), snake_case(0)
+    Analyzing naming in AppError.swift: camelCase(21), PascalCase(6), snake_case(0)
+    Analyzing naming in CodeTypes.swift: camelCase(15), PascalCase(15), snake_case(0)
+    Analyzing naming in SharedTypes.swift: camelCase(32), PascalCase(36), snake_case(0)
+    Analyzing naming in EnhancedAnalysisRecordRow.swift: camelCase(69), PascalCase(39), snake_case(2)
+    Analyzing naming in PerformanceTracker.swift: camelCase(83), PascalCase(43), snake_case(16)
+    Analyzing naming in AICodeFixAssistant.swift: camelCase(0), PascalCase(0), snake_case(0)
+    Analyzing naming in FixApplicationView.swift: camelCase(250), PascalCase(118), snake_case(4)
+    Analyzing naming in QuantumUIV2.swift: camelCase(215), PascalCase(113), snake_case(10)
+    Analyzing naming in RefactoringHelpers.swift: camelCase(0), PascalCase(0), snake_case(0)
+    Analyzing naming in AIDashboardView.swift: camelCase(347), PascalCase(216), snake_case(4)
+    Analyzing naming in PatternRecognitionEngine.swift: camelCase(371), PascalCase(262), snake_case(21)
+    Analyzing naming in AppLogger.swift: camelCase(78), PascalCase(42), snake_case(5)
+    Analyzing naming in QuantumUI.swift: camelCase(0), PascalCase(0), snake_case(0)
+    Analyzing naming in AIProviderPickerView.swift: camelCase(0), PascalCase(0), snake_case(0)
+    Analyzing naming in LanguagePickerView.swift: camelCase(0), PascalCase(0), snake_case(0)
+    Analyzing naming in RobustFileUploadView.swift: camelCase(349), PascalCase(200), snake_case(7)
+    Analyzing naming in IntelligentFixGenerator.swift: camelCase(246), PascalCase(137), snake_case(7)
+    Analyzing naming in QuantumAnalysisEngineV2.swift: camelCase(259), PascalCase(111), snake_case(22)
+    Analyzing naming in IssueDetector.swift: camelCase(219), PascalCase(130), snake_case(3)
+    Analyzing naming in ContentView.swift: camelCase(273), PascalCase(171), snake_case(3)
+    Analyzing naming in IssueDetector_fixed.swift: camelCase(0), PascalCase(0), snake_case(0)
+    Analyzing naming in AIInsightsView.swift: camelCase(0), PascalCase(0), snake_case(0)
+    Analyzing naming in SharedDataManager.swift: camelCase(33), PascalCase(27), snake_case(0)
+    Analyzing naming in FileUploadManager.swift: camelCase(266), PascalCase(159), snake_case(3)
+    Analyzing naming in EnhancedAICodeGenerator.swift: camelCase(384), PascalCase(197), snake_case(39)
+    Analyzing naming in FileUploadView.swift: camelCase(538), PascalCase(244), snake_case(5)
+    Analyzing naming in DataFlowDiagnostics.swift: camelCase(226), PascalCase(113), snake_case(0)
+    Analyzing naming in AICodeFixAssistant_Clean.swift: camelCase(0), PascalCase(0), snake_case(0)
+{"camelCase": 0, "PascalCase": 0, "snake_case": 0},
+    "structure_patterns": {"mvc_pattern": false, "mvvm_pattern": false, "swiftui_pattern": false},
+    "dependency_patterns":     📦 Dependencies in SmartDocumentationGenerator.swift: Combine
+Foundation
+OSLog
+    📦 Dependencies in UnifiedDataModels.swift: Foundation
+    📦 Dependencies in IntelligentCodeAnalyzer.swift: Combine
+Foundation
+OSLog
+SwiftUI
+    📦 Dependencies in MLCodeInsightsModels.swift: Foundation
+Security
+    📦 Dependencies in PatternAnalysisView.swift: SwiftUI
+    📦 Dependencies in DiffPreviewView.swift: Combine
+SwiftUI
+    📦 Dependencies in FileManagerService.swift: Combine
+CryptoKit
+SwiftUI
+    📦 Dependencies in Item.swift: Foundation
+SwiftData
+    📦 Dependencies in OpenAIService.swift: Foundation
+    📦 Dependencies in AISettingsView.swift: Foundation
+OSLog
+SwiftUI
+    📦 Dependencies in AICodeReviewService.swift: Combine
+Foundation
+OSLog
+    📦 Dependencies in AutomatedTestSuite.swift: Combine
+Foundation
+SwiftUI
+    📦 Dependencies in ComplexityAnalyzer.swift: Foundation
+    📦 Dependencies in CodingReviewerApp.swift: SwiftUI
+    📦 Dependencies in EnhancedAIAnalyzer.swift: Combine
+Foundation
+SwiftUI
+    📦 Dependencies in CodeAnalyzers.swift: Foundation
+    📦 Dependencies in AIServiceProtocol.swift: Foundation
+    📦 Dependencies in APIKeySetupView.swift: Accessibility
+SwiftUI
+    📦 Dependencies in AILearningCoordinator.swift: Combine
+Foundation
+SwiftUI
+    📦 Dependencies in EnhancedAIInsightsView.swift: Foundation
+SwiftUI
+    📦 Dependencies in AutomaticFixEngine.swift: Foundation
+OSLog
+    📦 Dependencies in MLIntegrationService.swift: Combine
+Foundation
+SwiftUI
+    📦 Dependencies in SecurityManager.swift: Foundation
+Security
+    📦 Dependencies in APIKeyManager.swift: Combine
+Foundation
+OSLog
+SwiftUI
+    📦 Dependencies in SecurityConfig.swift: Foundation
+    📦 Dependencies in AdvancedAIProjectAnalyzer.swift: Combine
+Foundation
+OSLog
+    📦 Dependencies in AnalysisTypes.swift: Foundation
+    📦 Dependencies in ServiceTypes.swift: Foundation
+    📦 Dependencies in AppError.swift: Foundation
+    📦 Dependencies in CodeTypes.swift: Foundation
+SwiftUI
+    📦 Dependencies in SharedTypes.swift: Foundation
+    📦 Dependencies in EnhancedAnalysisRecordRow.swift: SwiftUI
+    📦 Dependencies in PerformanceTracker.swift: Foundation
+    📦 Dependencies in FixApplicationView.swift: Accessibility
+SwiftUI
+    📦 Dependencies in QuantumUIV2.swift: SwiftUI
+    📦 Dependencies in AIDashboardView.swift: Combine
+SwiftUI
+    📦 Dependencies in PatternRecognitionEngine.swift: Combine
+Foundation
+SwiftUI
+    📦 Dependencies in AppLogger.swift: Foundation
+os.log
+    📦 Dependencies in RobustFileUploadView.swift: AppKit
+SwiftUI
+UniformTypeIdentifiers
+    📦 Dependencies in IntelligentFixGenerator.swift: Combine
+Foundation
+SwiftUI
+    📦 Dependencies in QuantumAnalysisEngineV2.swift: Combine
+Foundation
+SwiftUI
+    📦 Dependencies in IssueDetector.swift: Combine
+Foundation
+SwiftUI
+    📦 Dependencies in ContentView.swift: SwiftUI
+    📦 Dependencies in SharedDataManager.swift: Combine
+Foundation
+SwiftUI
+    📦 Dependencies in FileUploadManager.swift: Combine
+Foundation
+OSLog
+SwiftUI
+UniformTypeIdentifiers
+    📦 Dependencies in EnhancedAICodeGenerator.swift: Combine
+Foundation
+OSLog
+    📦 Dependencies in FileUploadView.swift: SwiftUI
+UniformTypeIdentifiers
+    📦 Dependencies in DataFlowDiagnostics.swift: Foundation
+SwiftUI
+{"imports": [], "frameworks": [], "dependencies": []}
+  }
+}
