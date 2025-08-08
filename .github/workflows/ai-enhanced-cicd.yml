@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+  actions: read
+
 env:
   XCODE_VERSION: "26.0"
   MACOS_VERSION: "26.0"
@@ -113,7 +119,7 @@ jobs:
         echo "🏗️ Starting intelligent build process..."
         
         # Check Xcode compatibility first
-        if [ "${{ env.XCODE_AI_COMPATIBLE }}" = "true" ]; then
+        if [ "${XCODE_AI_COMPATIBLE}" = "true" ]; then
           echo "✅ Xcode compatible - proceeding with Xcode builds..."
           
           # Try building with different strategies
@@ -165,7 +171,7 @@ jobs:
       run: |
         echo "🧪 Running adaptive testing strategy..."
         
-        if [ "${{ env.XCODE_AI_COMPATIBLE }}" = "true" ]; then
+        if [ "${XCODE_AI_COMPATIBLE}" = "true" ]; then
           echo "✅ Running Xcode tests..."
           
           # Try different test configurations
@@ -201,15 +207,6 @@ jobs:
           find . -name "*.swift" -type f -exec grep -l "XCTest\|@Test" {} \; | wc -l | xargs echo "🧪 Test files detected:"
           
           echo "✅ Alternative validation completed"
-        fi
-          
-          # Strategy 2: Continue on test failure for analysis
-          echo "Running tests with failure analysis..."
-          xcodebuild test \
-                    -scheme CodingReviewer \
-                    -destination "platform=macOS" \
-                    CODE_SIGNING_ALLOWED=NO || true
-          TEST_SUCCESS=true  # Continue for now, analyze later
         fi
         
         echo "Test execution completed with adaptive strategy"
