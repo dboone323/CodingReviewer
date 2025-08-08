@@ -39,8 +39,8 @@ final class AIServiceTests: XCTestCase {
             suggestionId: suggestion.id,
             title: "Use lazy initialization",
             description: "Replace with lazy var",
-            originalCode: "var x = getValue()",;
-            fixedCode: "lazy var x = getValue()",;
+            originalCode: "var x = getValue()",
+            fixedCode: "lazy var x = getValue()",
             explanation: "Use lazy initialization for better performance",
             confidence: 0.9,
             isAutoApplicable: true
@@ -190,12 +190,12 @@ final class AIServiceTests: XCTestCase {
         let aiError = AIServiceError.networkError(networkError)
         
         XCTAssertNotNil(aiError.errorDescription)
-        XCTAssertTrue(aiError.errorDescription!.contains("Network error"))
+        XCTAssertTrue(aiError.errorDescription?.contains("Network error") == true)
         
         let invalidKeyError = AIServiceError.invalidAPIKey
-        XCTAssertTrue(invalidKeyError.errorDescription!.contains("Invalid API key"))
+        XCTAssertTrue(invalidKeyError.errorDescription?.contains("Invalid API key") == true)
         
         let rateLimitError = AIServiceError.rateLimitExceeded
-        XCTAssertTrue(rateLimitError.errorDescription!.contains("Rate limit exceeded"))
+        XCTAssertTrue(rateLimitError.errorDescription?.contains("Rate limit exceeded") == true)
     }
 }

@@ -34,11 +34,11 @@ class AutomaticFixEngine {
 
         // Learn from the results - simplified version
         for appliedFix in result.appliedFixes {
-            await learningCoordinator.recordSuccess(fix: appliedFix.description, context: filePath)
+            learningCoordinator.recordSuccess(fix: appliedFix.description, context: filePath)
         }
 
         for failedFix in result.failedFixes {
-            await learningCoordinator.recordFailure(fix: failedFix.fix.description, error: failedFix.error.localizedDescription, context: filePath)
+            learningCoordinator.recordFailure(fix: failedFix.fix.description, error: failedFix.error.localizedDescription, context: filePath)
         }
 
         os_log("Applied %d automatic fixes to %@", log: logger, type: .info, result.appliedFixes.count, filePath)

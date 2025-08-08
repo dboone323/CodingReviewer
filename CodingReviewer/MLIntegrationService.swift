@@ -214,7 +214,7 @@ final class MLIntegrationService: ObservableObject {
     private func loadMLInsights() async {
         // Try to load from today's ML automation data first
         let todayString = getCurrentDateString()
-        var mlDataPath = ".ml_automation/recommendations_\(todayString).md"
+        let mlDataPath = ".ml_automation/recommendations_\(todayString).md"
 
         // If today's data doesn't exist, try the latest available data
         if !FileManager.default.fileExists(atPath: mlDataPath) {

@@ -43,16 +43,15 @@ class EnhancedAICodeGenerator: ObservableObject {
 
         os_log("Starting code generation for %@", log: logger, type: .info, request.description)
 
-        do {
-            // Phase 1: Analyze context
-            generationProgress = 0.2
-            let context = await contextAnalyzer.analyzeContext(request)
+        // Phase 1: Analyze context
+        generationProgress = 0.2
+        let context = await contextAnalyzer.analyzeContext(request)
 
-            // Phase 2: Select appropriate patterns
-            generationProgress = 0.4
-            let patterns = await patternLibrary.selectPatterns(for: context)
+        // Phase 2: Select appropriate patterns
+        generationProgress = 0.4
+        let patterns = await patternLibrary.selectPatterns(for: context)
 
-            // Phase 3: Generate code
+        // Phase 3: Generate code
             generationProgress = 0.6
             let generatedCode = await codeTemplate.generateCode(using: patterns, context: context)
 
@@ -81,20 +80,6 @@ class EnhancedAICodeGenerator: ObservableObject {
 
             isGenerating = false
             return result
-
-        } catch {
-            os_log("Code generation failed: %@", log: logger, type: .error, error.localizedDescription)
-            isGenerating = false
-
-            return CodeGenerationResult(
-                success: false,
-                generatedCode: "",
-                confidence: 0.0,
-                suggestions: [],
-                metadata: GenerationMetadata(patternsUsed: 0, linesGenerated: 0, generationTime: 0),
-                error: error
-            )
-        }
     }
 
     func generateFunction(name: String, parameters: [Parameter], returnType: String?, context: GenerationContext) async -> String {

@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Analysis Engine Types
 
-enum AnalysisEngine: String, CaseIterable, Codable {
+enum AnalysisEngine: String, CaseIterable {
     case ai = "AI"
     case pattern = "Pattern"
     case combined = "Combined"
@@ -28,7 +28,7 @@ enum AnalysisEngine: String, CaseIterable, Codable {
     }
 }
 
-enum AnalysisScope: String, CaseIterable, Codable {
+enum AnalysisScope: String, CaseIterable {
     case file = "File"
     case project = "Project"
     case folder = "Folder"
@@ -44,7 +44,7 @@ enum AnalysisScope: String, CaseIterable, Codable {
     }
 }
 
-enum AnalysisMode: String, CaseIterable, Codable {
+enum AnalysisMode: String, CaseIterable {
     case quick = "Quick"
     case standard = "Standard"
     case detailed = "Detailed"
@@ -71,7 +71,7 @@ enum AnalysisMode: String, CaseIterable, Codable {
 
 // MARK: - Pattern Analysis Types
 
-enum PatternType: String, CaseIterable, Codable {
+enum PatternType: String, CaseIterable {
     case antiPattern = "Anti-Pattern"
     case designPattern = "Design Pattern"
     case codeSmell = "Code Smell"
@@ -95,7 +95,7 @@ enum PatternType: String, CaseIterable, Codable {
     }
 }
 
-enum PatternConfidence: String, CaseIterable, Codable {
+enum PatternConfidence: String, CaseIterable {
     case low = "Low"
     case medium = "Medium"
     case high = "High"
@@ -122,7 +122,7 @@ enum PatternConfidence: String, CaseIterable, Codable {
 
 // MARK: - Quality Metrics Types
 
-enum QualityMetric: String, CaseIterable, Codable {
+enum QualityMetric: String, CaseIterable {
     case complexity = "Complexity"
     case maintainability = "Maintainability"
     case readability = "Readability"
@@ -159,7 +159,7 @@ enum QualityMetric: String, CaseIterable, Codable {
     }
 }
 
-enum ComplexityLevel: String, CaseIterable, Codable {
+enum ComplexityLevel: String, CaseIterable {
     case simple = "Simple"
     case moderate = "Moderate"
     case complex = "Complex"
@@ -186,7 +186,7 @@ enum ComplexityLevel: String, CaseIterable, Codable {
 
 // MARK: - Documentation Types
 
-enum DocumentationType: String, CaseIterable, Codable {
+enum DocumentationType: String, CaseIterable {
     case inline = "Inline"
     case function = "Function"
     case classType = "Class"
@@ -210,7 +210,7 @@ enum DocumentationType: String, CaseIterable, Codable {
     }
 }
 
-enum DocumentationQuality: String, CaseIterable, Codable {
+enum DocumentationQuality: String, CaseIterable {
     case missing = "Missing"
     case minimal = "Minimal"
     case adequate = "Adequate"
@@ -240,7 +240,7 @@ enum DocumentationQuality: String, CaseIterable, Codable {
 
 // MARK: - Fix and Suggestion Types
 
-enum SharedFixCategory: String, CaseIterable, Codable {
+enum SharedFixCategory: String, CaseIterable {
     case automatic = "Automatic"
     case assisted = "Assisted"
     case manual = "Manual"
@@ -265,7 +265,7 @@ enum SharedFixCategory: String, CaseIterable, Codable {
     }
 }
 
-enum FixStatus: String, CaseIterable, Codable {
+enum FixStatus: String, CaseIterable {
     case pending = "Pending"
     case inProgress = "In Progress"
     case applied = "Applied"

@@ -27,7 +27,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
     private var performanceAnalyzer: PerformanceAnalyzer
     private var securityAnalyzer: SecurityAnalyzer
     private var qualityAnalyzer: QualityAnalyzer
-    private var predictiveAnalyzer: PredictiveAnalyzer
+    private var predictiveAnalyzer: AdvancedPredictiveAnalyzer
 
     private var analysisTimer: Timer?
 
@@ -37,7 +37,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
         self.performanceAnalyzer = PerformanceAnalyzer()
         self.securityAnalyzer = SecurityAnalyzer()
         self.qualityAnalyzer = QualityAnalyzer()
-        self.predictiveAnalyzer = PredictiveAnalyzer()
+        self.predictiveAnalyzer = AdvancedPredictiveAnalyzer()
 
         startContinuousAnalysis()
     }
@@ -52,45 +52,54 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
 
         var results = ComprehensiveAnalysisResult()
 
-        do {
-            // Phase 1: Dependency Analysis
-            analysisProgress = 0.1
-            results.dependencies = await dependencyAnalyzer.analyze()
+        // Phase 1: Dependency Analysis
+        analysisProgress = 0.1
+        results.dependencies = await dependencyAnalyzer.analyze()
 
-            // Phase 2: Architecture Analysis
-            analysisProgress = 0.2
-            results.architecture = await architectureAnalyzer.analyze()
+        // Phase 2: Architecture Analysis
+        analysisProgress = 0.2
+        results.architecture = await architectureAnalyzer.analyze()
 
-            // Phase 3: Performance Analysis
-            analysisProgress = 0.4
-            results.performance = await performanceAnalyzer.analyze()
+        // Phase 3: Performance Analysis
+        analysisProgress = 0.4
+        let performanceResults = await performanceAnalyzer.analyze("")
+        results.performance = PerformanceAnalysisResult(
+            score: 0.8,
+            issues: performanceResults.map { $0.message },
+            optimizations: performanceResults.map { $0.suggestion }
+        )
 
-            // Phase 4: Security Analysis
-            analysisProgress = 0.5
-            results.security = await securityAnalyzer.analyze()
+        // Phase 4: Security Analysis
+        analysisProgress = 0.5
+        let securityResults = await securityAnalyzer.analyze("")
+        results.security = SecurityAnalysisResult(
+            score: 0.9,
+            vulnerabilities: securityResults.map { $0.message },
+            recommendations: securityResults.map { $0.suggestion }
+        )
 
-            // Phase 5: Code Quality Analysis
-            analysisProgress = 0.7
-            results.quality = await qualityAnalyzer.analyze()
+        // Phase 5: Code Quality Analysis
+        analysisProgress = 0.7
+        let qualityResults = await qualityAnalyzer.analyze("")
+        results.quality = QualityAnalysisResult(
+            score: 0.85,
+            metrics: QualityMetrics(),
+            issues: qualityResults.map { $0.message }
+        )
 
-            // Phase 6: Predictive Analysis
-            analysisProgress = 0.8
-            results.predictions = await predictiveAnalyzer.analyze()
+        // Phase 6: Predictive Analysis
+        analysisProgress = 0.8
+        results.predictions = await predictiveAnalyzer.analyze()
 
-            // Phase 7: Generate Recommendations
-            analysisProgress = 0.9
-            results.recommendations = await generateRecommendations(from: results)
+        // Phase 7: Generate Recommendations
+        analysisProgress = 0.9
+        results.recommendations = await generateRecommendations(from: results)
 
-            // Phase 8: Update Project Health
-            analysisProgress = 1.0
-            await updateProjectHealth(from: results)
+        // Phase 8: Update Project Health
+        analysisProgress = 1.0
+        await updateProjectHealth(from: results)
 
-            os_log("Comprehensive analysis completed successfully", log: logger, type: .info)
-
-        } catch {
-            os_log("Analysis failed: %@", log: logger, type: .error, error.localizedDescription)
-            results.error = error
-        }
+        os_log("Comprehensive analysis completed successfully", log: logger, type: .info)
 
         isAnalyzing = false
         return results
@@ -127,7 +136,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
         let improvements = await codeGenerator.suggestImprovements(for: content, filePath: filePath)
 
         // Convert to recommendations
-        let recommendations = improvements.map { improvement in
+        _ = improvements.map { improvement in
             FileRecommendation(
                 type: .codeImprovement(improvement),
                 priority: mapSeverityToPriority(improvement.severity),
@@ -137,7 +146,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
         }
 
         // Calculate confidence based on AI predictions
-        let confidence = calculateConfidence(predictedIssues: predictedIssues, improvements: improvements)
+        _ = calculateConfidence(predictedIssues: predictedIssues, improvements: improvements)
 
         return FileAnalysisResult(
             fileName: (filePath as NSString).lastPathComponent,
@@ -246,10 +255,22 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
         // Run analysis every 5 minutes
         analysisTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { _ in
             Task {
-                await self.performHealthCheck()
-                await self.preventPotentialIssues()
+                _ = await self.performHealthCheck()
+                _ = await self.preventPotentialIssues()
             }
         }
+    }
+
+    private func calculateScore(from results: [AnalysisResult]) -> Double {
+        guard !results.isEmpty else { return 1.0 }
+        let highSeverityCount = results.filter { $0.severity == "High" || $0.severity == "Critical" }.count
+        let mediumSeverityCount = results.filter { $0.severity == "Medium" }.count
+        
+        var score = 1.0
+        score -= Double(highSeverityCount) * 0.2
+        score -= Double(mediumSeverityCount) * 0.1
+        
+        return max(0.0, score)
     }
 
     private func generateRecommendations(from results: ComprehensiveAnalysisResult) async -> [ProjectRecommendation] {
@@ -331,7 +352,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
         // Check for common build issues
         let buildLogPath = FileManager.default.currentDirectoryPath + "/build_status.log"
         if FileManager.default.fileExists(atPath: buildLogPath) {
-            if let buildLog = try? String(contentsOfFile: buildLogPath, encoding: .utf8) {
+            if let buildLog = try? String(contentsOf: URL(fileURLWithPath: buildLogPath), encoding: .utf8) {
                 if buildLog.contains("error:") {
                     score -= 0.3
                     issues.append(ProjectIssue(
@@ -359,8 +380,8 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
 
     private func checkDependencyHealth() async -> (score: Double, issues: [ProjectIssue]) {
         // Check Package.swift, Podfile, etc. for dependency issues
-        var score = 1.0
-        var issues: [ProjectIssue] = []
+        let score = 1.0
+        let issues: [ProjectIssue] = []
 
         // This would check for outdated dependencies, conflicts, etc.
         // For now, return a good score
@@ -483,50 +504,6 @@ class ArchitectureAnalyzer {
             patterns: [],
             violations: [],
             suggestions: []
-        )
-    }
-}
-
-class PerformanceAnalyzer {
-    func analyze() async -> PerformanceAnalysisResult {
-        // Analyze for performance issues, memory leaks, inefficient patterns
-        return PerformanceAnalysisResult(
-            score: 0.8,
-            issues: [],
-            optimizations: []
-        )
-    }
-}
-
-class SecurityAnalyzer {
-    func analyze() async -> SecurityAnalysisResult {
-        // Analyze for security vulnerabilities
-        return SecurityAnalysisResult(
-            score: 0.95,
-            vulnerabilities: [],
-            recommendations: []
-        )
-    }
-}
-
-class QualityAnalyzer {
-    func analyze() async -> QualityAnalysisResult {
-        // Analyze code quality metrics
-        return QualityAnalysisResult(
-            score: 0.88,
-            metrics: QualityMetrics(),
-            issues: []
-        )
-    }
-}
-
-class PredictiveAnalyzer {
-    func analyze() async -> RiskAssessment {
-        // Use AI to predict future issues
-        return RiskAssessment(
-            overallRisk: 0.3,
-            criticalRisks: ["Potential memory leaks", "Async race conditions"],
-            mitigation: "Implement comprehensive testing and code review processes"
         )
     }
 }

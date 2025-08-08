@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 // MARK: - Programming Language Types
 // Note: CodeLanguage enum is now defined in Services/LanguageDetectionService.swift
@@ -15,18 +14,18 @@ import SwiftUI
 
 // MARK: - Quality and Analysis Types
 
-enum Severity: String, CaseIterable, Codable {
+enum Severity: String, CaseIterable {
     case info = "Info"
     case warning = "Warning"
     case error = "Error"
     case critical = "Critical"
 
-    var color: Color {
+    var colorIdentifier: String {
         switch self {
-        case .info: return .blue
-        case .warning: return .orange
-        case .error: return .red
-        case .critical: return .purple
+        case .info: return "blue"
+        case .warning: return "orange"
+        case .error: return "red"
+        case .critical: return "purple"
         }
     }
 
@@ -40,20 +39,20 @@ enum Severity: String, CaseIterable, Codable {
     }
 }
 
-enum QualityLevel: String, CaseIterable, Codable {
+enum QualityLevel: String, CaseIterable {
     case excellent = "Excellent"
     case good = "Good"
     case fair = "Fair"
     case poor = "Poor"
     case critical = "Critical"
 
-    var color: Color {
+    var colorIdentifier: String {
         switch self {
-        case .excellent: return .green
-        case .good: return .blue
-        case .fair: return .yellow
-        case .poor: return .orange
-        case .critical: return .red
+        case .excellent: return "green"
+        case .good: return "blue"
+        case .fair: return "yellow"
+        case .poor: return "orange"
+        case .critical: return "red"
         }
     }
 
@@ -68,20 +67,20 @@ enum QualityLevel: String, CaseIterable, Codable {
     }
 }
 
-enum EffortLevel: String, CaseIterable, Codable {
+enum EffortLevel: String, CaseIterable {
     case minimal = "Minimal"
     case low = "Low"
     case medium = "Medium"
     case high = "High"
     case extensive = "Extensive"
 
-    var color: Color {
+    var colorIdentifier: String {
         switch self {
-        case .minimal: return .green
-        case .low: return .blue
-        case .medium: return .yellow
-        case .high: return .orange
-        case .extensive: return .red
+        case .minimal: return "green"
+        case .low: return "blue"
+        case .medium: return "yellow"
+        case .high: return "orange"
+        case .extensive: return "red"
         }
     }
 
@@ -96,20 +95,20 @@ enum EffortLevel: String, CaseIterable, Codable {
     }
 }
 
-enum ImpactLevel: String, CaseIterable, Codable {
+enum ImpactLevel: String, CaseIterable {
     case negligible = "Negligible"
     case minor = "Minor"
     case moderate = "Moderate"
     case major = "Major"
     case critical = "Critical"
 
-    var color: Color {
+    var colorIdentifier: String {
         switch self {
-        case .negligible: return .gray
-        case .minor: return .blue
-        case .moderate: return .yellow
-        case .major: return .orange
-        case .critical: return .red
+        case .negligible: return "gray"
+        case .minor: return "blue"
+        case .moderate: return "yellow"
+        case .major: return "orange"
+        case .critical: return "red"
         }
     }
 

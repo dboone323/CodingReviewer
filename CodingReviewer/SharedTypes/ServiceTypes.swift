@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - AI Service Types
 
-enum AIProvider: String, CaseIterable, Codable {
+enum AIProvider: String, CaseIterable {
     case openAI = "OpenAI"
     case gemini = "Google Gemini"
 
@@ -33,7 +33,7 @@ enum AIProvider: String, CaseIterable, Codable {
     }
 }
 
-enum AnalysisType: String, CaseIterable, Codable {
+enum AnalysisType: String, CaseIterable {
     case quality = "Quality"
     case security = "Security"
     case performance = "Performance"
@@ -64,7 +64,7 @@ enum AnalysisType: String, CaseIterable, Codable {
     }
 }
 
-enum SuggestionType: String, CaseIterable, Codable {
+enum SuggestionType: String, CaseIterable {
     case codeQuality = "Code Quality"
     case security = "Security"
     case performance = "Performance"
@@ -90,7 +90,7 @@ enum SuggestionType: String, CaseIterable, Codable {
 
 // MARK: - Analysis Result Types
 
-enum AnalysisResultType: String, CaseIterable, Codable {
+enum AnalysisResultType: String, CaseIterable {
     case quality = "Quality"
     case security = "Security"
     case suggestion = "Suggestion"
@@ -120,7 +120,7 @@ enum AnalysisResultType: String, CaseIterable, Codable {
 
 // MARK: - File and Project Types
 
-enum ProjectType: String, CaseIterable, Codable {
+enum ProjectType: String, CaseIterable {
     case ios = "iOS"
     case macos = "macOS"
     case watchos = "watchOS"
@@ -150,7 +150,7 @@ enum ProjectType: String, CaseIterable, Codable {
     }
 }
 
-enum FileUploadStatus: String, CaseIterable, Codable {
+enum FileUploadStatus: String, CaseIterable {
     case pending = "Pending"
     case uploading = "Uploading"
     case processing = "Processing"
@@ -183,7 +183,7 @@ enum FileUploadStatus: String, CaseIterable, Codable {
 
 // MARK: - API and Rate Limiting Types
 
-enum APIUsageStatus: String, CaseIterable, Codable {
+enum APIUsageStatus: String, CaseIterable {
     case normal = "Normal"
     case approaching = "Approaching Limit"
     case exceeded = "Limit Exceeded"
@@ -199,7 +199,7 @@ enum APIUsageStatus: String, CaseIterable, Codable {
     }
 }
 
-enum RateLimitType: String, CaseIterable, Codable {
+enum RateLimitType: String, CaseIterable {
     case perMinute = "Per Minute"
     case perHour = "Per Hour"
     case perDay = "Per Day"

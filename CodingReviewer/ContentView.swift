@@ -7,7 +7,9 @@ struct ContentView: View {
     @State private var isAnalyzing = false
     @State private var showWelcome = true
     @StateObject private var fileUploadManager = FileUploadManager()
-    @StateObject private var mlHealthMonitor = MLHealthMonitor()
+    @StateObject private var memoryMonitor = MemoryMonitor()
+    @StateObject private var responseTracker = ResponseTimeTracker()
+    @StateObject private var backgroundManager = BackgroundProcessingManager()
 
     enum Tab: String, CaseIterable {
         case quickStart = "Quick Start"
@@ -16,6 +18,10 @@ struct ContentView: View {
         case insights = "AI Insights"
         case patterns = "Patterns"
         case enhancement = "Smart Enhancement"
+        case analytics = "Enterprise Analytics"
+        case processing = "Background Processing"
+        case integration = "Enterprise Integration"
+        case testing = "Advanced Testing"
         case settings = "Settings"
 
         var icon: String {
@@ -26,6 +32,10 @@ struct ContentView: View {
             case .insights: return "brain.head.profile"
             case .patterns: return "chart.line.uptrend.xyaxis"
             case .enhancement: return "wand.and.stars"
+            case .analytics: return "chart.bar.fill"
+            case .processing: return "gearshape.2.fill"
+            case .integration: return "building.2.fill"
+            case .testing: return "flask.fill"
             case .settings: return "gearshape.fill"
             }
         }
@@ -38,6 +48,10 @@ struct ContentView: View {
             case .insights: return .purple
             case .patterns: return .orange
             case .enhancement: return .pink
+            case .analytics: return .indigo
+            case .processing: return .teal
+            case .integration: return .brown
+            case .testing: return .mint
             case .settings: return .gray
             }
         }
@@ -87,20 +101,54 @@ struct ContentView: View {
 
                 Spacer()
 
-                // Status Indicator
+                // Status Indicator with Enhanced Performance Info
                 VStack(alignment: .leading, spacing: 8) {
                     Divider()
 
+                    // Main Status
                     HStack {
-                        Circle()
-                            .fill(isAnalyzing ? Color.orange : Color.green)
-                            .frame(width: 8, height: 8)
+                        AccessibleStatusIndicator(
+                            isAnalyzing ? .analyzing : .ready,
+                            showLabel: false
+                        )
 
                         Text(isAnalyzing ? "Analyzing..." : "Ready")
                             .font(.caption)
                             .foregroundColor(.secondary)
 
                         Spacer()
+                    }
+                    
+                    // Memory Usage Indicator
+                    HStack {
+                        Text("Memory")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                        
+                        Spacer()
+                        
+                        Circle()
+                            .fill(memoryMonitor.memoryPressure.color)
+                            .frame(width: 6, height: 6)
+                        
+                        Text(memoryMonitor.formatBytes(memoryMonitor.currentUsage))
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    // Background Jobs Indicator
+                    if !backgroundManager.activeJobs.isEmpty {
+                        HStack {
+                            Text("Jobs")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                            
+                            Spacer()
+                            
+                            Text("\(backgroundManager.activeJobs.count)")
+                                .font(.caption2)
+                                .foregroundColor(.orange)
+                        }
                     }
                 }
                 .padding()
@@ -123,8 +171,10 @@ struct ContentView: View {
                             analysisResults: $analysisResults,
                             isAnalyzing: $isAnalyzing
                         )
+                        .environmentObject(backgroundManager)
+                        .environmentObject(responseTracker)
                     case .files:
-                        RobustFileUploadView()
+                        FileUploadView()
                             .environmentObject(fileUploadManager)
                     case .aiDashboard:
                         AIDashboardView()
@@ -134,9 +184,32 @@ struct ContentView: View {
                         PatternAnalysisView()
                     case .enhancement:
                         SmartEnhancementView()
+                    case .analytics:
+                        EnhancedEnterpriseAnalyticsDashboard()
+                    case .processing:
+                        BackgroundProcessingDashboard()
+                    case .integration:
+                        EnterpriseIntegrationDashboard()
+                    case .testing:
+                        AdvancedTestingDashboardView()
                     case .settings:
-                        SettingsView()
-                            .environmentObject(mlHealthMonitor)
+                        VStack(spacing: 20) {
+                            SettingsView()
+                            
+                            // Performance Dashboard
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("Performance Monitor")
+                                    .font(.headline)
+                                
+                                EnhancedPerformanceDashboard()
+                                    .environmentObject(memoryMonitor)
+                                    .environmentObject(responseTracker)
+                                    .environmentObject(backgroundManager)
+                            }
+                            .padding()
+                            .background(Color(.controlBackgroundColor))
+                            .cornerRadius(12)
+                        }
                     }
                 }
             }
@@ -186,6 +259,18 @@ struct ContentView: View {
             break
         case .enhancement:
             // Run smart enhancement
+            break
+        case .analytics:
+            // Refresh analytics dashboard
+            break
+        case .processing:
+            // Show processing queue
+            break
+        case .integration:
+            // Sync team data
+            break
+        case .testing:
+            // Generate and run tests
             break
         case .settings:
             // Reset to defaults
@@ -359,6 +444,8 @@ struct QuickStartView: View {
     @Binding var codeInput: String
     @Binding var analysisResults: [AnalysisResult]
     @Binding var isAnalyzing: Bool
+    @EnvironmentObject var backgroundManager: BackgroundProcessingManager
+    @EnvironmentObject var responseTracker: ResponseTimeTracker
 
     @State private var selectedLanguage: String = "Auto-detect"
 
@@ -438,7 +525,7 @@ struct QuickStartView: View {
                                 # Usage
                                 items = [{'price': 10}, {'price': 20}]
                                 result = calculate_total(items)
-                                // AppLogger.shared.log(result) // TODO: Replace print with proper logging
+                                AppLogger.shared.log("Python calculation result: \\(result)", level: .debug, category: .analysis)
                                 """
                             }
 
@@ -448,8 +535,9 @@ struct QuickStartView: View {
                                     for user in users {
                                         let query = "SELECT * FROM users WHERE name = '" + user + "'"
                                         // Execute query
-                                        // AppLogger.shared.log(query) // TODO: Replace print with proper logging
+                                        AppLogger.shared.log("Executing query: \\(query)", level: .debug, category: .security)
                                     }
+                                }
                                 }
                                 """
                             }
@@ -460,30 +548,32 @@ struct QuickStartView: View {
             }
             .padding(.horizontal)
 
-            // Analyze Button
-            Button(action: {
-                if !codeInput.isEmpty {
-                    runAnalysis()
-                }
-            }) {
-                HStack {
-                    if isAnalyzing {
-                        ProgressView()
-                            .scaleEffect(0.8)
-                        Text("Analyzing...")
-                    } else {
-                        Image(systemName: "magnifyingglass")
-                        Text("Analyze Code")
+            // Analyze Button with Enhanced Progress
+            VStack(spacing: 8) {
+                AccessibleButton(
+                    "Analyze Code",
+                    subtitle: isAnalyzing ? "Processing your code..." : "Run comprehensive analysis",
+                    icon: isAnalyzing ? nil : "magnifyingglass",
+                    style: codeInput.isEmpty ? .secondary : .primary
+                ) {
+                    if !codeInput.isEmpty {
+                        runAnalysis()
                     }
                 }
-                .foregroundColor(.white)
-                .padding(.horizontal, 30)
-                .padding(.vertical, 10)
-                .background(codeInput.isEmpty ? Color.gray : Color.blue)
-                .cornerRadius(20)
+                .disabled(codeInput.isEmpty || isAnalyzing)
+                
+                // Enhanced Progress Indicator
+                if isAnalyzing {
+                    EnhancedProgressView(
+                        progress: 0.0, // Will be updated by animation
+                        title: "Analyzing Code",
+                        subtitle: "Processing \(selectedLanguage) code...",
+                        style: .detailed
+                    )
+                    .frame(height: 60)
+                    .padding(.horizontal)
+                }
             }
-            .disabled(codeInput.isEmpty || isAnalyzing)
-            .buttonStyle(PlainButtonStyle())
 
             // Results Section
             if !analysisResults.isEmpty {
@@ -497,47 +587,80 @@ struct QuickStartView: View {
 
     private func runAnalysis() {
         isAnalyzing = true
+        
+        // Enqueue background job for comprehensive analysis
+        _ = backgroundManager.enqueueJob(
+            name: "Code Analysis",
+            description: "Analyzing \(selectedLanguage) code for issues",
+            priority: .high
+        ) {
+            // Simulate comprehensive analysis
+            try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+            return "Analysis Complete"
+        }
 
-        // Simulate analysis with realistic delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            // Generate sample results based on code content
-            var results: [AnalysisResult] = []
+        // Simulate analysis with realistic delay using response tracker
+        Task {
+            do {
+                let results = try await responseTracker.trackOperation("Code Analysis") {
+                    try await Task.sleep(nanoseconds: 1_500_000_000) // 1.5 seconds
+                    
+                    // Generate sample results based on code content
+                    var results: [AnalysisResult] = []
 
-            if codeInput.contains("SELECT") && codeInput.contains("+") {
-                results.append(AnalysisResult(
-                    id: UUID(),
-                    type: "Security",
-                    severity: "High",
-                    message: "SQL Injection vulnerability detected",
-                    lineNumber: findLineNumber(for: "SELECT"),
-                    suggestion: "Use parameterized queries to prevent SQL injection"
-                ))
+                    if codeInput.contains("SELECT") && codeInput.contains("+") {
+                        results.append(AnalysisResult(
+                            id: UUID(),
+                            type: "Security",
+                            severity: "High",
+                            message: "SQL Injection vulnerability detected",
+                            lineNumber: findLineNumber(for: "SELECT"),
+                            suggestion: "Use parameterized queries to prevent SQL injection"
+                        ))
+                    }
+
+                    if codeInput.contains("for") && codeInput.contains("total") {
+                        results.append(AnalysisResult(
+                            id: UUID(),
+                            type: "Performance",
+                            severity: "Medium",
+                            message: "Consider using built-in sum() function",
+                            lineNumber: findLineNumber(for: "for"),
+                            suggestion: "Use sum(item['price'] for item in items) for better performance"
+                        ))
+                    }
+
+                    if results.isEmpty {
+                        results.append(AnalysisResult(
+                            id: UUID(),
+                            type: "Quality",
+                            severity: "Low",
+                            message: "Code looks good! No major issues found",
+                            lineNumber: 1,
+                            suggestion: "Consider adding comments for better documentation"
+                        ))
+                    }
+                    
+                    return results
+                }
+
+                await MainActor.run {
+                    analysisResults = results
+                    isAnalyzing = false
+                }
+            } catch {
+                await MainActor.run {
+                    analysisResults = [AnalysisResult(
+                        id: UUID(),
+                        type: "Error",
+                        severity: "High",
+                        message: "Analysis failed: \(error.localizedDescription)",
+                        lineNumber: 1,
+                        suggestion: "Please try again or check your code format"
+                    )]
+                    isAnalyzing = false
+                }
             }
-
-            if codeInput.contains("for") && codeInput.contains("total") {
-                results.append(AnalysisResult(
-                    id: UUID(),
-                    type: "Performance",
-                    severity: "Medium",
-                    message: "Consider using built-in sum() function",
-                    lineNumber: findLineNumber(for: "for"),
-                    suggestion: "Use sum(item['price'] for item in items) for better performance"
-                ))
-            }
-
-            if results.isEmpty {
-                results.append(AnalysisResult(
-                    id: UUID(),
-                    type: "Quality",
-                    severity: "Low",
-                    message: "Code looks good! No major issues found",
-                    lineNumber: 1,
-                    suggestion: "Consider adding comments for better documentation"
-                ))
-            }
-
-            analysisResults = results
-            isAnalyzing = false
         }
     }
 
@@ -643,46 +766,11 @@ struct SettingsView: View {
     @State private var enableRealTimeAnalysis = true
     @State private var analysisDepth = 2.0
     @State private var selectedTheme = "System"
-    @EnvironmentObject var mlHealthMonitor: MLHealthMonitor
 
     private let themes = ["Light", "Dark", "System"]
 
     var body: some View {
         Form {
-            Section("ML Health Monitoring") {
-                HStack {
-                    Image(systemName: mlHealthMonitor.healthStatus.icon)
-                        .foregroundColor(mlHealthMonitor.healthStatus.color)
-                    VStack(alignment: .leading) {
-                        Text("ML System Status")
-                            .font(.headline)
-                        Text(mlHealthMonitor.healthStatus.description)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    Spacer()
-                    Text("\(Int(mlHealthMonitor.healthScore * 100))%")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                }
-
-                if let lastCheck = mlHealthMonitor.lastCheck {
-                    HStack {
-                        Text("Last Check")
-                        Spacer()
-                        Text(lastCheck, style: .relative)
-                            .foregroundColor(.secondary)
-                    }
-                }
-
-                HStack {
-                    Text("Active Monitors")
-                    Spacer()
-                    Text("\(mlHealthMonitor.activeMonitors)")
-                        .foregroundColor(.secondary)
-                }
-            }
-
             Section("Analysis Settings") {
                 Toggle("Enable Real-time Analysis", isOn: $enableRealTimeAnalysis)
 

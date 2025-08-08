@@ -4,10 +4,11 @@ import SwiftUI
 import Combine
 
 @MainActor
-// / EnhancedAIService class
-// / TODO: Add detailed documentation
-/// EnhancedAIService class
-/// TODO: Add detailed documentation
+/// Enhanced AI service that provides advanced code analysis capabilities
+/// 
+/// This service integrates with external AI APIs to provide sophisticated code analysis,
+/// including quality assessment, security scanning, and performance optimization suggestions.
+/// It manages API key authentication and handles async communication with AI services.
 public class EnhancedAIService: ObservableObject {
     @Published public var isAnalyzing: Bool = false;
     @Published public var analysisResult: String = "";
@@ -21,10 +22,16 @@ public class EnhancedAIService: ObservableObject {
         self.session = URLSession.shared
     }
 
-    // / analyzeCodeWithEnhancedAI function
-    // / TODO: Add detailed documentation
-    /// analyzeCodeWithEnhancedAI function
-    /// TODO: Add detailed documentation
+    /// Analyzes code using enhanced AI capabilities with comprehensive analysis
+    /// 
+    /// This method performs deep code analysis including quality assessment, security scanning,
+    /// performance optimization suggestions, and best practice recommendations.
+    /// 
+    /// - Parameters:
+    ///   - code: The source code to analyze
+    ///   - language: The programming language of the code (default: "swift")
+    /// 
+    /// - Note: This method updates the `analysisResult` and `errorMessage` published properties
     public func analyzeCodeWithEnhancedAI(_ code: String, language: String = "swift") async {
         isAnalyzing = true
         errorMessage = nil

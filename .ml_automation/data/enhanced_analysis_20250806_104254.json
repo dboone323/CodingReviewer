@@ -1,0 +1,49 @@
+{
+  "timestamp": "2025-08-06T10:42:55-05:00",
+  "analysis_results": {
+    "file_count": 50,
+    "total_functions": 393,
+    "total_classes": 324,
+    "total_lines": 16561,
+    "code_quality_score": .70,
+    "critical_issue_percentage": 10,
+    "complexity_analysis": {
+      "high_risk_files": 5,
+      "avg_quality_score": 7,
+      "total_issues_detected": 79,
+      "avg_functions_per_file": 7,
+      "avg_lines_per_file": 331
+    },
+    "performance_metrics": {
+      "estimated_build_time": 116,
+      "memory_estimate_mb": 165,
+      "dependency_count": 157
+    },
+    "security_flags": [
+      "insecure_http"
+      , "password_reference"
+      
+    ],
+    "pattern_insights": {
+      "swiftui_usage": 63,
+      "combine_usage": 40,
+      "async_await_usage": 178
+    }
+  },
+  "critical_issues": [
+    "FileManagerService.swift: 5 critical issues detected",
+    "AICodeReviewService.swift: 4 critical issues detected",
+    "AutomaticFixEngine.swift: 5 critical issues detected",
+    "EnterpriseIntegration.swift: 4 critical issues detected",
+    "MLIntegrationService.swift: 5 critical issues detected"
+  ],
+  "recommendations": [
+    "Address 5 high-risk files requiring immediate attention",
+    "Improve code documentation (current coverage below 10%)",
+    "Reduce force unwrapping usage for better error handling",
+    "Break down large files (>500 lines) for better maintainability",
+    "Implement comprehensive unit testing strategy"
+  ],
+  "ml_confidence": 0.92,
+  "last_updated": "2025-08-06T10:42:55-05:00"
+}

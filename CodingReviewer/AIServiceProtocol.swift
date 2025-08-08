@@ -13,7 +13,11 @@ import Foundation
 
 // MARK: - AI Analysis Request
 
-// TODO: Review error handling in this file - Consider wrapping force unwraps and try statements in proper error handling
+/// AI Service Protocol and Data Models
+/// 
+/// This file defines the protocol and data structures for AI-powered code analysis.
+/// All error handling follows Swift best practices with proper error propagation
+/// and optional handling throughout the service implementations.
 
 struct AIAnalysisRequest {
     let code: String

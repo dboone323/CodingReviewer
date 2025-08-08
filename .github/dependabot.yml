@@ -1,0 +1,54 @@
+# Dependabot Configuration - Phase 3 Security Excellence
+
+version: 2
+updates:
+  # Swift Package Manager
+  - package-ecosystem: "swift"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "06:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "dboone323"
+    assignees:
+      - "dboone323"
+    commit-message:
+      prefix: "🔒 security"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "security"
+      - "automated"
+    rebase-strategy: "auto"
+    target-branch: "main"
+    
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "dboone323"
+    commit-message:
+      prefix: "🔧 ci"
+      include: "scope"
+    labels:
+      - "github-actions"
+      - "security"
+      - "ci-cd"
+
+  # Docker (if any Dockerfile exists)
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    labels:
+      - "docker"
+      - "security"

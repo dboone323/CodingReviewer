@@ -8,6 +8,7 @@
 import Testing
 import Combine
 @testable import CodingReviewer
+@testable import CodingReviewer
 
 @MainActor
 final class CodeReviewViewModelTests {
@@ -150,8 +151,8 @@ final class CodeReviewViewModelTests {
             suggestionId: UUID(),
             title: "Use lazy initialization",
             description: "Apply lazy keyword",
-            originalCode: "var x = getValue()",;
-            fixedCode: "lazy var x = getValue()",;
+            originalCode: "var x = getValue()",
+            fixedCode: "lazy var x = getValue()",
             explanation: "Using lazy initialization improves performance",
             confidence: 0.9,
             isAutoApplicable: true
@@ -173,8 +174,8 @@ final class CodeReviewViewModelTests {
             suggestionId: UUID(),
             title: "Test fix",
             description: "Test description",
-            originalCode: "var x = getValue()",;
-            fixedCode: "lazy var x = getValue()",;
+            originalCode: "var x = getValue()",
+            fixedCode: "lazy var x = getValue()",
             explanation: "Test explanation for improvement",
             confidence: 0.9,
             isAutoApplicable: true

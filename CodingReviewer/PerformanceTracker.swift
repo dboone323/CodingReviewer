@@ -1,10 +1,11 @@
 import Foundation
+import Combine
 
-class PerformanceTracker {
+class PerformanceTracker: ObservableObject {
     static let shared = PerformanceTracker()
 
-    private var startTimes: [String: CFTimeInterval] = [:];
-    private var performanceMetrics: [PerformanceMetric] = [];
+    private var startTimes: [String: CFTimeInterval] = [:]
+    @Published var performanceMetrics: [PerformanceMetric] = []
 
     private init() {}
 
@@ -29,7 +30,9 @@ class PerformanceTracker {
             memoryUsage: getCurrentMemoryUsage()
         )
 
-        performanceMetrics.append(metric)
+        DispatchQueue.main.async {
+            self.performanceMetrics.append(metric)
+        }
         startTimes.removeValue(forKey: operation)
 
         AppLogger.shared.log("Performance tracking completed: \(operation) - \(String(format: "%.3f", duration))s")
@@ -40,6 +43,18 @@ class PerformanceTracker {
         }
 
         return duration
+    }
+
+    func refreshMetrics() {
+        // Trigger a UI update by notifying observers
+        DispatchQueue.main.async {
+            self.objectWillChange.send()
+        }
+        AppLogger.shared.log("Performance metrics refreshed")
+    }
+
+    var metrics: [PerformanceMetric] {
+        return performanceMetrics
     }
 
     func getMetrics(for operation: String? = nil) -> [PerformanceMetric] {
@@ -65,7 +80,9 @@ class PerformanceTracker {
     }
 
     func clearMetrics() {
-        performanceMetrics.removeAll()
+        DispatchQueue.main.async {
+            self.performanceMetrics.removeAll()
+        }
         startTimes.removeAll()
         AppLogger.shared.log("Performance metrics cleared")
     }

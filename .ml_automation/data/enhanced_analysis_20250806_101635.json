@@ -1,0 +1,47 @@
+{
+  "timestamp": "2025-08-06T10:16:35-05:00",
+  "analysis_results": {
+    "file_count": 85,
+    "total_functions": 646,
+    "total_classes": 599,
+    "total_lines": 27776,
+    "code_quality_score": 0.55,
+    "critical_issue_percentage": 41,
+    "complexity_analysis": {
+      "high_risk_files": 35,
+      "large_files": 23,
+      "todo_files": 12,
+      "avg_functions_per_file": 7,
+      "avg_lines_per_file": 326
+    },
+    "performance_metrics": {
+      "estimated_build_time": 197,
+      "memory_estimate_mb": 277,
+      "force_unwrap_count": 205
+    },
+    "security_flags": [
+      "excessive_force_unwrapping",
+      "large_file_complexity"
+    ],
+    "pattern_insights": {
+      "swiftui_usage": 60,
+      "combine_usage": 38,
+      "async_await_usage": 174
+    }
+  },
+  "critical_issues": [
+    "35 files require immediate attention",
+    "23 files exceed recommended size (>500 lines)",
+    "12 files contain unresolved TODO/FIXME items",
+    "205 instances of force unwrapping detected"
+  ],
+  "recommendations": [
+    "Address 35 high-risk files requiring immediate attention",
+    "Break down 23 large files for better maintainability", 
+    "Resolve 12 outstanding TODO/FIXME items",
+    "Replace force unwrapping with proper error handling (205 instances)",
+    "Implement comprehensive unit testing strategy"
+  ],
+  "ml_confidence": 0.88,
+  "last_updated": "2025-08-06T10:16:35-05:00"
+}

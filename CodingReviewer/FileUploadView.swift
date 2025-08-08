@@ -440,36 +440,51 @@ struct FileUploadView: View {
     }
 
     private func handleDrop(providers: [NSItemProvider]) -> Bool {
-        var urls: [URL] = [];
-
+        Task {
+            await processDroppedProviders(providers)
+        }
+        return !providers.isEmpty
+    }
+    
+    @MainActor
+    private func processDroppedProviders(_ providers: [NSItemProvider]) async {
+        var collectedURLs: [URL] = []
+        
+        // Process providers sequentially to avoid concurrency issues
         for provider in providers {
             if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
-                provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, error in
-                    if let data = item as? Data, let url = URL(dataRepresentation: data, relativeTo: nil) {
-                        urls.append(url)
-
-                        if urls.count == providers.count {
-                            let urlsCopy = urls  // Capture urls to avoid concurrency warning
-                            Task {
-                                do {
-                                    let result = try await fileManager.uploadFiles(from: urlsCopy)
-                                    await MainActor.run {
-                                        self.uploadResult = result
-                                        self.showingUploadResults = true
-                                    }
-                                } catch {
-                                    await MainActor.run {
-                                        fileManager.errorMessage = error.localizedDescription
-                                    }
-                                }
+                do {
+                    let url = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<URL, Error>) in
+                        provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, error in
+                            if let error = error {
+                                continuation.resume(throwing: error)
+                                return
+                            }
+                            
+                            if let data = item as? Data, let url = URL(dataRepresentation: data, relativeTo: nil) {
+                                continuation.resume(returning: url)
+                            } else {
+                                continuation.resume(throwing: URLError(.badURL))
                             }
                         }
                     }
+                    collectedURLs.append(url)
+                } catch {
+                    AppLogger.shared.log("Failed to process dropped item: \(error)", level: .error, category: .general)
                 }
             }
         }
-
-        return !providers.isEmpty
+        
+        // Upload the collected URLs
+        if !collectedURLs.isEmpty {
+            do {
+                let result = try await fileManager.uploadFiles(from: collectedURLs)
+                self.uploadResult = result
+                self.showingUploadResults = true
+            } catch {
+                fileManager.errorMessage = error.localizedDescription
+            }
+        }
     }
 
     private func toggleFileSelection(_ file: CodeFile) {

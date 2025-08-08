@@ -1,10 +1,10 @@
 # Code Deduplication Prevention Report
-Generated: Sun Aug  3 11:31:59 CDT 2025
+Generated: Fri Aug  8 10:53:21 CDT 2025
 
 ## System Status
 - **Prevention System**: Active
 - **Monitoring**: Enabled
-- **Last Scan**: Sun Aug  3 11:31:59 CDT 2025
+- **Last Scan**: Fri Aug  8 10:53:21 CDT 2025
 
 ## Configuration
 ```json
@@ -19,20 +19,20 @@ Generated: Sun Aug  3 11:31:59 CDT 2025
 
 ## Scan Results
 - **Recent Detections**:       10
-- **Total Log Entries**:      873
+- **Total Log Entries**:     3538
 
 ### Recent Detections
 ```
-Sun Aug  3 11:31:57 CDT 2025: Potential duplicate: /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/ContentView.swift <-> /Users/danielstevens/Desktop/CodingReviewer/archived_backups/disabled_files_archive/ContentView_AI.swift.disabled
-Sun Aug  3 11:31:57 CDT 2025: Potential duplicate: /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AIInsightsView.swift <-> /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/EnhancedAIInsightsView.swift
-Sun Aug  3 11:31:57 CDT 2025: Potential duplicate: /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/Services/SharedDataManager.swift <-> /Users/danielstevens/Desktop/CodingReviewer/Tests/UnitTests/SharedDataManagerTests.swift
-Sun Aug  3 11:31:57 CDT 2025: Potential duplicate: /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/Services/FileUploadManager.swift <-> /Users/danielstevens/Desktop/CodingReviewer/Tests/UnitTests/FileUploadManagerTests.swift
-Sun Aug  3 11:31:57 CDT 2025: Potential duplicate: /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/Services/FileUploadManager.swift <-> /Users/danielstevens/Desktop/CodingReviewer/archived_backups/2025-07-29/CodingReviewer_refactoring_backup_20250729_130750/Services/FileUploadManager_Simple.swift
-Sun Aug  3 11:31:57 CDT 2025: Potential duplicate: /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/Services/FileUploadManager.swift <-> /Users/danielstevens/Desktop/CodingReviewer/archived_backups/2025-07-29/CodingReviewer_refactoring_backup_20250729_130750/Services/FileUploadManager_Clean.swift
-Sun Aug  3 11:31:57 CDT 2025: Potential duplicate: /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileUploadView.swift <-> /Users/danielstevens/Desktop/CodingReviewer/EnhancedFileUploadView_V2.swift
-Sun Aug  3 11:31:57 CDT 2025: Potential duplicate: /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileUploadView.swift <-> /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/EnhancedFileUploadView.swift
-Sun Aug  3 11:31:58 CDT 2025: Potential duplicate: /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/FileUploadView.swift <-> /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/Views/RobustFileUploadView.swift
-Sun Aug  3 11:31:59 CDT 2025: Identical content found for hash: 00dd561d36a2dcb29c8cc8dad29ebbbc4d88eb331abe0d79d8811d5dca50dd17
+Fri Aug  8 10:53:19 CDT 2025: Potential duplicate: /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeFixAssistant_Clean.swift <-> /Users/danielstevens/Desktop/CodingReviewer/build/CodingReviewer.build/Debug/CodingReviewer.build/Objects-normal/arm64/AICodeFixAssistant_Clean.swiftdeps
+Fri Aug  8 10:53:19 CDT 2025: Potential duplicate: /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeFixAssistant_Clean.swift <-> /Users/danielstevens/Desktop/CodingReviewer/build/CodingReviewer.build/Debug/CodingReviewer.build/Objects-normal/arm64/AICodeFixAssistant_Clean.d
+Fri Aug  8 10:53:19 CDT 2025: Potential duplicate: /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeFixAssistant_Clean.swift <-> /Users/danielstevens/Desktop/CodingReviewer/build/CodingReviewer.build/Debug/CodingReviewer.build/Objects-normal/arm64/AICodeFixAssistant_Clean.o
+Fri Aug  8 10:53:19 CDT 2025: Potential duplicate: /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeFixAssistant_Clean.swift <-> /Users/danielstevens/Desktop/CodingReviewer/build/CodingReviewer.build/Debug/CodingReviewer.build/Objects-normal/x86_64/AICodeFixAssistant_Clean.swiftconstvalues
+Fri Aug  8 10:53:19 CDT 2025: Potential duplicate: /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeFixAssistant_Clean.swift <-> /Users/danielstevens/Desktop/CodingReviewer/build/CodingReviewer.build/Debug/CodingReviewer.build/Objects-normal/x86_64/AICodeFixAssistant_Clean.stringsdata
+Fri Aug  8 10:53:19 CDT 2025: Potential duplicate: /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeFixAssistant_Clean.swift <-> /Users/danielstevens/Desktop/CodingReviewer/build/CodingReviewer.build/Debug/CodingReviewer.build/Objects-normal/x86_64/AICodeFixAssistant_Clean.dia
+Fri Aug  8 10:53:19 CDT 2025: Potential duplicate: /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeFixAssistant_Clean.swift <-> /Users/danielstevens/Desktop/CodingReviewer/build/CodingReviewer.build/Debug/CodingReviewer.build/Objects-normal/x86_64/AICodeFixAssistant_Clean.swiftdeps
+Fri Aug  8 10:53:19 CDT 2025: Potential duplicate: /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeFixAssistant_Clean.swift <-> /Users/danielstevens/Desktop/CodingReviewer/build/CodingReviewer.build/Debug/CodingReviewer.build/Objects-normal/x86_64/AICodeFixAssistant_Clean.d
+Fri Aug  8 10:53:19 CDT 2025: Potential duplicate: /Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/AICodeFixAssistant_Clean.swift <-> /Users/danielstevens/Desktop/CodingReviewer/build/CodingReviewer.build/Debug/CodingReviewer.build/Objects-normal/x86_64/AICodeFixAssistant_Clean.o
+Fri Aug  8 10:53:21 CDT 2025: Identical content found for hash: 0119a9f5be15a6739ab3ab68d34860817e3d62dc3fbee7835762f180bc2c4479
 ```
 
 ## Prevention Measures
