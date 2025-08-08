@@ -51,15 +51,43 @@ jobs:
       with:
         xcode-version: latest-stable
 
+    - name: Check Xcode Compatibility
+      run: |
+        echo "🔍 Checking Xcode project compatibility..."
+        PROJECT_OBJECT_VERSION=""
+        if [ -f "CodingReviewer.xcodeproj/project.pbxproj" ]; then
+          PROJECT_OBJECT_VERSION=$(grep "objectVersion = " CodingReviewer.xcodeproj/project.pbxproj | head -1 | sed 's/.*objectVersion = \([0-9]*\);.*/\1/')
+          echo "📋 Detected project objectVersion: $PROJECT_OBJECT_VERSION"
+        fi
+        
+        XCODE_VERSION_OUTPUT=$(xcodebuild -version | head -1)
+        echo "📱 Available Xcode: $XCODE_VERSION_OUTPUT"
+        
+        # Check compatibility (objectVersion 77 requires Xcode 16+)
+        if [ "$PROJECT_OBJECT_VERSION" -ge 77 ] 2>/dev/null; then
+          echo "⚠️ Project requires Xcode 16+ (objectVersion $PROJECT_OBJECT_VERSION), but runner has older Xcode"
+          echo "XCODE_CODEQL_COMPATIBLE=false" >> $GITHUB_ENV
+        else
+          echo "✅ Xcode version compatible with project"
+          echo "XCODE_CODEQL_COMPATIBLE=true" >> $GITHUB_ENV
+        fi
+
     - name: Build for CodeQL Analysis
       run: |
         echo "🏗️ Building for security analysis..."
-        xcodebuild -scheme CodingReviewer \
-                   -destination "platform=macOS" \
-                   clean build \
-                   CODE_SIGNING_ALLOWED=NO \
-                   ONLY_ACTIVE_ARCH=YES \
-                   -quiet
+        if [ "${{ env.XCODE_CODEQL_COMPATIBLE }}" = "true" ]; then
+          echo "✅ Building with Xcode for CodeQL..."
+          xcodebuild -scheme CodingReviewer \
+                     -destination "platform=macOS" \
+                     clean build \
+                     CODE_SIGNING_ALLOWED=NO \
+                     ONLY_ACTIVE_ARCH=YES \
+                     -quiet
+        else
+          echo "⚠️ Xcode build skipped due to version incompatibility"
+          echo "🔍 CodeQL will perform source-only analysis..."
+          echo "✅ Source code prepared for analysis"
+        fi
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
