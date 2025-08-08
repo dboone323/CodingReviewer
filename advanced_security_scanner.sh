@@ -3,8 +3,8 @@
 # Advanced Security Scanner - Phase 2 CI/CD Enhancement
 # MCP-Powered Security Analysis
 
-echo "🛡️ Advanced Security Scanner - Phase 2 Enhancement"
-echo "=================================================="
+echo "🛡️ Advanced Security Scanner - Phase 2 Enhancement" >&2
+echo "==================================================" >&2
 
 # Configuration
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
@@ -64,11 +64,11 @@ EOF
 # Update timestamp
 sed -i '' "s/\"timestamp\": \"\"/\"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"/" "$REPORT_FILE"
 
-print_status "Starting comprehensive security analysis..."
+print_status "Starting comprehensive security analysis..." >&2
 
 # 1. Scan for hardcoded secrets
 scan_secrets() {
-    print_status "Scanning for hardcoded secrets and credentials..."
+    print_status "Scanning for hardcoded secrets and credentials..." >&2
     
     SECRET_PATTERNS=(
         "password\s*=\s*['\"][^'\"]*['\"]"
@@ -87,9 +87,9 @@ scan_secrets() {
     done
     
     if [ $SECRETS_FOUND -gt 0 ]; then
-        print_warning "Found $SECRETS_FOUND potential secret patterns"
+        print_warning "Found $SECRETS_FOUND potential secret patterns" >&2
     else
-        print_success "No hardcoded secrets detected"
+        print_success "No hardcoded secrets detected" >&2
     fi
     
     echo "$SECRETS_FOUND"
@@ -97,41 +97,41 @@ scan_secrets() {
 
 # 2. Check file permissions
 check_permissions() {
-    print_status "Checking file permissions for security issues..."
+    print_status "Checking file permissions for security issues..." >&2
     
     PERM_ISSUES=0
     
     # Check for world-writable files
     if find . -type f -perm +002 2>/dev/null | grep -q .; then
         PERM_ISSUES=$((PERM_ISSUES + 1))
-        print_warning "Found world-writable files"
+        print_warning "Found world-writable files" >&2
     fi
     
     # Check for executable scripts
     EXEC_COUNT=$(find . -name "*.sh" -type f | wc -l | tr -d ' ')
-    print_info "Found $EXEC_COUNT shell scripts"
+    print_info "Found $EXEC_COUNT shell scripts" >&2
     
     echo "$PERM_ISSUES"
 }
 
 # 3. Dependency security check
 check_dependencies() {
-    print_status "Analyzing dependencies for security vulnerabilities..."
+    print_status "Analyzing dependencies for security vulnerabilities..." >&2
     
     DEP_ISSUES=0
     
     # Check for Package.swift
     if [ -f "Package.swift" ]; then
-        print_info "Analyzing Package.swift dependencies"
+        print_info "Analyzing Package.swift dependencies" >&2
         DEP_COUNT=$(grep -c "dependencies:" Package.swift 2>/dev/null || echo "0")
-        print_info "Found $DEP_COUNT dependency declarations"
+        print_info "Found $DEP_COUNT dependency declarations" >&2
     fi
     
     # Check for Podfile
     if [ -f "Podfile" ]; then
-        print_info "Analyzing Podfile dependencies"
+        print_info "Analyzing Podfile dependencies" >&2
         POD_COUNT=$(grep -c "pod " Podfile 2>/dev/null || echo "0")
-        print_info "Found $POD_COUNT pod dependencies"
+        print_info "Found $POD_COUNT pod dependencies" >&2
     fi
     
     echo "$DEP_ISSUES"
@@ -139,21 +139,21 @@ check_dependencies() {
 
 # 4. Code security patterns
 check_code_patterns() {
-    print_status "Analyzing code for insecure patterns..."
+    print_status "Analyzing code for insecure patterns..." >&2
     
     CODE_ISSUES=0
     
     # Check for unsafe URL handling
     if grep -r "URL(string:" . --include="*.swift" >/dev/null 2>&1; then
         CODE_ISSUES=$((CODE_ISSUES + 1))
-        print_warning "Found direct URL string construction"
+        print_warning "Found direct URL string construction" >&2
     fi
     
     # Check for force unwrapping
     FORCE_UNWRAP_COUNT=$(grep -r "!" . --include="*.swift" | wc -l | tr -d ' ')
     if [ "$FORCE_UNWRAP_COUNT" -gt 50 ]; then
         CODE_ISSUES=$((CODE_ISSUES + 1))
-        print_warning "High number of force unwraps detected: $FORCE_UNWRAP_COUNT"
+        print_warning "High number of force unwraps detected: $FORCE_UNWRAP_COUNT" >&2
     fi
     
     echo "$CODE_ISSUES"
@@ -161,20 +161,20 @@ check_code_patterns() {
 
 # 5. Network security check
 check_network_security() {
-    print_status "Checking network security configurations..."
+    print_status "Checking network security configurations..." >&2
     
     NET_ISSUES=0
     
     # Check for HTTP (non-HTTPS) URLs
     if grep -r "http://" . --include="*.swift" --include="*.plist" >/dev/null 2>&1; then
         NET_ISSUES=$((NET_ISSUES + 1))
-        print_warning "Found non-HTTPS URLs"
+        print_warning "Found non-HTTPS URLs" >&2
     fi
     
     # Check for disabled certificate validation
     if grep -r "allowsArbitraryLoads" . --include="*.plist" >/dev/null 2>&1; then
         NET_ISSUES=$((NET_ISSUES + 1))
-        print_warning "Found disabled certificate validation"
+        print_warning "Found disabled certificate validation" >&2
     fi
     
     echo "$NET_ISSUES"
@@ -182,7 +182,7 @@ check_network_security() {
 
 # Run all security checks
 main() {
-    print_status "Initializing Phase 2 enhanced security scanner..."
+    print_status "Initializing Phase 2 enhanced security scanner..." >&2
     
     SECRETS=$(scan_secrets)
     PERMISSIONS=$(check_permissions)
@@ -234,18 +234,18 @@ except Exception as e:
 " 2>/dev/null || echo "Note: JSON report update requires Python 3"
     
     # Generate summary
-    print_info "Security Analysis Summary:"
-    echo "  📊 Files Scanned: $FILES_SCANNED"
-    echo "  🎯 Security Score: $SECURITY_SCORE/100"
-    echo "  ⚠️  Total Issues: $TOTAL_ISSUES"
-    echo "  📄 Report: $REPORT_FILE"
+    print_info "Security Analysis Summary:" >&2
+    echo "  📊 Files Scanned: $FILES_SCANNED" >&2
+    echo "  🎯 Security Score: $SECURITY_SCORE/100" >&2
+    echo "  ⚠️  Total Issues: $TOTAL_ISSUES" >&2
+    echo "  📄 Report: $REPORT_FILE" >&2
     
     if [ $TOTAL_ISSUES -eq 0 ]; then
-        print_success "No security issues detected!"
+        print_success "No security issues detected!" >&2
     elif [ $TOTAL_ISSUES -le 3 ]; then
-        print_warning "Minor security issues detected - review recommended"
+        print_warning "Minor security issues detected - review recommended" >&2
     else
-        print_warning "Multiple security issues detected - immediate review required"
+        print_warning "Multiple security issues detected - immediate review required" >&2
     fi
     
     # Create human-readable summary
@@ -292,8 +292,8 @@ fi)
 *Generated by Advanced Security Scanner - Phase 2*
 SUMMARY_EOF
     
-    print_success "Security analysis completed successfully!"
-    print_info "Reports saved to $SECURITY_DIR/"
+    print_success "Security analysis completed successfully!" >&2
+    print_info "Reports saved to $SECURITY_DIR/" >&2
     
     return $TOTAL_ISSUES
 }
