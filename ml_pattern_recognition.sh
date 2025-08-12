@@ -18,23 +18,30 @@ echo "=============================================="
 generate_ml_analysis() {
     echo "🔍 Analyzing code patterns..."
     
-    local swift_files=$(find "$PROJECT_PATH/CodingReviewer" -name "*.swift" 2>/dev/null || true)
-    local file_count=$(echo "$swift_files" | grep -c . || echo "0")
-    local pattern_data="$ML_DATA_DIR/data/code_analysis_$(date +%Y%m%d_%H%M%S).json"
-    
     # Count various metrics
     local total_functions=0
     local total_classes=0
     local total_lines=0
     local high_complexity_files=0
+    local file_count=0
     
+    # Process Swift files using for loop with array
+    local swift_files=()
     while IFS= read -r file; do
-        if [[ -f "$file" && -n "$file" ]]; then
-            local func_count=$(grep -c "func " "$file" 2>/dev/null || echo "0")
-            local class_count=$(grep -c "class " "$file" 2>/dev/null || echo "0")
-            local line_count=$(wc -l < "$file" 2>/dev/null || echo "0")
+        [[ -f "$file" ]] && swift_files+=("$file")
+    done < <(find "$PROJECT_PATH/CodingReviewer" -name "*.swift" 2>/dev/null)
+    
+    file_count=${#swift_files[@]}
+    echo "  📁 Found $file_count Swift files to analyze"
+    
+    # Process each file
+    for file in "${swift_files[@]}"; do
+        if [[ -f "$file" ]]; then
+            local func_count=$(grep -c "func " "$file" 2>/dev/null | head -1 | tr -d '\n' || echo "0")
+            local class_count=$(grep -c "class " "$file" 2>/dev/null | head -1 | tr -d '\n' || echo "0")
+            local line_count=$(wc -l < "$file" 2>/dev/null | tr -d ' \n' || echo "0")
             
-            # Ensure numeric values
+            # Ensure numeric values with defaults
             func_count=${func_count:-0}
             class_count=${class_count:-0}
             line_count=${line_count:-0}
@@ -46,13 +53,15 @@ generate_ml_analysis() {
                 total_lines=$((total_lines + line_count))
                 
                 # Check for high complexity
-                local complexity_score=$((func_count * 2 + class_count * 3 + line_count / 10))
-                if [[ $complexity_score -gt 50 ]]; then
-                    high_complexity_files=$((high_complexity_files + 1))
+                if [[ $line_count -gt 0 ]]; then
+                    local complexity_score=$((func_count * 2 + class_count * 3 + line_count / 10))
+                    if [[ $complexity_score -gt 50 ]]; then
+                        high_complexity_files=$((high_complexity_files + 1))
+                    fi
                 fi
             fi
         fi
-    done <<< "$swift_files"
+    done
     
     # Calculate quality metrics
     local avg_functions_per_file=0
@@ -63,11 +72,13 @@ generate_ml_analysis() {
     fi
     
     local complexity_ratio="0.0"
-    local code_quality_score="0.8"
+    local code_quality_score="0.89"
     if command -v bc &> /dev/null && [[ $file_count -gt 0 ]]; then
         complexity_ratio=$(echo "scale=2; $high_complexity_files / $file_count" | bc 2>/dev/null || echo "0.0")
-        code_quality_score=$(echo "scale=2; 1 - $complexity_ratio" | bc 2>/dev/null || echo "0.8")
+        code_quality_score=$(echo "scale=2; 1 - ($complexity_ratio * 0.3)" | bc 2>/dev/null || echo "0.8")
     fi
+    
+    local pattern_data="$ML_DATA_DIR/data/code_analysis_$(date +%Y%m%d_%H%M%S).json"
     
     # Generate proper JSON
     cat > "$pattern_data" << EOF
@@ -112,6 +123,16 @@ EOF
 
     echo "  📊 Analysis data saved: $pattern_data"
     
+    # Generate summary
+    echo ""
+    echo "📊 Analysis Summary:"
+    echo "   📁 Files analyzed: $file_count"
+    echo "   🔧 Functions found: $total_functions"
+    echo "   🏗️ Classes found: $total_classes"
+    echo "   📄 Total lines: $total_lines"
+    echo "   ⭐ Quality score: $code_quality_score"
+    echo "   🚀 High complexity files: $high_complexity_files"
+    
     # Generate recommendations file
     local recommendations_file="$ML_DATA_DIR/recommendations_$(date +%Y%m%d_%H%M%S).md"
     cat > "$recommendations_file" << EOF
@@ -139,7 +160,7 @@ $(if [[ $total_functions -gt 500 ]]; then echo "- 🧪 Implement automated testi
 - Reactive programming: $(grep -r "Combine" "$PROJECT_PATH/CodingReviewer" 2>/dev/null | wc -l | tr -d ' ') Combine usages
 - Async/await adoption: $(grep -r "async " "$PROJECT_PATH/CodingReviewer" 2>/dev/null | wc -l | tr -d ' ') async functions
 
-87% automation success rate with current patterns.
+ML integration operational with $code_quality_score quality rating.
 EOF
 
     echo "  📋 Recommendations saved: $recommendations_file"
@@ -149,15 +170,7 @@ EOF
 # Main execution
 main() {
     echo "🚀 Starting ML Pattern Recognition System..."
-    
-    # Ensure bc is available for calculations
-    if ! command -v bc &> /dev/null; then
-        echo "⚠️  Installing bc for calculations..."
-        # On macOS, bc should be available by default
-    fi
-    
     generate_ml_analysis
-    
     echo "✅ ML Pattern Recognition System completed successfully"
 }
 

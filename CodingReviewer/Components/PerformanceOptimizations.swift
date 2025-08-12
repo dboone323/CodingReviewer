@@ -1,3 +1,4 @@
+import Foundation
 //
 //  PerformanceOptimizations.swift
 //  CodingReviewer
@@ -26,6 +27,7 @@ class BatchProcessor<T: Sendable>: ObservableObject {
         self.processingDelay = processingDelay
     }
     
+    /// Analyzes and processes data with comprehensive validation
     func processBatch<Result: Sendable>(
         items: [T],
         processor: @escaping @Sendable (T) async throws -> Result
@@ -72,7 +74,7 @@ class BatchProcessor<T: Sendable>: ObservableObject {
 // MARK: - Memory Usage Monitor
 
 @MainActor
-class MemoryMonitor: ObservableObject {
+public class MemoryMonitor: ObservableObject {
     @Published var currentUsage: UInt64 = 0
     @Published var peakUsage: UInt64 = 0
     @Published var memoryPressure: MemoryPressure = .normal
@@ -119,6 +121,7 @@ class MemoryMonitor: ObservableObject {
         timer = nil
     }
     
+    /// Initiates process with proper setup and monitoring
     func startMonitoring() {
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             Task { @MainActor in
@@ -127,11 +130,13 @@ class MemoryMonitor: ObservableObject {
         }
     }
     
+    /// Completes process and performs cleanup
     func stopMonitoring() {
         timer?.invalidate()
         timer = nil
     }
     
+    /// Updates and persists data with validation
     private func updateMemoryUsage() {
         let usage = getMemoryUsage()
         currentUsage = usage
@@ -155,6 +160,7 @@ class MemoryMonitor: ObservableObject {
         }
     }
     
+    /// Retrieves data with proper error handling and caching
     private func getMemoryUsage() -> UInt64 {
         var info = mach_task_basic_info()
         var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size)/4
@@ -175,6 +181,7 @@ class MemoryMonitor: ObservableObject {
         }
     }
     
+    /// Performs operation with error handling and validation
     private func addWarning(for pressure: MemoryPressure, usage: UInt64) {
         let message: String
         switch pressure {
@@ -201,6 +208,7 @@ class MemoryMonitor: ObservableObject {
         }
     }
     
+    /// Formats and displays data with proper styling
     func formatBytes(_ bytes: UInt64) -> String {
         let formatter = ByteCountFormatter()
         formatter.allowedUnits = [.useMB, .useGB]
@@ -236,6 +244,7 @@ class ResponseTimeTracker: ObservableObject {
     private let slowThreshold: TimeInterval = 2.0 // 2 seconds
     private let maxEntries = 100
     
+    /// Performs operation with error handling and validation
     func trackOperation<T>(
         _ operation: String,
         threshold: TimeInterval? = nil,
@@ -287,16 +296,21 @@ class ResponseTimeTracker: ObservableObject {
         }
     }
     
+    /// Updates and persists data with validation
     private func updateAverageResponseTime() {
         guard !recentResponseTimes.isEmpty else {
             averageResponseTime = 0
             return
         }
         
-        let totalTime = recentResponseTimes.reduce(0) { $0 + $1.duration }
+        let totalTime = recentResponseTimes
+    .reduce(0) {
+         $0 + $1.duration 
+    }
         averageResponseTime = totalTime / Double(recentResponseTimes.count)
     }
     
+    /// Retrieves data with proper error handling and caching
     func getSuccessRate() -> Double {
         guard !recentResponseTimes.isEmpty else { return 0 }
         

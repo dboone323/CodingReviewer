@@ -1,3 +1,4 @@
+import Foundation
 // SECURITY: API key handling - ensure proper encryption and keychain storage
 //
 // APIKeySetupView.swift
@@ -120,6 +121,7 @@ struct APIKeySetupView: View {
         .frame(minWidth: 500, minHeight: 400)
     }
 
+    /// Validates input and ensures compliance
     private func validateKey() async {
         isValidating = true
         validationResult = "Validating..."
@@ -141,6 +143,7 @@ struct APIKeySetupView: View {
         }
     }
 
+    /// Updates and persists data with validation
     private func saveKey() async {
         await MainActor.run {
             isValidating = true

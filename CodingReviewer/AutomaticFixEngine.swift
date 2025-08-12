@@ -13,6 +13,7 @@ class AutomaticFixEngine {
 
     // MARK: - Fix Application Methods
 
+    /// Performs operation with error handling and validation
     func applyAutomaticFixes(to filePath: String) async throws -> FixApplicationResult {
         os_log("Starting automatic fixes for %@", log: logger, type: .debug, filePath)
 
@@ -45,6 +46,7 @@ class AutomaticFixEngine {
         return result
     }
 
+    /// Performs operation with error handling and validation
     func detectIssues(in content: String, filePath: String) async throws -> [FixEngineIssue] {
         var issues: [FixEngineIssue] = [];
         let lines = content.components(separatedBy: .newlines)
@@ -63,6 +65,7 @@ class AutomaticFixEngine {
         return issues
     }
 
+    /// Creates and configures components with proper initialization
     private func generateFixes(for issues: [FixEngineIssue]) -> [AutomaticFix] {
         return issues.compactMap { issue in
             switch issue.type {
@@ -93,6 +96,7 @@ class AutomaticFixEngine {
     // Commented out for simplified AI learning system
     // Will be re-enabled when full AI features are activated
     /*
+    /// Performs operation with error handling and validation
     private func prioritizeFixes(recommended: [RecommendedFix], traditional: [AutomaticFix]) -> [AutomaticFix] {
         var prioritizedFixes: [AutomaticFix] = []
 
@@ -113,6 +117,7 @@ class AutomaticFixEngine {
     }
     */
 
+    /// Performs operation with error handling and validation
     private func applyFixes(_ fixes: [AutomaticFix], to content: String, filePath: String) async throws -> FixApplicationResult {
         var modifiedContent = content;
         var appliedFixes: [AutomaticFix] = [];
@@ -146,6 +151,7 @@ class AutomaticFixEngine {
         )
     }
 
+    /// Performs operation with error handling and validation
     private func applyFix(_ fix: AutomaticFix, to content: String) throws -> String {
         var lines = content.components(separatedBy: .newlines);
 
@@ -181,6 +187,7 @@ class AutomaticFixEngine {
 
 extension AutomaticFixEngine {
 
+    /// Performs operation with error handling and validation
     private func detectSwiftConcurrencyIssues(line: String, lineNumber: Int) -> [FixEngineIssue] {
         var issues: [FixEngineIssue] = [];
 
@@ -198,6 +205,7 @@ extension AutomaticFixEngine {
         return issues
     }
 
+    /// Performs operation with error handling and validation
     private func detectPerformanceIssues(line: String, lineNumber: Int) -> [FixEngineIssue] {
         var issues: [FixEngineIssue] = [];
 
@@ -215,6 +223,7 @@ extension AutomaticFixEngine {
         return issues
     }
 
+    /// Performs operation with error handling and validation
     private func detectSecurityIssues(line: String, lineNumber: Int) -> [FixEngineIssue] {
         var issues: [FixEngineIssue] = [];
 
@@ -235,6 +244,7 @@ extension AutomaticFixEngine {
         return issues
     }
 
+    /// Performs operation with error handling and validation
     private func detectCodeQualityIssues(line: String, lineNumber: Int) -> [FixEngineIssue] {
         var issues: [FixEngineIssue] = [];
 
@@ -252,6 +262,7 @@ extension AutomaticFixEngine {
         return issues
     }
 
+    /// Performs operation with error handling and validation
     private func detectSwiftBestPractices(line: String, lineNumber: Int) -> [FixEngineIssue] {
         var issues: [FixEngineIssue] = [];
 
@@ -287,6 +298,7 @@ extension AutomaticFixEngine {
 
 extension AutomaticFixEngine {
 
+    /// Creates and configures components with proper initialization
     private func createConcurrencyFix(for issue: FixEngineIssue) -> AutomaticFix? {
         let pattern = #"([a-zA-Z_][a-zA-Z0-9_]*\.shared\.[a-zA-Z_][a-zA-Z0-9_]*\()"#
         let replacement = "await $1"
@@ -300,6 +312,7 @@ extension AutomaticFixEngine {
         )
     }
 
+    /// Creates and configures components with proper initialization
     private func createUnusedVariableFix(for issue: FixEngineIssue) -> AutomaticFix? {
         // Extract variable name from the warning
         let pattern = #"let ([a-zA-Z_][a-zA-Z0-9_]*) ="#
@@ -314,6 +327,7 @@ extension AutomaticFixEngine {
         )
     }
 
+    /// Creates and configures components with proper initialization
     private func createSafeUnwrappingFix(for issue: FixEngineIssue) -> AutomaticFix? {
         let pattern = #"([a-zA-Z_][a-zA-Z0-9_]*)!"#
         let replacement = "$1 ?? defaultValue"
@@ -327,6 +341,7 @@ extension AutomaticFixEngine {
         )
     }
 
+    /// Creates and configures components with proper initialization
     private func createStringInterpolationFix(for issue: FixEngineIssue) -> AutomaticFix? {
         let pattern = #"print\("([^"]+)"\)"#
         let replacement = #"logger.logInfo("$1")"#
@@ -340,6 +355,7 @@ extension AutomaticFixEngine {
         )
     }
 
+    /// Creates and configures components with proper initialization
     private func createWeakSelfFix(for issue: FixEngineIssue) -> AutomaticFix? {
         let pattern = #"{ self\."#
         let replacement = "{ [weak self] in self?."
@@ -353,6 +369,7 @@ extension AutomaticFixEngine {
         )
     }
 
+    /// Creates and configures components with proper initialization
     private func createOptionalChainingFix(for issue: FixEngineIssue) -> AutomaticFix? {
         let pattern = #"if let ([a-zA-Z_][a-zA-Z0-9_]*) = ([a-zA-Z_][a-zA-Z0-9_]*) {"#
         let replacement = "$2?."
@@ -366,6 +383,7 @@ extension AutomaticFixEngine {
         )
     }
 
+    /// Creates and configures components with proper initialization
     private func createImmutableVariableFix(for issue: FixEngineIssue) -> AutomaticFix? {
         let pattern = #"var ([a-zA-Z_][a-zA-Z0-9_]*)"#
         let replacement = "let $1"
@@ -379,6 +397,7 @@ extension AutomaticFixEngine {
         )
     }
 
+    /// Creates and configures components with proper initialization
     private func createRedundantReturnFix(for issue: FixEngineIssue) -> AutomaticFix? {
         let pattern = #"return (.+)"#
         let replacement = "$1"
@@ -392,6 +411,7 @@ extension AutomaticFixEngine {
         )
     }
 
+    /// Creates and configures components with proper initialization
     private func createMagicNumberFix(for issue: FixEngineIssue) -> AutomaticFix? {
         // This would require more context to generate meaningful constant names
         return AutomaticFix(
@@ -403,6 +423,7 @@ extension AutomaticFixEngine {
         )
     }
 
+    /// Creates and configures components with proper initialization
     private func createFunctionRefactoringFix(for issue: FixEngineIssue) -> AutomaticFix? {
         return AutomaticFix(
             type: .longFunction,

@@ -16,7 +16,7 @@ struct EnterpriseStatusDashboard: View {
     @StateObject private var backgroundProcessing = BackgroundProcessingSystem()
     @StateObject private var usageTracker = UsageTracker()
     @State private var systemStatus: SystemStatus?
-    @State private var analyticsReport: EnterpriseAnalyticsDashboard.AnalyticsReport?
+    @State private var analyticsReport: AnalyticsReport?
     @State private var isGeneratingReport = false
     
     var body: some View {
@@ -266,7 +266,7 @@ struct EnterpriseQuickStatCard: View {
 }
 
 struct PerformanceMetricsCard: View {
-    let report: EnterpriseAnalyticsDashboard.AnalyticsReport
+    let report: AnalyticsReport
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {

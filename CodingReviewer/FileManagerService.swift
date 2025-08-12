@@ -1,3 +1,4 @@
+import Foundation
 // SECURITY: API key handling - ensure proper encryption and keychain storage
 //
 //  FileManagerService.swift
@@ -114,22 +115,9 @@ struct CodeFile: Identifiable, Sendable, Hashable, @preconcurrency Codable {
     }
 }
 
-// Enhanced structure to preserve analysis data while remaining Codable
-struct EnhancedAnalysisItem: @preconcurrency Codable, Sendable {
-    let message: String
-    let severity: String
-    let lineNumber: Int?
-    let type: String
+// Note: EnhancedAnalysisItem is defined in ProcessingTypes.swift
 
-    init(message: String, severity: String, lineNumber: Int? = nil, type: String = "quality") {
-        self.message = message
-        self.severity = severity
-        self.lineNumber = lineNumber
-        self.type = type
-    }
-}
-
-struct FileAnalysisRecord: Identifiable, Sendable, @preconcurrency Codable {
+struct FileAnalysisRecord: Identifiable, Sendable {
     let id: UUID
     let file: CodeFile
     let analysisResults: [EnhancedAnalysisItem] // Rich analysis data
@@ -612,9 +600,10 @@ final class FileManagerService: ObservableObject {
         // Add file size analysis
         if characterCount > 50000 {
             results.append(EnhancedAnalysisItem(
-                message: "Large file detected (\(characterCount) characters). Consider breaking into smaller modules.",
+                title: "Analysis Result",
+                description: "Large file detected (\(characterCount) characters). Consider breaking into smaller modules.",
                 severity: "medium",
-                type: "maintainability"
+                category: "maintainability"
             ))
         }
 
@@ -629,19 +618,21 @@ final class FileManagerService: ObservableObject {
             let forceUnwrapCount = content.components(separatedBy: "!").count - 1
             if forceUnwrapCount > 5 {
                 results.append(EnhancedAnalysisItem(
-                    message: "High number of force unwraps (\(forceUnwrapCount)) detected. Consider using safe unwrapping.",
-                    severity: "high",
-                    type: "safety"
-                ))
+                title: "Analysis Result",
+                description: "High number of force unwraps (\(forceUnwrapCount)) detected. Consider using safe unwrapping.",
+                severity: "high",
+                category: "safety"
+            ))
             }
         }
 
         // Check for TODO/FIXME comments
         if content.lowercased().contains("todo") || content.lowercased().contains("fixme") {
             results.append(EnhancedAnalysisItem(
-                message: "TODO or FIXME comments found. Consider addressing them.",
+                title: "Analysis Result",
+                description: "TODO or FIXME comments found. Consider addressing them.",
                 severity: "low",
-                type: "maintenance"
+                category: "maintenance"
             ))
         }
 
@@ -655,10 +646,11 @@ final class FileManagerService: ObservableObject {
                     let functionLineCount = functionCode.components(separatedBy: .newlines).count
                     if functionLineCount > 50 {
                         results.append(EnhancedAnalysisItem(
-                            message: "Long function detected (\(functionLineCount) lines). Consider breaking into smaller functions.",
-                            severity: "medium",
-                            type: "maintainability"
-                        ))
+                title: "Analysis Result",
+                description: "Long function detected (\(functionLineCount) lines). Consider breaking into smaller functions.",
+                severity: "medium",
+                category: "maintainability"
+            ))
                     }
                 }
             }
@@ -673,9 +665,10 @@ final class FileManagerService: ObservableObject {
         // Check for proper imports
         if !content.contains("import ") && lineCount > 10 {
             results.append(EnhancedAnalysisItem(
-                message: "No import statements found in Python file with \(lineCount) lines.",
+                title: "Analysis Result",
+                description: "No import statements found in Python file with \(lineCount) lines.",
                 severity: "low",
-                type: "style"
+                category: "style"
             ))
         }
 
@@ -683,9 +676,10 @@ final class FileManagerService: ObservableObject {
         let printCount = content.components(separatedBy: "await AppLogger.shared.log(").count - 1
         if printCount > 3 {
             results.append(EnhancedAnalysisItem(
-                message: "Multiple print statements (\(printCount)) found. Consider using proper logging.",
+                title: "Code Quality Issue",
+                description: "Multiple print statements (\(printCount)) found. Consider using proper logging.",
                 severity: "low",
-                type: "best_practice"
+                category: "best_practice"
             ))
         }
 
@@ -699,18 +693,20 @@ final class FileManagerService: ObservableObject {
         let consoleLogCount = content.components(separatedBy: "console.log").count - 1
         if consoleLogCount > 3 {
             results.append(EnhancedAnalysisItem(
-                message: "Multiple console.log statements (\(consoleLogCount)) found. Consider removing before production.",
+                title: "Debug Code Issue",
+                description: "Multiple console.log statements (\(consoleLogCount)) found. Consider removing before production.",
                 severity: "low",
-                type: "debugging"
+                category: "debugging"
             ))
         }
 
         // Check for var usage (prefer let/const)
         if content.contains(" var ") {
             results.append(EnhancedAnalysisItem(
-                message: "Usage of 'var' detected. Consider using 'let' or 'const' for better scoping.",
+                title: "Analysis Result",
+                description: "Usage of 'var' detected. Consider using 'let' or 'const' for better scoping.",
                 severity: "medium",
-                type: "best_practice"
+                category: "best_practice"
             ))
         }
 
@@ -724,9 +720,10 @@ final class FileManagerService: ObservableObject {
         let printCount = content.components(separatedBy: "System.out.println").count - 1
         if printCount > 2 {
             results.append(EnhancedAnalysisItem(
-                message: "Multiple System.out.println statements (\(printCount)) found. Consider using a logging framework.",
+                title: "Analysis Result",
+                description: "Multiple System.out.println statements (\(printCount)) found. Consider using a logging framework.",
                 severity: "low",
-                type: "best_practice"
+                category: "best_practice"
             ))
         }
 
@@ -740,9 +737,10 @@ final class FileManagerService: ObservableObject {
         let averageLineLength = content.count / max(lineCount, 1)
         if averageLineLength > 120 {
             results.append(EnhancedAnalysisItem(
-                message: "Long average line length (\(averageLineLength) chars). Consider breaking lines for readability.",
+                title: "Analysis Result",
+                description: "Long average line length (\(averageLineLength) chars). Consider breaking lines for readability.",
                 severity: "low",
-                type: "readability"
+                category: "readability"
             ))
         }
 

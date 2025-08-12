@@ -1,3 +1,4 @@
+import Foundation
 //
 // FixApplicationView.swift
 // CodingReviewer
@@ -83,6 +84,7 @@ struct FixApplicationView: View {
 
     // MARK: - Actions
 
+    /// Creates and configures components with proper initialization
     private func generateFixes() async {
         do {
             let context = CodeContext(
@@ -97,18 +99,22 @@ struct FixApplicationView: View {
         }
     }
 
+    /// Performs operation with error handling and validation
     private func selectAllFixes() {
         selectedFixes = Set(fixGenerator.generatedFixes.map { $0.id })
     }
 
+    /// Performs operation with error handling and validation
     private func deselectAllFixes() {
         selectedFixes.removeAll()
     }
 
+    /// Performs operation with error handling and validation
     private func applySelectedFixes() {
         showingApplyConfirmation = true
     }
 
+    /// Performs operation with error handling and validation
     private func previewSelectedFixes() {
         // Show preview of all selected fixes
         if let firstFix = fixGenerator.generatedFixes.first(where: { selectedFixes.contains($0.id) }) {
@@ -117,6 +123,7 @@ struct FixApplicationView: View {
         }
     }
 
+    /// Performs operation with error handling and validation
     private func applyConfirmedFixes() {
         var modifiedCode = originalCode;
         let sortedFixes = fixGenerator.generatedFixes
@@ -261,6 +268,7 @@ struct FixesList: View {
         }
     }
 
+    /// Performs operation with error handling and validation
     private func toggleFixSelection(_ fixId: UUID) {
         if selectedFixes.contains(fixId) {
             selectedFixes.remove(fixId)

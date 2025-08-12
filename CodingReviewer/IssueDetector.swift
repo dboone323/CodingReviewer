@@ -12,6 +12,7 @@ class IssueDetector: ObservableObject {
     // Shared instance
     static let shared = IssueDetector()
 
+    /// Performs operation with error handling and validation
     func scanFiles(_ files: [CodeFile]) async {
         await MainActor.run {
             isScanning = true
@@ -35,6 +36,7 @@ class IssueDetector: ObservableObject {
         }
     }
 
+    /// Performs operation with error handling and validation
     private func scanFile(_ file: CodeFile) async -> [DetectedIssue] {
         let lines = file.content.components(separatedBy: .newlines)
         var issues: [DetectedIssue] = []
@@ -51,6 +53,7 @@ class IssueDetector: ObservableObject {
         return issues
     }
 
+    /// Performs operation with error handling and validation
     private func detectSecurityIssues(line: String, lineNumber: Int, file: CodeFile) -> [DetectedIssue] {
         var issues: [DetectedIssue] = []
 
@@ -102,6 +105,7 @@ class IssueDetector: ObservableObject {
         return issues
     }
 
+    /// Performs operation with error handling and validation
     private func detectPerformanceIssues(line: String, lineNumber: Int, file: CodeFile) -> [DetectedIssue] {
         var issues: [DetectedIssue] = []
 
@@ -140,6 +144,7 @@ class IssueDetector: ObservableObject {
         return issues
     }
 
+    /// Performs operation with error handling and validation
     private func detectQualityIssues(line: String, lineNumber: Int, file: CodeFile) -> [DetectedIssue] {
         var issues: [DetectedIssue] = []
 
@@ -176,6 +181,7 @@ class IssueDetector: ObservableObject {
         return issues
     }
 
+    /// Creates and configures components with proper initialization
     func generateAutoFixes(for issues: [DetectedIssue]) -> [AutoFix] {
         return issues.compactMap { issue in
             switch issue.type {
@@ -191,6 +197,7 @@ class IssueDetector: ObservableObject {
         }
     }
 
+    /// Creates and configures components with proper initialization
     private func generateSecurityFix(for issue: DetectedIssue) -> AutoFix? {
         switch issue.title {
         case "Insecure HTTP":
@@ -206,11 +213,13 @@ class IssueDetector: ObservableObject {
         }
     }
 
+    /// Creates and configures components with proper initialization
     private func generatePerformanceFix(for issue: DetectedIssue) -> AutoFix? {
         // Implementation for performance fixes
         return nil
     }
 
+    /// Creates and configures components with proper initialization
     private func generateQualityFix(for issue: DetectedIssue) -> AutoFix? {
         // Implementation for quality fixes
         return nil

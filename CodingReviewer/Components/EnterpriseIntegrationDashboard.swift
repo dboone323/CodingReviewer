@@ -9,6 +9,29 @@ import SwiftUI
 import Foundation
 import UniformTypeIdentifiers
 
+// MARK: - Simple MetricCard Component
+struct MetricCard: View {
+    let title: String
+    let value: String
+    let color: Color
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.secondary)
+            Text(value)
+                .font(.title2)
+                .fontWeight(.semibold)
+                .foregroundColor(color)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(8)
+    }
+}
+
 // MARK: - Enterprise Integration Dashboard
 
 struct EnterpriseIntegrationDashboard: View {
@@ -577,6 +600,7 @@ struct NotificationsTab: View {
         }
     }
     
+    /// Performs operation with error handling and validation
     private func filteredNotifications() -> [TeamCollaborationManager.CollaborationNotification] {
         switch selectedFilter {
         case .all:

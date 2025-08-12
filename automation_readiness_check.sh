@@ -155,6 +155,15 @@ check_project_integrity() {
     check_item "ContentView File" "[[ -f 'CodingReviewer/ContentView.swift' ]]"
     check_item "Build Script Available" "[[ -f 'build_and_run.sh' ]]"
     
+    # NEW: Check validation documentation exists (August 12, 2025)
+    check_item "Validation Rules Documentation" "[[ -f 'VALIDATION_RULES.md' ]]"
+    check_item "Development Guidelines" "[[ -f 'DEVELOPMENT_GUIDELINES.md' ]]"
+    check_item "Architecture Documentation" "[[ -f 'ARCHITECTURE.md' ]]"
+    check_item "Quick Reference Guide" "[[ -f 'QUICK_REFERENCE.md' ]]"
+    
+    # NEW: Check validation script is available
+    check_item "Validation Script Available" "[[ -f 'validation_script.sh' ]]"
+    
     # Check for critical Swift files
     local swift_count=$(find CodingReviewer -name "*.swift" -type f | wc -l | tr -d ' ')
     if [[ "$swift_count" -gt 20 ]]; then
@@ -164,6 +173,18 @@ check_project_integrity() {
         echo -e "${YELLOW}⚠️  Swift Files: $swift_count (Limited coverage)${NC}"
     fi
     ((TOTAL_CHECKS++))
+    
+    # NEW: Architecture boundary validation (August 12, 2025)
+    echo "  📋 Checking architecture boundaries..."
+    if [ -d "CodingReviewer/SharedTypes" ]; then
+        if grep -r "import SwiftUI" CodingReviewer/SharedTypes/ 2>/dev/null; then
+            echo -e "${RED}❌ SwiftUI imports found in SharedTypes/ - violates architecture rules${NC}"
+        else
+            echo -e "${GREEN}✅ Architecture boundaries respected${NC}"
+            ((READINESS_SCORE++))
+        fi
+        ((TOTAL_CHECKS++))
+    fi
     
     echo ""
 }
@@ -213,9 +234,15 @@ generate_readiness_report() {
         echo -e "${GREEN}All critical systems operational with optimizations active.${NC}"
         echo ""
         echo -e "${CYAN}💡 Recommended next steps:${NC}"
-        echo -e "${CYAN}  1. Run: ./ultra_enhanced_master_orchestrator_v4.sh${NC}"
-        echo -e "${CYAN}  2. Monitor performance with built-in monitoring${NC}"
-        echo -e "${CYAN}  3. AI will continue learning and improving${NC}"
+        echo -e "${CYAN}  1. Run validation check: ./validation_script.sh${NC}"
+        echo -e "${CYAN}  2. Run: ./ultra_enhanced_master_orchestrator_v4.sh${NC}"
+        echo -e "${CYAN}  3. Monitor performance with built-in monitoring${NC}"
+        echo -e "${CYAN}  4. AI will continue learning and improving${NC}"
+        echo ""
+        echo -e "${BLUE}📚 IMPORTANT: Review these guides before automation:${NC}"
+        echo -e "${BLUE}  • VALIDATION_RULES.md - Pre-development validation checklist${NC}"
+        echo -e "${BLUE}  • DEVELOPMENT_GUIDELINES.md - Strategic implementation patterns${NC}"
+        echo -e "${BLUE}  • QUICK_REFERENCE.md - Essential patterns and decision matrix${NC}"
         return 0
     elif [[ "$percentage" -ge 85 ]]; then
         echo -e "${YELLOW}⚡ SYSTEM MOSTLY READY${NC}"

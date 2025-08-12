@@ -66,6 +66,72 @@ xcodebuild test -project CodingReviewer.xcodeproj -scheme CodingReviewer -destin
 - Use meaningful variable and function names
 - Prefer `let` over `var` when possible
 
+### **CodingReviewer-Specific Standards (August 8, 2025)**
+
+**CRITICAL: Review DEVELOPMENT_GUIDELINES.md and VALIDATION_RULES.md before contributing**
+
+#### **Type Implementation Requirements**
+```swift
+// ✅ REQUIRED - Complete type implementation
+struct NewDataType: Identifiable, Sendable {
+    let id: UUID                    // Always include ID
+    let createdAt: Date            // Immutable metadata
+    var status: Status             // Mutable runtime state
+    var lastUpdated: Date          // Track changes
+    
+    // Complete protocol implementations required
+    // No partial implementations allowed
+}
+
+// ❌ FORBIDDEN - Incomplete types lead to cascading errors
+struct NewDataType: Identifiable {
+    let id: UUID
+    // Missing properties will cause build failures
+}
+```
+
+#### **Concurrency Safety Rules**
+- **Always use `Sendable`** for data models in concurrent contexts
+- **Avoid `Codable`** in complex nested types (causes circular references)
+- **Use `[weak self]`** only in class contexts with retain cycle risk
+- **No `@preconcurrency`** annotations (indicates architectural problems)
+
+#### **Architecture Boundary Enforcement**
+- **SharedTypes/**: Pure data models only (NO SwiftUI imports)
+- **Extensions/**: UI extensions for data models only
+- **Components/**: Reusable UI components only
+- **Never import SwiftUI** in SharedTypes/ folder
+
+#### **Error Prevention Patterns**
+```swift
+// ✅ SAFE OPTIONAL HANDLING
+guard let url = URL(string: urlString) else {
+    throw ValidationError.invalidURL
+}
+
+let validItems = items.compactMap { item in
+    guard item.isValid else { return nil }
+    return item
+}
+
+// ❌ FORBIDDEN PATTERNS
+let url = URL(string: urlString)!  // Force unwrap
+let item = items.first!            // Force unwrap
+```
+
+#### **Platform Compatibility Requirements**
+```swift
+// ✅ CROSS-PLATFORM UI
+.toolbar {
+    ToolbarItem(placement: .primaryAction) {
+        Button("Action") { /* action */ }
+    }
+}
+
+// ❌ PLATFORM-SPECIFIC CODE
+.navigationBarItems(trailing: button)  // iOS only
+```
+
 ### Code Organization
 ```swift
 // MARK: - Properties
@@ -140,11 +206,25 @@ func testAnalyzeCode_WithValidSwiftCode_ReturnsExpectedResults() {
    - [ ] All tests pass
    - [ ] No SwiftLint warnings
    - [ ] Self-review completed
+   - [ ] **VALIDATION_RULES.md checklist completed**
+   - [ ] **Architecture boundaries respected (see ARCHITECTURE.md)**
+   - [ ] **Type implementation complete (no bandaid fixes)**
 
-2. **Documentation**
+2. **CodingReviewer-Specific Validation (August 8, 2025)**
+   - [ ] No SwiftUI imports in SharedTypes/ folder
+   - [ ] No Codable conformance in complex nested types
+   - [ ] All new types implement complete property sets
+   - [ ] Platform compatibility verified (macOS/iOS if applicable)
+   - [ ] Optional handling uses safe patterns only
+   - [ ] No force unwrapping in production code
+   - [ ] Sendable conformance for concurrent data models
+   - [ ] Complete protocol conformance implementations
+
+3. **Documentation**
    - [ ] README updated if needed
    - [ ] Code comments added
    - [ ] API documentation updated
+   - [ ] **Architecture impact documented if significant**
 
 3. **Testing**
    - [ ] Unit tests for new code

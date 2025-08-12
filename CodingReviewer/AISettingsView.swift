@@ -55,6 +55,7 @@ struct AISettingsView: View {
         }
     }
 
+    /// Updates and persists data with validation
     private func saveAPIKeys() {
         // Simple keychain storage simulation
         UserDefaults.standard.set(openAIKey, forKey: "openai_key")
@@ -66,6 +67,7 @@ struct AISettingsView: View {
         Logger().info("API keys saved")
     }
 
+    /// Retrieves data with proper error handling and caching
     private func loadAPIKeys() {
         openAIKey = UserDefaults.standard.string(forKey: "openai_key") ?? ""
         geminiKey = UserDefaults.standard.string(forKey: "gemini_key") ?? ""

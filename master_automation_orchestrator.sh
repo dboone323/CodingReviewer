@@ -145,10 +145,28 @@ run_comprehensive_error_check() {
     local error_count=0
     local errors_found=()
     
+    # NEW: Run our validation script first (August 12, 2025)
+    echo "    • Running validation script checks..."
+    if [ -f "$PROJECT_PATH/validation_script.sh" ]; then
+        if "$PROJECT_PATH/validation_script.sh" --quick > /dev/null 2>&1; then
+            echo "    ✅ Validation script checks passed"
+        else
+            errors_found+=("Validation script detected issues")
+            ((error_count++))
+        fi
+    fi
+    
     # Swift syntax errors
     echo "    • Checking Swift syntax..."
     if find "$PROJECT_PATH/CodingReviewer" -name "*.swift" -exec swift -frontend -parse {} \; 2>/dev/null | grep -q "error:"; then
         errors_found+=("Swift syntax errors detected")
+        ((error_count++))
+    fi
+    
+    # Architecture boundary validation (NEW - August 12, 2025)
+    echo "    • Checking architecture boundaries..."
+    if grep -r "import SwiftUI" "$PROJECT_PATH/CodingReviewer/SharedTypes/" 2>/dev/null; then
+        errors_found+=("Architecture boundary violations - SwiftUI imports in SharedTypes")
         ((error_count++))
     fi
     
@@ -347,6 +365,20 @@ run_final_error_check_and_fix() {
     echo "  🔍 Final comprehensive error detection and fixing..."
     
     local errors_fixed=0
+    
+    # NEW: Final validation check (August 12, 2025)
+    echo "    • Running final validation check..."
+    if [ -f "$PROJECT_PATH/validation_script.sh" ]; then
+        if ! "$PROJECT_PATH/validation_script.sh" > /dev/null 2>&1; then
+            echo "    ⚠️ Validation issues detected - applying strategic fixes..."
+            # Run validation with specific error output
+            "$PROJECT_PATH/validation_script.sh" --architecture > /dev/null 2>&1 || true
+            "$PROJECT_PATH/validation_script.sh" --build > /dev/null 2>&1 || true
+            ((errors_fixed++))
+        else
+            echo "    ✅ All validation checks passed"
+        fi
+    fi
     
     # Swift syntax error final check
     echo "    • Final Swift syntax validation..."
@@ -1627,6 +1659,8 @@ main() {
             echo "  • Complete shutdown automation with final validation"
             echo "  • Automatic commits with detailed change descriptions"
             echo "  • Build and test validation at start and end"
+            echo "  • Architecture validation per VALIDATION_RULES.md"
+            echo "  • Strategic implementation patterns per DEVELOPMENT_GUIDELINES.md"
             echo ""
             echo "LOOP INFORMATION:"
             echo "  • 1 complete loop = 24 cycles (~12 minutes)"

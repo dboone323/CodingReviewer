@@ -1,3 +1,4 @@
+import Foundation
 //
 //  EnhancedErrorHandling.swift
 //  CodingReviewer
@@ -274,7 +275,9 @@ struct EnhancedErrorView: View {
     
     private func openSettings() {
         // This would typically trigger navigation to settings
-        NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security")!)
+        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security") {
+            NSWorkspace.shared.open(url)
+        }
     }
     
     private func selectDifferentFile() {

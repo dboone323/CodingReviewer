@@ -8,6 +8,7 @@
 import SwiftUI
 import Foundation
 import Combine
+// TestingTypes is automatically available in the same target
 
 // MARK: - Automated Test Suite
 
@@ -26,6 +27,7 @@ class AutomatedTestSuite: ObservableObject {
         self.fileManager = manager
     }
 
+    /// Performs operation with error handling and validation
     func runAllTests() async {
         // Convert CodeFile to UploadedFile for compatibility
         let files = fileManager.uploadedFiles.map { codeFile in
@@ -80,6 +82,7 @@ class AutomatedTestSuite: ObservableObject {
         progress = 1.0
     }
 
+    /// Performs operation with error handling and validation
     private func runSecurityTests(on file: UploadedFile) async -> TestResult {
         // Add small delay for realistic timing
         try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 second delay for realism
@@ -112,6 +115,7 @@ class AutomatedTestSuite: ObservableObject {
         )
     }
 
+    /// Performs operation with error handling and validation
     private func runPerformanceTests(on file: UploadedFile) async -> TestResult {
         // Add small delay for realistic timing
         try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 second delay
@@ -144,6 +148,7 @@ class AutomatedTestSuite: ObservableObject {
         )
     }
 
+    /// Performs operation with error handling and validation
     private func runQualityTests(on file: UploadedFile) async -> TestResult {
         // Add small delay for realistic timing
         try? await Task.sleep(nanoseconds: 400_000_000) // 0.4 second delay
@@ -180,6 +185,7 @@ class AutomatedTestSuite: ObservableObject {
         )
     }
 
+    /// Performs operation with error handling and validation
     private func runSyntaxTests(on file: UploadedFile) async -> TestResult {
         // Add small delay for realistic timing
         try? await Task.sleep(nanoseconds: 200_000_000) // 0.2 second delay
@@ -218,6 +224,7 @@ class AutomatedTestSuite: ObservableObject {
         )
     }
 
+    /// Creates and configures components with proper initialization
     private func generateFixes() async {
         // Add small delay for realistic timing
         try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 second delay
@@ -232,6 +239,7 @@ class AutomatedTestSuite: ObservableObject {
         }
     }
 
+    /// Creates and configures components with proper initialization
     private func generateAutoFix(for issue: String, in fileName: String) -> AutoFix {
         let confidence: Double
         let title: String
@@ -273,6 +281,7 @@ class AutomatedTestSuite: ObservableObject {
         )
     }
 
+    /// Performs operation with error handling and validation
     func applyFix(_ fix: AutoFix) {
         if fixes.contains(where: { $0.id == fix.id }) {
             // Here you would implement the actual fix logic
@@ -294,18 +303,21 @@ struct TestResult: Identifiable, Sendable {
     let timestamp: Date
 }
 
-enum TestType: String, CaseIterable {
-    case security = "Security"
-    case performance = "Performance"
-    case quality = "Quality"
-    case syntax = "Syntax"
+// TestType is now imported from TestingTypes.swift
 
+// Extension for service-specific icons
+extension TestType {
     var icon: String {
         switch self {
-        case .security: return "shield.checkered"
+        case .unit: return "shield.checkered"
         case .performance: return "speedometer"
-        case .quality: return "star.circle"
-        case .syntax: return "chevron.left.forwardslash.chevron.right"
+        case .integration: return "star.circle"
+        case .function: return "chevron.left.forwardslash.chevron.right"
+        case .edgeCase: return "exclamationmark.triangle"
+        case .coverage: return "checkmark.circle"
+        case .security: return "lock.shield"
+        case .quality: return "star.fill"
+        case .syntax: return "text.word.spacing"
         }
     }
 }

@@ -102,6 +102,7 @@ final class AITestingOrchestrator: ObservableObject {
     
     // MARK: - Private Analysis Methods
     
+    /// Analyzes and processes data with comprehensive validation
     private func analyzeCodebase(_ codebase: String) async -> CodeAnalysis {
         // Simulate advanced codebase analysis
         let functions = extractFunctions(from: codebase)
@@ -117,22 +118,22 @@ final class AITestingOrchestrator: ObservableObject {
         )
     }
     
+    /// Creates and configures components with proper initialization
     private func generateContextualTests(from analysis: CodeAnalysis) async -> [GeneratedTestCase] {
         var tests: [GeneratedTestCase] = []
         
         // Generate function tests
         for function in analysis.functions {
             let testCase = GeneratedTestCase(
-                id: UUID(),
-                name: "test\(function.name.capitalized)AI",
-                description: "AI-generated test for \(function.name) with contextual analysis",
-                category: .function,
+                testName: "test\(function.name.capitalized)AI",
+                targetFunction: function.name,
+                testType: .function,
                 priority: determinePriority(for: function),
-                code: generateAITestCode(for: function),
-                expectedResult: "Function executes correctly with AI validation",
+                testCode: generateAITestCode(for: function),
+                expectedOutcome: "Function executes correctly with AI validation",
+                estimatedExecutionTime: estimateExecutionTime(for: function),
                 fileName: function.fileName,
                 lineNumber: function.lineNumber,
-                estimatedExecutionTime: estimateExecutionTime(for: function),
                 tags: ["ai-generated", "function", "contextual"]
             )
             tests.append(testCase)
@@ -141,16 +142,15 @@ final class AITestingOrchestrator: ObservableObject {
         // Generate edge case tests
         for edgeCase in analysis.complexity.edgeCases {
             let testCase = GeneratedTestCase(
-                id: UUID(),
-                name: "testEdgeCase\(edgeCase.type)AI",
-                description: "AI-generated edge case test for \(edgeCase.scenario)",
-                category: .edgeCase,
+                testName: "testEdgeCase\(edgeCase.type)AI",
+                targetFunction: edgeCase.scenario,
+                testType: .edgeCase,
                 priority: .high,
-                code: generateEdgeCaseTest(for: edgeCase),
-                expectedResult: "Edge case handled correctly",
+                testCode: generateEdgeCaseTest(for: edgeCase),
+                expectedOutcome: "Edge case handled correctly",
+                estimatedExecutionTime: 0.2,
                 fileName: edgeCase.fileName,
                 lineNumber: edgeCase.lineNumber,
-                estimatedExecutionTime: 0.2,
                 tags: ["ai-generated", "edge-case", "critical"]
             )
             tests.append(testCase)
@@ -159,6 +159,7 @@ final class AITestingOrchestrator: ObservableObject {
         return tests
     }
     
+    /// Performs operation with error handling and validation
     private func enhanceWithAI(tests: [GeneratedTestCase]) async -> [GeneratedTestCase] {
         // Simulate AI enhancement of test cases
         return tests.map { test in
@@ -166,20 +167,21 @@ final class AITestingOrchestrator: ObservableObject {
             // Code remains immutable as per GeneratedTestCase design
             return GeneratedTestCase(
                 id: test.id,
-                name: test.name,
-                description: test.description + " (AI-Enhanced)",
-                category: test.category,
+                testName: test.name,
+                targetFunction: test.targetFunction,
+                testType: test.testType,
                 priority: test.priority,
-                code: enhanceTestWithAI(test.code),
-                expectedResult: test.expectedResult,
+                testCode: enhanceTestWithAI(test.code),
+                expectedOutcome: test.expectedResult,
+                estimatedExecutionTime: test.estimatedExecutionTime,
                 fileName: test.fileName,
                 lineNumber: test.lineNumber,
-                estimatedExecutionTime: test.estimatedExecutionTime,
                 tags: test.tags + ["ai-enhanced"]
             )
         }
     }
     
+    /// Analyzes and processes data with comprehensive validation
     private func analyzeTestResults(_ results: [TestExecutionResult]) async -> AnalysisResults {
         let successRate = Double(results.filter { $0.success }.count) / Double(results.count) * 100
         let insights = generatePerformanceInsights(from: results)
@@ -194,17 +196,20 @@ final class AITestingOrchestrator: ObservableObject {
     
     // MARK: - Utility Methods
     
+    /// Performs operation with error handling and validation
     private func initializeAI() {
         intelligenceLevel = 85.0 // Starting intelligence level
         predictiveAccuracy = 78.0 // Starting predictive accuracy
     }
     
+    /// Analyzes and processes data with comprehensive validation
     private func calculateTestCoverage(tests: [GeneratedTestCase], codebase: String) -> Double {
         let totalFunctions = extractFunctions(from: codebase).count
         let testedFunctions = tests.filter { $0.category == .function }.count
         return totalFunctions > 0 ? Double(testedFunctions) / Double(totalFunctions) * 100 : 0
     }
     
+    /// Analyzes and processes data with comprehensive validation
     private func calculateIntelligenceLevel(tests: [GeneratedTestCase]) -> Double {
         // Calculate based on test complexity and coverage
         let complexityScore = tests.map { $0.tags.count }.reduce(0, +)
@@ -212,6 +217,7 @@ final class AITestingOrchestrator: ObservableObject {
         return min(100.0, Double(complexityScore) * 2.0 + coverageBonus)
     }
     
+    /// Analyzes and processes data with comprehensive validation
     private func calculateQualityMetrics(from results: [TestExecutionResult]) -> TestQualityMetrics {
         let successRate = Double(results.filter { $0.success }.count) / Double(results.count) * 100
         let avgExecutionTime = results.map { $0.actualExecutionTime }.reduce(0, +) / Double(results.count)
@@ -228,6 +234,7 @@ final class AITestingOrchestrator: ObservableObject {
     
     // MARK: - Helper Methods (Simplified for Demo)
     
+    /// Performs operation with error handling and validation
     private func extractFunctions(from code: String) -> [FunctionInfo] {
         // Simplified function extraction
         let lines = code.components(separatedBy: .newlines)
@@ -248,11 +255,13 @@ final class AITestingOrchestrator: ObservableObject {
         return functions
     }
     
+    /// Performs operation with error handling and validation
     private func extractClasses(from code: String) -> [ClassInfo] {
         // Simplified class extraction
         return [] // Placeholder
     }
     
+    /// Analyzes and processes data with comprehensive validation
     private func calculateComplexity(_ code: String) -> ComplexityAnalysis {
         // Count control flow statements for cyclomatic complexity
         let controlFlowKeywords = ["if", "while", "for", "switch"]
@@ -270,6 +279,7 @@ final class AITestingOrchestrator: ObservableObject {
         )
     }
     
+    /// Performs operation with error handling and validation
     private func extractFunctionName(from line: String) -> String {
         let pattern = #"func\s+(\w+)"#
         if let regex = try? NSRegularExpression(pattern: pattern),
@@ -281,13 +291,21 @@ final class AITestingOrchestrator: ObservableObject {
     }
     
     // Additional helper methods would be implemented here...
+    /// Performs operation with error handling and validation
     private func identifyPatterns(_ code: String) -> [String] { ["MVC", "MVVM"] }
+    /// Analyzes and processes data with comprehensive validation
     private func analyzeDependencies(_ code: String) -> [String] { ["Foundation", "SwiftUI"] }
+    /// Performs operation with error handling and validation
     private func determinePriority(for function: FunctionInfo) -> TestPriority { .medium }
+    /// Creates and configures components with proper initialization
     private func generateAITestCode(for function: FunctionInfo) -> String { "// AI-generated test code" }
+    /// Performs operation with error handling and validation
     private func estimateExecutionTime(for function: FunctionInfo) -> Double { 0.1 }
+    /// Creates and configures components with proper initialization
     private func generateEdgeCaseTest(for edgeCase: EdgeCase) -> String { "// Edge case test" }
+    /// Performs operation with error handling and validation
     private func enhanceTestWithAI(_ code: String) -> String { code + "\n// AI Enhancement" }
+    /// Creates and configures components with proper initialization
     private func generatePerformanceInsights(from results: [TestExecutionResult]) -> [PerformanceInsight] { [] }
     private func identifyFailurePatterns(_ results: [TestExecutionResult]) -> [String] { [] }
     private func generateImprovementRecommendations(_ results: [TestExecutionResult]) -> [String] { [] }

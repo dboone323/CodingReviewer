@@ -414,3 +414,21 @@ main() {
 }
 
 main "$@"
+
+# IMPROVED: Smart weak self handling
+fix_weak_self_patterns() {
+    local file="$1"
+    
+    # Only add weak self in closures where it makes sense
+    # Look for closures with [weak self] and fix the usage inside
+    awk '
+    /\[weak self\]/ { in_weak_closure = 1 }
+    /^[[:space:]]*}/ { if (in_weak_closure) in_weak_closure = 0 }
+    {
+        if (in_weak_closure && /self\./) {
+            gsub(/self\./, "self?.")
+        }
+        print
+    }
+    ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+}

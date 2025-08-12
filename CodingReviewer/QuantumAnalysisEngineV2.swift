@@ -40,7 +40,7 @@ class QuantumAnalysisEngineV2: ObservableObject {
         // Phase 4: Quantum-parallel chunk processing (enhanced)
         processingStatus = "Quantum-parallel processing..."
         let chunks = splitCodeIntoQuantumChunks(code, threadCount: quantumThreads)
-        let results = await withTaskGroup(of: EnhancedAnalysisChunk.self, returning: [EnhancedAnalysisChunk].self) { group in
+        let results = await withTaskGroup(of: EnhancedAnalysisChunk?.self, returning: [EnhancedAnalysisChunk].self) { group in
             var chunkResults: [EnhancedAnalysisChunk] = []
 
             for (index, chunk) in chunks.enumerated() {
@@ -50,16 +50,20 @@ class QuantumAnalysisEngineV2: ObservableObject {
             }
 
             for await result in group {
-                chunkResults.append(result)
+                if let result = result {
+                    chunkResults.append(result)
+                }
             }
 
             return chunkResults
         }
 
         let quantumTime = Date().timeIntervalSince(quantumStart)
-        quantumPerformance = min(99.9, (1.0 / max(quantumTime, 0.0001)) * 0.0001) // Target <0.0001s
-        isQuantumActive = false
-        processingStatus = "Quantum analysis complete"
+        await MainActor.run {
+            quantumPerformance = min(99.9, (1.0 / max(quantumTime, 0.0001)) * 0.0001) // Target <0.0001s
+            isQuantumActive = false
+            processingStatus = "Quantum analysis complete"
+        }
 
         return QuantumAnalysisResultV2(
             traditionalIssues: extractEnhancedIssues(results),
@@ -74,9 +78,10 @@ class QuantumAnalysisEngineV2: ObservableObject {
     }
 
     // Enhanced quantum superposition
+    /// Creates and configures components with proper initialization
     private func createQuantumSuperposition(_ code: String) async -> [QuantumState] {
         // Simulate quantum superposition of multiple code analysis states
-        let states = (0..<8).map { index in
+        let states = (0..<8).map { [weak self] index in
             QuantumState(
                 id: index,
                 codeVariant: code,
@@ -98,11 +103,13 @@ class QuantumAnalysisEngineV2: ObservableObject {
         return states
     }
 
+    /// Performs operation with error handling and validation
     private func entangleQuantumStates(_ state1: QuantumState, _ state2: QuantumState) async {
         // Simulate quantum entanglement for synchronized analysis
         try? await Task.sleep(nanoseconds: 100_000) // 0.1ms entanglement time
     }
 
+    /// Performs operation with error handling and validation
     private func splitCodeIntoQuantumChunks(_ code: String, threadCount: Int) -> [String] {
         let lines = code.components(separatedBy: .newlines)
         let chunkSize = max(1, lines.count / threadCount)
@@ -117,6 +124,7 @@ class QuantumAnalysisEngineV2: ObservableObject {
         return chunks
     }
 
+    /// Analyzes and processes data with comprehensive validation
     private func processEnhancedQuantumChunk(_ chunk: String, index: Int) async -> EnhancedAnalysisChunk {
         // Enhanced quantum processing with optimized algorithms
         let startTime = Date()
@@ -145,6 +153,7 @@ class QuantumAnalysisEngineV2: ObservableObject {
         return result
     }
 
+    /// Analyzes and processes data with comprehensive validation
     private func calculateAdvancedComplexity(_ code: String) -> Int {
         // Advanced complexity calculation with quantum algorithms
         let baseComplexity = code.components(separatedBy: .whitespacesAndNewlines).filter { !$0.isEmpty }.count / 8
@@ -153,6 +162,7 @@ class QuantumAnalysisEngineV2: ObservableObject {
         return max(1, baseComplexity + quantumBonus + patternBonus)
     }
 
+    /// Performs operation with error handling and validation
     private func detectAdvancedPatterns(_ code: String) -> [String] {
         var patterns: [String] = []
         if code.contains("class ") { patterns.append("OOP") }
@@ -165,6 +175,7 @@ class QuantumAnalysisEngineV2: ObservableObject {
         return patterns
     }
 
+    /// Performs operation with error handling and validation
     private func assessQuantumQuality(_ code: String) -> Double {
         var quality = 75.0
         if code.contains("//") { quality += 15 } // Comments
@@ -174,6 +185,7 @@ class QuantumAnalysisEngineV2: ObservableObject {
         return min(100.0, quality)
     }
 
+    /// Performs operation with error handling and validation
     private func extractEnhancedIssues(_ chunks: [EnhancedAnalysisChunk]) -> [AnalysisResult] {
         var issues: [AnalysisResult] = []
 
@@ -202,6 +214,7 @@ class QuantumAnalysisEngineV2: ObservableObject {
         return issues
     }
 
+    /// Creates and configures components with proper initialization
     private func generateQuantumInsightsV2(_ patterns: [ConsciousnessPattern]) -> [QuantumInsightV2] {
         return patterns.map { pattern in
             QuantumInsightV2(
@@ -215,6 +228,7 @@ class QuantumAnalysisEngineV2: ObservableObject {
         }
     }
 
+    /// Analyzes and processes data with comprehensive validation
     private func calculatePerformanceMetrics(_ executionTime: TimeInterval, _ chunkCount: Int) -> QuantumPerformanceMetrics {
         let throughput = Double(chunkCount) / executionTime
         let efficiency = min(1.0, throughput / Double(quantumThreads))
@@ -320,6 +334,7 @@ class QuantumCacheV2 {
         return accessCount > 0 ? Double(hitCount) / Double(accessCount) : 0.0
     }
 
+    /// Retrieves data with proper error handling and caching
     func getCachedAnalysis(_ code: String) -> EnhancedAnalysisChunk? {
         accessCount += 1
         let key = String(code.hashValue)
@@ -330,6 +345,7 @@ class QuantumCacheV2 {
         return nil
     }
 
+    /// Performs operation with error handling and validation
     func cacheAnalysis(_ code: String, result: EnhancedAnalysisChunk) {
         let key = String(code.hashValue)
         cache[key] = result
@@ -346,6 +362,7 @@ class QuantumCacheV2 {
 
 // Enhanced consciousness neural processor
 class ConsciousnessNeuralProcessor {
+    /// Analyzes and processes data with comprehensive validation
     func analyzeWithConsciousness(_ states: [QuantumState]) async -> [ConsciousnessPattern] {
         var patterns: [ConsciousnessPattern] = []
 
@@ -376,6 +393,7 @@ class ConsciousnessNeuralProcessor {
 
 // Enhanced biological evolution engine
 class BiologicalEvolutionEngine {
+    /// Performs operation with error handling and validation
     func evolveCodeStructure(_ code: String, patterns: [ConsciousnessPattern]) async -> BiologicalEvolutionResult {
         // Simulate biological evolution of code structure
         try? await Task.sleep(nanoseconds: 300_000) // 0.3ms evolution time
@@ -409,16 +427,4 @@ class BiologicalEvolutionEngine {
 // Traditional analysis types (enhanced) - Remove conflicting definitions
 // Use UnifiedDataModels.swift for AnalysisResult structure
 
-enum ProgrammingLanguage {
-    case swift, python, javascript, java, other
-
-    var displayName: String {
-        switch self {
-        case .swift: return "Swift"
-        case .python: return "Python"
-        case .javascript: return "JavaScript"
-        case .java: return "Java"
-        case .other: return "Other"
-        }
-    }
-}
+// ProgrammingLanguage enum defined in FileMetadataService.swift

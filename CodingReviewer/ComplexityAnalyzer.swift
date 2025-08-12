@@ -5,6 +5,7 @@ class ComplexityAnalyzer {
 
     private init() {}
 
+    /// Analyzes and processes data with comprehensive validation
     func analyzeFunction(_ content: String, in file: String) -> FunctionComplexity {
         let lines = content.components(separatedBy: .newlines)
 
@@ -51,6 +52,7 @@ class ComplexityAnalyzer {
         )
     }
 
+    /// Creates and configures components with proper initialization
     func generateRefactoringSuggestions(for complexity: FunctionComplexity) -> [RefactoringSuggestion] {
         var suggestions: [RefactoringSuggestion] = [];
 

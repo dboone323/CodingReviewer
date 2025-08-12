@@ -212,7 +212,7 @@ struct AdvancedTestingDashboardView: View {
             
             TestMetricCard(
                 title: "Coverage",
-                value: String(format: "%.1f%%", testingFramework.testCoverage.overallCoveragePercentage),
+                value: String(format: "%.1f%%", (testingFramework.testCoverage.functionCoverage + testingFramework.testCoverage.lineCoverage + testingFramework.testCoverage.branchCoverage) / 3.0 * 100),
                 icon: "chart.pie.fill",
                 color: .green
             )
@@ -274,6 +274,7 @@ struct AdvancedTestingDashboardView: View {
     
     // MARK: - Helper Methods
     
+    /// Creates and configures components with proper initialization
     private func generateTestsForSampleCode() async {
         let sampleCode = """
         import Foundation
@@ -281,6 +282,7 @@ struct AdvancedTestingDashboardView: View {
         class UserManager {
             private var users: [User] = []
             
+            /// Performs operation with error handling and validation
             func addUser(_ user: User) throws {
                 guard !user.email.isEmpty else {
                     throw UserError.invalidEmail
@@ -288,11 +290,13 @@ struct AdvancedTestingDashboardView: View {
                 users.append(user)
             }
             
+            /// Retrieves data with proper error handling and caching
             func getUser(by id: String) -> User? {
                 return users.first { $0.id == id }
             }
             
             @MainActor
+            /// Updates and persists data with validation
             func updateUserAsync(_ user: User) async throws {
                 // Simulate async operation
                 try await Task.sleep(nanoseconds: 100_000_000)
@@ -320,18 +324,23 @@ struct AdvancedTestingDashboardView: View {
         testingFramework.generateTestCases(for: sampleCode, fileName: "UserManager.swift")
     }
     
+    /// Performs operation with error handling and validation
     private func testsForCategory(_ category: TestCategory) -> [GeneratedTestCase] {
-        return testingFramework.generatedTestCases.filter { $0.category == category }
+        return testingFramework.generatedTestCases.filter { $0.category.rawValue == category.rawValue }
     }
     
+    /// Performs operation with error handling and validation
     private func testsForPriority(_ priority: TestPriority) -> [GeneratedTestCase] {
         return testingFramework.generatedTestCases.filter { $0.priority == priority }
     }
     
     private var totalEstimatedRuntime: TimeInterval {
-        return testingFramework.generatedTestCases.reduce(0) { $0 + $1.estimatedExecutionTime }
+        return testingFramework.generatedTestCases.reduce(into: 0.0) { total, testCase in
+            total += testCase.estimatedExecutionTime
+        }
     }
     
+    /// Performs operation with error handling and validation
     private func iconForCategory(_ category: TestCategory) -> String {
         switch category {
         case .function: return "function"
@@ -343,6 +352,7 @@ struct AdvancedTestingDashboardView: View {
         }
     }
     
+    /// Performs operation with error handling and validation
     private func colorForCategory(_ category: TestCategory) -> Color {
         switch category {
         case .function: return .blue
@@ -354,8 +364,25 @@ struct AdvancedTestingDashboardView: View {
         }
     }
     
+    /// Performs operation with error handling and validation
+    private func colorForTestType(_ testType: TestType) -> Color {
+        switch testType {
+        case .unit: return .blue
+        case .integration: return .green
+        case .function: return .blue
+        case .performance: return .orange
+        case .security: return .red
+        case .quality: return .purple
+        case .syntax: return .gray
+        case .edgeCase: return .yellow
+        case .coverage: return .teal
+        }
+    }
+    
+    /// Performs operation with error handling and validation
     private func colorForPriority(_ priority: TestPriority) -> Color {
         switch priority {
+        case .critical: return .red
         case .high: return .red
         case .medium: return .orange
         case .low: return .green
@@ -400,7 +427,7 @@ struct TestCaseRow: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text(testCase.name)
+                Text(testCase.testName)
                     .font(.headline)
                 
                 Text(testCase.description)
@@ -416,7 +443,7 @@ struct TestCaseRow: View {
                         .font(.caption)
                         .padding(.horizontal, 6)
                         .padding(.vertical, 2)
-                        .background(colorForCategory(testCase.category).opacity(0.2))
+                        .background(colorForTestType(testCase.category).opacity(0.2))
                         .cornerRadius(4)
                     
                     Circle()
@@ -436,6 +463,22 @@ struct TestCaseRow: View {
         }
     }
     
+    /// Performs operation with error handling and validation
+    private func colorForTestType(_ testType: TestType) -> Color {
+        switch testType {
+        case .unit: return .blue
+        case .integration: return .green
+        case .function: return .blue
+        case .performance: return .orange
+        case .security: return .red
+        case .quality: return .purple
+        case .syntax: return .gray
+        case .edgeCase: return .yellow
+        case .coverage: return .teal
+        }
+    }
+    
+    /// Performs operation with error handling and validation
     private func colorForCategory(_ category: TestCategory) -> Color {
         switch category {
         case .function: return .blue
@@ -447,8 +490,10 @@ struct TestCaseRow: View {
         }
     }
     
+    /// Performs operation with error handling and validation
     private func colorForPriority(_ priority: TestPriority) -> Color {
         switch priority {
+        case .critical: return .red
         case .high: return .red
         case .medium: return .orange
         case .low: return .green
@@ -499,7 +544,7 @@ struct TestCodeDetailView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     // Test case info
                     VStack(alignment: .leading, spacing: 8) {
-                        Text(testCase.name)
+                        Text(testCase.testName)
                             .font(.title2)
                             .fontWeight(.bold)
                         

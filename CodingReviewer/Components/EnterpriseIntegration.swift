@@ -29,79 +29,13 @@ class EnterpriseDataExporter: ObservableObject {
         let customFields: [String]
         let isDefault: Bool
         let createdAt: Date
-        
-        enum ExportFormat: String, Codable, CaseIterable {
-            case json = "JSON"
-            case csv = "CSV"
-            case xml = "XML"
-            case pdf = "PDF"
-            case html = "HTML"
-            case markdown = "Markdown"
-            
-            var fileExtension: String {
-                switch self {
-                case .json: return "json"
-                case .csv: return "csv"
-                case .xml: return "xml"
-                case .pdf: return "pdf"
-                case .html: return "html"
-                case .markdown: return "md"
-                }
-            }
-            
-            var mimeType: String {
-                switch self {
-                case .json: return "application/json"
-                case .csv: return "text/csv"
-                case .xml: return "application/xml"
-                case .pdf: return "application/pdf"
-                case .html: return "text/html"
-                case .markdown: return "text/markdown"
-                }
-            }
-            
-            var icon: String {
-                switch self {
-                case .json: return "doc.text"
-                case .csv: return "tablecells"
-                case .xml: return "doc.richtext"
-                case .pdf: return "doc.fill"
-                case .html: return "globe"
-                case .markdown: return "textformat"
-                }
-            }
-        }
-        
-        enum DataType: String, Codable, CaseIterable {
-            case codeAnalysis = "Code Analysis Results"
-            case usageAnalytics = "Usage Analytics"
-            case performanceMetrics = "Performance Metrics"
-            case errorLogs = "Error Logs"
-            case userActivity = "User Activity"
-            case systemConfiguration = "System Configuration"
-            case processingJobs = "Processing Jobs"
-            case insights = "AI Insights"
-            
-            var icon: String {
-                switch self {
-                case .codeAnalysis: return "doc.text.magnifyingglass"
-                case .usageAnalytics: return "chart.bar"
-                case .performanceMetrics: return "speedometer"
-                case .errorLogs: return "exclamationmark.triangle"
-                case .userActivity: return "person.crop.circle"
-                case .systemConfiguration: return "gearshape"
-                case .processingJobs: return "list.bullet.clipboard"
-                case .insights: return "brain.head.profile"
-                }
-            }
-        }
     }
     
     struct ExportRecord: Identifiable {
         let id = UUID()
         let templateName: String
-        let format: ExportTemplate.ExportFormat
-        let dataTypes: [ExportTemplate.DataType]
+        let format: ExportFormat
+        let dataTypes: [DataType]
         let exportedAt: Date
         let fileSize: Int64
         let recordCount: Int
@@ -153,11 +87,12 @@ class EnterpriseDataExporter: ObservableObject {
     
     // MARK: - Template Management
     
+    /// Creates and configures components with proper initialization
     func createTemplate(
         name: String,
         description: String,
-        format: ExportTemplate.ExportFormat,
-        dataTypes: [ExportTemplate.DataType],
+        format: ExportFormat,
+        dataTypes: [DataType],
         customFields: [String] = []
     ) -> ExportTemplate {
         let template = ExportTemplate(
@@ -175,11 +110,13 @@ class EnterpriseDataExporter: ObservableObject {
         return template
     }
     
+    /// Removes data and performs cleanup safely
     func deleteTemplate(id: UUID) {
         availableExports.removeAll { $0.id == id && !$0.isDefault }
         saveTemplates()
     }
     
+    /// Creates and configures components with proper initialization
     private func createDefaultTemplates() {
         if availableExports.isEmpty {
             let defaultTemplates = [
@@ -228,6 +165,7 @@ class EnterpriseDataExporter: ObservableObject {
     
     // MARK: - Export Operations
     
+    /// Performs operation with error handling and validation
     func exportData(
         template: ExportTemplate,
         configuration: ExportConfiguration = ExportConfiguration()
@@ -301,6 +239,7 @@ class EnterpriseDataExporter: ObservableObject {
         }
     }
     
+    /// Performs operation with error handling and validation
     private func collectData(
         for template: ExportTemplate,
         configuration: ExportConfiguration
@@ -317,8 +256,9 @@ class EnterpriseDataExporter: ObservableObject {
         return allData
     }
     
+    /// Performs operation with error handling and validation
     private func collectDataForType(
-        _ dataType: ExportTemplate.DataType,
+        _ dataType: DataType,
         configuration: ExportConfiguration
     ) async throws -> [[String: Any]] {
         // Simulate network delay
@@ -342,12 +282,25 @@ class EnterpriseDataExporter: ObservableObject {
             return generateMockProcessingJobData()
         case .insights:
             return generateMockInsightData()
+        case .codeFile:
+            return [["type": "codeFile", "data": "Code File Data", "timestamp": ISO8601DateFormatter().string(from: Date())]]
+        case .documentation:
+            return [["type": "documentation", "data": "Documentation Data", "timestamp": ISO8601DateFormatter().string(from: Date())]]
+        case .configuration:
+            return [["type": "configuration", "data": "Configuration Data", "timestamp": ISO8601DateFormatter().string(from: Date())]]
+        case .test:
+            return [["type": "test", "data": "Test Data", "timestamp": ISO8601DateFormatter().string(from: Date())]]
+        case .asset:
+            return [["type": "asset", "data": "Asset Data", "timestamp": ISO8601DateFormatter().string(from: Date())]]
+        case .other:
+            return [["type": "other", "data": "Other Data", "timestamp": ISO8601DateFormatter().string(from: Date())]]
         }
     }
     
+    /// Formats and displays data with proper styling
     private func formatData(
         _ data: [[String: Any]],
-        format: ExportTemplate.ExportFormat,
+        format: ExportFormat,
         configuration: ExportConfiguration
     ) throws -> Data {
         switch format {
@@ -366,6 +319,7 @@ class EnterpriseDataExporter: ObservableObject {
         }
     }
     
+    /// Updates and persists data with validation
     private func saveExportedData(_ data: Data, template: ExportTemplate) async throws -> (String, Int64) {
         let fileName = "\(template.name.replacingOccurrences(of: " ", with: "_"))_\(Date().timeIntervalSince1970).\(template.format.fileExtension)"
         
@@ -391,6 +345,7 @@ class EnterpriseDataExporter: ObservableObject {
     
     // MARK: - Data Formatting Methods
     
+    /// Formats and displays data with proper styling
     private func formatAsJSON(_ data: [[String: Any]], configuration: ExportConfiguration) throws -> Data {
         var output: [String: Any] = [:]
         
@@ -407,6 +362,7 @@ class EnterpriseDataExporter: ObservableObject {
         return try JSONSerialization.data(withJSONObject: output, options: .prettyPrinted)
     }
     
+    /// Formats and displays data with proper styling
     private func formatAsCSV(_ data: [[String: Any]], configuration: ExportConfiguration) throws -> Data {
         guard !data.isEmpty else { return Data() }
         

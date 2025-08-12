@@ -1,3 +1,4 @@
+import Foundation
 import SwiftUI
 import Combine
 import UniformTypeIdentifiers
@@ -204,6 +205,7 @@ struct EnhancedEnterpriseAnalyticsDashboard: View {
         }
     }
     
+    /// Retrieves data with proper error handling and caching
     private func getBadgeCount(for view: DashboardView) -> Int? {
         switch view {
         case .overview: return nil
@@ -463,21 +465,7 @@ struct ExportOptionsView: View {
     @State private var includeRawData = false
     @State private var customDateRange = false
     
-    enum ExportFormat: String, CaseIterable {
-        case pdf = "PDF Report"
-        case csv = "CSV Data"
-        case json = "JSON Export"
-        case excel = "Excel Workbook"
-        
-        var icon: String {
-            switch self {
-            case .pdf: return "doc.fill"
-            case .csv: return "tablecells.fill"
-            case .json: return "curlybraces"
-            case .excel: return "doc.richtext.fill"
-            }
-        }
-    }
+    // ExportFormat now defined in SharedTypes.swift
     
     var body: some View {
         VStack(spacing: 24) {
@@ -549,14 +537,15 @@ struct ExportOptionsView: View {
         .frame(width: 500, height: 600)
     }
     
+    /// Performs operation with error handling and validation
     private func exportReport() {
         // Handle export logic
-        print("Exporting \(selectedFormat.rawValue)")
+        // AppLogger.shared.log("Exporting \(selectedFormat.rawValue)") // TODO: Replace print with proper logging
     }
 }
 
 struct ExportFormatButton: View {
-    let format: ExportOptionsView.ExportFormat
+    let format: ExportFormat
     let isSelected: Bool
     let action: () -> Void
     

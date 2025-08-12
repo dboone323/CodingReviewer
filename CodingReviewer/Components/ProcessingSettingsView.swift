@@ -6,8 +6,6 @@
 //
 
 import SwiftUI
-
-// Note: ProcessingJob types are defined in BackgroundProcessingTypes.swift
 import Foundation
 
 // MARK: - Job Creator View
@@ -102,6 +100,7 @@ struct JobCreatorView: View {
         }
     }
     
+    /// Performs operation with comprehensive error handling and validation
     private func createJobs() {
         if scheduleRecurring {
             processingSystem.scheduleRecurringJob(
@@ -236,18 +235,17 @@ struct ProcessingSettingsView: View {
             }
             .navigationTitle("Processing Settings")
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
+                ToolbarItem {
+                    HStack {
+                        Button("Cancel") {
+                            dismiss()
+                        }
+                        Button("Save") {
+                            saveSettings()
+                            dismiss()
+                        }
+                        .disabled(limits.maxConcurrentJobs < 1)
                     }
-                }
-                
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Save") {
-                        saveSettings()
-                        dismiss()
-                    }
-                    .disabled(!limits.isValid)
                 }
             }
             .alert("Reset Settings", isPresented: $showingResetAlert) {
@@ -261,6 +259,7 @@ struct ProcessingSettingsView: View {
         }
     }
     
+    /// Performs operation with comprehensive error handling and validation
     private func saveSettings() {
         processingSystem.updateProcessingLimits(limits)
     }
@@ -519,6 +518,7 @@ struct AdvancedProcessingSettings: View {
         }
     }
     
+    /// Performs operation with comprehensive error handling and validation
     private func exportProcessingData() {
         let stats = processingSystem.getProcessingStats()
         let exportDict: [String: Any] = [

@@ -12,54 +12,37 @@ import SwiftUI
 
 extension ProcessingJob.JobType {
     var color: Color {
-        switch colorIdentifier {
-        case "blue": return .blue
-        case "green": return .green
-        case "red": return .red
-        case "orange": return .orange
-        case "purple": return .purple
-        case "teal": return .teal
-        case "indigo": return .indigo
-        case "gray": return .gray
-        default: return .primary
+        switch self {
+        case .codeAnalysis: return .blue
+        case .documentation: return .green
+        case .testing: return .red
+        case .refactoring: return .orange
+        case .optimization: return .purple
         }
     }
 }
 
 extension ProcessingJob.JobStatus {
     var color: Color {
-        switch colorIdentifier {
-        case "orange": return .orange
-        case "blue": return .blue
-        case "yellow": return .yellow
-        case "green": return .green
-        case "red": return .red
-        case "gray": return .gray
-        default: return .primary
-        }
-    }
-}
-
-extension ProcessingJob.JobPriority {
-    var color: Color {
-        switch colorIdentifier {
-        case "gray": return .gray
-        case "blue": return .blue
-        case "orange": return .orange
-        case "red": return .red
-        default: return .primary
+        switch self {
+        case .pending: return .orange
+        case .queued: return .yellow
+        case .running: return .blue
+        case .paused: return .purple
+        case .completed: return .green
+        case .failed: return .red
+        case .cancelled: return .gray
         }
     }
 }
 
 extension SystemLoad.LoadLevel {
     var color: Color {
-        switch colorIdentifier {
-        case "green": return .green
-        case "yellow": return .yellow
-        case "orange": return .orange
-        case "red": return .red
-        default: return .primary
+        switch self {
+        case .low: return .green
+        case .medium: return .yellow
+        case .high: return .orange
+        case .critical: return .red
         }
     }
 }
@@ -110,6 +93,18 @@ extension ImpactLevel {
         case "gray": return .gray
         case "blue": return .blue
         case "yellow": return .yellow
+        case "orange": return .orange
+        case "red": return .red
+        default: return .primary
+        }
+    }
+}
+
+extension ProcessingJob.JobPriority {
+    var color: Color {
+        switch colorIdentifier {
+        case "gray": return .gray
+        case "blue": return .blue
         case "orange": return .orange
         case "red": return .red
         default: return .primary

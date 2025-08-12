@@ -166,6 +166,7 @@ struct AIMLHeaderView: View {
         .padding()
     }
 
+    /// Performs operation with comprehensive error handling and validation
     private func formatRelativeTime(_ date: Date) -> String {
         let formatter = RelativeDateTimeFormatter()
         formatter.unitsStyle = .abbreviated
@@ -430,6 +431,7 @@ struct PredictiveAnalysisView: View {
         }
     }
 
+    /// Performs operation with comprehensive error handling and validation
     private func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium

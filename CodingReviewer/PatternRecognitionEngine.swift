@@ -30,6 +30,8 @@ final class PatternRecognitionEngine: ObservableObject {
     // MARK: - Main Pattern Detection Interface
 
     @MainActor
+    /// Performs specific functionality - TODO: Add detailed description
+    /// Performs specific functionality
     func detectDesignPatterns(
         in code: String,
         language: CodeLanguage
@@ -66,6 +68,8 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     @MainActor
+    /// Performs specific functionality - TODO: Add detailed description
+    /// Performs specific functionality
     func identifyCodeSmells(_ analysis: [AnalysisResult]) async -> [CodeSmell] {
 
         logger.log("🔍 Identifying code smells in analysis results", level: .info, category: .ai)
@@ -86,6 +90,8 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     @MainActor
+    /// Processes and analyzes input data
+    /// Performs specific functionality
     func analyzeArchitecture(files: [CodeFile]) async -> ArchitectureInsights {
 
         logger.log("🔍 Analyzing architecture for \(files.count) files", level: .info, category: .ai)
@@ -106,6 +112,8 @@ final class PatternRecognitionEngine: ObservableObject {
     }
 
     @MainActor
+    /// Performs specific functionality - TODO: Add detailed description
+    /// Performs specific functionality
     func detectPerformanceBottlenecks(_ code: String) async -> [PerformanceIssue] {
 
         logger.log("🔍 Detecting performance bottlenecks", level: .info, category: .ai)
@@ -127,6 +135,7 @@ final class PatternRecognitionEngine: ObservableObject {
 
     // MARK: - Design Pattern Detection
 
+    /// Performs specific functionality
     private func detectSingletonPattern(in code: String, language: CodeLanguage) async -> [DetectedPattern] {
         var patterns: [DetectedPattern] = [];
 
@@ -168,6 +177,7 @@ final class PatternRecognitionEngine: ObservableObject {
         return patterns
     }
 
+    /// Performs specific functionality
     private func detectObserverPattern(in code: String, language: CodeLanguage) async -> [DetectedPattern] {
         var patterns: [DetectedPattern] = [];
 
@@ -188,6 +198,7 @@ final class PatternRecognitionEngine: ObservableObject {
         return patterns
     }
 
+    /// Performs specific functionality
     private func detectFactoryPattern(in code: String, language: CodeLanguage) async -> [DetectedPattern] {
         var patterns: [DetectedPattern] = [];
 
@@ -207,6 +218,7 @@ final class PatternRecognitionEngine: ObservableObject {
         return patterns
     }
 
+    /// Performs specific functionality
     private func detectMVVMPattern(in code: String, language: CodeLanguage) async -> [DetectedPattern] {
         var patterns: [DetectedPattern] = [];
 
@@ -226,6 +238,7 @@ final class PatternRecognitionEngine: ObservableObject {
         return patterns
     }
 
+    /// Performs specific functionality
     private func detectDependencyInjectionPattern(in code: String, language: CodeLanguage) async -> [DetectedPattern] {
         var patterns: [DetectedPattern] = [];
 
@@ -248,6 +261,7 @@ final class PatternRecognitionEngine: ObservableObject {
 
     // MARK: - Code Smell Detection
 
+    /// Performs specific functionality
     private func detectLongMethodSmells(_ analysis: [AnalysisResult]) -> [CodeSmell] {
         // Simulate detection logic - in reality this would analyze actual code metrics
         return [
@@ -262,6 +276,7 @@ final class PatternRecognitionEngine: ObservableObject {
         ]
     }
 
+    /// Performs specific functionality
     private func detectLargeClassSmells(_ analysis: [AnalysisResult]) -> [CodeSmell] {
         return [
             CodeSmell(
@@ -275,6 +290,7 @@ final class PatternRecognitionEngine: ObservableObject {
         ]
     }
 
+    /// Performs specific functionality
     private func detectDuplicateCodeSmells(_ analysis: [AnalysisResult]) -> [CodeSmell] {
         return [
             CodeSmell(
@@ -288,6 +304,7 @@ final class PatternRecognitionEngine: ObservableObject {
         ]
     }
 
+    /// Performs specific functionality
     private func detectGodObjectSmells(_ analysis: [AnalysisResult]) -> [CodeSmell] {
         return [
             CodeSmell(
@@ -301,6 +318,7 @@ final class PatternRecognitionEngine: ObservableObject {
         ]
     }
 
+    /// Performs specific functionality
     private func detectDeadCodeSmells(_ analysis: [AnalysisResult]) -> [CodeSmell] {
         return [
             CodeSmell(
@@ -316,6 +334,7 @@ final class PatternRecognitionEngine: ObservableObject {
 
     // MARK: - Architecture Analysis
 
+    /// Performs specific functionality
     private func calculateArchitectureScore(_ files: [CodeFile]) -> Double {
         // Simplified scoring algorithm
         let fileCount = files.count
@@ -335,6 +354,7 @@ final class PatternRecognitionEngine: ObservableObject {
         return max(0, min(100, score))
     }
 
+    /// Performs specific functionality
     private func analyzeLayers(_ files: [CodeFile]) -> [LayeringSuggestion] {
         return [
             LayeringSuggestion(
@@ -354,6 +374,7 @@ final class PatternRecognitionEngine: ObservableObject {
         ]
     }
 
+    /// Performs specific functionality
     private func analyzeCoupling(_ files: [CodeFile]) -> CouplingAnalysis {
         return CouplingAnalysis(
             overallLevel: .medium,
@@ -363,6 +384,7 @@ final class PatternRecognitionEngine: ObservableObject {
         )
     }
 
+    /// Performs specific functionality
     private func analyzeCohesion(_ files: [CodeFile]) -> CohesionAnalysis {
         return CohesionAnalysis(
             overallLevel: .high,
@@ -372,6 +394,7 @@ final class PatternRecognitionEngine: ObservableObject {
         )
     }
 
+    /// Performs specific functionality
     private func buildDependencyGraph(_ files: [CodeFile]) -> DependencyGraph {
         return DependencyGraph(
             nodes: files.map { DependencyNode(name: $0.name, type: .classType) },
@@ -381,6 +404,7 @@ final class PatternRecognitionEngine: ObservableObject {
         )
     }
 
+    /// Performs specific functionality
     private func generateArchitectureRecommendations(_ files: [CodeFile]) -> [ArchitectureRecommendation] {
         return [
             ArchitectureRecommendation(
@@ -395,6 +419,7 @@ final class PatternRecognitionEngine: ObservableObject {
 
     // MARK: - Performance Analysis
 
+    /// Performs specific functionality
     private func detectInefficiientLoops(in code: String) -> [PerformanceIssue] {
         var issues: [PerformanceIssue] = [];
 
@@ -415,6 +440,7 @@ final class PatternRecognitionEngine: ObservableObject {
         return issues
     }
 
+    /// Performs specific functionality
     private func detectMemoryLeaks(in code: String) -> [PerformanceIssue] {
         var issues: [PerformanceIssue] = [];
 
@@ -434,6 +460,7 @@ final class PatternRecognitionEngine: ObservableObject {
         return issues
     }
 
+    /// Performs specific functionality
     private func detectUnnecessaryComputations(in code: String) -> [PerformanceIssue] {
         var issues: [PerformanceIssue] = [];
 
@@ -453,6 +480,7 @@ final class PatternRecognitionEngine: ObservableObject {
         return issues
     }
 
+    /// Performs specific functionality
     private func detectIOBottlenecks(in code: String) -> [PerformanceIssue] {
         var issues: [PerformanceIssue] = [];
 
@@ -472,12 +500,14 @@ final class PatternRecognitionEngine: ObservableObject {
         return issues
     }
 
+    /// Performs specific functionality
     private func detectAlgorithmicComplexity(in code: String) -> [PerformanceIssue] {
         return [] // Placeholder for complex algorithmic analysis
     }
 
     // MARK: - Helper Methods
 
+    /// Performs specific functionality
     private func updateProgress(_ progress: Double) async {
         await MainActor.run {
             self.analysisProgress = progress
@@ -485,6 +515,7 @@ final class PatternRecognitionEngine: ObservableObject {
         try? await Task.sleep(nanoseconds: 100_000_000) // Small delay for UI
     }
 
+    /// Performs specific functionality
     private func findCodeLocation(for pattern: String, in code: String) -> CodeLocation {
         let lines = code.components(separatedBy: .newlines)
         for (index, line) in lines.enumerated() {

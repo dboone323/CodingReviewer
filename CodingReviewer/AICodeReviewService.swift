@@ -305,6 +305,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
     @Published var aiInsightsAvailable = false;
     @Published var lastAnalysisTimestamp: Date?
 
+    /// Performs specific functionality
     private func log(_ message: String) async {
         AppLogger.shared.log("🤖 AI Service: \(message)")
     }
@@ -318,6 +319,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
     // MARK: - Phase 3 Enhanced Methods (Build Compatible - Stage 1)
 
     @MainActor
+    /// Performs specific functionality
     func performComprehensiveAnalysis(
         for fileContents: [String],
         withFileNames fileNames: [String],
@@ -362,6 +364,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         return results
     }
 
+    /// Performs specific functionality
     private func performIntelligentAnalysis(content: String, fileName: String) -> EnhancedAnalysisResult {
         // Phase 3: Enhanced analysis with intelligent suggestions
 
@@ -392,6 +395,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         )
     }
 
+    /// Performs specific functionality
     private func detectLanguageFromFileName(_ fileName: String) -> String {
         let ext = (fileName as NSString).pathExtension.lowercased()
         switch ext {
@@ -410,6 +414,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
 
     // MARK: - Phase 3 Intelligent Analysis Methods
 
+    /// Performs specific functionality
     private func generateIntelligentSuggestions(content: String, language: String) -> [String] {
         var suggestions: [String] = [];
 
@@ -430,6 +435,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         return suggestions
     }
 
+    /// Performs specific functionality
     private func generateSwiftSuggestions(content: String) -> [String] {
         var suggestions: [String] = [];
 
@@ -456,6 +462,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         return suggestions
     }
 
+    /// Performs specific functionality
     private func generatePythonSuggestions(content: String) -> [String] {
         var suggestions: [String] = [];
 
@@ -477,6 +484,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         return suggestions
     }
 
+    /// Performs specific functionality
     private func generateJavaScriptSuggestions(content: String) -> [String] {
         var suggestions: [String] = [];
 
@@ -498,6 +506,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         return suggestions
     }
 
+    /// Performs specific functionality
     private func generateJavaSuggestions(content: String) -> [String] {
         var suggestions: [String] = [];
 
@@ -514,6 +523,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         return suggestions
     }
 
+    /// Performs specific functionality
     private func generateGenericSuggestions(content: String) -> [String] {
         var suggestions: [String] = [];
 
@@ -536,6 +546,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         return suggestions
     }
 
+    /// Performs specific functionality
     private func calculateEnhancedComplexity(code: String) -> Double? {
         let lines = code.components(separatedBy: CharacterSet.newlines)
         let nonEmptyLines = lines.filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
@@ -559,6 +570,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         return min(10.0, max(1.0, complexity))
     }
 
+    /// Performs specific functionality
     private func calculateEnhancedMaintainability(code: String) -> Double? {
         let lines = code.components(separatedBy: CharacterSet.newlines)
         let nonEmptyLines = lines.filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
@@ -587,6 +599,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         return min(100.0, max(0.0, maintainability))
     }
 
+    /// Performs specific functionality
     private func generateNaturalLanguageExplanation(content: String, suggestions: [String]) -> String {
         let lines = content.components(separatedBy: CharacterSet.newlines)
         let wordCount = content.components(separatedBy: CharacterSet.whitespacesAndNewlines).filter { !$0.isEmpty }.count
@@ -615,6 +628,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         return explanation
     }
 
+    /// Performs specific functionality
     private func generateAutomatedFixes(content: String, language: String) -> [String] {
         var fixes: [String] = [];
 
@@ -650,6 +664,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         return fixes
     }
 
+    /// Performs specific functionality
     private func generateRefactoringSuggestions(content: String) -> [String] {
         var suggestions: [String] = [];
 
@@ -707,6 +722,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         return suggestions
     }
 
+    /// Performs specific functionality
     private func generateSmartFixes(content: String, language: String) -> [AIGeneratedFix] {
         var fixes: [AIGeneratedFix] = [];
 
@@ -722,6 +738,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         return fixes
     }
 
+    /// Performs specific functionality
     private func detectCommonIssues(content: String, language: String) -> [String] {
         var issues: [String] = [];
 
@@ -741,6 +758,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         return issues
     }
 
+    /// Performs specific functionality
     private func createSmartFix(for issue: String, content: String, language: String) -> AIGeneratedFix? {
         // Generate intelligent fixes based on issue content
         if issue.contains("force unwrap") {
@@ -790,6 +808,7 @@ final class EnhancedAICodeReviewService: ObservableObject {
         return nil
     }
 
+    /// Performs specific functionality
     private func determineSeverity(from message: String) -> String {
         if message.lowercased().contains("force") || message.lowercased().contains("unsafe") {
             return "safety"
@@ -806,10 +825,12 @@ final class EnhancedAICodeReviewService: ObservableObject {
 
     // MARK: - Simplified Methods for Compatibility
 
+    /// Performs specific functionality
     func generateFixesForIssues(_ issues: [String]) async throws -> [AIGeneratedFix] {
         []
     }
 
+    /// Performs specific functionality
     func analyzeCodeQuality(_ code: String) async throws -> Double {
         let lines = code.components(separatedBy: CharacterSet.newlines)
         let nonEmptyLines = lines.filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
@@ -817,14 +838,17 @@ final class EnhancedAICodeReviewService: ObservableObject {
         return min(100.0, max(0.0, 100.0 - Double(avgLineLength) / 2.0))
     }
 
+    /// Performs specific functionality
     func explainCode(_ code: String, language: String) async throws -> String {
         "🤖 Enhanced AI code explanation will be available in the next update"
     }
 
+    /// Performs specific functionality
     func generateDocumentation(for code: String, language: String) async throws -> String {
         "📚 AI-powered documentation generation coming soon"
     }
 
+    /// Performs specific functionality
     func suggestRefactoring(for code: String, language: String) async throws -> [String] {
         ["🔄 Advanced refactoring suggestions will be available with full AI integration"]
     }

@@ -1,3 +1,4 @@
+import Foundation
 import SwiftUI
 import Combine
 
@@ -320,6 +321,7 @@ struct EnhancedSmartLoadingView: View {
         }
     }
     
+    /// Initiates process with proper setup and monitoring
     private func startTipRotation() {
         guard tips.count > 1 else { return }
         

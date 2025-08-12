@@ -1,3 +1,4 @@
+import Foundation
 import SwiftUI
 
 /// Performance monitoring dashboard for analysis operations
@@ -152,6 +153,7 @@ struct PerformanceDashboardView: View {
         .cornerRadius(10)
     }
     
+    /// Performs operation with error handling and validation
     private func performanceCard(title: String, value: String, color: Color) -> some View {
         VStack(spacing: 4) {
             Text(value)
@@ -169,6 +171,7 @@ struct PerformanceDashboardView: View {
         .cornerRadius(8)
     }
     
+    /// Performs operation with error handling and validation
     private func metricRow(_ metric: PerformanceMetric) -> some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
@@ -225,14 +228,19 @@ struct PerformanceDashboardView: View {
         }
     }
     
+    /// Formats and displays data with proper styling
     private func formatAverageDuration() -> String {
         guard !performanceTracker.metrics.isEmpty else { return "N/A" }
         
-        let totalDuration = performanceTracker.metrics.reduce(0) { $0 + $1.duration }
+        let totalDuration = performanceTracker.metrics
+    .reduce(0) {
+         $0 + $1.duration 
+    }
         let average = totalDuration / Double(performanceTracker.metrics.count)
         return String(format: "%.3fs", average)
     }
     
+    /// Formats and displays data with proper styling
     private func formatSlowestOperation() -> String {
         guard let slowest = performanceTracker.metrics.max(by: { $0.duration < $1.duration }) else {
             return "N/A"
@@ -240,11 +248,12 @@ struct PerformanceDashboardView: View {
         return String(format: "%.3fs", slowest.duration)
     }
     
+    /// Creates and configures components with proper initialization
     private func generatePerformanceReport() {
         let report = performanceTracker.generateReport()
         AppLogger.shared.log("Performance report generated", level: .info, category: .performance)
         // In a real app, you might save this to a file or show it in a view
-        print(report)
+        // AppLogger.shared.log(report) // TODO: Replace print with proper logging
     }
 }
 

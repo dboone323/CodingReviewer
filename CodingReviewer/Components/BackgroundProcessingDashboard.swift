@@ -110,12 +110,14 @@ struct BackgroundProcessingDashboard: View {
         }
     }
     
+    /// Initiates process with proper setup and monitoring
     private func startAutoRefresh() {
         refreshTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             // Auto-refresh trigger - the system already updates itself
         }
     }
     
+    /// Completes process and performs cleanup
     private func stopAutoRefresh() {
         refreshTimer?.invalidate()
         refreshTimer = nil
@@ -251,6 +253,7 @@ struct OverviewTab: View {
         }
     }
     
+    /// Formats and displays data with proper styling
     private func formatDuration(_ duration: TimeInterval) -> String {
         if duration < 60 {
             return String(format: "%.1fs", duration)
@@ -319,6 +322,7 @@ struct ActiveJobsTab: View {
         }
     }
     
+    /// Performs operation with error handling and validation
     private func sortedActiveJobs() -> [ProcessingJob] {
         switch sortBy {
         case .priority:
@@ -381,11 +385,14 @@ struct HistoryTab: View {
         }
     }
     
+    /// Performs operation with error handling and validation
     private func filteredJobs() -> [ProcessingJob] {
         switch selectedFilter {
         case .all:
             return (processingSystem.completedJobs + processingSystem.failedJobs)
-                .sorted { $0.endTime ?? Date.distantPast > $1.endTime ?? Date.distantPast }
+                .sorted { (job1: ProcessingJob, job2: ProcessingJob) in 
+                    (job1.startTime) > (job2.startTime)
+                }
         case .completed:
             return processingSystem.completedJobs
         case .failed:
@@ -433,7 +440,7 @@ struct MonitoringTab: View {
                             
                             Spacer()
                             
-                            CircularProgressView(
+                            BackgroundCircularProgressView(
                                 progress: Double(processingSystem.systemLoad.currentConcurrentJobs) / Double(processingSystem.processingLimits.maxConcurrentJobs),
                                 color: .orange
                             )
@@ -484,6 +491,7 @@ struct MonitoringTab: View {
         }
     }
     
+    /// Formats and displays data with proper styling
     private func formatDuration(_ duration: TimeInterval) -> String {
         if duration < 60 {
             return String(format: "%.1fs", duration)
@@ -614,8 +622,8 @@ struct JobSummaryRow: View {
                     .fill(job.status.color)
                     .frame(width: 8, height: 8)
                 
-                if job.endTime != nil {
-                    Text(formatDuration(job.duration))
+                if job.endTime != nil, let duration = job.duration {
+                    Text(formatDuration(duration))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -623,6 +631,7 @@ struct JobSummaryRow: View {
         }
     }
     
+    /// Formats and displays data with proper styling
     private func formatDuration(_ duration: TimeInterval) -> String {
         if duration < 60 {
             return String(format: "%.1fs", duration)
@@ -726,8 +735,8 @@ struct HistoryJobRow: View {
                             .foregroundColor(.secondary)
                     }
                     
-                    if job.endTime != nil {
-                        Text(formatDuration(job.duration))
+                    if job.endTime != nil, let duration = job.duration {
+                        Text(formatDuration(duration))
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -749,6 +758,7 @@ struct HistoryJobRow: View {
         .padding(.vertical, 4)
     }
     
+    /// Formats and displays data with proper styling
     private func formatDuration(_ duration: TimeInterval) -> String {
         if duration < 60 {
             return String(format: "%.1fs", duration)
@@ -805,7 +815,7 @@ struct SystemLoadGauge: View {
     }
 }
 
-struct CircularProgressView: View {
+struct BackgroundCircularProgressView: View {
     let progress: Double
     let color: Color
     

@@ -7,12 +7,12 @@ import os
 
 // MARK: - Analysis Debouncer
 
-// / Protocol for code review functionality to enable better testability
+/// Protocol for code review functionality to enable better testability
 protocol CodeReviewService {
     func analyzeCode(_ code: String) async -> CodeAnalysisReport
 }
 
-// / Performance-optimized analysis with debouncing
+/// Performance-optimized analysis with debouncing
 actor AnalysisDebouncer {
     private var lastAnalysisTime: Date = .distantPast;
     private let debounceInterval: TimeInterval = 0.5
@@ -27,37 +27,6 @@ actor AnalysisDebouncer {
         }
         return false
     }
-}
-
-// / Represents a comprehensive code analysis report
-struct CodeAnalysisReport {
-    let results: [AnalysisResult]
-    let metrics: CodeMetrics
-    let overallRating: Rating
-
-    enum Rating {
-        case excellent
-        case good
-        case needsImprovement
-        case poor
-
-        var description: String {
-            switch self {
-            case .excellent: return "🌟 Excellent"
-            case .good: return "👍 Good"
-            case .needsImprovement: return "⚠️ Needs Improvement"
-            case .poor: return "❌ Poor"
-            }
-        }
-    }
-}
-
-// / Code metrics for analysis
-struct CodeMetrics {
-    let characterCount: Int
-    let lineCount: Int
-    let estimatedComplexity: Int
-    let analysisTime: TimeInterval
 }
 
 // / Enhanced ViewModel with AI integration and better architecture
@@ -145,22 +114,13 @@ final class CodeReviewViewModel: ObservableObject {
                         analysisResult += "\n\n" + enhancedResult
                     }
 
-                    // Create comprehensive AI response
+                    // Create comprehensive AI response  
                     let qualityScore = extractQualityScore(from: enhancedResult)
                     aiAnalysisResult = AIAnalysisResponse(
                         suggestions: [],
-                        fixes: [],
-                        documentation: enhancedResult,
-                        complexity: ComplexityScore(
-                            score: Double(qualityScore) / 100.0,
-                            description: "Enhanced analysis quality score",
-                            cyclomaticComplexity: calculateCyclomaticComplexity(codeInput)
-                        ),
-                        maintainability: MaintainabilityScore(
-                            score: Double(qualityScore) / 100.0,
-                            description: "Code maintainability assessment"
-                        ),
-                        executionTime: Date().timeIntervalSince(startTime)
+                        complexityScore: Double(qualityScore) / 100.0,
+                        maintainabilityScore: Double(qualityScore) / 100.0,
+                        confidence: 0.8
                     )
 
                     isAIAnalyzing = false
@@ -178,6 +138,10 @@ final class CodeReviewViewModel: ObservableObject {
     @MainActor
     // / analyze function
     // / TODO: Add detailed documentation
+    /// analyze function
+    /// TODO: Add detailed documentation
+    /// analyze function
+    /// TODO: Add detailed documentation
     public func analyze(_ code: String) {
         codeInput = code
         Task {
@@ -191,7 +155,7 @@ final class CodeReviewViewModel: ObservableObject {
         // In a more sophisticated implementation, you'd locate the exact position
         if codeInput.contains(fix.originalCode) {
             codeInput = codeInput.replacingOccurrences(of: fix.originalCode, with: fix.fixedCode)
-            logger.log("Applied AI fix: \(fix.title)", level: .info, category: .ai)
+            logger.log("Applied AI fix: \(fix.description)", level: .info, category: .ai)
 
             // Re-analyze after applying fix
             Task {
@@ -255,6 +219,10 @@ final class CodeReviewViewModel: ObservableObject {
     // / Clears all analysis results
     // / clearResults function
     // / TODO: Add detailed documentation
+    /// clearResults function
+    /// TODO: Add detailed documentation
+    /// clearResults function
+    /// TODO: Add detailed documentation
     public func clearResults() {
         analysisResult = ""
         analysisResults.removeAll()
@@ -306,8 +274,8 @@ final class CodeReviewViewModel: ObservableObject {
         reportString += "📈 Code Metrics:\n"
         reportString += "• Character count: \(report.metrics.characterCount)\n"
         reportString += "• Line count: \(report.metrics.lineCount)\n"
-        reportString += "• Estimated complexity: \(report.metrics.estimatedComplexity)\n"
-        reportString += "• Analysis time: \(String(format: "%.2f", report.metrics.analysisTime))s\n\n"
+        reportString += "• Estimated complexity: \(report.metrics.complexityScore)\n"
+        reportString += "• Function count: \(report.metrics.functionCount)\n\n"
 
         // Group results by type
         let qualityResults = report.results.filter { $0.type == "Quality" }
@@ -360,21 +328,15 @@ final class CodeReviewViewModel: ObservableObject {
         }
 
         // Overall rating
-        reportString += "📊 Overall Rating: \(report.overallRating.description)\n"
+        reportString += "📊 Overall Rating: \(report.rating.rawValue)\n"
 
         // AI Analysis if available
         if let aiResult = aiAnalysisResult {
             reportString += "\n🤖 AI Analysis:\n"
-            if let complexity = aiResult.complexity {
-                reportString += "• Complexity Score: \(complexity.cyclomaticComplexity)\n"
-            }
-            if let maintainability = aiResult.maintainability {
-                reportString += "• Maintainability: \(String(format: "%.2f", maintainability.score))\n"
-            }
+            reportString += "• Complexity Score: \(String(format: "%.2f", aiResult.complexityScore))\n"
+            reportString += "• Maintainability: \(String(format: "%.2f", aiResult.maintainabilityScore))\n"
             reportString += "• AI Suggestions: \(aiResult.suggestions.count)\n"
-            if let documentation = aiResult.documentation, !documentation.isEmpty {
-                reportString += "\n💬 AI Assessment:\n\(documentation)\n"
-            }
+            reportString += "• Confidence: \(String(format: "%.2f", aiResult.confidence))\n"
         }
 
         return reportString
@@ -468,23 +430,25 @@ final class DefaultCodeReviewService: CodeReviewService {
             }
 
             let endTime = CFAbsoluteTimeGetCurrent()
-            let analysisTime = endTime - startTime
+            _ = endTime - startTime  // Track analysis time for potential future use
 
             // Calculate metrics
             let metrics = CodeMetrics(
                 characterCount: code.count,
                 lineCount: code.components(separatedBy: .newlines).count,
-                estimatedComplexity: calculateComplexity(code),
-                analysisTime: analysisTime
+                functionCount: 0, // Could be calculated
+                complexityScore: Double(calculateComplexity(code))
             )
 
             // Determine overall rating
             let rating = determineRating(from: allResults)
 
             return CodeAnalysisReport(
+                rating: rating,
+                summary: "Analysis completed with \(allResults.count) results",
+                timestamp: Date(),
                 results: allResults,
-                metrics: metrics,
-                overallRating: rating
+                metrics: metrics
             )
         }
     }
@@ -509,7 +473,7 @@ final class DefaultCodeReviewService: CodeReviewService {
         switch totalIssues {
         case 0: return .excellent
         case 1...2: return .good
-        case 3...5: return .needsImprovement
+        case 3...5: return .fair
         default: return .poor
         }
     }
@@ -519,10 +483,10 @@ final class DefaultCodeReviewService: CodeReviewService {
     private func convertToEnhancedAnalysisItems(_ results: [AnalysisResult]) -> [EnhancedAnalysisItem] {
         results.map { result in
             EnhancedAnalysisItem(
-                message: result.message,
+                title: "\(result.type) Issue",
+                description: "\(result.message) (Line \(result.lineNumber))",
                 severity: result.severity,
-                lineNumber: result.lineNumber,
-                type: result.type
+                category: result.type
             )
         }
     }

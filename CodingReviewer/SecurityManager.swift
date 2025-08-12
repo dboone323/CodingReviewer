@@ -7,6 +7,7 @@ class SecurityManager {
     private init() {}
 
     // Secure API key storage in Keychain
+    /// Updates and persists data with validation
     static func storeAPIKey(_ key: String, for service: String) -> Bool {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -18,6 +19,7 @@ class SecurityManager {
         return status == errSecSuccess
     }
 
+    /// Retrieves data with proper error handling and caching
     func retrieveAPIKey(for service: String) -> String? {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -39,6 +41,7 @@ class SecurityManager {
     }
 
     // Validate URLs for HTTPS
+    /// Validates input and ensures compliance
     func validateSecureURL(_ urlString: String) -> Bool {
         guard let url = URL(string: urlString),
               url.scheme?.lowercased() == "https" else {
@@ -48,6 +51,7 @@ class SecurityManager {
     }
 
     // Sanitize input strings
+    /// Performs operation with error handling and validation
     func sanitizeInput(_ input: String) -> String {
         let allowedCharacters = CharacterSet.alphanumerics.union(.whitespaces).union(.punctuationCharacters)
         return String(input.unicodeScalars.filter { allowedCharacters.contains($0) })

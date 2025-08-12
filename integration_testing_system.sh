@@ -248,24 +248,70 @@ EOF
 - Integration test log: \`$TEST_LOG\`
 - Build test log: \`$TEST_RESULTS_DIR/build_test.log\`
 - Duplicate check log: \`$TEST_RESULTS_DIR/duplicate_check.log\`
+- Python test log: \`$TEST_RESULTS_DIR/python_test.log\`
+- Jupyter test log: \`$TEST_RESULTS_DIR/jupyter_test.log\`
+- Pylance test log: \`$TEST_RESULTS_DIR/pylance_test.log\`
 
 ## Next Steps
 1. Review any failed tests
 2. Address identified issues
 3. Re-run integration tests
-4. Deploy with confidence
+4. Open Jupyter notebook for detailed analysis: \`jupyter_notebooks/pylance_jupyter_integration.ipynb\`
+5. Deploy with confidence
 EOF
     
     echo "  📄 Report saved to: $report_file"
+}
+
+# Function to test Python integration
+test_python_integration() {
+    echo "🐍 Testing Python Integration..."
+    
+    local python_start=$(date +%s)
+    
+    # Check if Python environment exists
+    if [ ! -d ".venv" ]; then
+        echo "  ❌ Python environment: NOT FOUND"
+        echo "$(date): PYTHON_ENV_TEST FAIL" >> "$TEST_LOG"
+        return 1
+    fi
+    
+    # Activate Python environment and run tests
+    source .venv/bin/activate
+    
+    # Run Python tests
+    python -m pytest python_tests/ -x --tb=short > "$TEST_RESULTS_DIR/python_test.log" 2>&1
+    local python_result=$?
+    
+    # Test Jupyter notebook
+    python -c "import jupyter, pandas, plotly; print('Jupyter dependencies OK')" > "$TEST_RESULTS_DIR/jupyter_test.log" 2>&1
+    local jupyter_result=$?
+    
+    # Test Pylance integration
+    python -c "import sys; sys.path.append('python_src'); from testing_framework import CodingReviewerTestFramework; print('Pylance integration OK')" > "$TEST_RESULTS_DIR/pylance_test.log" 2>&1
+    local pylance_result=$?
+    
+    local python_end=$(date +%s)
+    local python_duration=$((python_end - python_start))
+    
+    if [ $python_result -eq 0 ] && [ $jupyter_result -eq 0 ] && [ $pylance_result -eq 0 ]; then
+        echo "  ✅ Python integration: PASS (${python_duration}s)"
+        echo "$(date): PYTHON_INTEGRATION_TEST PASS ${python_duration}s" >> "$TEST_LOG"
+        return 0
+    else
+        echo "  ❌ Python integration: FAIL (${python_duration}s)"
+        echo "$(date): PYTHON_INTEGRATION_TEST FAIL ${python_duration}s" >> "$TEST_LOG"
+        return 1
+    fi
 }
 
 # Main execution
 echo "🚀 Starting integration testing..."
 echo "$(date): Integration testing started" > "$TEST_LOG"
 
-# Run all tests
+# Run all tests (enhanced with Python integration)
 tests_passed=0
-tests_total=6
+tests_total=7
 
 test_build_system && ((tests_passed++))
 test_file_management && ((tests_passed++))
@@ -273,6 +319,7 @@ test_automation_systems && ((tests_passed++))
 test_duplicate_prevention && ((tests_passed++))
 test_swift_compilation && ((tests_passed++))
 test_project_structure && ((tests_passed++))
+test_python_integration && ((tests_passed++))
 
 echo ""
 echo "📊 Integration Test Results:"

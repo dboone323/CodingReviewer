@@ -1,3 +1,4 @@
+import Foundation
 //
 //  FileUploadView.swift
 //  CodingReviewer
@@ -394,6 +395,7 @@ struct FileUploadView: View {
 
     // MARK: - Actions
 
+    /// Handles operations with comprehensive error management
     private func handleFileImport(_ result: Result<[URL], Error>) {
         switch result {
         case .success(let urls):
@@ -415,6 +417,7 @@ struct FileUploadView: View {
         }
     }
 
+    /// Performs operation with comprehensive error handling and validation
     private func showFolderPicker() {
         let panel = NSOpenPanel()
         panel.canChooseDirectories = true
@@ -439,6 +442,7 @@ struct FileUploadView: View {
         }
     }
 
+    /// Handles operations with comprehensive error management
     private func handleDrop(providers: [NSItemProvider]) -> Bool {
         Task {
             await processDroppedProviders(providers)
@@ -447,6 +451,7 @@ struct FileUploadView: View {
     }
     
     @MainActor
+    /// Analyzes and processes data with comprehensive validation
     private func processDroppedProviders(_ providers: [NSItemProvider]) async {
         var collectedURLs: [URL] = []
         
@@ -487,6 +492,7 @@ struct FileUploadView: View {
         }
     }
 
+    /// Performs operation with comprehensive error handling and validation
     private func toggleFileSelection(_ file: CodeFile) {
         if selectedFiles.contains(file.id) {
             selectedFiles.remove(file.id)
@@ -495,11 +501,13 @@ struct FileUploadView: View {
         }
     }
 
+    /// Performs operation with comprehensive error handling and validation
     private func selectProjectFiles(_ project: ProjectStructure) {
         let projectFileIds = Set(project.files.map(\.id))
         selectedFiles = selectedFiles.symmetricDifference(projectFileIds)
     }
 
+    /// Analyzes and processes data with comprehensive validation
     private func analyzeSelectedFiles() {
         let filesToAnalyze = fileManager.uploadedFiles.filter { selectedFiles.contains($0.id) }
 
@@ -529,6 +537,7 @@ struct FileUploadView: View {
         }
     }
 
+    /// Analyzes and processes data with comprehensive validation
     private func analyzeAllFiles() {
         guard !fileManager.uploadedFiles.isEmpty else {
             fileManager.errorMessage = "No files to analyze. Please upload some files first."
@@ -556,6 +565,7 @@ struct FileUploadView: View {
         }
     }
 
+    /// Performs operation with comprehensive error handling and validation
     private func exportFileList() {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.json]
@@ -592,6 +602,7 @@ struct FileUploadView: View {
         }
     }
 
+    /// Retrieves data with proper error handling and caching
     private func uploadResultMessage(_ result: FileUploadResult) -> String {
         var message = "";
 

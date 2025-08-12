@@ -6,11 +6,19 @@ import Foundation
 // / TODO: Add detailed documentation
 /// BugPredictor class
 /// TODO: Add detailed documentation
+/// BugPredictor class
+/// TODO: Add detailed documentation
+/// BugPredictor class
+/// TODO: Add detailed documentation
 public class BugPredictor {
     public init() {}
 
     // / predict function
     // / TODO: Add detailed documentation
+    /// predict function
+    /// TODO: Add detailed documentation
+    /// predict function
+    /// TODO: Add detailed documentation
     /// predict function
     /// TODO: Add detailed documentation
     public func predict(features: CodeFeatures) async -> BugPredictionResult {
@@ -34,11 +42,19 @@ public class BugPredictor {
 // / TODO: Add detailed documentation
 /// MLComplexityAnalyzer class
 /// TODO: Add detailed documentation
+/// MLComplexityAnalyzer class
+/// TODO: Add detailed documentation
+/// MLComplexityAnalyzer class
+/// TODO: Add detailed documentation
 public class MLComplexityAnalyzer {
     public init() {}
 
     // / analyze function
     // / TODO: Add detailed documentation
+    /// analyze function
+    /// TODO: Add detailed documentation
+    /// analyze function
+    /// TODO: Add detailed documentation
     /// analyze function
     /// TODO: Add detailed documentation
     public func analyze(_ code: String) async -> ComplexityAnalysisResult {
@@ -53,6 +69,7 @@ public class MLComplexityAnalyzer {
         )
     }
 
+    /// Analyzes and processes data with comprehensive validation
     private func calculateCyclomaticComplexity(_ code: String) -> Double {
         let keywords = ["if", "else", "while", "for", "switch", "case", "catch", "&&", "||"]
         return keywords.reduce(1.0) { complexity, keyword in
@@ -61,6 +78,7 @@ public class MLComplexityAnalyzer {
         }
     }
 
+    /// Analyzes and processes data with comprehensive validation
     private func calculateCognitiveComplexity(_ code: String) -> Double {
         // Cognitive complexity considers nesting levels
         let lines = code.components(separatedBy: .newlines)
@@ -81,6 +99,7 @@ public class MLComplexityAnalyzer {
         return complexity
     }
 
+    /// Analyzes and processes data with comprehensive validation
     private func calculateMaintainability(_ code: String, cyclomatic: Double) -> Double {
         let linesOfCode = Double(code.components(separatedBy: .newlines).count)
         let halsteadVolume = linesOfCode * 2.0 // Simplified Halstead volume
@@ -239,11 +258,19 @@ public enum ImplementationEffort {
 // / TODO: Add detailed documentation
 /// CodePatternAnalyzer class
 /// TODO: Add detailed documentation
+/// CodePatternAnalyzer class
+/// TODO: Add detailed documentation
+/// CodePatternAnalyzer class
+/// TODO: Add detailed documentation
 public class CodePatternAnalyzer {
     public init() {}
 
     // / analyzePatterns function
     // / TODO: Add detailed documentation
+    /// analyzePatterns function
+    /// TODO: Add detailed documentation
+    /// analyzePatterns function
+    /// TODO: Add detailed documentation
     /// analyzePatterns function
     /// TODO: Add detailed documentation
     public func analyzePatterns(_ code: String) async -> CodePatterns {
@@ -255,6 +282,7 @@ public class CodePatternAnalyzer {
         )
     }
 
+    /// Analyzes and processes data with comprehensive validation
     private func calculateComplexity(_ code: String) -> Double {
         let keywords = ["if", "else", "while", "for", "switch", "case", "catch", "&&", "||"]
         return keywords.reduce(1.0) { complexity, keyword in
@@ -263,12 +291,14 @@ public class CodePatternAnalyzer {
         } / 20.0 // Normalize to 0-1
     }
 
+    /// Analyzes and processes data with comprehensive validation
     private func calculateCoupling(_ code: String) -> Double {
         let imports = code.components(separatedBy: "import ").count - 1
         let dependencies = code.components(separatedBy: ".").count - 1
         return min(1.0, Double(imports + dependencies) / 50.0)
     }
 
+    /// Analyzes and processes data with comprehensive validation
     private func calculateCohesion(_ code: String) -> Double {
         // Simple cohesion calculation based on function locality
         let functions = code.components(separatedBy: "func ").count - 1
@@ -278,6 +308,7 @@ public class CodePatternAnalyzer {
         return max(0.0, 1.0 - Double(functions) / (Double(classes) * 10.0))
     }
 
+    /// Analyzes and processes data with comprehensive validation
     private func calculateTestability(_ code: String) -> Double {
         let publicMethods = code.components(separatedBy: "public func").count - 1
         let totalMethods = code.components(separatedBy: "func ").count - 1
@@ -303,11 +334,19 @@ public struct CodePatterns {
 // / TODO: Add detailed documentation
 /// PerformanceImpactPredictor class
 /// TODO: Add detailed documentation
+/// PerformanceImpactPredictor class
+/// TODO: Add detailed documentation
+/// PerformanceImpactPredictor class
+/// TODO: Add detailed documentation
 public class PerformanceImpactPredictor {
     public init() {}
 
     // / predict function
     // / TODO: Add detailed documentation
+    /// predict function
+    /// TODO: Add detailed documentation
+    /// predict function
+    /// TODO: Add detailed documentation
     /// predict function
     /// TODO: Add detailed documentation
     public func predict(changes: [CodeChange]) async -> PerformanceImpactPrediction {
@@ -322,6 +361,7 @@ public class PerformanceImpactPredictor {
         )
     }
 
+    /// Performs operation with error handling and validation
     private func extractPerformanceFeatures(_ change: CodeChange) -> PerformanceFeatures {
         return PerformanceFeatures(
             changeType: change.type,
@@ -332,6 +372,7 @@ public class PerformanceImpactPredictor {
         )
     }
 
+    /// Performs operation with error handling and validation
     private func aggregateFeatures(_ features: [PerformanceFeatures]) -> AggregatedPerformanceFeatures {
         return AggregatedPerformanceFeatures(
             totalLinesAdded: features.reduce(0) { $0 + $1.linesAdded },
@@ -341,6 +382,7 @@ public class PerformanceImpactPredictor {
         )
     }
 
+    /// Analyzes and processes data with comprehensive validation
     private func calculateExpectedImpact(_ features: AggregatedPerformanceFeatures) -> Double {
         // Simplified impact calculation
         let lineImpact = Double(features.totalLinesAdded - features.totalLinesRemoved) * 0.01
@@ -348,11 +390,13 @@ public class PerformanceImpactPredictor {
         return lineImpact + complexityImpact
     }
 
+    /// Analyzes and processes data with comprehensive validation
     private func calculatePredictionConfidence(_ features: AggregatedPerformanceFeatures) -> Double {
         // Simplified confidence calculation
         return min(1.0, max(0.5, 1.0 - (abs(features.totalComplexityDelta) * 0.1)))
     }
 
+    /// Performs operation with error handling and validation
     private func identifyCriticalChanges(_ changes: [CodeChange]) -> [CriticalChange] {
         return changes.compactMap { change in
             if change.complexityDelta > 5 {
@@ -362,6 +406,7 @@ public class PerformanceImpactPredictor {
         }
     }
 
+    /// Performs operation with error handling and validation
     private func findOptimizationOpportunities(_ changes: [CodeChange]) -> [OptimizationOpportunity] {
         return changes.compactMap { change in
             if change.type == .algorithmImprovement {
@@ -375,6 +420,7 @@ public class PerformanceImpactPredictor {
         }
     }
 
+    /// Analyzes and processes data with comprehensive validation
     private func calculateChangeDistribution(_ features: [PerformanceFeatures]) -> ChangeDistribution {
         let total = features.count
         let additions = features.filter { $0.changeType == .addition }.count
@@ -388,11 +434,13 @@ public class PerformanceImpactPredictor {
         )
     }
 
+    /// Performs operation with error handling and validation
     private func estimatePerformanceGain(_ change: CodeChange) -> Double {
         // Simplified performance gain estimation
         return max(0, Double(change.complexityDelta) * -0.1)
     }
 
+    /// Performs operation with error handling and validation
     private func estimateImplementationEffort(_ change: CodeChange) -> ImplementationEffort {
         if change.linesAdded + change.linesRemoved > 100 {
             return .high

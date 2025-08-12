@@ -1,3 +1,4 @@
+import Foundation
 //
 // EnhancedAnalysisRecordRow.swift
 // CodingReviewer
@@ -101,8 +102,8 @@ struct EnhancedAnalysisRecordRow: View {
 
                     Spacer()
 
-                    if let lineNumber = item.lineNumber {
-                        Text("Line \(lineNumber)")
+                    if item.lineNumber > 0 {
+                        Text("Line \(item.lineNumber)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .padding(.horizontal, 6)
@@ -159,14 +160,18 @@ struct EnhancedAnalysisRecordRow_Previews: PreviewProvider {
 
         let sampleAnalysisResults = [
             EnhancedAnalysisItem(
-                message: "Variable 'unused' is declared but never used",
+                title: "Unused Variable",
+                description: "Variable 'unused' is declared but never used",
                 severity: "medium",
+                message: "Variable 'unused' is declared but never used",
                 lineNumber: 15,
                 type: "quality"
             ),
             EnhancedAnalysisItem(
-                message: "Force unwrapping may cause runtime crash",
+                title: "Force Unwrapping",
+                description: "Force unwrapping may cause runtime crash",
                 severity: "high",
+                message: "Force unwrapping may cause runtime crash",
                 lineNumber: 23,
                 type: "security"
             )

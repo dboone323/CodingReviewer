@@ -28,6 +28,8 @@ final class IntelligentFixGenerator: ObservableObject {
     // MARK: - Main Fix Generation Interface
 
     @MainActor
+    /// Generates or creates new content
+    /// Performs specific functionality
     func generateFixes(
         for analysis: EnhancedAnalysisResult,
         context: CodeContext
@@ -71,6 +73,7 @@ final class IntelligentFixGenerator: ObservableObject {
 
     // MARK: - Fix Application
 
+    /// Performs specific functionality
     func applyFix(_ fix: IntelligentFix, to code: String) throws -> String {
         let lines = code.components(separatedBy: .newlines)
 
@@ -95,6 +98,7 @@ final class IntelligentFixGenerator: ObservableObject {
         return modifiedLines.joined(separator: "\n")
     }
 
+    /// Performs specific functionality
     func validateFix(_ fix: IntelligentFix, in context: CodeContext) async -> FixValidation {
         // Simulate validation logic
         let isValid = fix.confidence > 0.7
@@ -111,6 +115,7 @@ final class IntelligentFixGenerator: ObservableObject {
 
     // MARK: - Security Fixes
 
+    /// Performs specific functionality
     private func generateSecurityFixes(
         analysis: EnhancedAnalysisResult,
         context: CodeContext
@@ -137,6 +142,7 @@ final class IntelligentFixGenerator: ObservableObject {
         return fixes
     }
 
+    /// Performs specific functionality
     private func generateForceUnwrappingFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         var fixes: [IntelligentFix] = [];
         let lines = code.components(separatedBy: .newlines)
@@ -171,6 +177,7 @@ final class IntelligentFixGenerator: ObservableObject {
 
     // MARK: - Performance Fixes
 
+    /// Performs specific functionality
     private func generatePerformanceFixes(
         analysis: EnhancedAnalysisResult,
         context: CodeContext
@@ -188,6 +195,7 @@ final class IntelligentFixGenerator: ObservableObject {
         return fixes
     }
 
+    /// Performs specific functionality
     private func generateStringConcatenationFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         var fixes: [IntelligentFix] = [];
         let lines = code.components(separatedBy: .newlines)
@@ -221,6 +229,7 @@ final class IntelligentFixGenerator: ObservableObject {
 
     // MARK: - Style Fixes
 
+    /// Performs specific functionality
     private func generateStyleFixes(
         analysis: EnhancedAnalysisResult,
         context: CodeContext
@@ -240,6 +249,7 @@ final class IntelligentFixGenerator: ObservableObject {
 
     // MARK: - Logic Fixes
 
+    /// Performs specific functionality
     private func generateLogicFixes(
         analysis: EnhancedAnalysisResult,
         context: CodeContext
@@ -260,18 +270,28 @@ final class IntelligentFixGenerator: ObservableObject {
     // MARK: - Helper Methods
 
     @MainActor
+    /// Updates or modifies data
+    /// Performs specific functionality
     private func updateProgress(_ progress: Double) async {
         fixGenerationProgress = progress
         try? await Task.sleep(nanoseconds: 50_000_000) // 0.05 second
     }
 
+    /// Performs specific functionality
     private func containsHardcodedCredentials(_ code: String) -> Bool {
-        let patterns = ["password\\s*=\\s*\"", "api_key\\s*=\\s*\"", "secret\\s*=\\s*\""]
+        // TODO: Replace with secure credential storage]
+        let patterns = [
+            "password\\s*=\\s*\"[^\"]+\"",
+            "secret\\s*=\\s*\"[^\"]+\"",
+            "token\\s*=\\s*\"[^\"]+\"",
+            "key\\s*=\\s*\"[^\"]+\""
+        ]
         return patterns.contains { pattern in
             code.range(of: pattern, options: .regularExpression) != nil
         }
     }
 
+    /// Performs specific functionality
     private func generateStringBuilderFix(forLoop: String, concatenation: String) -> String {
         return """
         var components: [String] = [];
@@ -282,41 +302,49 @@ final class IntelligentFixGenerator: ObservableObject {
         """
     }
 
+    /// Performs specific functionality
     private func generateNamingFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for naming convention fixes
         return []
     }
 
+    /// Performs specific functionality
     private func generateFormattingFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for formatting fixes
         return []
     }
 
+    /// Performs specific functionality
     private func generateNullCheckFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for null check fixes
         return []
     }
 
+    /// Performs specific functionality
     private func generateExceptionHandlingFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for exception handling fixes
         return []
     }
 
+    /// Performs specific functionality
     private func generateSQLInjectionFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for SQL injection fixes
         return []
     }
 
+    /// Performs specific functionality
     private func generateCredentialFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for credential fixes
         return []
     }
 
+    /// Performs specific functionality
     private func generateCollectionOptimizationFixes(code: String, context: CodeContext) -> [IntelligentFix] {
         // Implementation for collection optimization fixes
         return []
     }
 
+    /// Performs specific functionality
     private func performCompilationCheck(fix: IntelligentFix, context: CodeContext) async -> CompilationCheck {
         // Simulate compilation check
         return CompilationCheck(

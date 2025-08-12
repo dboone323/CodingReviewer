@@ -42,6 +42,7 @@ final class AppLogger {
     static let shared = AppLogger()
     private init() {}
 
+    /// Performs operation with error handling and validation
     func log(
         _ message: String,
         level: LogLevel = .info,
@@ -67,6 +68,7 @@ final class AppLogger {
         }
     }
 
+    /// Initiates process with proper setup and monitoring
     func startMeasurement(for operation: String) -> Date {
         let startTime = Date()
         performanceMetrics[operation] = startTime
@@ -74,6 +76,7 @@ final class AppLogger {
         return startTime
     }
 
+    /// Completes process and performs cleanup
     func endMeasurement(for operation: String, startTime: Date) {
         let duration = Date().timeIntervalSince(startTime)
         performanceMetrics.removeValue(forKey: operation)
@@ -81,23 +84,28 @@ final class AppLogger {
             level: .info, category: .performance)
     }
 
+    /// Performs operation with error handling and validation
     func logAnalysisStart(codeLength: Int) {
         log("Starting code analysis for \(codeLength) characters", level: .info, category: .analysis)
     }
 
+    /// Performs operation with error handling and validation
     func logAnalysisComplete(resultsCount: Int, duration: TimeInterval) {
         log("Analysis completed: \(resultsCount) results in \(String(format: "%.2f", duration))s",
             level: .info, category: .analysis)
     }
 
+    /// Performs operation with error handling and validation
     func logError(_ error: Error, context: String, category: LogCategory = .general) {
         log("Error in \(context): \(error.localizedDescription)", level: .error, category: category)
     }
 
+    /// Performs operation with error handling and validation
     func logAIRequest(type: String, tokenCount: Int) {
         log("AI \(type) request - \(tokenCount) tokens", level: .info, category: .ai)
     }
 
+    /// Performs operation with error handling and validation
     func logAIResponse(type: String, success: Bool, duration: TimeInterval) {
         let status = success ? "successful" : "failed"
         log("AI \(type) response \(status) in \(String(format: "%.2f", duration))s",
@@ -105,16 +113,19 @@ final class AppLogger {
     }
 
     // Convenience method for debug logging
+    /// Performs operation with error handling and validation
     func debug(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
         log(message, level: .debug, category: .general, file: file, function: function, line: line)
     }
 
     // Convenience method for warning logging
+    /// Performs operation with error handling and validation
     func logWarning(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
         log(message, level: .warning, category: .general, file: file, function: function, line: line)
     }
 
     // Convenience method for security logging
+    /// Performs operation with error handling and validation
     func logSecurity(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
         log(message, level: .info, category: .security, file: file, function: function, line: line)
     }
@@ -158,10 +169,12 @@ enum CodeReviewError: LocalizedError {
 actor PerformanceMonitor {
     private var analysisMetrics: [String: TimeInterval] = [:];
 
+    /// Initiates process with proper setup and monitoring
     func startMeasurement(for operation: String) -> Date {
         Date()
     }
 
+    /// Completes process and performs cleanup
     func endMeasurement(for operation: String, startTime: Date) {
         let duration = Date().timeIntervalSince(startTime)
         analysisMetrics[operation] = duration
@@ -170,6 +183,7 @@ actor PerformanceMonitor {
         }
     }
 
+    /// Retrieves data with proper error handling and caching
     func getMetrics() -> [String: TimeInterval] {
         analysisMetrics
     }

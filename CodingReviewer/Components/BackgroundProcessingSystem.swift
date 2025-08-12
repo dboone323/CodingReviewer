@@ -51,14 +51,15 @@ class BackgroundProcessingSystem: ObservableObject {
         data: [String: Any] = [:]
     ) -> ProcessingJob {
         let job = ProcessingJob(
+            name: title,
             type: type,
-            title: title,
             status: .queued,
+            priority: priority,
             progress: 0.0,
             startTime: Date(),
-            errorMessage: nil,
-            data: data,
-            priority: priority
+            result: nil,
+            endTime: nil,
+            duration: nil
         )
         
         activeJobs.append(job)
@@ -188,13 +189,17 @@ class BackgroundProcessingSystem: ObservableObject {
         let successRate = totalProcessed > 0 ? Double(successCount) / Double(totalProcessed) : 0.0
         let avgProcessingTime = completedJobs.isEmpty ? 0.0 : 
             completedJobs.reduce(0.0) { sum, job in
-                sum + job.duration
+                sum + (job.duration ?? 0.0)
             } / Double(completedJobs.count)
         
         return ProcessingStats(
+            totalJobs: totalProcessed,
+            completedJobs: successCount,
+            failedJobs: failedJobs.count,
+            averageProcessingTime: avgProcessingTime,
+            systemLoad: systemLoad,
             totalJobsProcessed: totalProcessed,
             successRate: successRate,
-            averageProcessingTime: avgProcessingTime,
             currentLoad: systemLoad.loadLevel,
             activeJobs: activeJobs.count,
             queueLength: systemLoad.queueLength
@@ -274,6 +279,11 @@ class BackgroundProcessingSystem: ObservableObject {
         job.progress = success ? 1.0 : job.progress
         job.status = success ? .completed : .failed
         
+        // Calculate duration
+        if let endTime = job.endTime {
+            job.duration = endTime.timeIntervalSince(job.startTime)
+        }
+        
         if !success {
             job.errorMessage = "Job processing failed"
         }
@@ -326,14 +336,34 @@ class BackgroundProcessingSystem: ObservableObject {
         
         // Calculate average job duration
         if !completedJobs.isEmpty {
-            systemLoad.averageJobDuration = completedJobs.map { $0.duration }.reduce(0, +) / Double(completedJobs.count)
+            let durations = completedJobs.compactMap { $0.duration }
+            if !durations.isEmpty {
+                systemLoad.averageJobDuration = durations.reduce(0, +) / Double(durations.count)
+            }
         }
         
         // Simulate system metrics (in a real implementation, these would be actual system readings)
-        systemLoad.cpuUsage = min(0.1 + Double(runningJobs.count) * 0.15, 0.95)
-        systemLoad.memoryUsage = min(0.2 + Double(activeJobs.count) * 0.05, 0.90)
-        systemLoad.diskUsage = 0.3
-        systemLoad.networkActivity = runningJobs.isEmpty ? 0.0 : 0.4
+        let cpuUsage = min(0.1 + Double(runningJobs.count) * 0.15, 0.95)
+        let memoryUsage = min(0.2 + Double(activeJobs.count) * 0.05, 0.90)
+        let diskUsage = 0.3
+        let networkActivity = runningJobs.isEmpty ? 0.0 : 0.4
+        let isOverloaded = cpuUsage > 0.8 || memoryUsage > 0.8
+        
+        // Create updated SystemLoad with calculated values
+        systemLoad = SystemLoad(
+            cpu: cpuUsage,
+            memory: memoryUsage,
+            disk: diskUsage,
+            queueLength: systemLoad.queueLength,
+            currentConcurrentJobs: systemLoad.currentConcurrentJobs,
+            lastUpdated: systemLoad.lastUpdated,
+            averageJobDuration: systemLoad.averageJobDuration,
+            activeJobs: systemLoad.activeJobs,
+            queuedJobs: systemLoad.queuedJobs,
+            diskUsage: diskUsage,
+            networkActivity: networkActivity,
+            isOverloaded: isOverloaded
+        )
         
         // Auto-pause if system is overloaded
         if processingLimits.pauseOnHighLoad && systemLoad.isOverloaded {
@@ -347,20 +377,21 @@ class BackgroundProcessingSystem: ObservableObject {
         let totalJobs = activeJobs.count + completedJobs.count + failedJobs.count
         let successRate = totalJobs > 0 ? Double(completedJobs.count) / Double(totalJobs) : 1.0
         let uptime = Date().timeIntervalSince(systemStartTime)
-        let avgProcessingTime = systemLoad.averageJobDuration
+        let _ = systemLoad.averageJobDuration // Acknowledge usage
         let isHealthy = !systemLoad.isOverloaded && successRate > 0.8
         let statusText = isHealthy ? "Healthy" : "Needs Attention"
         
         return SystemStatus(
-            uptime: uptime,
-            totalJobsProcessed: totalJobs,
-            averageProcessingTime: avgProcessingTime,
-            successRate: successRate,
-            currentLoad: systemLoad,
             isHealthy: isHealthy,
-            lastHealthCheck: Date(),
+            uptime: uptime,
+            systemLoad: systemLoad,
+            activeUsers: 1,  // Placeholder
+            errorRate: 1.0 - successRate,
             activeJobsCount: activeJobs.count,
             status: statusText,
+            successRate: successRate,
+            healthScore: isHealthy ? 0.9 : 0.5,
+            totalJobsProcessed: totalJobs,
             isProcessingEnabled: isProcessingEnabled
         )
     }

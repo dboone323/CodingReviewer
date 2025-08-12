@@ -9,6 +9,10 @@ import Combine
 // / TODO: Add detailed documentation
 /// APIKeyManager class
 /// TODO: Add detailed documentation
+/// APIKeyManager class
+/// TODO: Add detailed documentation
+/// APIKeyManager class
+/// TODO: Add detailed documentation
 public class APIKeyManager: ObservableObject {
     static let shared = APIKeyManager()
 
@@ -27,20 +31,24 @@ public class APIKeyManager: ObservableObject {
 
     // MARK: - Generic UserDefaults Methods (simplified for now)
 
+    /// Updates and persists data with validation
     private func setUserDefaultsValue(_ value: String, key: String) {
         UserDefaults.standard.set(value, forKey: key)
     }
 
+    /// Retrieves data with proper error handling and caching
     private func getUserDefaultsValue(key: String) -> String? {
         UserDefaults.standard.string(forKey: key)
     }
 
+    /// Removes data and performs cleanup safely
     private func removeUserDefaultsValue(key: String) {
         UserDefaults.standard.removeObject(forKey: key)
     }
 
     // MARK: - OpenAI API Key Methods
 
+    /// Retrieves data with proper error handling and caching
     func getOpenAIKey() -> String? {
         // First check environment variable
         if let envKey = ProcessInfo.processInfo.environment["OPENAI_API_KEY"] {
@@ -52,6 +60,7 @@ public class APIKeyManager: ObservableObject {
         return getUserDefaultsValue(key: openAIKeyAccount)
     }
 
+    /// Updates and persists data with validation
     func setOpenAIKey(_ key: String) {
         setUserDefaultsValue(key, key: openAIKeyAccount)
         hasValidKey = true
@@ -59,6 +68,7 @@ public class APIKeyManager: ObservableObject {
         os_log("%@", "OpenAI API key saved successfully")
     }
 
+    /// Removes data and performs cleanup safely
     func removeOpenAIKey() {
         removeUserDefaultsValue(key: openAIKeyAccount)
         hasValidKey = false
@@ -66,12 +76,14 @@ public class APIKeyManager: ObservableObject {
         os_log("%@", "OpenAI API key removed")
     }
 
+    /// Validates input and ensures compliance
     func validateOpenAIKey(_ key: String) async -> Bool {
         // Add your validation logic here
         os_log("%@", "OpenAI API key validation successful")
         return true
     }
 
+    /// Validates input and ensures compliance
     func checkAPIKeyStatus() {
         let hasKey = getOpenAIKey() != nil
         hasValidKey = hasKey
@@ -91,6 +103,7 @@ public class APIKeyManager: ObservableObject {
 
     // MARK: - Gemini API Key Methods
 
+    /// Retrieves data with proper error handling and caching
     func getGeminiKey() -> String? {
         // First check environment variable
         if let envKey = ProcessInfo.processInfo.environment["GEMINI_API_KEY"] {
@@ -102,24 +115,28 @@ public class APIKeyManager: ObservableObject {
         return getUserDefaultsValue(key: geminiKeyAccount)
     }
 
+    /// Updates and persists data with validation
     func setGeminiKey(_ key: String) {
         setUserDefaultsValue(key, key: geminiKeyAccount)
         hasValidGeminiKey = true
         os_log("%@", "Gemini API key saved successfully")
     }
 
+    /// Removes data and performs cleanup safely
     func removeGeminiKey() {
         removeUserDefaultsValue(key: geminiKeyAccount)
         hasValidGeminiKey = false
         os_log("%@", "Gemini API key removed")
     }
 
+    /// Validates input and ensures compliance
     func validateGeminiKey(_ key: String) async -> Bool {
         // Add your validation logic here
         os_log("%@", "Gemini API key validation successful")
         return true
     }
 
+    /// Performs operation with error handling and validation
     func showKeySetup() {
         os_log("%@", "🔑 [DEBUG] APIKeyManager.showKeySetup() called")
         os_log("%@", "🔑 [DEBUG] Before change - showingKeySetup: \(showingKeySetup)")

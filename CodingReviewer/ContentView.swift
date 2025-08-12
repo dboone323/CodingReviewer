@@ -1,4 +1,6 @@
+import Foundation
 import SwiftUI
+import Combine
 
 struct ContentView: View {
     @State private var selectedTab: Tab = .quickStart
@@ -239,6 +241,7 @@ struct ContentView: View {
         }
     }
 
+    /// Handles operations with comprehensive error management
     private func handleQuickAction() {
         switch selectedTab {
         case .quickStart:
@@ -278,6 +281,7 @@ struct ContentView: View {
         }
     }
 
+    /// Performs operation with comprehensive error handling and validation
     private func runAnalysis() {
         isAnalyzing = true
 
@@ -531,6 +535,7 @@ struct QuickStartView: View {
 
                             SampleCodeButton(title: "Swift Example") {
                                 codeInput = """
+                                /// Analyzes and processes data with comprehensive validation
                                 func processUserData(users: [String]) {
                                     for user in users {
                                         let query = "SELECT * FROM users WHERE name = '" + user + "'"
@@ -585,6 +590,7 @@ struct QuickStartView: View {
         }
     }
 
+    /// Performs operation with comprehensive error handling and validation
     private func runAnalysis() {
         isAnalyzing = true
         
@@ -664,6 +670,7 @@ struct QuickStartView: View {
         }
     }
 
+    /// Performs operation with comprehensive error handling and validation
     private func findLineNumber(for text: String) -> Int {
         let lines = codeInput.components(separatedBy: .newlines)
         for (index, line) in lines.enumerated() {

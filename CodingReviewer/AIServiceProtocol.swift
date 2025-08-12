@@ -3,13 +3,15 @@
 // AIServiceProtocol.swift
 // CodingReviewer
 //
-// Created on July 17, 2025.
+// Creat// MARK: - AI Service Protocol extensions for additional functionality
+
+// Additional protocol extensions and utilities can be added hereervice Protocol extensions for additional functionality2025.
 //
 
 import Foundation
 
-// Import our centralized shared types
-// This provides access to CodeLanguage and other shared enums
+// SharedTypes are automatically available in the same target
+// No need to explicitly import AITypes or CoreDataTypes
 
 // MARK: - AI Analysis Request
 
@@ -19,81 +21,26 @@ import Foundation
 /// All error handling follows Swift best practices with proper error propagation
 /// and optional handling throughout the service implementations.
 
-struct AIAnalysisRequest {
-    let code: String
-    let language: CodeLanguage
-    let analysisType: AnalysisType
-    let context: AnalysisContext?
+// AIAnalysisRequest, ComplexityScore, MaintainabilityScore are now imported from AITypes.swift
 
-    enum AnalysisType {
-        case quality
-        case security
-        case performance
-        case documentation
-        case refactoring
-        case comprehensive
-    }
+// Additional analysis context types specific to this service
+struct AnalysisContext {
+    let fileName: String?
+    let projectType: ProjectType?
+    let dependencies: [String]?
+    let targetFramework: String?
 
-    struct AnalysisContext {
-        let fileName: String?
-        let projectType: ProjectType?
-        let dependencies: [String]?
-        let targetFramework: String?
-
-        enum ProjectType {
-            case ios, macos, watchos, tvos, multiplatform
-        }
+    enum ProjectType {
+        case ios, macos, watchos, tvos, multiplatform
     }
 }
 
-// MARK: - AI Analysis Response
+// AnalysisType is now imported from ServiceTypes.swift
 
-struct ComplexityScore {
-    let score: Double // 0.0 to 1.0
-    let description: String
-    let cyclomaticComplexity: Double
+// AIAnalysisResponse, AISuggestion, CodeFix are now imported from AITypes.swift
 
-    enum Rating: String, CaseIterable {
-        case excellent = "excellent"
-        case good = "good"
-        case fair = "fair"
-        case poor = "poor"
-        case critical = "critical"
-    }
-}
-
-struct MaintainabilityScore {
-    let score: Double // 0.0 to 1.0
-    let description: String
-
-    enum Rating: String, CaseIterable {
-        case excellent = "excellent"
-        case good = "good"
-        case fair = "fair"
-        case poor = "poor"
-        case critical = "critical"
-    }
-}
-
-struct AIAnalysisResponse {
-    let suggestions: [AISuggestion]
-    let fixes: [CodeFix]
-    let documentation: String?
-    let complexity: ComplexityScore?
-    let maintainability: MaintainabilityScore?
-    let executionTime: TimeInterval
-}
-
-struct AISuggestion {
-    let id: UUID
-    let type: SuggestionType
-    let title: String
-    let description: String
-    let severity: Severity
-    let lineNumber: Int?
-    let columnNumber: Int?
-    let confidence: Double // 0.0 to 1.0
-
+// Additional service-specific types
+extension AISuggestion {
     enum SuggestionType: String, CaseIterable {
         case codeQuality = "Code Quality"
         case security = "Security"
@@ -120,47 +67,18 @@ struct AISuggestion {
     }
 }
 
-struct CodeFix {
-    let id: UUID
-    let suggestionId: UUID
-    let title: String
-    let description: String
-    let originalCode: String
-    let fixedCode: String
-    let explanation: String
-    let confidence: Double
-    let isAutoApplicable: Bool
-}
+// CodeFix is now imported from AITypes.swift
 
 // MARK: - AI Service Errors
 
-enum AIServiceError: LocalizedError {
-    case invalidAPIKey
-    case networkError(Error)
-    case rateLimitExceeded
-    case tokenLimitExceeded
-    case invalidResponse
-    case serviceUnavailable
-    case insufficientCredits
+// AIServiceError is now imported from AITypes.swift
 
-    nonisolated var errorDescription: String? {
-        switch self {
-        case .invalidAPIKey:
-            return "Invalid API key. Please check your OpenAI API key in settings."
-        case .networkError(let error):
-            return "Network error: \(error.localizedDescription)"
-        case .rateLimitExceeded:
-            return "Rate limit exceeded. Please try again later."
-        case .tokenLimitExceeded:
-            return "Token limit exceeded. Please try with shorter code."
-        case .invalidResponse:
-            return "Received invalid response from AI service."
-        case .serviceUnavailable:
-            return "AI service is currently unavailable. Please try again later."
-        case .insufficientCredits:
-            return "Insufficient API credits. Please check your OpenAI account."
-        }
-    }
+// MARK: - AI Service Protocol
+
+protocol AIServiceProtocol {
+    func analyzeCode(_ request: AIAnalysisRequest) async throws -> AIAnalysisResponse
+    func generateDocumentation(for code: String, language: CodeLanguage) async throws -> String
+    func suggestFixes(for issues: [String]) async throws -> [CodeFix]
 }
 
 // MARK: - Code Language Extension
@@ -212,13 +130,6 @@ struct APIUsageStats: @preconcurrency Codable, Sendable {
     }
 }
 
-// MARK: - AI Service Protocol
+// MARK: - AI Service Protocol Extensions
 
-@MainActor
-protocol AIServiceProtocol {
-    func analyzeCode(_ request: AIAnalysisRequest) async throws -> AIAnalysisResponse
-    func explainCode(_ code: String, language: String) async throws -> String
-    func generateDocumentation(_ code: String, language: String) async throws -> String
-    func suggestRefactoring(_ code: String, language: String) async throws -> [AISuggestion]
-    func generateFix(for issue: String) async throws -> String
-}
+// Additional protocol extensions and utilities can be added here

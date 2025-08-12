@@ -126,6 +126,7 @@ struct CacheStatistics {
 
 /// Extension to integrate caching with existing analyzers
 extension CodeAnalyzer {
+    /// Analyzes and processes data with comprehensive validation
     func analyzeWithCaching(_ code: String) async -> [AnalysisResult] {
         let analyzerType = String(describing: type(of: self))
         

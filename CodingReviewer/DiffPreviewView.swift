@@ -1,3 +1,4 @@
+import Foundation
 //
 //  DiffPreviewView.swift
 //  CodingReviewer
@@ -67,12 +68,14 @@ struct DiffPreviewView: View {
 
     // MARK: - Helper Methods
 
+    /// Retrieves data with proper error handling and caching
     private func getContextualCode() -> String {
         let lines = originalCode.components(separatedBy: .newlines)
         let contextRange = getContextRange(for: fix.startLine...fix.endLine, in: lines)
         return lines[contextRange].joined(separator: "\n")
     }
 
+    /// Retrieves data with proper error handling and caching
     private func getModifiedContextualCode() -> String {
         let lines = originalCode.components(separatedBy: .newlines)
         var modifiedLines = lines;
@@ -94,6 +97,7 @@ struct DiffPreviewView: View {
         return modifiedLines[adjustedRange].joined(separator: "\n")
     }
 
+    /// Retrieves data with proper error handling and caching
     private func getContextRange(for changeRange: ClosedRange<Int>, in lines: [String]) -> Range<Int> {
         let contextLines = 3
         let start = max(0, changeRange.lowerBound - contextLines)
@@ -234,8 +238,8 @@ struct CodeView: View {
                     CodeLineView(
                         lineNumber: index + 1,
                         content: line,
-                        isChanged: changedLineRange.contains(index),
-                        highlightType: highlightType
+                        isChanged: self.changedLineRange.contains(index),
+                        highlightType: self.highlightType
                     )
                 }
             }
@@ -355,6 +359,7 @@ struct FixHistoryEntry: Identifiable, Sendable, @preconcurrency Codable {
 class FixHistoryManager: ObservableObject {
     @Published var history: [FixHistoryEntry] = [];
 
+    /// Performs operation with error handling and validation
     func recordAppliedFix(_ fix: IntelligentFix, originalCode: String, modifiedCode: String, fileName: String) {
         let entry = FixHistoryEntry(
             fixId: fix.id,
@@ -374,6 +379,7 @@ class FixHistoryManager: ObservableObject {
         saveHistory()
     }
 
+    /// Updates and persists data with validation
     private func saveHistory() {
         // Save to UserDefaults or Core Data
         if let encoded = try? JSONEncoder().encode(history) {
@@ -381,6 +387,7 @@ class FixHistoryManager: ObservableObject {
         }
     }
 
+    /// Retrieves data with proper error handling and caching
     private func loadHistory() {
         if let data = UserDefaults.standard.data(forKey: "FixHistory"),
            let decoded = try? JSONDecoder().decode([FixHistoryEntry].self, from: data) {

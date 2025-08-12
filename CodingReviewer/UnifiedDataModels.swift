@@ -4,15 +4,15 @@ import Foundation
 // This file contains the single source of truth for all analysis-related data structures
 
 /// Represents a single analysis result from code examination
-struct AnalysisResult: Identifiable, Sendable, @preconcurrency Codable, Hashable {
-    let id: UUID
-    let type: String // "Security", "Performance", "Quality", etc.
-    let severity: String // "High", "Medium", "Low"
-    let message: String
-    let lineNumber: Int
-    let suggestion: String
+public struct AnalysisResult: Identifiable, Sendable, @preconcurrency Codable, Hashable {
+    public let id: UUID
+    public let type: String // "Security", "Performance", "Quality", etc.
+    public let severity: String // "High", "Medium", "Low"
+    public let message: String
+    public let lineNumber: Int
+    public let suggestion: String
 
-    init(id: UUID = UUID(), type: String, severity: String, message: String, lineNumber: Int, suggestion: String = "") {
+    public init(id: UUID = UUID(), type: String, severity: String, message: String, lineNumber: Int, suggestion: String = "") {
         self.id = id
         self.type = type
         self.severity = severity

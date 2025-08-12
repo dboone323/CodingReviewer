@@ -1,3 +1,4 @@
+import Foundation
 //
 //  EnhancedProgressIndicators.swift
 //  CodingReviewer

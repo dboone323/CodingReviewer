@@ -84,6 +84,7 @@ final class SmartDocumentationGenerator: ObservableObject {
     }
 
 // / Function description needed
+/// Creates and configures components with proper initialization
 func generateDocumentation(for content: String, fileName: String) async -> GeneratedDocumentation {
         await MainActor.run {
             isGenerating = true

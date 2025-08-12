@@ -101,7 +101,7 @@ struct SimpleUploadResult {
 // MARK: - File Upload Manager
 
 @MainActor
-class FileUploadManager: ObservableObject {
+public class FileUploadManager: ObservableObject {
     @Published var isUploading: Bool = false;
     @Published var uploadProgress: Double = 0.0;
     @Published var errorMessage: String?

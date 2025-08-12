@@ -9,6 +9,10 @@ import Combine
 /// This service integrates with external AI APIs to provide sophisticated code analysis,
 /// including quality assessment, security scanning, and performance optimization suggestions.
 /// It manages API key authentication and handles async communication with AI services.
+/// EnhancedAIService class
+/// TODO: Add detailed documentation
+/// EnhancedAIService class
+/// TODO: Add detailed documentation
 public class EnhancedAIService: ObservableObject {
     @Published public var isAnalyzing: Bool = false;
     @Published public var analysisResult: String = "";
@@ -16,13 +20,11 @@ public class EnhancedAIService: ObservableObject {
 
     private let apiKeyManager: APIKeyManager
     private let session: URLSession
-
+    
     init(apiKeyManager: APIKeyManager) {
         self.apiKeyManager = apiKeyManager
         self.session = URLSession.shared
-    }
-
-    /// Analyzes code using enhanced AI capabilities with comprehensive analysis
+    }    /// Analyzes code using enhanced AI capabilities with comprehensive analysis
     /// 
     /// This method performs deep code analysis including quality assessment, security scanning,
     /// performance optimization suggestions, and best practice recommendations.
@@ -32,6 +34,10 @@ public class EnhancedAIService: ObservableObject {
     ///   - language: The programming language of the code (default: "swift")
     /// 
     /// - Note: This method updates the `analysisResult` and `errorMessage` published properties
+    /// analyzeCodeWithEnhancedAI function
+    /// TODO: Add detailed documentation
+    /// analyzeCodeWithEnhancedAI function
+    /// TODO: Add detailed documentation
     public func analyzeCodeWithEnhancedAI(_ code: String, language: String = "swift") async {
         isAnalyzing = true
         errorMessage = nil
@@ -53,6 +59,7 @@ public class EnhancedAIService: ObservableObject {
         }
     }
 
+    /// Performs operation with error handling and validation
     private func performLocalAnalysis(_ code: String, language: String) -> String {
         var analysis = "🔍 Enhanced Local Code Analysis\n";
         analysis += String(repeating: "=", count: 40) + "\n\n"
@@ -134,6 +141,7 @@ public class EnhancedAIService: ObservableObject {
         return analysis
     }
 
+    /// Performs operation with error handling and validation
     private func performAIAnalysis(_ code: String, language: String) async {
         do {
             let prompt = createAnalysisPrompt(code: code, language: language)
@@ -151,6 +159,7 @@ public class EnhancedAIService: ObservableObject {
         }
     }
 
+    /// Creates and configures components with proper initialization
     private func createAnalysisPrompt(code: String, language: String) -> String {
         return """
         Analyze this \(language) code and provide actionable insights:
@@ -171,6 +180,7 @@ public class EnhancedAIService: ObservableObject {
         """
     }
 
+    /// Performs operation with error handling and validation
     private func callOpenAI(prompt: String) async throws -> String {
         guard let apiKey = UserDefaults.standard.string(forKey: "openai_api_key") else {
             throw AIAnalysisError.noAPIKey
@@ -213,6 +223,7 @@ public class EnhancedAIService: ObservableObject {
         return content
     }
 
+    /// Analyzes and processes data with comprehensive validation
     private func calculateComplexity(_ code: String) -> Int {
         let keywords = ["if", "else", "for", "while", "switch", "case", "guard", "catch"]
         return keywords.reduce(1) { complexity, keyword in
@@ -220,6 +231,7 @@ public class EnhancedAIService: ObservableObject {
         }
     }
 
+    /// Performs operation with error handling and validation
     private func complexityLevel(_ complexity: Int) -> String {
         switch complexity {
         case 1...5: return "Low ✅"
