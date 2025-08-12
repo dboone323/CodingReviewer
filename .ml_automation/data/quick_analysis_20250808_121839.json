@@ -1,0 +1,12 @@
+{
+  "timestamp": "2025-08-08T12:18:39-05:00",
+  "analysis_results": {
+    "files_processed": 10,
+    "total_functions": 119,
+    "total_classes": 14,
+    "total_lines": 3686,
+    "avg_functions_per_file": 11,
+    "avg_lines_per_file": 368
+  },
+  "test_mode": true
+}

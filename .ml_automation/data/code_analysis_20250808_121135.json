@@ -1,0 +1,37 @@
+{
+  "timestamp": "2025-08-08T12:11:36-05:00",
+  "analysis_results": {
+    "file_count": 106,
+    "total_functions": 0,
+    "total_classes": 0,
+    "total_lines": 0,
+    "code_quality_score": 1,
+    "complexity_analysis": {
+      "high_complexity_files": 0,
+      "avg_functions_per_file": 0,
+      "avg_lines_per_file": 0,
+      "complexity_ratio": 0
+    },
+    "performance_metrics": {
+      "estimated_build_time": 212,
+      "memory_estimate_mb": 0,
+      "dependency_count": 107
+    },
+    "security_flags": [
+      "insecure_http"
+      , "password_reference"
+    ],
+    "pattern_insights": {
+      "swiftui_usage": 70,
+      "combine_usage": 46,
+      "async_await_usage": 224
+    }
+  },
+  "recommendations": [
+    
+    
+    
+  ],
+  "ml_confidence": 0.85,
+  "last_updated": "2025-08-08T12:11:37-05:00"
+}

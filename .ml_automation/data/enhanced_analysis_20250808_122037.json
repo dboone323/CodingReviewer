@@ -1,0 +1,42 @@
+{
+  "timestamp": "2025-08-08T12:20:39-05:00",
+  "analysis_results": {
+    "file_count": 106,
+    "total_functions": 805,
+    "total_classes": 79,
+    "total_structs": 378,
+    "total_protocols": 5,
+    "total_lines": 31592,
+    "code_quality_score": .89,
+    "complexity_analysis": {
+      "high_complexity_files": 42,
+      "avg_functions_per_file": 7,
+      "avg_lines_per_file": 298,
+      "complexity_ratio": .39
+    },
+    "performance_metrics": {
+      "estimated_build_time": 243,
+      "memory_estimate_mb": 315,
+      "dependency_count": 77
+    },
+    "architecture_patterns": {
+      "swiftui_usage": 70,
+      "combine_usage": 46,
+      "async_await_usage": 224,
+      "mvvm_patterns": 47,
+      "published_properties": 189
+    },
+    "security_flags": [
+      "insecure_http"
+      , "credential_references"
+    ]
+  },
+  "recommendations": [
+    "Consider refactoring high-complexity files"
+    
+    , "Consider implementing automated testing for function coverage"
+    , "MVVM architecture detected - excellent choice for SwiftUI"
+  ],
+  "ml_confidence": 0.92,
+  "last_updated": "2025-08-08T12:20:39-05:00"
+}
