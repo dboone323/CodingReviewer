@@ -1,3 +1,6 @@
+from _pytest.python import Function
+from _pytest.nodes import Item
+from _pytest.config import Config
 """
 Pytest configuration for CodingReviewer test suite.
 Enhanced with Architecture Validation (August 12, 2025).
@@ -55,7 +58,7 @@ def validation_rules_available(project_root: Path) -> bool:
 def validation_script_available(project_root: Path) -> bool:
     """Check if our validation script is available and executable."""
     validation_script = project_root / "validation_script.sh"
-    return validation_script.exists() and validation_script.stat().st_mode & 0o111
+    return bool(validation_script.exists() and validation_script.stat().st_mode & 0o111)
 
 
 @pytest.fixture
@@ -76,13 +79,13 @@ def architecture_validated(project_root: Path, validation_script_available: bool
 # Pytest configuration
 def pytest_configure(config):
     """Configure pytest with our custom markers."""
-    config.addinivalue_line(
+    config.addinivalue_line(  # type: ignore  # pytest config method
         "markers", "architecture: marks tests as architecture validation tests"
     )
-    config.addinivalue_line(
+    config.addinivalue_line(  # type: ignore  # pytest config method
         "markers", "validation: marks tests as validation rule tests"
     )
-    config.addinivalue_line(
+    config.addinivalue_line(  # type: ignore  # pytest config method
         "markers", "strategic: marks tests related to strategic implementation patterns"
     )
 
@@ -91,16 +94,16 @@ def pytest_collection_modifyitems(config, items):
     """Modify test collection to add markers based on test names."""
     for item in items:
         # Add architecture marker to architecture-related tests
-        if "architecture" in item.name.lower():
-            item.add_marker(pytest.mark.architecture)
+        if "architecture" in item.name.lower():  # type: ignore  # pytest item attribute
+            item.add_marker(pytest.mark.architecture)  # type: ignore  # pytest item method
         
         # Add validation marker to validation-related tests
-        if "validation" in item.name.lower():
-            item.add_marker(pytest.mark.validation)
+        if "validation" in item.name.lower():  # type: ignore  # pytest item attribute
+            item.add_marker(pytest.mark.validation)  # type: ignore  # pytest item method
         
         # Add strategic marker to strategic implementation tests
-        if "strategic" in item.name.lower():
-            item.add_marker(pytest.mark.strategic)
+        if "strategic" in item.name.lower():  # type: ignore  # pytest item attribute
+            item.add_marker(pytest.mark.strategic)  # type: ignore  # pytest item method
 
 
 def pytest_runtest_setup(item):

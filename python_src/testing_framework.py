@@ -135,7 +135,7 @@ class CodingReviewerTestFramework:
     
     def _parse_swift_test_output(self, stdout: str, stderr: str) -> List[CodingTestResult]:
         """Parse Swift test output into CodingTestResult objects."""
-        results = []
+        results: List[CodingTestResult] = []
         
         # Parse test results from output
         lines = stdout.split('\n') + stderr.split('\n')
@@ -157,7 +157,7 @@ class CodingReviewerTestFramework:
                             except ValueError:
                                 pass
                     
-                    results.append(CodingTestResult(
+                    results.append(CodingTestResult(  # type: ignore  # typed append
                         name=name,
                         status=status,
                         duration=duration
@@ -166,13 +166,13 @@ class CodingReviewerTestFramework:
         # If no specific test results found, create a summary result
         if not results:
             if "BUILD SUCCEEDED" in stdout or "Test session results" in stdout:
-                results.append(CodingTestResult(
+                results.append(CodingTestResult(  # type: ignore  # typed append
                     name="swift_build_and_test",
                     status="passed",
                     duration=0.0
                 ))
             else:
-                results.append(CodingTestResult(
+                results.append(CodingTestResult(  # type: ignore  # typed append
                     name="swift_build_and_test",
                     status="failed",
                     duration=0.0,
@@ -222,7 +222,7 @@ class CodingReviewerTestFramework:
     
     def _parse_pytest_output(self, stdout: str, stderr: str) -> List[CodingTestResult]:
         """Parse pytest output into CodingTestResult objects."""
-        results = []
+        results: List[CodingTestResult] = []
         
         # Try to load JSON report if available
         json_report_path = self.config["reports_path"] / "pytest_report.json"
@@ -232,7 +232,7 @@ class CodingReviewerTestFramework:
                     report_data = json.load(f)
                 
                 for test in report_data.get("tests", []):
-                    results.append(CodingTestResult(
+                    results.append(CodingTestResult(  # type: ignore  # typed append
                         name=test["nodeid"],
                         status=test["outcome"],
                         duration=test.get("duration", 0.0),
@@ -253,7 +253,7 @@ class CodingReviewerTestFramework:
                     if len(parts) >= 2:
                         name = parts[0]
                         status = "passed" if "PASSED" in line else ("failed" if "FAILED" in line else "skipped")
-                        results.append(CodingTestResult(
+                        results.append(CodingTestResult(  # type: ignore  # typed append
                             name=name,
                             status=status,
                             duration=0.0
@@ -289,7 +289,7 @@ class CodingReviewerTestFramework:
                 "completed_at": suite.completed_at.isoformat() if suite.completed_at else None,
                 "tests": [asdict(result) for result in suite.results]
             }
-            report["suites"].append(suite_data)
+            report["suites"].append(suite_data)  # type: ignore  # typed dict append
             
             total_tests += suite.total_count
             total_passed += suite.passed_count
@@ -346,8 +346,8 @@ class TestVisualization:
         """Create interactive test dashboard using Plotly."""
         fig = make_subplots(  # type: ignore
             rows=2, cols=2,
-            subplot_titles=("Test Results Summary", "Success Rate by Suite", 
-                          "Test Duration", "Test Status Distribution"),
+            subplot_titles=["Test Results Summary", "Success Rate by Suite", 
+                          "Test Duration", "Test Status Distribution"],
             specs=[[{"type": "bar"}, {"type": "bar"}],
                    [{"type": "scatter"}, {"type": "pie"}]]
         )

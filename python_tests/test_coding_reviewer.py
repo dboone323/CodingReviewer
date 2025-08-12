@@ -2,6 +2,7 @@
 Test suite for CodingReviewer Swift integration and analysis capabilities.
 Enhanced with Architecture Validation Rules (August 12, 2025)
 """
+from typing import Any, Dict, List, Optional, Union
 
 import pytest
 import subprocess
@@ -164,7 +165,7 @@ class TestAutomationScriptValidation:
         """Test that automation scripts use safe patterns from our guidelines."""
         automation_scripts = list(project_root.glob("*automation*.sh")) + list(project_root.glob("*fix*.sh"))
         
-        problematic_patterns = []
+        problematic_patterns: List[str] = []
         
         for script in automation_scripts[:10]:  # Check first 10 to avoid overwhelming
             if script.exists():
@@ -182,7 +183,7 @@ class TestAutomationScriptValidation:
         
         if problematic_patterns:
             # Allow some, but flag if excessive
-            if len(problematic_patterns) > 3:
+            if len(problematic_patterns) > 3:  # type: ignore  # typed list len
                 pytest.fail(f"Too many unsafe patterns in automation: {problematic_patterns[:3]}")
     
     def test_master_orchestrator_has_validation_integration(self, project_root: Path) -> None:
@@ -384,7 +385,7 @@ class TestCodeAnalysisIntegration:
     def test_ai_service_integration(self):
         """Test AI service integration."""
         # This would test actual AI service calls in a real scenario
-        mock_ai_response = {
+        mock_ai_response: Dict[str, Any] = {
             "analysis": "Code quality looks good",
             "suggestions": ["Add documentation", "Consider refactoring"],
             "score": 85
@@ -392,14 +393,14 @@ class TestCodeAnalysisIntegration:
         
         # In a real implementation, this would call the actual AI service
         assert mock_ai_response["score"] > 80
-        assert len(mock_ai_response["suggestions"]) > 0
+        assert len(mock_ai_response["suggestions"]) > 0  # type: ignore  # dict value len
     
     @pytest.mark.slow
     def test_full_project_analysis(self):
         """Test full project analysis (marked as slow)."""
         # This would be a comprehensive test of the entire project
         # Marked as slow because it would take significant time
-        project_stats = {
+        project_stats: Dict[str, Any] = {
             "total_files": 100,
             "swift_files": 80,
             "test_files": 20,
@@ -434,14 +435,16 @@ class TestCodeAnalysisIntegration:
     def test_api_endpoints(self):
         """Test API endpoints (if any)."""
         # Mock API responses
-        mock_responses = {
+        mock_responses: Dict[str, Any] = {
             "/analyze": {"status": "success", "data": {}},
             "/health": {"status": "healthy"},
             "/metrics": {"status": "ok", "uptime": 12345, "requests": 100}
         }
         
-        for endpoint, expected in mock_responses.items():
+        for endpoint, expected in mock_responses.items():  # type: ignore  # typed dict append
             assert "status" in expected
+            # Verify endpoint format
+            assert endpoint.startswith("/"), f"Endpoint {endpoint} should start with /"
     
     @pytest.mark.ui
     def test_ui_components(self):
@@ -454,7 +457,7 @@ class TestCodeAnalysisIntegration:
         }
         
         for component, status in ui_tests.items():
-            assert status == "passed"
+            assert status == "passed", f"UI component {component} should pass tests"
 
 
 class TestJupyterIntegration:
@@ -463,7 +466,7 @@ class TestJupyterIntegration:
     def test_notebook_creation(self):
         """Test that Jupyter notebooks can be created."""
         # This would test notebook creation and execution
-        notebook_config = {
+        notebook_config: Dict[str, Any] = {
             "kernel": "python3",
             "cells": [],
             "metadata": {}
@@ -519,7 +522,7 @@ def project_root():
 
 
 @pytest.fixture(scope="session")
-def test_data_dir(project_root):
+def test_data_dir(project_root: Path) -> Path:
     """Provide test data directory."""
     return project_root / "test_data"
 
