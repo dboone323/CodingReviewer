@@ -170,3 +170,43 @@ automation_*.log
 .security_cache/
 .ai_cache/
 .performance_monitoring/
+
+# Jupyter notebook cache and outputs
+.jupyter/
+.ipynb_checkpoints/
+
+# System diagnosis and validation files
+.system_diagnosis/
+.validation_log
+
+# Temporary Swift files and backups
+*.swift.complex
+*.swift.backup*
+DisabledTests/
+
+# Automation and analysis scripts (temporary)
+add_documentation.swift
+analyze_build_errors.sh
+automated_quality_enhancement.sh
+comprehensive_*.sh
+critical_error_fixes.sh
+debug_ml.sh
+enhanced_*.sh
+final_*.sh
+fix_*.sh
+improved_*.sh
+launch_enhanced.sh
+master_enhanced_workflow.sh
+ml_pattern_recognition*.sh
+phase*_*.sh
+priority*_*.sh
+quality_improvement_*.sh
+quick_*.sh
+refactoring_suggestions.md
+robust_*.sh
+simple_*.sh
+strategic_*.sh
+system_diagnosis.sh
+unified_*.sh
+validate_*.sh
+validation_script.sh
