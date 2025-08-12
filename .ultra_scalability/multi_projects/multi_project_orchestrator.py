@@ -1,3 +1,4 @@
+from typing import Any, Optional
 #!/usr/bin/env python3
 """
 Ultra Multi-Project Orchestration Engine V1.0
@@ -100,7 +101,7 @@ class MultiProjectOrchestrator:
         self.project_queue.put(project_id)
         return project_id
     
-    async def process_projects_batch(self, batch_size=50):
+    async def process_projects_batch(self, batch_size=50) -> bool:
         """Process projects in optimized batches"""
         batch_start = time.time()
         batch_projects = []

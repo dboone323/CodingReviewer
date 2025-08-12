@@ -1,0 +1,20 @@
+{
+  "enabled": true,
+  "scan_frequency": "daily",
+  "alert_thresholds": {
+    "critical": 1,
+    "high": 5,
+    "risk_score": 50
+  },
+  "auto_actions": {
+    "create_issues": true,
+    "notify_team": true,
+    "block_deployments": true,
+    "auto_patch": false
+  },
+  "compliance_checks": [
+    "OWASP Top 10",
+    "CWE Top 25",
+    "NIST Cybersecurity Framework"
+  ]
+}

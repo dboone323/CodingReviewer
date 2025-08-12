@@ -1,0 +1,65 @@
+{
+  "total_files_processed": 6,
+  "total_fixes_applied": 12,
+  "successful_files": 6,
+  "results": [
+    {
+      "file_path": "/Users/danielstevens/Desktop/CodingReviewer/quality_gates_validator.py",
+      "fixes_applied": [
+        "Line 134: Replaced bare except with Exception",
+        "Line 147: Replaced bare except with Exception",
+        "Line 155: Replaced bare except with Exception",
+        "Line 163: Replaced bare except with Exception",
+        "Line 176: Replaced bare except with Exception"
+      ],
+      "errors_fixed": 5,
+      "success": true,
+      "message": "Successfully applied 5 fixes"
+    },
+    {
+      "file_path": "/Users/danielstevens/Desktop/CodingReviewer/performance_monitor.py",
+      "fixes_applied": [
+        "Line 51: Replaced bare except with Exception",
+        "Line 58: Replaced bare except with Exception"
+      ],
+      "errors_fixed": 2,
+      "success": true,
+      "message": "Successfully applied 2 fixes"
+    },
+    {
+      "file_path": "/Users/danielstevens/Desktop/CodingReviewer/technical_debt_analyzer.py",
+      "fixes_applied": [
+        "Replaced deprecated ast.Str with ast.Constant",
+        "Line 283: Added str return type to _generate_file_issues"
+      ],
+      "errors_fixed": 2,
+      "success": true,
+      "message": "Successfully applied 2 fixes"
+    },
+    {
+      "file_path": "/Users/danielstevens/Desktop/CodingReviewer/advanced_refactoring_optimizer.py",
+      "fixes_applied": [
+        "Replaced deprecated ast.Str with ast.Constant",
+        "Line 483: Added bool return type to save_analysis_results",
+        "Line 496: Added str return type to generate_summary_report"
+      ],
+      "errors_fixed": 3,
+      "success": true,
+      "message": "Successfully applied 3 fixes"
+    },
+    {
+      "file_path": "/Users/danielstevens/Desktop/CodingReviewer/python_src/testing_framework.py",
+      "fixes_applied": [],
+      "errors_fixed": 0,
+      "success": true,
+      "message": "No fixes needed"
+    },
+    {
+      "file_path": "/Users/danielstevens/Desktop/CodingReviewer/ai_operations_dashboard.py",
+      "fixes_applied": [],
+      "errors_fixed": 0,
+      "success": true,
+      "message": "No fixes needed"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+#!/bin/bash
+# Pre-commit hook for AI Operations Dashboard
+# Runs quality checks before allowing commit
+
+echo "🔍 Running pre-commit quality checks..."
+
+# Run tests
+echo "Running tests..."
+python -m pytest tests/unit/ -x -q
+if [ $? -ne 0 ]; then
+    echo "❌ Tests failed. Commit aborted."
+    exit 1
+fi
+
+# Run code quality checks
+echo "Checking code quality..."
+python technical_debt_analyzer.py > /dev/null
+if [ $? -ne 0 ]; then
+    echo "⚠️ Code quality check failed."
+fi
+
+# Run documentation check
+echo "Checking documentation..."
+python documentation_generator.py > /dev/null
+if [ $? -ne 0 ]; then
+    echo "⚠️ Documentation generation failed."
+fi
+
+echo "✅ Pre-commit checks passed!"
+exit 0

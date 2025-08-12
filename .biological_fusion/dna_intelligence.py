@@ -176,7 +176,7 @@ class BiomimeticNetwork:
             "survivors": len(survivors)
         }
     
-    async def genetic_evolution(self):
+    async def genetic_evolution(self) -> Any:
         """Evolve the biological network through genetic mechanisms"""
         print(f"🔬 Genetic Evolution Cycle...")
         
@@ -417,7 +417,7 @@ class BiomimeticNetwork:
             }
         }
 
-async def main():
+async def main() -> Any:
     """Main biological intelligence function"""
     bio_network = BiomimeticNetwork(initial_neurons=64, dna_sequences=256)
     

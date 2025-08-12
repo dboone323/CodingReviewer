@@ -114,7 +114,7 @@ class EnterpriseAnalyticsEngine: ObservableObject {
             return AnalyticsMetric(name: key, value: doubleValue, category: "Performance")
         }
         
-        // Convert TeamAnalytics to TeamProductivity
+        // Convert TeamAnalytics to TeamProductivity for enhanced insights
         let teamProductivity = TeamProductivity(
             analysesPerUser: teamMetrics.qualityScore,
             averageQualityScore: teamMetrics.securityScore,
@@ -124,7 +124,7 @@ class EnterpriseAnalyticsEngine: ObservableObject {
         
         return AnalyticsReport(
             title: "Enterprise Analytics Report",
-            summary: generateSummary(),
+            summary: generateSummaryWithProductivity(teamProductivity: teamProductivity),
             metrics: qualityMetricsConverted + securityMetricsConverted + performanceMetricsConverted,
             trends: [],
             timeframe: .lastMonth
@@ -423,6 +423,28 @@ class EnterpriseAnalyticsEngine: ObservableObject {
         Code Quality Score: \(Int(codeQualityScore * 100))%
         Security Rating: \(securityRating.rawValue)
         Performance Score: \(Int(performanceScore * 100))%
+        
+        Key Insights:
+        - \(trendingInsights.count) trending insights identified
+        - \(securityVulnerabilities.count) security vulnerabilities requiring attention
+        - \(codeQualityIssues.count) code quality issues detected
+        """
+    }
+    
+    private func generateSummaryWithProductivity(teamProductivity: TeamProductivity) -> String {
+        return """
+        Enterprise Analytics Summary (Enhanced)
+        
+        Total Issues: \(totalIssues)
+        Code Quality Score: \(Int(codeQualityScore * 100))%
+        Security Rating: \(securityRating.rawValue)
+        Performance Score: \(Int(performanceScore * 100))%
+        
+        Team Productivity Metrics:
+        - Analyses per User: \(String(format: "%.1f", teamProductivity.analysesPerUser))
+        - Average Quality Score: \(String(format: "%.1f", teamProductivity.averageQualityScore))
+        - Issue Resolution Rate: \(String(format: "%.1f", teamProductivity.issueResolutionRate))%
+        - Code Review Efficiency: \(String(format: "%.1f", teamProductivity.codeReviewEfficiency * 100))%
         
         Key Insights:
         - \(trendingInsights.count) trending insights identified

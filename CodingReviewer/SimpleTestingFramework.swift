@@ -48,7 +48,7 @@ final class SimpleTestingFramework: ObservableObject {
         let lines = code.components(separatedBy: .newlines)
         
         // Generate basic function tests
-        for (lineIndex, line) in lines.enumerated() {
+        for (_, line) in lines.enumerated() {
             let trimmedLine = line.trimmingCharacters(in: .whitespaces)
             
             if trimmedLine.hasPrefix("func ") {
@@ -75,7 +75,6 @@ final class SimpleTestingFramework: ObservableObject {
     private func calculateTestCoverage(for code: String, testCases: [GeneratedTestCase]) -> TestCoverage {
         let lines = code.components(separatedBy: .newlines)
         let functionCount = lines.filter { $0.trimmingCharacters(in: .whitespaces).hasPrefix("func ") }.count
-        let coveragePercentage = functionCount > 0 ? Double(testCases.count) / Double(functionCount) * 100 : 0
         
         return TestCoverage(
             functionsCovered: testCases.count,

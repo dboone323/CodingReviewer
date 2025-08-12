@@ -270,7 +270,11 @@ final class TestExecutionEngine: ObservableObject {
     /// Creates and configures components with proper initialization
     func generateTestReport() -> TestReport {
         let failedTests = executionResults.filter { !$0.passed }
-        let summary = "Test execution completed with \(overallStats.passedTests) passed, \(overallStats.failedTests) failed out of \(overallStats.totalTests) total tests."
+        let failedTestNames = failedTests.map { $0.testCase.testName }.joined(separator: ", ")
+        let summary = """
+        Test execution completed with \(overallStats.passedTests) passed, \(overallStats.failedTests) failed out of \(overallStats.totalTests) total tests.
+        \(failedTests.isEmpty ? "All tests passed successfully!" : "Failed tests: \(failedTestNames)")
+        """
         
         // Create a basic coverage object (you may want to calculate this properly)
         let testCoverage = TestCoverage(

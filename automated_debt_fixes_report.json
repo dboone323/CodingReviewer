@@ -1,0 +1,1124 @@
+{
+  "quick_wins": {
+    "timestamp": "2025-08-12T12:15:00",
+    "fixes_applied": [
+      {
+        "file_path": "advanced_mcp_integration.py",
+        "line_number": 512,
+        "fix_type": "bare_except_clause",
+        "description": "Replaced bare except: with except Exception as e:",
+        "original": "except:",
+        "fixed": "except Exception as e:"
+      },
+      {
+        "file_path": "continuous_monitoring_dashboard.py",
+        "line_number": 487,
+        "fix_type": "bare_except_clause",
+        "description": "Replaced bare except: with except Exception as e:",
+        "original": "except:",
+        "fixed": "except Exception as e:"
+      },
+      {
+        "file_path": "ai_code_review_automation.py",
+        "line_number": 194,
+        "fix_type": "bare_except_clause",
+        "description": "Replaced bare except: with except Exception as e:",
+        "original": "except:",
+        "fixed": "except Exception as e:"
+      },
+      {
+        "file_path": "cross_project_learning.py",
+        "line_number": 435,
+        "fix_type": "bare_except_clause",
+        "description": "Replaced bare except: with except Exception as e:",
+        "original": "except:",
+        "fixed": "except Exception as e:"
+      },
+      {
+        "file_path": "cross_project_learning.py",
+        "line_number": 457,
+        "fix_type": "bare_except_clause",
+        "description": "Replaced bare except: with except Exception as e:",
+        "original": "except:",
+        "fixed": "except Exception as e:"
+      },
+      {
+        "file_path": "cross_project_learning.py",
+        "line_number": 519,
+        "fix_type": "bare_except_clause",
+        "description": "Replaced bare except: with except Exception as e:",
+        "original": "except:",
+        "fixed": "except Exception as e:"
+      },
+      {
+        "file_path": "final_ai_operations_dashboard.py",
+        "line_number": 340,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'save_dashboard_data'",
+        "original": "async def save_dashboard_data(self, data: Dict[str, Any], filename: str):",
+        "fixed": "async def save_dashboard_data(self, data: Dict[str, Any], filename: str) -> Any:"
+      },
+      {
+        "file_path": "continuous_monitoring_dashboard.py",
+        "line_number": 225,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'serve_dashboard'",
+        "original": "async def serve_dashboard(self, request):",
+        "fixed": "async def serve_dashboard(self, request) -> Any:"
+      },
+      {
+        "file_path": "continuous_monitoring_dashboard.py",
+        "line_number": 311,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'api_metrics'",
+        "original": "async def api_metrics(self, request):",
+        "fixed": "async def api_metrics(self, request) -> Any:"
+      },
+      {
+        "file_path": "continuous_monitoring_dashboard.py",
+        "line_number": 338,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'websocket_handler'",
+        "original": "async def websocket_handler(self, request):",
+        "fixed": "async def websocket_handler(self, request) -> Any:"
+      },
+      {
+        "file_path": "continuous_monitoring_dashboard.py",
+        "line_number": 359,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'broadcast_update'",
+        "original": "async def broadcast_update(self, data: Dict[str, Any]):",
+        "fixed": "async def broadcast_update(self, data: Dict[str, Any]) -> Any:"
+      },
+      {
+        "file_path": "continuous_monitoring_dashboard.py",
+        "line_number": 428,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'collect_metrics'",
+        "original": "async def collect_metrics(self):",
+        "fixed": "async def collect_metrics(self) -> Any:"
+      },
+      {
+        "file_path": "continuous_monitoring_dashboard.py",
+        "line_number": 584,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'start'",
+        "original": "async def start(self):",
+        "fixed": "async def start(self) -> Any:"
+      },
+      {
+        "file_path": "automated_debt_fixer.py",
+        "line_number": 408,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'main'",
+        "original": "def main():",
+        "fixed": "def main() -> Any:"
+      },
+      {
+        "file_path": "complete_ai_operations_dashboard.py",
+        "line_number": 368,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'save_dashboard_data'",
+        "original": "async def save_dashboard_data(self, data: Dict[str, Any], filename: str):",
+        "fixed": "async def save_dashboard_data(self, data: Dict[str, Any], filename: str) -> Any:"
+      },
+      {
+        "file_path": "technical_debt_analyzer.py",
+        "line_number": 467,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'main'",
+        "original": "def main():",
+        "fixed": "def main() -> Any:"
+      },
+      {
+        "file_path": "enhanced_error_logging.py",
+        "line_number": 337,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'log_critical'",
+        "original": "def log_critical(component: str, message: str, category: ErrorCategory = ErrorCategory.SYSTEM_INTEGRATION, **kwargs):",
+        "fixed": "def log_critical(component: str, message: str, category: ErrorCategory = ErrorCategory.SYSTEM_INTEGRATION, **kwargs) -> Any:"
+      },
+      {
+        "file_path": "enhanced_error_logging.py",
+        "line_number": 341,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'log_error'",
+        "original": "def log_error(component: str, message: str, category: ErrorCategory = ErrorCategory.SYSTEM_INTEGRATION, **kwargs):",
+        "fixed": "def log_error(component: str, message: str, category: ErrorCategory = ErrorCategory.SYSTEM_INTEGRATION, **kwargs) -> Any:"
+      },
+      {
+        "file_path": "enhanced_error_logging.py",
+        "line_number": 345,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'log_warning'",
+        "original": "def log_warning(component: str, message: str, category: ErrorCategory = ErrorCategory.SYSTEM_INTEGRATION, **kwargs):",
+        "fixed": "def log_warning(component: str, message: str, category: ErrorCategory = ErrorCategory.SYSTEM_INTEGRATION, **kwargs) -> Any:"
+      },
+      {
+        "file_path": "enhanced_error_logging.py",
+        "line_number": 349,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'log_info'",
+        "original": "def log_info(component: str, message: str, category: ErrorCategory = ErrorCategory.SYSTEM_INTEGRATION, **kwargs):",
+        "fixed": "def log_info(component: str, message: str, category: ErrorCategory = ErrorCategory.SYSTEM_INTEGRATION, **kwargs) -> Any:"
+      },
+      {
+        "file_path": "enhanced_error_logging.py",
+        "line_number": 380,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'log_errors'",
+        "original": "def log_errors(component: str, category: ErrorCategory = ErrorCategory.SYSTEM_INTEGRATION):",
+        "fixed": "def log_errors(component: str, category: ErrorCategory = ErrorCategory.SYSTEM_INTEGRATION) -> Any:"
+      },
+      {
+        "file_path": "enhanced_error_logging.py",
+        "line_number": 382,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'decorator'",
+        "original": "def decorator(func):",
+        "fixed": "def decorator(func) -> Any:"
+      },
+      {
+        "file_path": "enhanced_error_logging.py",
+        "line_number": 383,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'wrapper'",
+        "original": "def wrapper(*args, **kwargs):",
+        "fixed": "def wrapper(*args, **kwargs) -> Any:"
+      },
+      {
+        "file_path": "test_dashboard_integration.py",
+        "line_number": 13,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'test_dashboard_integration'",
+        "original": "async def test_dashboard_integration():",
+        "fixed": "async def test_dashboard_integration() -> Any:"
+      },
+      {
+        "file_path": "ai_operations_dashboard.py",
+        "line_number": 323,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'save_dashboard_data'",
+        "original": "async def save_dashboard_data(self, data: Dict[str, Any], filename: str):",
+        "fixed": "async def save_dashboard_data(self, data: Dict[str, Any], filename: str) -> Any:"
+      },
+      {
+        "file_path": "fix_pylance_errors_phase3.py",
+        "line_number": 26,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'remove_unused_imports_from_phase2_script'",
+        "original": "def remove_unused_imports_from_phase2_script(self):",
+        "fixed": "def remove_unused_imports_from_phase2_script(self) -> Any:"
+      },
+      {
+        "file_path": "fix_pylance_errors_phase3.py",
+        "line_number": 46,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'clean_test_file_imports'",
+        "original": "def clean_test_file_imports(self):",
+        "fixed": "def clean_test_file_imports(self) -> Any:"
+      },
+      {
+        "file_path": "fix_pylance_errors_phase3.py",
+        "line_number": 66,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'add_conftest_type_annotations'",
+        "original": "def add_conftest_type_annotations(self):",
+        "fixed": "def add_conftest_type_annotations(self) -> Any:"
+      },
+      {
+        "file_path": "fix_pylance_errors_phase3.py",
+        "line_number": 105,
+        "fix_type": "type_annotation",
+        "description": "Added return type annotation to function 'remove_unused_conftest_imports'",
+        "original": "def remove_unused_conftest_imports(self):",
+        "fixed": "def remove_unused_conftest_imports(self) -> Any:"
+      },
+      {
+        "file_path": "advanced_mcp_integration.py",
+        "line_number": 729,
+        "fix_type": "documentation",
+        "description": "Added basic docstring to function 'visit_ClassDef'",
+        "original": "# No docstring",
+        "fixed": "\"\"\"TODO: Add documentation for visit_ClassDef\"\"\""
+      }
+    ],
+    "files_modified": [
+      "automated_debt_fixer.py",
+      "enhanced_error_logging.py",
+      "technical_debt_analyzer.py",
+      "ai_code_review_automation.py",
+      "test_dashboard_integration.py",
+      "fix_pylance_errors_phase3.py",
+      "continuous_monitoring_dashboard.py",
+      "final_ai_operations_dashboard.py",
+      "complete_ai_operations_dashboard.py",
+      "advanced_mcp_integration.py",
+      "ai_operations_dashboard.py",
+      "cross_project_learning.py"
+    ],
+    "errors": []
+  },
+  "complexity_reduction": {
+    "timestamp": "2025-08-12T12:16:00",
+    "complexity_analysis": [
+      {
+        "file_path": "final_ai_operations_dashboard.py",
+        "current_complexity": 33,
+        "function_breakdown": [
+          {
+            "function_name": "main",
+            "line_number": 351,
+            "complexity": 3,
+            "lines_of_code": 53,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "__init__",
+            "line_number": 37,
+            "complexity": 1,
+            "lines_of_code": 9,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "initialize_systems",
+            "line_number": 59,
+            "complexity": 11,
+            "lines_of_code": 2,
+            "needs_refactoring": true
+          },
+          {
+            "function_name": "run_comprehensive_analysis",
+            "line_number": 109,
+            "complexity": 10,
+            "lines_of_code": 5,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "generate_optimization_recommendations",
+            "line_number": 180,
+            "complexity": 7,
+            "lines_of_code": 5,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "generate_executive_dashboard",
+            "line_number": 260,
+            "complexity": 3,
+            "lines_of_code": 5,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "save_dashboard_data",
+            "line_number": 340,
+            "complexity": 1,
+            "lines_of_code": 5,
+            "needs_refactoring": false
+          }
+        ],
+        "target_complexity": 16
+      },
+      {
+        "file_path": "advanced_mcp_integration.py",
+        "current_complexity": 73,
+        "function_breakdown": [
+          {
+            "function_name": "main",
+            "line_number": 1027,
+            "complexity": 1,
+            "lines_of_code": 15,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "__init__",
+            "line_number": 87,
+            "complexity": 1,
+            "lines_of_code": 2,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "analyze_code_patterns",
+            "line_number": 91,
+            "complexity": 10,
+            "lines_of_code": 5,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_analyze_python_file",
+            "line_number": 114,
+            "complexity": 3,
+            "lines_of_code": 4,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_analyze_swift_file",
+            "line_number": 133,
+            "complexity": 3,
+            "lines_of_code": 4,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_detect_class_patterns",
+            "line_number": 150,
+            "complexity": 2,
+            "lines_of_code": 6,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_detect_function_patterns",
+            "line_number": 174,
+            "complexity": 2,
+            "lines_of_code": 6,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_detect_import_patterns",
+            "line_number": 198,
+            "complexity": 2,
+            "lines_of_code": 6,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_detect_error_handling_patterns",
+            "line_number": 222,
+            "complexity": 3,
+            "lines_of_code": 6,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_detect_swift_class_patterns",
+            "line_number": 246,
+            "complexity": 2,
+            "lines_of_code": 6,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_detect_swift_protocol_patterns",
+            "line_number": 270,
+            "complexity": 2,
+            "lines_of_code": 5,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_detect_swift_memory_patterns",
+            "line_number": 293,
+            "complexity": 2,
+            "lines_of_code": 6,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_consolidate_patterns",
+            "line_number": 317,
+            "complexity": 4,
+            "lines_of_code": 6,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "__init__",
+            "line_number": 347,
+            "complexity": 1,
+            "lines_of_code": 2,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "predict_development_needs",
+            "line_number": 351,
+            "complexity": 7,
+            "lines_of_code": 13,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "__init__",
+            "line_number": 449,
+            "complexity": 1,
+            "lines_of_code": 2,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "generate_analytics",
+            "line_number": 453,
+            "complexity": 1,
+            "lines_of_code": 3,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_analyze_code_quality",
+            "line_number": 466,
+            "complexity": 1,
+            "lines_of_code": 9,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_analyze_development_velocity",
+            "line_number": 500,
+            "complexity": 5,
+            "lines_of_code": 9,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_analyze_technical_debt",
+            "line_number": 540,
+            "complexity": 1,
+            "lines_of_code": 8,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_analyze_predictions",
+            "line_number": 573,
+            "complexity": 1,
+            "lines_of_code": 7,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_analyze_project_health",
+            "line_number": 605,
+            "complexity": 1,
+            "lines_of_code": 8,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "__init__",
+            "line_number": 631,
+            "complexity": 1,
+            "lines_of_code": 2,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "analyze_workflows",
+            "line_number": 635,
+            "complexity": 4,
+            "lines_of_code": 9,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_analyze_build_workflow",
+            "line_number": 656,
+            "complexity": 2,
+            "lines_of_code": 4,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_analyze_testing_workflow",
+            "line_number": 679,
+            "complexity": 2,
+            "lines_of_code": 4,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_analyze_deployment_workflow",
+            "line_number": 701,
+            "complexity": 3,
+            "lines_of_code": 4,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "__init__",
+            "line_number": 726,
+            "complexity": 1,
+            "lines_of_code": 1,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "visit_ClassDef",
+            "line_number": 729,
+            "complexity": 2,
+            "lines_of_code": 4,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "__init__",
+            "line_number": 738,
+            "complexity": 1,
+            "lines_of_code": 1,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "visit_FunctionDef",
+            "line_number": 741,
+            "complexity": 4,
+            "lines_of_code": 2,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "__init__",
+            "line_number": 750,
+            "complexity": 1,
+            "lines_of_code": 1,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "visit_Import",
+            "line_number": 753,
+            "complexity": 2,
+            "lines_of_code": 2,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "visit_ImportFrom",
+            "line_number": 758,
+            "complexity": 3,
+            "lines_of_code": 2,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "__init__",
+            "line_number": 767,
+            "complexity": 1,
+            "lines_of_code": 8,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "run_comprehensive_analysis",
+            "line_number": 780,
+            "complexity": 1,
+            "lines_of_code": 14,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_generate_summary",
+            "line_number": 817,
+            "complexity": 2,
+            "lines_of_code": 8,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_generate_recommendations",
+            "line_number": 850,
+            "complexity": 4,
+            "lines_of_code": 6,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_generate_next_actions",
+            "line_number": 873,
+            "complexity": 5,
+            "lines_of_code": 7,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_save_results",
+            "line_number": 892,
+            "complexity": 1,
+            "lines_of_code": 11,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_generate_markdown_report",
+            "line_number": 915,
+            "complexity": 9,
+            "lines_of_code": 14,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_generate_dashboard_config",
+            "line_number": 991,
+            "complexity": 4,
+            "lines_of_code": 5,
+            "needs_refactoring": false
+          }
+        ],
+        "target_complexity": 20
+      },
+      {
+        "file_path": "continuous_monitoring_dashboard.py",
+        "current_complexity": 51,
+        "function_breakdown": [
+          {
+            "function_name": "main",
+            "line_number": 612,
+            "complexity": 4,
+            "lines_of_code": 4,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "__init__",
+            "line_number": 53,
+            "complexity": 1,
+            "lines_of_code": 2,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_init_database",
+            "line_number": 57,
+            "complexity": 1,
+            "lines_of_code": 7,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "store_metric",
+            "line_number": 89,
+            "complexity": 1,
+            "lines_of_code": 6,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "get_recent_metrics",
+            "line_number": 109,
+            "complexity": 2,
+            "lines_of_code": 9,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "__init__",
+            "line_number": 140,
+            "complexity": 1,
+            "lines_of_code": 3,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "add_alert_rule",
+            "line_number": 145,
+            "complexity": 1,
+            "lines_of_code": 3,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "add_alert_callback",
+            "line_number": 150,
+            "complexity": 1,
+            "lines_of_code": 2,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "check_alerts",
+            "line_number": 154,
+            "complexity": 11,
+            "lines_of_code": 2,
+            "needs_refactoring": true
+          },
+          {
+            "function_name": "_trigger_alert",
+            "line_number": 176,
+            "complexity": 4,
+            "lines_of_code": 9,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "__init__",
+            "line_number": 210,
+            "complexity": 1,
+            "lines_of_code": 5,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_setup_routes",
+            "line_number": 217,
+            "complexity": 1,
+            "lines_of_code": 6,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "serve_dashboard",
+            "line_number": 225,
+            "complexity": 1,
+            "lines_of_code": 3,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "api_metrics",
+            "line_number": 311,
+            "complexity": 2,
+            "lines_of_code": 8,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "websocket_handler",
+            "line_number": 338,
+            "complexity": 6,
+            "lines_of_code": 7,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "broadcast_update",
+            "line_number": 359,
+            "complexity": 5,
+            "lines_of_code": 6,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "__init__",
+            "line_number": 379,
+            "complexity": 1,
+            "lines_of_code": 12,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_setup_default_alerts",
+            "line_number": 402,
+            "complexity": 2,
+            "lines_of_code": 3,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_handle_alert",
+            "line_number": 415,
+            "complexity": 1,
+            "lines_of_code": 4,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "collect_metrics",
+            "line_number": 428,
+            "complexity": 5,
+            "lines_of_code": 4,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_collect_basic_metrics",
+            "line_number": 467,
+            "complexity": 5,
+            "lines_of_code": 12,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "monitoring_loop",
+            "line_number": 494,
+            "complexity": 5,
+            "lines_of_code": 3,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_determine_metric_status",
+            "line_number": 554,
+            "complexity": 8,
+            "lines_of_code": 4,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "start",
+            "line_number": 584,
+            "complexity": 2,
+            "lines_of_code": 11,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "stop",
+            "line_number": 606,
+            "complexity": 1,
+            "lines_of_code": 3,
+            "needs_refactoring": false
+          }
+        ],
+        "target_complexity": 20
+      },
+      {
+        "file_path": "technical_debt_analyzer.py",
+        "current_complexity": 67,
+        "function_breakdown": [
+          {
+            "function_name": "main",
+            "line_number": 467,
+            "complexity": 7,
+            "lines_of_code": 5,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "__init__",
+            "line_number": 44,
+            "complexity": 1,
+            "lines_of_code": 5,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "analyze_codebase",
+            "line_number": 58,
+            "complexity": 7,
+            "lines_of_code": 7,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_analyze_file",
+            "line_number": 107,
+            "complexity": 6,
+            "lines_of_code": 2,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_calculate_complexity",
+            "line_number": 151,
+            "complexity": 5,
+            "lines_of_code": 4,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_find_duplicate_code",
+            "line_number": 165,
+            "complexity": 9,
+            "lines_of_code": 8,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_check_type_annotations",
+            "line_number": 192,
+            "complexity": 5,
+            "lines_of_code": 6,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_assess_error_handling",
+            "line_number": 209,
+            "complexity": 7,
+            "lines_of_code": 11,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_assess_documentation",
+            "line_number": 236,
+            "complexity": 10,
+            "lines_of_code": 9,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_calculate_file_score",
+            "line_number": 261,
+            "complexity": 1,
+            "lines_of_code": 5,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_generate_file_issues",
+            "line_number": 283,
+            "complexity": 6,
+            "lines_of_code": 4,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_calculate_overall_metrics",
+            "line_number": 326,
+            "complexity": 4,
+            "lines_of_code": 8,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_generate_recommendations",
+            "line_number": 354,
+            "complexity": 4,
+            "lines_of_code": 9,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_identify_quick_wins",
+            "line_number": 396,
+            "complexity": 4,
+            "lines_of_code": 7,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "generate_report",
+            "line_number": 424,
+            "complexity": 1,
+            "lines_of_code": 9,
+            "needs_refactoring": false
+          }
+        ],
+        "target_complexity": 20
+      },
+      {
+        "file_path": "enhanced_error_logging.py",
+        "current_complexity": 36,
+        "function_breakdown": [
+          {
+            "function_name": "log_critical",
+            "line_number": 337,
+            "complexity": 1,
+            "lines_of_code": 2,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "log_error",
+            "line_number": 341,
+            "complexity": 1,
+            "lines_of_code": 2,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "log_warning",
+            "line_number": 345,
+            "complexity": 1,
+            "lines_of_code": 2,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "log_info",
+            "line_number": 349,
+            "complexity": 1,
+            "lines_of_code": 2,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "log_errors",
+            "line_number": 380,
+            "complexity": 3,
+            "lines_of_code": 3,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "main",
+            "line_number": 399,
+            "complexity": 3,
+            "lines_of_code": 11,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "__init__",
+            "line_number": 56,
+            "complexity": 1,
+            "lines_of_code": 8,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_setup_python_logging",
+            "line_number": 97,
+            "complexity": 1,
+            "lines_of_code": 13,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "log_error",
+            "line_number": 124,
+            "complexity": 4,
+            "lines_of_code": 11,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_suggest_resolution",
+            "line_number": 170,
+            "complexity": 5,
+            "lines_of_code": 5,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_log_to_structured_file",
+            "line_number": 183,
+            "complexity": 3,
+            "lines_of_code": 2,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_log_to_python_logger",
+            "line_number": 197,
+            "complexity": 3,
+            "lines_of_code": 7,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_update_error_summary",
+            "line_number": 220,
+            "complexity": 3,
+            "lines_of_code": 2,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_get_top_error_categories",
+            "line_number": 240,
+            "complexity": 2,
+            "lines_of_code": 4,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_get_common_suggestions",
+            "line_number": 249,
+            "complexity": 3,
+            "lines_of_code": 4,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "get_error_report",
+            "line_number": 258,
+            "complexity": 2,
+            "lines_of_code": 2,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_assess_system_health_impact",
+            "line_number": 284,
+            "complexity": 4,
+            "lines_of_code": 5,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "_get_recommended_actions",
+            "line_number": 309,
+            "complexity": 8,
+            "lines_of_code": 9,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "__init__",
+            "line_number": 357,
+            "complexity": 1,
+            "lines_of_code": 3,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "__enter__",
+            "line_number": 362,
+            "complexity": 1,
+            "lines_of_code": 2,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "__exit__",
+            "line_number": 366,
+            "complexity": 2,
+            "lines_of_code": 1,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "decorator",
+            "line_number": 382,
+            "complexity": 3,
+            "lines_of_code": 2,
+            "needs_refactoring": false
+          },
+          {
+            "function_name": "wrapper",
+            "line_number": 383,
+            "complexity": 3,
+            "lines_of_code": 1,
+            "needs_refactoring": false
+          }
+        ],
+        "target_complexity": 18
+      }
+    ],
+    "refactoring_suggestions": [
+      {
+        "file_path": "final_ai_operations_dashboard.py",
+        "function_name": "initialize_systems",
+        "current_complexity": 11,
+        "suggestion": "Break down into smaller functions",
+        "approach": "Extract method refactoring",
+        "estimated_effort": "30-60 minutes",
+        "priority": "medium"
+      },
+      {
+        "file_path": "continuous_monitoring_dashboard.py",
+        "function_name": "check_alerts",
+        "current_complexity": 11,
+        "suggestion": "Break down into smaller functions",
+        "approach": "Extract method refactoring",
+        "estimated_effort": "30-60 minutes",
+        "priority": "medium"
+      }
+    ],
+    "implementation_plan": [
+      {
+        "phase": "Phase 2 - Medium Complexity",
+        "duration": "2 days",
+        "targets": 2,
+        "description": "Refactor moderately complex functions",
+        "functions": [
+          "initialize_systems",
+          "check_alerts"
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "total_fixes_applied": 30,
+    "files_modified": 12,
+    "refactoring_suggestions": 2,
+    "implementation_phases": 1
+  }
+}

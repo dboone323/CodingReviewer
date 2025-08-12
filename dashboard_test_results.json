@@ -1,0 +1,12 @@
+{
+  "timestamp": "2025-08-12T12:15:25.434893",
+  "workspace": ".",
+  "system_health": {
+    "initialized": false,
+    "last_update": null,
+    "active_systems": [],
+    "health_score": 0.0,
+    "alerts": []
+  },
+  "analysis_components": {}
+}

@@ -1,0 +1,908 @@
+{
+  "timestamp": "2025-08-12T12:55:29.682429",
+  "files_analyzed": 30,
+  "total_issues": 58,
+  "severity_breakdown": {
+    "critical": 0,
+    "high": 17,
+    "medium": 39,
+    "low": 2
+  },
+  "category_breakdown": {
+    "high_complexity": 23,
+    "missing_types": 28,
+    "poor_error_handling": 7
+  },
+  "overall_debt_score": 63.6,
+  "recommendations": [
+    {
+      "category": "Complexity Reduction",
+      "priority": "high",
+      "description": "Reduce complexity in 23 files",
+      "action": "Break down complex functions into smaller, focused functions",
+      "estimated_effort": "1-2 days",
+      "impact": "Improves maintainability and readability"
+    },
+    {
+      "category": "Type Safety",
+      "priority": "medium",
+      "description": "Improve type annotations in 28 files",
+      "action": "Add type hints to function parameters and return types",
+      "estimated_effort": "2-3 days",
+      "impact": "Better IDE support and error detection"
+    },
+    {
+      "category": "Error Handling",
+      "priority": "medium",
+      "description": "Improve error handling in 7 locations",
+      "action": "Replace bare except clauses with specific exception types",
+      "estimated_effort": "1 day",
+      "impact": "Better error diagnosis and system stability"
+    }
+  ],
+  "quick_wins": [
+    {
+      "title": "Fix Bare Except Clauses",
+      "effort": "15 minutes",
+      "impact": "High",
+      "files_affected": 2,
+      "description": "Replace bare except: with specific exception types"
+    }
+  ],
+  "average_quality_score": 36.4,
+  "files_with_issues": 28,
+  "file_metrics": [
+    {
+      "file_path": "final_ai_operations_dashboard.py",
+      "lines_of_code": 336,
+      "cyclomatic_complexity": 33,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 74.28571428571428,
+      "documentation_score": 87.5,
+      "overall_score": 42.5
+    },
+    {
+      "file_path": "deployment_script.py",
+      "lines_of_code": 106,
+      "cyclomatic_complexity": 13,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 23.333333333333332,
+      "documentation_score": 90.0,
+      "overall_score": 42.1
+    },
+    {
+      "file_path": "documentation_generator.py",
+      "lines_of_code": 1160,
+      "cyclomatic_complexity": 94,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 39.09090909090909,
+      "documentation_score": 97.2972972972973,
+      "overall_score": 24.4
+    },
+    {
+      "file_path": "final_system_validation.py",
+      "lines_of_code": 213,
+      "cyclomatic_complexity": 42,
+      "type_annotation_coverage": 12.5,
+      "error_handling_score": 87.5,
+      "documentation_score": 100.0,
+      "overall_score": 46.0
+    },
+    {
+      "file_path": "advanced_mcp_integration.py",
+      "lines_of_code": 803,
+      "cyclomatic_complexity": 73,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 30.714285714285715,
+      "documentation_score": 74.07407407407408,
+      "overall_score": 18.8
+    },
+    {
+      "file_path": "demo_phase4_advanced_integration.py",
+      "lines_of_code": 243,
+      "cyclomatic_complexity": 26,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 16.0,
+      "documentation_score": 100.0,
+      "overall_score": 34.0
+    },
+    {
+      "file_path": "quality_gates_validator.py",
+      "lines_of_code": 145,
+      "cyclomatic_complexity": 35,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 45.0,
+      "documentation_score": 90.0,
+      "overall_score": 34.4
+    },
+    {
+      "file_path": "demo_mcp_integration.py",
+      "lines_of_code": 63,
+      "cyclomatic_complexity": 7,
+      "type_annotation_coverage": 100.0,
+      "error_handling_score": 0.0,
+      "documentation_score": 100.0,
+      "overall_score": 71.4
+    },
+    {
+      "file_path": "continuous_monitoring_dashboard.py",
+      "lines_of_code": 494,
+      "cyclomatic_complexity": 51,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 51.8,
+      "documentation_score": 87.09677419354838,
+      "overall_score": 26.0
+    },
+    {
+      "file_path": "automated_debt_fixer.py",
+      "lines_of_code": 325,
+      "cyclomatic_complexity": 69,
+      "type_annotation_coverage": 9.090909090909092,
+      "error_handling_score": 78.18181818181819,
+      "documentation_score": 91.66666666666666,
+      "overall_score": 36.0
+    },
+    {
+      "file_path": "testing_infrastructure.py",
+      "lines_of_code": 523,
+      "cyclomatic_complexity": 33,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 55.0,
+      "documentation_score": 92.85714285714286,
+      "overall_score": 38.5
+    },
+    {
+      "file_path": "complete_ai_operations_dashboard.py",
+      "lines_of_code": 334,
+      "cyclomatic_complexity": 24,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 54.285714285714285,
+      "documentation_score": 87.5,
+      "overall_score": 42.9
+    },
+    {
+      "file_path": "performance_monitor.py",
+      "lines_of_code": 92,
+      "cyclomatic_complexity": 11,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 27.272727272727273,
+      "documentation_score": 75.0,
+      "overall_score": 42.1
+    },
+    {
+      "file_path": "automated_fix_applicator.py",
+      "lines_of_code": 306,
+      "cyclomatic_complexity": 81,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 35.0,
+      "documentation_score": 94.11764705882352,
+      "overall_score": 22.9
+    },
+    {
+      "file_path": "technical_debt_analyzer.py",
+      "lines_of_code": 394,
+      "cyclomatic_complexity": 67,
+      "type_annotation_coverage": 6.666666666666667,
+      "error_handling_score": 37.0,
+      "documentation_score": 94.44444444444444,
+      "overall_score": 25.4
+    },
+    {
+      "file_path": "workflow_enhancer.py",
+      "lines_of_code": 855,
+      "cyclomatic_complexity": 23,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 30.0,
+      "documentation_score": 93.33333333333333,
+      "overall_score": 38.3
+    },
+    {
+      "file_path": "enhanced_error_logging.py",
+      "lines_of_code": 342,
+      "cyclomatic_complexity": 36,
+      "type_annotation_coverage": 26.08695652173913,
+      "error_handling_score": 35.65217391304348,
+      "documentation_score": 78.57142857142857,
+      "overall_score": 37.5
+    },
+    {
+      "file_path": "test_dashboard_integration.py",
+      "lines_of_code": 142,
+      "cyclomatic_complexity": 30,
+      "type_annotation_coverage": 33.33333333333333,
+      "error_handling_score": 60.0,
+      "documentation_score": 100.0,
+      "overall_score": 52.6
+    },
+    {
+      "file_path": "demo_security_excellence.py",
+      "lines_of_code": 95,
+      "cyclomatic_complexity": 7,
+      "type_annotation_coverage": 100.0,
+      "error_handling_score": 0.0,
+      "documentation_score": 100.0,
+      "overall_score": 71.4
+    },
+    {
+      "file_path": "demo_strategic_roadmap_completion.py",
+      "lines_of_code": 215,
+      "cyclomatic_complexity": 15,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 55.0,
+      "documentation_score": 81.81818181818183,
+      "overall_score": 47.6
+    },
+    {
+      "file_path": "ai_operations_dashboard.py",
+      "lines_of_code": 299,
+      "cyclomatic_complexity": 22,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 54.285714285714285,
+      "documentation_score": 87.5,
+      "overall_score": 44.1
+    },
+    {
+      "file_path": "ai_code_review_automation.py",
+      "lines_of_code": 538,
+      "cyclomatic_complexity": 83,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 41.61290322580645,
+      "documentation_score": 91.66666666666666,
+      "overall_score": 24.2
+    },
+    {
+      "file_path": "fix_pylance_errors.py",
+      "lines_of_code": 189,
+      "cyclomatic_complexity": 34,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 55.0,
+      "documentation_score": 77.77777777777779,
+      "overall_score": 35.6
+    },
+    {
+      "file_path": "predictive_planning_workflows.py",
+      "lines_of_code": 537,
+      "cyclomatic_complexity": 45,
+      "type_annotation_coverage": 5.88235294117647,
+      "error_handling_score": 0.0,
+      "documentation_score": 91.66666666666666,
+      "overall_score": 19.1
+    },
+    {
+      "file_path": "fix_pylance_errors_phase3.py",
+      "lines_of_code": 124,
+      "cyclomatic_complexity": 22,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 0.0,
+      "documentation_score": 71.42857142857143,
+      "overall_score": 28.1
+    },
+    {
+      "file_path": "comprehensive_system_verification.py",
+      "lines_of_code": 188,
+      "cyclomatic_complexity": 18,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 28.57142857142857,
+      "documentation_score": 100.0,
+      "overall_score": 41.9
+    },
+    {
+      "file_path": "cross_project_learning.py",
+      "lines_of_code": 569,
+      "cyclomatic_complexity": 57,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 21.923076923076923,
+      "documentation_score": 93.75,
+      "overall_score": 19.5
+    },
+    {
+      "file_path": "fix_notebook_errors.py",
+      "lines_of_code": 92,
+      "cyclomatic_complexity": 10,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 0.0,
+      "documentation_score": 60.0,
+      "overall_score": 33.6
+    },
+    {
+      "file_path": "fix_pylance_errors_phase2.py",
+      "lines_of_code": 215,
+      "cyclomatic_complexity": 46,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 45.71428571428571,
+      "documentation_score": 75.0,
+      "overall_score": 25.7
+    },
+    {
+      "file_path": "advanced_refactoring_optimizer.py",
+      "lines_of_code": 440,
+      "cyclomatic_complexity": 69,
+      "type_annotation_coverage": 0.0,
+      "error_handling_score": 52.5,
+      "documentation_score": 90.0,
+      "overall_score": 26.6
+    }
+  ],
+  "detailed_issues": [
+    {
+      "file_path": "final_ai_operations_dashboard.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "high",
+      "description": "High cyclomatic complexity: 33",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 33,
+      "impact_score": 66
+    },
+    {
+      "file_path": "final_ai_operations_dashboard.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "deployment_script.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "documentation_generator.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "high",
+      "description": "High cyclomatic complexity: 94",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 94,
+      "impact_score": 100
+    },
+    {
+      "file_path": "documentation_generator.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "final_system_validation.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "high",
+      "description": "High cyclomatic complexity: 42",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 42,
+      "impact_score": 84
+    },
+    {
+      "file_path": "final_system_validation.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 12.5%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 87
+    },
+    {
+      "file_path": "advanced_mcp_integration.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "high",
+      "description": "High cyclomatic complexity: 73",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 73,
+      "impact_score": 100
+    },
+    {
+      "file_path": "advanced_mcp_integration.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "demo_phase4_advanced_integration.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "medium",
+      "description": "High cyclomatic complexity: 26",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 26,
+      "impact_score": 52
+    },
+    {
+      "file_path": "demo_phase4_advanced_integration.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "quality_gates_validator.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "high",
+      "description": "High cyclomatic complexity: 35",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 35,
+      "impact_score": 70
+    },
+    {
+      "file_path": "quality_gates_validator.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "quality_gates_validator.py",
+      "line_number": 134,
+      "issue_type": "poor_error_handling",
+      "severity": "medium",
+      "description": "Bare except clause catches all exceptions",
+      "suggested_fix": "Specify exact exception types to catch",
+      "complexity_score": 3,
+      "impact_score": 25
+    },
+    {
+      "file_path": "quality_gates_validator.py",
+      "line_number": 147,
+      "issue_type": "poor_error_handling",
+      "severity": "medium",
+      "description": "Bare except clause catches all exceptions",
+      "suggested_fix": "Specify exact exception types to catch",
+      "complexity_score": 3,
+      "impact_score": 25
+    },
+    {
+      "file_path": "quality_gates_validator.py",
+      "line_number": 155,
+      "issue_type": "poor_error_handling",
+      "severity": "medium",
+      "description": "Bare except clause catches all exceptions",
+      "suggested_fix": "Specify exact exception types to catch",
+      "complexity_score": 3,
+      "impact_score": 25
+    },
+    {
+      "file_path": "quality_gates_validator.py",
+      "line_number": 163,
+      "issue_type": "poor_error_handling",
+      "severity": "medium",
+      "description": "Bare except clause catches all exceptions",
+      "suggested_fix": "Specify exact exception types to catch",
+      "complexity_score": 3,
+      "impact_score": 25
+    },
+    {
+      "file_path": "quality_gates_validator.py",
+      "line_number": 176,
+      "issue_type": "poor_error_handling",
+      "severity": "medium",
+      "description": "Bare except clause catches all exceptions",
+      "suggested_fix": "Specify exact exception types to catch",
+      "complexity_score": 3,
+      "impact_score": 25
+    },
+    {
+      "file_path": "continuous_monitoring_dashboard.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "high",
+      "description": "High cyclomatic complexity: 51",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 51,
+      "impact_score": 100
+    },
+    {
+      "file_path": "continuous_monitoring_dashboard.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "automated_debt_fixer.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "high",
+      "description": "High cyclomatic complexity: 69",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 69,
+      "impact_score": 100
+    },
+    {
+      "file_path": "automated_debt_fixer.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 9.1%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 90
+    },
+    {
+      "file_path": "testing_infrastructure.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "high",
+      "description": "High cyclomatic complexity: 33",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 33,
+      "impact_score": 66
+    },
+    {
+      "file_path": "testing_infrastructure.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "complete_ai_operations_dashboard.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "medium",
+      "description": "High cyclomatic complexity: 24",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 24,
+      "impact_score": 48
+    },
+    {
+      "file_path": "complete_ai_operations_dashboard.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "performance_monitor.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "performance_monitor.py",
+      "line_number": 51,
+      "issue_type": "poor_error_handling",
+      "severity": "medium",
+      "description": "Bare except clause catches all exceptions",
+      "suggested_fix": "Specify exact exception types to catch",
+      "complexity_score": 3,
+      "impact_score": 25
+    },
+    {
+      "file_path": "performance_monitor.py",
+      "line_number": 58,
+      "issue_type": "poor_error_handling",
+      "severity": "medium",
+      "description": "Bare except clause catches all exceptions",
+      "suggested_fix": "Specify exact exception types to catch",
+      "complexity_score": 3,
+      "impact_score": 25
+    },
+    {
+      "file_path": "automated_fix_applicator.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "high",
+      "description": "High cyclomatic complexity: 81",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 81,
+      "impact_score": 100
+    },
+    {
+      "file_path": "automated_fix_applicator.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "technical_debt_analyzer.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "high",
+      "description": "High cyclomatic complexity: 67",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 67,
+      "impact_score": 100
+    },
+    {
+      "file_path": "technical_debt_analyzer.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 6.7%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 93
+    },
+    {
+      "file_path": "workflow_enhancer.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "medium",
+      "description": "High cyclomatic complexity: 23",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 23,
+      "impact_score": 46
+    },
+    {
+      "file_path": "workflow_enhancer.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "enhanced_error_logging.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "high",
+      "description": "High cyclomatic complexity: 36",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 36,
+      "impact_score": 72
+    },
+    {
+      "file_path": "enhanced_error_logging.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "low",
+      "description": "Low type annotation coverage: 26.1%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 73
+    },
+    {
+      "file_path": "test_dashboard_integration.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "medium",
+      "description": "High cyclomatic complexity: 30",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 30,
+      "impact_score": 60
+    },
+    {
+      "file_path": "test_dashboard_integration.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "low",
+      "description": "Low type annotation coverage: 33.3%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 66
+    },
+    {
+      "file_path": "demo_strategic_roadmap_completion.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "ai_operations_dashboard.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "medium",
+      "description": "High cyclomatic complexity: 22",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 22,
+      "impact_score": 44
+    },
+    {
+      "file_path": "ai_operations_dashboard.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "ai_code_review_automation.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "high",
+      "description": "High cyclomatic complexity: 83",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 83,
+      "impact_score": 100
+    },
+    {
+      "file_path": "ai_code_review_automation.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "fix_pylance_errors.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "high",
+      "description": "High cyclomatic complexity: 34",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 34,
+      "impact_score": 68
+    },
+    {
+      "file_path": "fix_pylance_errors.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "predictive_planning_workflows.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "high",
+      "description": "High cyclomatic complexity: 45",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 45,
+      "impact_score": 90
+    },
+    {
+      "file_path": "predictive_planning_workflows.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 5.9%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 94
+    },
+    {
+      "file_path": "fix_pylance_errors_phase3.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "medium",
+      "description": "High cyclomatic complexity: 22",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 22,
+      "impact_score": 44
+    },
+    {
+      "file_path": "fix_pylance_errors_phase3.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "comprehensive_system_verification.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "cross_project_learning.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "high",
+      "description": "High cyclomatic complexity: 57",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 57,
+      "impact_score": 100
+    },
+    {
+      "file_path": "cross_project_learning.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "fix_notebook_errors.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "fix_pylance_errors_phase2.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "high",
+      "description": "High cyclomatic complexity: 46",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 46,
+      "impact_score": 92
+    },
+    {
+      "file_path": "fix_pylance_errors_phase2.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    },
+    {
+      "file_path": "advanced_refactoring_optimizer.py",
+      "line_number": 1,
+      "issue_type": "high_complexity",
+      "severity": "high",
+      "description": "High cyclomatic complexity: 69",
+      "suggested_fix": "Consider breaking down complex functions into smaller ones",
+      "complexity_score": 69,
+      "impact_score": 100
+    },
+    {
+      "file_path": "advanced_refactoring_optimizer.py",
+      "line_number": 1,
+      "issue_type": "missing_types",
+      "severity": "medium",
+      "description": "Low type annotation coverage: 0.0%",
+      "suggested_fix": "Add type annotations to function parameters and return types",
+      "complexity_score": 5,
+      "impact_score": 100
+    }
+  ]
+}

@@ -6,7 +6,7 @@ from _pytest.fixtures import FixtureRequest
 from _pytest.terminal import TerminalReporter
 from _pytest.config import Config
 from _pytest.nodes import Item
-from typing import List, Any
+from typing import List
 
 import pytest
 from pathlib import Path
@@ -126,7 +126,8 @@ def pytest_runtest_setup(item: Item) -> None:
 @pytest.fixture(autouse=True)
 def log_test_info(request: FixtureRequest) -> None:
     """Automatically log test information for all tests."""
-    print(f"\n🧪 Running test: {request.node.name}")
+    # type: ignore  # pytest dynamic node attributes are not fully typed
+    print(f"\n🧪 Running test: {request.node.name}")  # type: ignore
     
     # Check if this is a validation-related test
     if hasattr(request.node, 'get_closest_marker'):

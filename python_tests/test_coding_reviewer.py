@@ -8,7 +8,7 @@ import pytest
 import subprocess
 import sys
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import patch, Mock, AsyncMock
 from typing import List, Any
 
 # Import our testing framework
@@ -216,8 +216,12 @@ class TestSwiftIntegration:
     @pytest.fixture
     def mock_subprocess(self):
         """Mock subprocess for testing without actually running Xcode."""
-        with patch('subprocess.run') as mock:
-            yield mock
+        with patch('asyncio.create_subprocess_exec') as mock:
+            # Create a mock process that returns our test data
+            mock_process = Mock()
+            mock_process.communicate = AsyncMock()
+            mock.return_value = mock_process
+            yield mock_process
     
     def test_framework_initialization(self, framework: Any):
         """Test that the framework initializes correctly."""
@@ -235,13 +239,14 @@ class TestSwiftIntegration:
     async def test_swift_test_execution_success(self, framework: Any, mock_subprocess: Any):
         """Test successful Swift test execution."""
         # Mock successful xcodebuild output
-        mock_subprocess.return_value.stdout = """
+        mock_subprocess.communicate.return_value = (
+            b"""
         Test Case '-[CodingReviewerTests.AIServiceTests testAPIKeyValidation]' passed (0.123 seconds).
         Test Case '-[CodingReviewerTests.CodeAnalysisTests testBasicAnalysis]' passed (0.456 seconds).
         BUILD SUCCEEDED
-        """
-        mock_subprocess.return_value.stderr = ""
-        mock_subprocess.return_value.returncode = 0
+        """,
+            b""
+        )
         
         suite = await framework.run_swift_tests()
         
@@ -254,10 +259,12 @@ class TestSwiftIntegration:
     async def test_swift_test_execution_failure(self, framework: Any, mock_subprocess: Any):
         """Test Swift test execution with failures."""
         # Mock failed xcodebuild output
-        mock_subprocess.return_value.stdout = """
+        mock_subprocess.communicate.return_value = (
+            b"""
         Test Case '-[CodingReviewerTests.AIServiceTests testAPIKeyValidation]' failed (0.123 seconds).
-        """
-        mock_subprocess.return_value.stderr = "error: build failed"
+        """,
+            b"error: build failed"
+        )
         mock_subprocess.return_value.returncode = 1
         
         suite = await framework.run_swift_tests()

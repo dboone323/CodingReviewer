@@ -81,7 +81,7 @@ class QuantumAnalysisEngineV2: ObservableObject {
     /// Creates and configures components with proper initialization
     private func createQuantumSuperposition(_ code: String) async -> [QuantumState] {
         // Simulate quantum superposition of multiple code analysis states
-        let states = (0..<8).map { [weak self] index in
+        let states = (0..<8).map { index in
             QuantumState(
                 id: index,
                 codeVariant: code,

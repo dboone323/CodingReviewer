@@ -24,7 +24,7 @@ class NeuralLayer:
     
     def __post_init__(self):
         if not self.weights:
-            self.weights = [[random.uniform(-1, 1) for _ in range(self.neurons)] 
+            self.weights = [[random.uniform(-1, 1) for _ in range(self.neurons)]   # TODO: Consider generator expression for memory efficiency
                           for _ in range(self.neurons)]
         if not self.biases:
             self.biases = [random.uniform(-0.5, 0.5) for _ in range(self.neurons)]
@@ -69,7 +69,7 @@ class SelfEvolvingNeuralNetwork:
             )
             self.layers.append(layer)
     
-    async def evolve_neural_architecture(self):
+    async def evolve_neural_architecture(self) -> Any:
         """Evolve the neural network architecture for better performance"""
         print(f"🧠 Evolving Neural Architecture (Generation {self.evolution_generation + 1})...")
         

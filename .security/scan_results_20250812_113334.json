@@ -1,0 +1,120 @@
+{
+  "dependency": {
+    "scan_type": "dependency",
+    "total_vulnerabilities": 2,
+    "critical_count": 0,
+    "high_count": 1,
+    "medium_count": 1,
+    "low_count": 0,
+    "vulnerabilities": [
+      {
+        "id": "GHSA-xxxx-yyyy-zzzz",
+        "severity": "high",
+        "title": "Insecure Random Number Generation",
+        "description": "The random number generator uses predictable seeds",
+        "package": "crypto-lib",
+        "version": "1.2.3",
+        "fixed_version": "1.2.4",
+        "cve_id": "CVE-2024-12345",
+        "created_at": "2025-08-12T11:33:34.928888"
+      },
+      {
+        "id": "GHSA-aaaa-bbbb-cccc",
+        "severity": "medium",
+        "title": "Path Traversal Vulnerability",
+        "description": "Improper input validation allows directory traversal",
+        "package": "file-utils",
+        "version": "2.1.0",
+        "fixed_version": "2.1.1",
+        "cve_id": null,
+        "created_at": "2025-08-12T11:33:34.928894"
+      }
+    ],
+    "scan_duration": 1.8e-05,
+    "timestamp": "2025-08-12T11:33:34.928906",
+    "risk_score": 15
+  },
+  "code": {
+    "scan_type": "code",
+    "total_vulnerabilities": 2,
+    "critical_count": 1,
+    "high_count": 1,
+    "medium_count": 0,
+    "low_count": 0,
+    "vulnerabilities": [
+      {
+        "id": "CODE-SQL-001",
+        "severity": "critical",
+        "title": "SQL Injection Vulnerability",
+        "description": "Unsanitized user input in database query",
+        "package": "database-module",
+        "version": null,
+        "fixed_version": null,
+        "cve_id": null,
+        "created_at": "2025-08-12T11:33:34.928928"
+      },
+      {
+        "id": "CODE-XSS-002",
+        "severity": "high",
+        "title": "Cross-Site Scripting (XSS)",
+        "description": "Unescaped user input in HTML output",
+        "package": null,
+        "version": null,
+        "fixed_version": null,
+        "cve_id": null,
+        "created_at": "2025-08-12T11:33:34.928930"
+      }
+    ],
+    "scan_duration": 7e-06,
+    "timestamp": "2025-08-12T11:33:34.928932",
+    "risk_score": 35
+  },
+  "secrets": {
+    "scan_type": "secrets",
+    "total_vulnerabilities": 1,
+    "critical_count": 1,
+    "high_count": 0,
+    "medium_count": 0,
+    "low_count": 0,
+    "vulnerabilities": [
+      {
+        "id": "SECRET-API-001",
+        "severity": "critical",
+        "title": "Exposed API Key",
+        "description": "API key found in configuration file",
+        "package": null,
+        "version": null,
+        "fixed_version": null,
+        "cve_id": null,
+        "created_at": "2025-08-12T11:33:34.928941"
+      }
+    ],
+    "scan_duration": 4e-06,
+    "timestamp": "2025-08-12T11:33:34.928943",
+    "risk_score": 25
+  },
+  "configuration": {
+    "scan_type": "configuration",
+    "total_vulnerabilities": 1,
+    "critical_count": 0,
+    "high_count": 0,
+    "medium_count": 1,
+    "low_count": 0,
+    "vulnerabilities": [
+      {
+        "id": "CONFIG-TLS-001",
+        "severity": "medium",
+        "title": "Weak TLS Configuration",
+        "description": "TLS version 1.1 is deprecated and insecure",
+        "package": null,
+        "version": null,
+        "fixed_version": null,
+        "cve_id": null,
+        "created_at": "2025-08-12T11:33:34.928952"
+      }
+    ],
+    "scan_duration": 5e-06,
+    "timestamp": "2025-08-12T11:33:34.928954",
+    "risk_score": 5
+  }
+}

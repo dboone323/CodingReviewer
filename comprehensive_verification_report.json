@@ -1,0 +1,33 @@
+{
+  "timestamp": "2025-08-12 12:54:59",
+  "tests": {
+    "python_version": true,
+    "python_modules": true,
+    "technical_debt_analyzer": false,
+    "documentation_generator": false,
+    "system_validation": false,
+    "refactoring_optimizer": false,
+    "fix_applicator": false,
+    "pytest_suite": true,
+    "docs_directory": true,
+    "api_docs": true,
+    "user_guides": true,
+    "analysis_results": true,
+    "refactoring_report": true,
+    "completion_report": true,
+    "xcode_project": true,
+    "xcode_build": false,
+    "pytest_config": true,
+    "pyproject_config": true,
+    "gitignore": true,
+    "github_workflows": true,
+    "gitlab_ci": true
+  },
+  "summary": {
+    "total_tests": 21,
+    "passed_tests": 15,
+    "failed_tests": 6,
+    "success_rate": 71.42857142857143,
+    "overall_status": "FAIL"
+  }
+}

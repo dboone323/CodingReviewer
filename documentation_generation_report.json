@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-08-12T12:53:34.398013",
+  "modules_analyzed": 29,
+  "documentation_files_created": 42,
+  "coverage_stats": {
+    "function_coverage": 88.4514435695538,
+    "class_coverage": 89.85507246376811,
+    "overall_coverage": 89.15325801666096,
+    "total_functions": 381,
+    "documented_functions": 337,
+    "total_classes": 69,
+    "documented_classes": 62
+  },
+  "documentation_structure": {
+    "api_reference": {},
+    "user_guides": {},
+    "developer_guides": {},
+    "architecture": {},
+    "troubleshooting": {}
+  }
+}

@@ -23,7 +23,7 @@ class Phase3PylanceCleanup:
         self.fixes_applied: int = 0
         self.files_modified: List[str] = []
         
-    def remove_unused_imports_from_phase2_script(self):
+    def remove_unused_imports_from_phase2_script(self) -> Any:
         """Remove unused imports from the Phase 2 fixer script"""
         script_path = pathlib.Path("fix_pylance_errors_phase2.py")
         if not script_path.exists():
@@ -43,7 +43,7 @@ class Phase3PylanceCleanup:
             self.fixes_applied += 1
             self.files_modified.append(str(script_path))
     
-    def clean_test_file_imports(self):
+    def clean_test_file_imports(self) -> Any:
         """Remove unused imports from test_coding_reviewer.py"""
         test_path = pathlib.Path("python_tests/test_coding_reviewer.py")
         if not test_path.exists():
@@ -63,7 +63,7 @@ class Phase3PylanceCleanup:
             self.fixes_applied += 1
             self.files_modified.append(str(test_path))
     
-    def add_conftest_type_annotations(self):
+    def add_conftest_type_annotations(self) -> Any:
         """Add missing type annotations to conftest.py pytest parameters"""
         conftest_path = pathlib.Path("python_tests/conftest.py")
         if not conftest_path.exists():
@@ -102,7 +102,7 @@ class Phase3PylanceCleanup:
                 self.fixes_applied += 1
                 self.files_modified.append(str(conftest_path))
     
-    def remove_unused_conftest_imports(self):
+    def remove_unused_conftest_imports(self) -> Any:
         """Remove unused imports from conftest.py"""
         conftest_path = pathlib.Path("python_tests/conftest.py")
         if not conftest_path.exists():

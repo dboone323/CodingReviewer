@@ -1,0 +1,39 @@
+{
+  "timestamp": "2025-08-12T12:34:33.235784",
+  "test_results": {
+    "unit_tests": {
+      "tests_run": 0,
+      "tests_passed": 0,
+      "status": "FAILED",
+      "output": "============================= test session starts ==============================\nplatform darwin -- Python 3.12.4, pytest-8.4.1, pluggy-1.6.0 -- /Users/danielstevens/Desktop/CodingReviewer/.venv/bin/python\ncachedir: .pytest_cache\nmetadata: {'Python': '3.12.4', 'Platform': 'macOS-26.0-arm64-arm-64bit', 'Packages': {'pytest': '8.4.1', 'pluggy': '1.6.0'}, 'Plugins': {'html': '4.1.1', 'asyncio': '1.1.0', 'xdist': '3.8.0', 'metadata': '3.1.1', 'anyio': '4.10.0', 'cov': '6.2.1'}}\nrootdir: /Users/danielstevens/Desktop/CodingReviewer\nconfigfile: pytest.ini\nplugins: html-4.1.1, asyncio-1.1.0, xdist-3.8.0, metadata-3.1.1, anyio-4.10.0, cov-6.2.1\nasyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 0 items\n\n============================ no tests ran in 0.02s =============================\n",
+      "errors": "ERROR: not found: /Users/danielstevens/Desktop/CodingReviewer/tests/unit\n(no match in any of [<Dir CodingReviewer>])\n\n"
+    },
+    "integration_tests": {
+      "tests_run": 0,
+      "tests_passed": 0,
+      "status": "FAILED",
+      "output": "============================= test session starts ==============================\nplatform darwin -- Python 3.12.4, pytest-8.4.1, pluggy-1.6.0 -- /Users/danielstevens/Desktop/CodingReviewer/.venv/bin/python\ncachedir: .pytest_cache\nmetadata: {'Python': '3.12.4', 'Platform': 'macOS-26.0-arm64-arm-64bit', 'Packages': {'pytest': '8.4.1', 'pluggy': '1.6.0'}, 'Plugins': {'html': '4.1.1', 'asyncio': '1.1.0', 'xdist': '3.8.0', 'metadata': '3.1.1', 'anyio': '4.10.0', 'cov': '6.2.1'}}\nrootdir: /Users/danielstevens/Desktop/CodingReviewer\nconfigfile: pytest.ini\nplugins: html-4.1.1, asyncio-1.1.0, xdist-3.8.0, metadata-3.1.1, anyio-4.10.0, cov-6.2.1\nasyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 0 items\n\n============================ no tests ran in 0.02s =============================\n",
+      "errors": "ERROR: not found: /Users/danielstevens/Desktop/CodingReviewer/tests/integration\n(no match in any of [<Dir CodingReviewer>])\n\n"
+    },
+    "performance_tests": {
+      "tests_run": 0,
+      "tests_passed": 0,
+      "status": "FAILED",
+      "output": "============================= test session starts ==============================\nplatform darwin -- Python 3.12.4, pytest-8.4.1, pluggy-1.6.0 -- /Users/danielstevens/Desktop/CodingReviewer/.venv/bin/python\ncachedir: .pytest_cache\nmetadata: {'Python': '3.12.4', 'Platform': 'macOS-26.0-arm64-arm-64bit', 'Packages': {'pytest': '8.4.1', 'pluggy': '1.6.0'}, 'Plugins': {'html': '4.1.1', 'asyncio': '1.1.0', 'xdist': '3.8.0', 'metadata': '3.1.1', 'anyio': '4.10.0', 'cov': '6.2.1'}}\nrootdir: /Users/danielstevens/Desktop/CodingReviewer\nconfigfile: pytest.ini\nplugins: html-4.1.1, asyncio-1.1.0, xdist-3.8.0, metadata-3.1.1, anyio-4.10.0, cov-6.2.1\nasyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 0 items\n\n============================ no tests ran in 0.03s =============================\n",
+      "errors": "ERROR: not found: /Users/danielstevens/Desktop/CodingReviewer/tests/performance\n(no match in any of [<Dir CodingReviewer>])\n\n"
+    },
+    "summary": {
+      "total_tests": 0,
+      "total_passed": 0,
+      "pass_rate": 0
+    }
+  },
+  "coverage_data": {
+    "overall_coverage": 0,
+    "error": "Couldn't parse '/Users/danielstevens/Desktop/CodingReviewer/Tests/integration/test_system_integration.py' as Python source: 'unterminated string literal (detected at line 25)' at line 25"
+  },
+  "target_coverage": 80.0,
+  "actual_coverage": 0,
+  "tests_created": 5,
+  "status": "NEEDS_IMPROVEMENT"
+}

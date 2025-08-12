@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "check_interval": "5m",
+  "alerts": {
+    "failure_threshold": 10,
+    "performance_degradation": 50,
+    "coverage_drop": 5
+  },
+  "notifications": {
+    "github_issues": true,
+    "slack_integration": false,
+    "email_alerts": false
+  },
+  "auto_actions": {
+    "retry_flaky_tests": true,
+    "create_debug_reports": true,
+    "trigger_investigation_workflow": true
+  }
+}

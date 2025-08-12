@@ -39,6 +39,7 @@ struct DragDropUploadView: View {
     }
     
     private func handleDrop(providers: [NSItemProvider]) {
+        let urlsQueue = DispatchQueue(label: "file-urls", attributes: .concurrent)
         var urls: [URL] = []
         let group = DispatchGroup()
         
@@ -47,7 +48,9 @@ struct DragDropUploadView: View {
             provider.loadItem(forTypeIdentifier: "public.file-url", options: nil) { item, error in
                 if let data = item as? Data,
                    let url = URL(dataRepresentation: data, relativeTo: nil) {
-                    urls.append(url)
+                    urlsQueue.async(flags: .barrier) {
+                        urls.append(url)
+                    }
                 }
                 group.leave()
             }

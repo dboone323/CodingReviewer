@@ -61,7 +61,7 @@ final class OpenAIService: AIServiceProtocol {
         let startTime = logger.startMeasurement(for: "ai_suggest_fixes")
         defer { logger.endMeasurement(for: "ai_suggest_fixes", startTime: startTime) }
 
-        let issuesText = issues.enumerated().map { [weak self] index, issue in
+        let issuesText = issues.enumerated().map { index, issue in
             "\(index + 1). \(issue)"
         }.joined(separator: "\n")
         

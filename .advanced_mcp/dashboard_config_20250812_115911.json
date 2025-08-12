@@ -1,0 +1,87 @@
+{
+  "dashboard_title": "Advanced MCP Integration Dashboard",
+  "refresh_interval": 300,
+  "metrics": [
+    {
+      "name": "Code Complexity Score",
+      "value": 90,
+      "type": "percentage",
+      "category": "code_quality",
+      "status": "good",
+      "target": 80
+    },
+    {
+      "name": "Pattern Diversity",
+      "value": 100,
+      "type": "percentage",
+      "category": "code_quality",
+      "status": "good",
+      "target": 100
+    },
+    {
+      "name": "Files Modified (7 days)",
+      "value": 8600,
+      "type": "count",
+      "category": "development_velocity",
+      "status": "good",
+      "target": null
+    },
+    {
+      "name": "Total Project Files",
+      "value": 8893,
+      "type": "count",
+      "category": "development_velocity",
+      "status": "good",
+      "target": null
+    },
+    {
+      "name": "Technical Debt Score",
+      "value": 100,
+      "type": "score",
+      "category": "technical_debt",
+      "status": "critical",
+      "target": 20
+    },
+    {
+      "name": "High Impact Issues",
+      "value": 3,
+      "type": "count",
+      "category": "technical_debt",
+      "status": "warning",
+      "target": 0
+    },
+    {
+      "name": "High Confidence Predictions",
+      "value": 0,
+      "type": "count",
+      "category": "prediction_insights",
+      "status": "good",
+      "target": null
+    },
+    {
+      "name": "Prediction Confidence",
+      "value": 75.0,
+      "type": "percentage",
+      "category": "prediction_insights",
+      "status": "good",
+      "target": 70
+    },
+    {
+      "name": "Overall Project Health",
+      "value": 85.0,
+      "type": "percentage",
+      "category": "project_health",
+      "status": "good",
+      "target": 80
+    }
+  ],
+  "alerts": [
+    {
+      "metric": "Technical Debt Score",
+      "threshold": 20,
+      "severity": "high",
+      "action": "immediate_attention_required"
+    }
+  ],
+  "widgets": []
+}

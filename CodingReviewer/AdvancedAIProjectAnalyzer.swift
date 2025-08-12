@@ -430,7 +430,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
         // Factor in number of improvements suggested (more suggestions = more room for improvement)
         let improvementFactor = max(0.5, 1.0 - (Double(improvements.count) * 0.1))
 
-        return Double(avgPredictionConfidence) * 0.5
+        return Double(avgPredictionConfidence) * improvementFactor * 0.5
     }
 
     /// Performs operation with comprehensive error handling and validation

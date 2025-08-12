@@ -251,9 +251,9 @@ struct PerformanceDashboardView: View {
     /// Creates and configures components with proper initialization
     private func generatePerformanceReport() {
         let report = performanceTracker.generateReport()
-        AppLogger.shared.log("Performance report generated", level: .info, category: .performance)
+        AppLogger.shared.log("Performance report generated: \(report)", level: .info, category: .performance)
         // In a real app, you might save this to a file or show it in a view
-        // AppLogger.shared.log(report) // TODO: Replace print with proper logging
+        NotificationCenter.default.post(name: Notification.Name("PerformanceReportGenerated"), object: report)
     }
 }
 

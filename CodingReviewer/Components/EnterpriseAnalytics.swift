@@ -437,8 +437,14 @@ struct EnterpriseAnalyticsDashboard: View {
         let uniqueDays = Set(recentRecords.map { Calendar.current.startOfDay(for: $0.timestamp) }).count
         let averageActionsPerDay = totalActions > 0 ? Double(totalActions) / Double(max(uniqueDays, 1)) : 0
         
+        // Calculate action breakdown for analytics reporting
         let actionBreakdown = Dictionary(grouping: recentRecords, by: { $0.action })
             .mapValues { $0.count }
+        
+        // Convert ActionType keys to String keys for insights generation
+        let actionBreakdownStrings = Dictionary(uniqueKeysWithValues: 
+            actionBreakdown.map { (key, value) in (String(describing: key), value) }
+        )
         
         let localMetrics = LocalPerformanceMetrics(
             averageResponseTime: recentRecords.compactMap { $0.duration }.reduce(0, +) / Double(max(recentRecords.count, 1)),
@@ -466,8 +472,28 @@ struct EnterpriseAnalyticsDashboard: View {
             averageAnalysisTime: recentRecords.compactMap { $0.duration }.reduce(0, +) / Double(max(recentRecords.count, 1)),
             averageActionsPerDay: averageActionsPerDay,
             performanceMetrics: performanceMetrics,
-            insights: ["Performance is stable", "Usage patterns are consistent"]
+            insights: generateInsights(from: actionBreakdownStrings, performanceMetrics: performanceMetrics)
         )
+    }
+    
+    private func generateInsights(from actionBreakdown: [String: Int], performanceMetrics: PerformanceMetrics) -> [String] {
+        var insights: [String] = []
+        
+        // Analyze action patterns
+        if let mostCommonAction = actionBreakdown.max(by: { $0.value < $1.value }) {
+            insights.append("Most common action: \(mostCommonAction.key) (\(mostCommonAction.value) times)")
+        }
+        
+        // Performance insights
+        if performanceMetrics.successRate > 0.9 {
+            insights.append("High success rate: \(String(format: "%.1f", performanceMetrics.successRate * 100))%")
+        }
+        
+        if performanceMetrics.responseTime < 1.0 {
+            insights.append("Fast response times: \(String(format: "%.2f", performanceMetrics.responseTime))s average")
+        }
+        
+        return insights.isEmpty ? ["System performing within normal parameters"] : insights
     }
     
     private func findPeakUsageHour(from records: [UsageTracker.ActivityRecord]) -> Int {

@@ -3,7 +3,59 @@ CodingReviewer Python Testing Framework
 
 This module provides comprehensive testing utilities for the CodingReviewer project,
 integrating with both Swift/Xcode testing and Jupyter notebook analysis.
+
+UPDATED: Now uses modular architecture for better maintainability.
+For new code, import directly from testing_framework module.
 """
+
+# Legacy compatibility - import and re-export the main classes
+import sys
+from pathlib import Path
+
+# Add the testing_framework module to the path
+sys.path.insert(0, str(Path(__file__).parent / "testing_framework"))
+
+# Import the main framework class and re-export for backward compatibility
+try:
+    from testing_framework.core_framework import CodingReviewerTestFramework
+    from testing_framework.models import CodingTestResult, CodingTestSuite
+    from testing_framework.visualization import TestVisualization
+    from testing_framework.utilities import mock_swift_service, create_sample_test_data
+except ImportError:
+    # Fallback message if modular import fails
+    print("⚠️  Modular testing framework not found. Please check installation.")
+    print("💡 Direct usage: from testing_framework import CodingReviewerTestFramework")
+    raise
+
+# Main execution for backward compatibility
+async def main():
+    """Main function for direct execution."""
+    print("🚀 CodingReviewer Testing Framework")
+    print("=" * 50)
+    
+    framework = CodingReviewerTestFramework()
+    
+    try:
+        # Run all tests
+        report = await framework.run_all_tests()
+        
+        print("\n📊 Test Summary:")
+        summary = report["summary"]
+        print(f"Total Tests: {summary['total_tests']}")
+        print(f"Passed: {summary['total_passed']}")
+        print(f"Failed: {summary['total_failed']}")
+        print(f"Success Rate: {summary['overall_success_rate']:.1f}%")
+        print(f"Duration: {summary['total_duration']:.2f}s")
+        
+    except Exception as e:
+        print(f"❌ Framework execution failed: {e}")
+        import traceback
+        traceback.print_exc()
+
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
 
 import asyncio
 import json
@@ -12,7 +64,7 @@ import sys
 from dataclasses import dataclass, asdict
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
 from unittest.mock import Mock
 
 import plotly.graph_objects as go
