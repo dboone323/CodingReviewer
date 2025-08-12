@@ -1,14 +1,15 @@
-from _pytest.python import Function
-from _pytest.nodes import Item
-from _pytest.config import Config
 """
 Pytest configuration for CodingReviewer test suite.
 Enhanced with Architecture Validation (August 12, 2025).
 """
+from _pytest.fixtures import FixtureRequest
+from _pytest.terminal import TerminalReporter
+from _pytest.config import Config
+from _pytest.nodes import Item
+from typing import List, Any
 
 import pytest
 from pathlib import Path
-from typing import List, Dict, Any
 import subprocess
 import sys
 
@@ -77,7 +78,7 @@ def architecture_validated(project_root: Path, validation_script_available: bool
 
 
 # Pytest configuration
-def pytest_configure(config):
+def pytest_configure(config: Config) -> None:
     """Configure pytest with our custom markers."""
     config.addinivalue_line(  # type: ignore  # pytest config method
         "markers", "architecture: marks tests as architecture validation tests"
@@ -90,7 +91,7 @@ def pytest_configure(config):
     )
 
 
-def pytest_collection_modifyitems(config, items):
+def pytest_collection_modifyitems(config: Config, items: List[Item]) -> None:
     """Modify test collection to add markers based on test names."""
     for item in items:
         # Add architecture marker to architecture-related tests
@@ -106,7 +107,7 @@ def pytest_collection_modifyitems(config, items):
             item.add_marker(pytest.mark.strategic)  # type: ignore  # pytest item method
 
 
-def pytest_runtest_setup(item):
+def pytest_runtest_setup(item: Item) -> None:
     """Setup hook that runs before each test."""
     # Skip validation tests if validation rules are not available
     if item.get_closest_marker("validation"):
@@ -123,7 +124,7 @@ def pytest_runtest_setup(item):
 
 
 @pytest.fixture(autouse=True)
-def log_test_info(request):
+def log_test_info(request: FixtureRequest) -> None:
     """Automatically log test information for all tests."""
     print(f"\n🧪 Running test: {request.node.name}")
     
@@ -166,7 +167,7 @@ def performance_tracker():
 
 
 # Hook to report validation test results
-def pytest_terminal_summary(terminalreporter, exitstatus, config):
+def pytest_terminal_summary(terminalreporter: TerminalReporter, exitstatus: int, config: Config) -> None:
     """Add validation summary to test report."""
     validation_tests = [
         item for item in terminalreporter.stats.get('passed', [])

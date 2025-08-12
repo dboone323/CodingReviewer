@@ -15,7 +15,7 @@ Usage: python fix_pylance_errors_phase2.py
 import re
 import sys
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional
+from typing import Dict
 import subprocess
 
 class PylancePhase2Fixer:

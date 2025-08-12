@@ -2,7 +2,7 @@
 Test suite for CodingReviewer Swift integration and analysis capabilities.
 Enhanced with Architecture Validation Rules (August 12, 2025)
 """
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List
 
 import pytest
 import subprocess
