@@ -4,13 +4,11 @@ Enhanced with Architecture Validation Rules (August 12, 2025)
 """
 
 import pytest
-import asyncio
-import json
 import subprocess
 import sys
 from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
-from typing import Dict, List, Any
+from unittest.mock import patch
+from typing import List, Any
 
 # Import our testing framework
 sys.path.append(str(Path(__file__).parent.parent / "python_src"))
@@ -220,20 +218,20 @@ class TestSwiftIntegration:
         with patch('subprocess.run') as mock:
             yield mock
     
-    def test_framework_initialization(self, framework):
+    def test_framework_initialization(self, framework: Any):
         """Test that the framework initializes correctly."""
         assert framework.project_root.exists()
         assert framework.config is not None
         assert "swift_project_path" in framework.config
         assert "python_test_path" in framework.config
     
-    def test_swift_project_detection(self, framework):
+    def test_swift_project_detection(self, framework: Any):
         """Test that Swift project is properly detected."""
         swift_project = framework.config["swift_project_path"]
         assert swift_project.name == "CodingReviewer.xcodeproj"
     
     @pytest.mark.asyncio
-    async def test_swift_test_execution_success(self, framework, mock_subprocess):
+    async def test_swift_test_execution_success(self, framework: Any, mock_subprocess: Any):
         """Test successful Swift test execution."""
         # Mock successful xcodebuild output
         mock_subprocess.return_value.stdout = """
@@ -252,7 +250,7 @@ class TestSwiftIntegration:
         assert suite.success_rate > 0
     
     @pytest.mark.asyncio
-    async def test_swift_test_execution_failure(self, framework, mock_subprocess):
+    async def test_swift_test_execution_failure(self, framework: Any, mock_subprocess: Any):
         """Test Swift test execution with failures."""
         # Mock failed xcodebuild output
         mock_subprocess.return_value.stdout = """
@@ -266,7 +264,7 @@ class TestSwiftIntegration:
         assert suite.name == "Swift Tests"
         assert suite.failed_count >= 1 or suite.error_count >= 1
     
-    def test_swift_output_parsing(self, framework):
+    def test_swift_output_parsing(self, framework: Any):
         """Test parsing of Swift test output."""
         stdout = """
         Test Case '-[CodingReviewerTests.AIServiceTests testAPIKeyValidation]' passed (0.123 seconds).
@@ -333,7 +331,7 @@ class TestPythonTestingFramework:
         assert suite.success_rate == 40.0  # 2/5 * 100
     
     @pytest.mark.asyncio
-    async def test_python_test_execution(self, framework):
+    async def test_python_test_execution(self, framework: Any):
         """Test Python test execution (this test tests itself!)."""
         # This will run pytest on the current test directory
         suite = await framework.run_python_tests()
@@ -342,7 +340,7 @@ class TestPythonTestingFramework:
         assert isinstance(suite.results, list)
         assert suite.total_duration >= 0
     
-    def test_report_generation(self, framework):
+    def test_report_generation(self, framework: Any):
         """Test test report generation."""
         # Add some mock test results
         from datetime import datetime
@@ -477,7 +475,6 @@ class TestJupyterIntegration:
     def test_data_analysis_capabilities(self):
         """Test data analysis capabilities for test results."""
         import pandas as pd
-        import numpy as np
         
         # Create sample test data
         test_data = pd.DataFrame({

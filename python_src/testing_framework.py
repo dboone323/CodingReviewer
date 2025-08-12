@@ -7,21 +7,14 @@ integrating with both Swift/Xcode testing and Jupyter notebook analysis.
 
 import asyncio
 import json
-import os
 import subprocess
 import sys
-import time
 from dataclasses import dataclass, asdict
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Any, Union
-from unittest.mock import Mock, patch
+from typing import Dict, List, Optional, Any
+from unittest.mock import Mock
 
-import pytest
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
@@ -349,9 +342,9 @@ class TestVisualization:
     """Visualization utilities for test results."""
     
     @staticmethod
-    def create_test_dashboard(report: Dict[str, Any]) -> go.Figure:
+    def create_test_dashboard(report: Dict[str, Any]) -> go.Figure:  # type: ignore
         """Create interactive test dashboard using Plotly."""
-        fig = make_subplots(
+        fig = make_subplots(  # type: ignore
             rows=2, cols=2,
             subplot_titles=("Test Results Summary", "Success Rate by Suite", 
                           "Test Duration", "Test Status Distribution"),
@@ -368,24 +361,24 @@ class TestVisualization:
         durations = [s["duration"] for s in suites]
         
         # Test Results Summary (Stacked Bar)
-        fig.add_trace(
-            go.Bar(name="Passed", x=suite_names, y=passed_counts, marker_color="green"),
+        fig.add_trace(  # type: ignore
+            go.Bar(name="Passed", x=suite_names, y=passed_counts, marker_color="green"),  # type: ignore
             row=1, col=1
         )
-        fig.add_trace(
-            go.Bar(name="Failed", x=suite_names, y=failed_counts, marker_color="red"),
+        fig.add_trace(  # type: ignore
+            go.Bar(name="Failed", x=suite_names, y=failed_counts, marker_color="red"),  # type: ignore
             row=1, col=1
         )
         
         # Success Rate by Suite
-        fig.add_trace(
-            go.Bar(x=suite_names, y=success_rates, marker_color="blue", showlegend=False),
+        fig.add_trace(  # type: ignore
+            go.Bar(x=suite_names, y=success_rates, marker_color="blue", showlegend=False),  # type: ignore
             row=1, col=2
         )
         
         # Test Duration
-        fig.add_trace(
-            go.Scatter(x=suite_names, y=durations, mode="markers+lines", 
+        fig.add_trace(  # type: ignore
+            go.Scatter(x=suite_names, y=durations, mode="markers+lines",  # type: ignore
                       marker_size=10, marker_color="orange", showlegend=False),
             row=2, col=1
         )
@@ -397,13 +390,13 @@ class TestVisualization:
                  summary["total_skipped"], summary["total_errors"]]
         colors = ["green", "red", "yellow", "purple"]
         
-        fig.add_trace(
-            go.Pie(labels=labels, values=values, marker_colors=colors, showlegend=False),
+        fig.add_trace(  # type: ignore
+            go.Pie(labels=labels, values=values, marker_colors=colors, showlegend=False),  # type: ignore
             row=2, col=2
         )
         
         # Update layout
-        fig.update_layout(
+        fig.update_layout(  # type: ignore
             title_text="CodingReviewer Test Dashboard",
             showlegend=True,
             height=800
@@ -444,6 +437,6 @@ if __name__ == "__main__":
         # Create visualization
         viz = TestVisualization()
         fig = viz.create_test_dashboard(report)
-        fig.show()
+        fig.show()  # type: ignore
     
     asyncio.run(main())

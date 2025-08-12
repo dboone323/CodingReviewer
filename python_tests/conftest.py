@@ -5,7 +5,7 @@ Enhanced with Architecture Validation (August 12, 2025).
 
 import pytest
 from pathlib import Path
-from typing import List
+from typing import List, Dict, Any
 import subprocess
 import sys
 
