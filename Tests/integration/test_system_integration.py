@@ -22,7 +22,7 @@ class TestSystemIntegration(unittest.TestCase):
         
         # Create test files
         test_file = self.temp_path / "test_module.py"
-        test_file.write_text('def example_function():
+        test_file.write_text('''def example_function():
     """Example function for testing"""
     return "test"
 
@@ -30,7 +30,7 @@ class ExampleClass:
     """Example class for testing"""
     def method(self):
         return True
-')
+''')
     
     def tearDown(self):
         """Cleanup test environment"""

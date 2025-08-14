@@ -7,8 +7,6 @@ DNA-inspired AI systems with evolutionary adaptation
 import asyncio
 import random
 import time
-import json
-import math
 from datetime import datetime
 from dataclasses import dataclass, field
 from typing import List, Dict, Any, Tuple, Optional
