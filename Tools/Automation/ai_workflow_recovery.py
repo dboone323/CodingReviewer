@@ -536,9 +536,16 @@ Timestamp: {datetime.now().isoformat()}"""
     def run_quality_check(self) -> Tuple[bool, str]:
         """Run local quality check to verify fixes"""
         try:
+            # Try python3 first, then fall back to python
+            python_cmd = 'python3'
+            try:
+                subprocess.run([python_cmd, '--version'], capture_output=True, check=True)
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                python_cmd = 'python'
+            
             # Run workflow quality check script
             result = subprocess.run(
-                ['python', 'workflow_quality_check.py'],
+                [python_cmd, 'workflow_quality_check.py'],
                 capture_output=True, text=True, cwd=self.repo_path
             )
             

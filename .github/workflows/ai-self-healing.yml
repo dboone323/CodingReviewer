@@ -56,7 +56,7 @@ jobs:
         echo "🧠 Running AI-enhanced quality check..."
         
         # Run quality check and capture output
-        if python workflow_quality_check.py > quality_output.txt 2>&1; then
+        if python3 workflow_quality_check.py > quality_output.txt 2>&1; then
           echo "✅ Quality check passed!"
           echo "needs-recovery=false" >> $GITHUB_OUTPUT
         else
@@ -225,7 +225,7 @@ jobs:
       run: |
         echo "🔍 Running final quality verification..."
         
-        if python workflow_quality_check.py; then
+        if python3 workflow_quality_check.py; then
           echo "🎉 Final verification passed! Recovery was successful!"
           exit 0
         else
