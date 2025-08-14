@@ -1,3 +1,6 @@
+import Foundation
+import SwiftUI
+
 //
 // EnhancedAIInsightsView.swift
 // CodingReviewer
@@ -6,16 +9,13 @@
 // Created on July 29, 2025
 //
 
-import SwiftUI
-import Foundation
-
 // MARK: - Enhanced AI Insights View
 
 struct EnhancedAIInsightsView: View {
-    @StateObject private var mlService = MLIntegrationService();
+    @StateObject private var mlService = MLIntegrationService()
     @EnvironmentObject private var fileManager: FileManagerService
-    @State private var selectedTab: AIMLTab = .insights;
-    @State private var showingFullAnalysis = false;
+    @State private var selectedTab: AIMLTab = .insights
+    @State private var showingFullAnalysis = false
 
     enum AIMLTab: String, CaseIterable {
         case insights = "ML Insights"
@@ -25,10 +25,10 @@ struct EnhancedAIInsightsView: View {
 
         var systemImage: String {
             switch self {
-            case .insights: return "brain.head.profile"
-            case .predictions: return "crystal.ball"
-            case .learning: return "graduationcap"
-            case .realtime: return "waveform.path.ecg"
+            case .insights: "brain.head.profile"
+            case .predictions: "crystal.ball"
+            case .learning: "graduationcap"
+            case .realtime: "waveform.path.ecg"
             }
         }
     }
@@ -230,7 +230,7 @@ struct MLInsightsView: View {
 
 struct MLInsightCard: View {
     let insight: MLInsight
-    @State private var isExpanded = false;
+    @State private var isExpanded = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -505,7 +505,7 @@ struct CrossProjectLearningView: View {
 
 struct CrossProjectLearningCard: View {
     let learning: CrossProjectLearning
-    @State private var isExpanded = false;
+    @State private var isExpanded = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -635,7 +635,9 @@ struct RealtimeMLView: View {
 
                 QuickStatCard(
                     title: "Confidence",
-                    value: mlService.mlInsights.isEmpty ? "N/A" : "\(Int(mlService.mlInsights.map(\.confidence).reduce(0, +) / Double(mlService.mlInsights.count) * 100))%",
+                    value: mlService.mlInsights
+                        .isEmpty ? "N/A" :
+                        "\(Int(mlService.mlInsights.map(\.confidence).reduce(0, +) / Double(mlService.mlInsights.count) * 100))%",
                     icon: "checkmark.seal",
                     color: .orange
                 )
@@ -785,7 +787,7 @@ struct UploadedFilesDisplayView: View {
 
             // Language breakdown
             let languageGroups = Dictionary(grouping: files, by: { $0.language })
-            let sortedLanguages = Array(Set(files.map { $0.language })).sorted(by: { $0.displayName < $1.displayName })
+            let sortedLanguages = Array(Set(files.map(\.language))).sorted(by: { $0.displayName < $1.displayName })
 
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 8) {
                 ForEach(sortedLanguages, id: \.self) { language in

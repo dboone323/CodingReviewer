@@ -21,9 +21,9 @@ enum AnalysisEngine: String, CaseIterable {
 
     var description: String {
         switch self {
-        case .ai: return "AI-powered analysis using language models"
-        case .pattern: return "Pattern-based static analysis"
-        case .combined: return "Combined AI and pattern analysis"
+        case .ai: "AI-powered analysis using language models"
+        case .pattern: "Pattern-based static analysis"
+        case .combined: "Combined AI and pattern analysis"
         }
     }
 }
@@ -36,10 +36,10 @@ enum AnalysisScope: String, CaseIterable {
 
     var systemImage: String {
         switch self {
-        case .file: return "doc"
-        case .project: return "folder"
-        case .folder: return "folder.badge.plus"
-        case .selection: return "selection.pin.in.out"
+        case .file: "doc"
+        case .project: "folder"
+        case .folder: "folder.badge.plus"
+        case .selection: "selection.pin.in.out"
         }
     }
 }
@@ -52,19 +52,19 @@ enum AnalysisMode: String, CaseIterable {
 
     var description: String {
         switch self {
-        case .quick: return "Fast analysis with basic checks"
-        case .standard: return "Standard analysis with common patterns"
-        case .detailed: return "Detailed analysis with comprehensive checks"
-        case .comprehensive: return "Complete analysis with all features"
+        case .quick: "Fast analysis with basic checks"
+        case .standard: "Standard analysis with common patterns"
+        case .detailed: "Detailed analysis with comprehensive checks"
+        case .comprehensive: "Complete analysis with all features"
         }
     }
 
     var estimatedTime: String {
         switch self {
-        case .quick: return "< 30 seconds"
-        case .standard: return "1-2 minutes"
-        case .detailed: return "3-5 minutes"
-        case .comprehensive: return "5-10 minutes"
+        case .quick: "< 30 seconds"
+        case .standard: "1-2 minutes"
+        case .detailed: "3-5 minutes"
+        case .comprehensive: "5-10 minutes"
         }
     }
 }
@@ -83,14 +83,14 @@ enum PatternType: String, CaseIterable {
 
     var systemImage: String {
         switch self {
-        case .antiPattern: return "exclamationmark.triangle"
-        case .designPattern: return "building.columns"
-        case .codeSmell: return "nose"
-        case .bestPractice: return "star"
-        case .architecture: return "building.2"
-        case .performance: return "speedometer"
-        case .security: return "lock.shield"
-        case .maintainability: return "wrench.and.screwdriver"
+        case .antiPattern: "exclamationmark.triangle"
+        case .designPattern: "building.columns"
+        case .codeSmell: "nose"
+        case .bestPractice: "star"
+        case .architecture: "building.2"
+        case .performance: "speedometer"
+        case .security: "lock.shield"
+        case .maintainability: "wrench.and.screwdriver"
         }
     }
 }
@@ -103,19 +103,19 @@ enum PatternConfidence: String, CaseIterable {
 
     var color: String {
         switch self {
-        case .low: return "red"
-        case .medium: return "orange"
-        case .high: return "green"
-        case .certain: return "blue"
+        case .low: "red"
+        case .medium: "orange"
+        case .high: "green"
+        case .certain: "blue"
         }
     }
 
     var percentage: Int {
         switch self {
-        case .low: return 25
-        case .medium: return 50
-        case .high: return 75
-        case .certain: return 95
+        case .low: 25
+        case .medium: 50
+        case .high: 75
+        case .certain: 95
         }
     }
 }
@@ -134,27 +134,27 @@ enum QualityMetric: String, CaseIterable {
 
     var systemImage: String {
         switch self {
-        case .complexity: return "brain"
-        case .maintainability: return "wrench.and.screwdriver"
-        case .readability: return "eye"
-        case .testability: return "testtube.2"
-        case .performance: return "speedometer"
-        case .security: return "lock.shield"
-        case .documentation: return "doc.text"
-        case .consistency: return "checkmark.seal"
+        case .complexity: "brain"
+        case .maintainability: "wrench.and.screwdriver"
+        case .readability: "eye"
+        case .testability: "testtube.2"
+        case .performance: "speedometer"
+        case .security: "lock.shield"
+        case .documentation: "doc.text"
+        case .consistency: "checkmark.seal"
         }
     }
 
     var description: String {
         switch self {
-        case .complexity: return "Code complexity analysis"
-        case .maintainability: return "Ease of maintenance and modification"
-        case .readability: return "Code clarity and comprehension"
-        case .testability: return "Ease of writing tests"
-        case .performance: return "Execution efficiency"
-        case .security: return "Security vulnerability assessment"
-        case .documentation: return "Code documentation quality"
-        case .consistency: return "Code style and pattern consistency"
+        case .complexity: "Code complexity analysis"
+        case .maintainability: "Ease of maintenance and modification"
+        case .readability: "Code clarity and comprehension"
+        case .testability: "Ease of writing tests"
+        case .performance: "Execution efficiency"
+        case .security: "Security vulnerability assessment"
+        case .documentation: "Code documentation quality"
+        case .consistency: "Code style and pattern consistency"
         }
     }
 }
@@ -167,19 +167,19 @@ enum ComplexityLevel: String, CaseIterable {
 
     var color: String {
         switch self {
-        case .simple: return "green"
-        case .moderate: return "yellow"
-        case .complex: return "orange"
-        case .veryComplex: return "red"
+        case .simple: "green"
+        case .moderate: "yellow"
+        case .complex: "orange"
+        case .veryComplex: "red"
         }
     }
 
     var range: String {
         switch self {
-        case .simple: return "1-5"
-        case .moderate: return "6-10"
-        case .complex: return "11-20"
-        case .veryComplex: return "20+"
+        case .simple: "1-5"
+        case .moderate: "6-10"
+        case .complex: "11-20"
+        case .veryComplex: "20+"
         }
     }
 }
@@ -198,14 +198,14 @@ enum DocumentationType: String, CaseIterable {
 
     var systemImage: String {
         switch self {
-        case .inline: return "text.alignleft"
-        case .function: return "function"
-        case .classType: return "curlybraces"
-        case .module: return "shippingbox"
-        case .readme: return "doc.text"
-        case .api: return "doc.richtext"
-        case .technical: return "doc.on.doc"
-        case .user: return "book"
+        case .inline: "text.alignleft"
+        case .function: "function"
+        case .classType: "curlybraces"
+        case .module: "shippingbox"
+        case .readme: "doc.text"
+        case .api: "doc.richtext"
+        case .technical: "doc.on.doc"
+        case .user: "book"
         }
     }
 }
@@ -219,21 +219,21 @@ enum DocumentationQuality: String, CaseIterable {
 
     var color: String {
         switch self {
-        case .missing: return "red"
-        case .minimal: return "orange"
-        case .adequate: return "yellow"
-        case .good: return "green"
-        case .excellent: return "blue"
+        case .missing: "red"
+        case .minimal: "orange"
+        case .adequate: "yellow"
+        case .good: "green"
+        case .excellent: "blue"
         }
     }
 
     var score: Int {
         switch self {
-        case .missing: return 0
-        case .minimal: return 25
-        case .adequate: return 50
-        case .good: return 75
-        case .excellent: return 100
+        case .missing: 0
+        case .minimal: 25
+        case .adequate: 50
+        case .good: 75
+        case .excellent: 100
         }
     }
 }
@@ -248,19 +248,19 @@ enum SharedFixCategory: String, CaseIterable {
 
     var systemImage: String {
         switch self {
-        case .automatic: return "wand.and.rays"
-        case .assisted: return "hand.point.up.left"
-        case .manual: return "hand.tap"
-        case .review: return "eye"
+        case .automatic: "wand.and.rays"
+        case .assisted: "hand.point.up.left"
+        case .manual: "hand.tap"
+        case .review: "eye"
         }
     }
 
     var description: String {
         switch self {
-        case .automatic: return "Can be fixed automatically"
-        case .assisted: return "Requires user confirmation"
-        case .manual: return "Requires manual intervention"
-        case .review: return "Needs code review"
+        case .automatic: "Can be fixed automatically"
+        case .assisted: "Requires user confirmation"
+        case .manual: "Requires manual intervention"
+        case .review: "Needs code review"
         }
     }
 }
@@ -274,21 +274,21 @@ enum FixStatus: String, CaseIterable {
 
     var systemImage: String {
         switch self {
-        case .pending: return "clock"
-        case .inProgress: return "gear"
-        case .applied: return "checkmark.circle"
-        case .rejected: return "xmark.circle"
-        case .failed: return "exclamationmark.triangle"
+        case .pending: "clock"
+        case .inProgress: "gear"
+        case .applied: "checkmark.circle"
+        case .rejected: "xmark.circle"
+        case .failed: "exclamationmark.triangle"
         }
     }
 
     var color: String {
         switch self {
-        case .pending: return "gray"
-        case .inProgress: return "blue"
-        case .applied: return "green"
-        case .rejected: return "orange"
-        case .failed: return "red"
+        case .pending: "gray"
+        case .inProgress: "blue"
+        case .applied: "green"
+        case .rejected: "orange"
+        case .failed: "red"
         }
     }
 }

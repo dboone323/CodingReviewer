@@ -9,7 +9,7 @@ struct EnhancedFileUploadView: View {
     @State private var showingFilePicker = false
     @State private var analysisResults: [FileAnalysisResult] = []
     @State private var showingResults = false
-    
+
     var body: some View {
         VStack(spacing: 0) {
             // Header
@@ -18,14 +18,14 @@ struct EnhancedFileUploadView: View {
                     Text("File Manager")
                         .font(.title2)
                         .fontWeight(.bold)
-                    
+
                     Text("Upload and analyze files or entire projects")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
-                
+
                 Spacer()
-                
+
                 // Action Buttons
                 HStack(spacing: 12) {
                     if !uploadedFiles.isEmpty {
@@ -35,18 +35,18 @@ struct EnhancedFileUploadView: View {
                         .disabled(selectedFiles.isEmpty || isAnalyzing)
                         .buttonStyle(.borderedProminent)
                     }
-                    
+
                     Menu {
                         Button("Choose Files...") {
                             showingFilePicker = true
                         }
-                        
+
                         Button("Choose Folder...") {
                             chooseFolderAndUpload()
                         }
-                        
+
                         Divider()
-                        
+
                         Button("Clear All") {
                             uploadedFiles.removeAll()
                             selectedFiles.removeAll()
@@ -60,9 +60,9 @@ struct EnhancedFileUploadView: View {
                 }
             }
             .padding()
-            
+
             Divider()
-            
+
             if uploadedFiles.isEmpty {
                 // Drop Zone
                 DropZoneView(isDragOver: $isDragOver) {
@@ -77,20 +77,20 @@ struct EnhancedFileUploadView: View {
                         HStack {
                             Text("Files (\(uploadedFiles.count))")
                                 .font(.headline)
-                            
+
                             Spacer()
-                            
+
                             if !selectedFiles.isEmpty {
                                 Button("Select All") {
-                                    selectedFiles = Set(uploadedFiles.map { $0.id })
+                                    selectedFiles = Set(uploadedFiles.map(\.id))
                                 }
                                 .font(.caption)
                             }
                         }
                         .padding()
-                        
+
                         Divider()
-                        
+
                         ScrollView {
                             LazyVStack(spacing: 1) {
                                 ForEach(uploadedFiles) { file in
@@ -106,25 +106,25 @@ struct EnhancedFileUploadView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
                     .frame(minWidth: 300)
-                    
+
                     // Results Panel (Right Side)
-                    if showingResults && !analysisResults.isEmpty {
+                    if showingResults, !analysisResults.isEmpty {
                         VStack(alignment: .leading, spacing: 0) {
                             HStack {
                                 Text("Analysis Results")
                                     .font(.headline)
-                                
+
                                 Spacer()
-                                
+
                                 Button("Export Report") {
                                     exportAnalysisReport()
                                 }
                                 .font(.caption)
                             }
                             .padding()
-                            
+
                             Divider()
-                            
+
                             ScrollView {
                                 LazyVStack(spacing: 12) {
                                     ForEach(analysisResults) { result in
@@ -144,7 +144,7 @@ struct EnhancedFileUploadView: View {
                             Image(systemName: "doc.text.magnifyingglass")
                                 .font(.system(size: 48))
                                 .foregroundColor(.gray)
-                            
+
                             Text("Select files and click 'Analyze' to see results")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
@@ -163,7 +163,7 @@ struct EnhancedFileUploadView: View {
             handleFileImport(result)
         }
     }
-    
+
     private func toggleFileSelection(_ id: UUID) {
         if selectedFiles.contains(id) {
             selectedFiles.remove(id)
@@ -171,11 +171,11 @@ struct EnhancedFileUploadView: View {
             selectedFiles.insert(id)
         }
     }
-    
+
     private func handleFileDrop(_ providers: [NSItemProvider]) {
         for provider in providers {
             if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
-                provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { (item, error) in
+                provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, _ in
                     if let url = item as? URL {
                         DispatchQueue.main.async {
                             loadFile(from: url)
@@ -185,7 +185,7 @@ struct EnhancedFileUploadView: View {
             }
         }
     }
-    
+
     private func handleFileImport(_ result: Result<[URL], Error>) {
         switch result {
         case .success(let urls):
@@ -196,29 +196,29 @@ struct EnhancedFileUploadView: View {
             print("File import failed: \(error)")
         }
     }
-    
+
     private func chooseFolderAndUpload() {
         let panel = NSOpenPanel()
         panel.allowsMultipleSelection = false
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
         panel.canCreateDirectories = false
-        
+
         if panel.runModal() == .OK {
             if let url = panel.url {
                 loadDirectory(from: url)
             }
         }
     }
-    
+
     private func loadFile(from url: URL) {
         guard url.startAccessingSecurityScopedResource() else { return }
         defer { url.stopAccessingSecurityScopedResource() }
-        
+
         do {
             let content = try String(contentsOf: url, encoding: .utf8)
             let fileSize = try url.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 0
-            
+
             let uploadedFile = UploadedFile(
                 id: UUID(),
                 name: url.lastPathComponent,
@@ -228,67 +228,92 @@ struct EnhancedFileUploadView: View {
                 type: determineFileType(from: url),
                 uploadDate: Date()
             )
-            
+
             uploadedFiles.append(uploadedFile)
         } catch {
             print("Failed to load file: \(error)")
         }
     }
-    
+
     private func loadDirectory(from url: URL) {
         guard url.startAccessingSecurityScopedResource() else { return }
         defer { url.stopAccessingSecurityScopedResource() }
-        
+
         let fileManager = FileManager.default
-        
-        if let enumerator = fileManager.enumerator(at: url, includingPropertiesForKeys: [.isRegularFileKey, .fileSizeKey]) {
+
+        if let enumerator = fileManager.enumerator(
+            at: url,
+            includingPropertiesForKeys: [.isRegularFileKey, .fileSizeKey]
+        ) {
             for case let fileURL as URL in enumerator {
                 if let resourceValues = try? fileURL.resourceValues(forKeys: [.isRegularFileKey]),
                    resourceValues.isRegularFile == true,
-                   isSourceCodeFile(url: fileURL) {
+                   isSourceCodeFile(url: fileURL)
+                {
                     loadFile(from: fileURL)
                 }
             }
         }
     }
-    
+
     private func isSourceCodeFile(url: URL) -> Bool {
-        let sourceExtensions = ["swift", "py", "js", "ts", "java", "cpp", "c", "h", "go", "rs", "php", "rb", "kt", "cs", "scala", "sh", "json", "xml", "yaml", "yml"]
+        let sourceExtensions = [
+            "swift",
+            "py",
+            "js",
+            "ts",
+            "java",
+            "cpp",
+            "c",
+            "h",
+            "go",
+            "rs",
+            "php",
+            "rb",
+            "kt",
+            "cs",
+            "scala",
+            "sh",
+            "json",
+            "xml",
+            "yaml",
+            "yml",
+        ]
         return sourceExtensions.contains(url.pathExtension.lowercased())
     }
-    
+
     private func determineFileType(from url: URL) -> String {
         switch url.pathExtension.lowercased() {
-        case "swift": return "Swift"
-        case "py": return "Python"
-        case "js": return "JavaScript"
-        case "ts": return "TypeScript"
-        case "java": return "Java"
-        case "cpp", "c": return "C++"
-        case "go": return "Go"
-        case "rs": return "Rust"
-        case "php": return "PHP"
-        case "rb": return "Ruby"
-        case "kt": return "Kotlin"
-        case "cs": return "C#"
-        case "json": return "JSON"
-        case "xml": return "XML"
-        case "yaml", "yml": return "YAML"
-        default: return "Text"
+        case "swift": "Swift"
+        case "py": "Python"
+        case "js": "JavaScript"
+        case "ts": "TypeScript"
+        case "java": "Java"
+        case "cpp", "c": "C++"
+        case "go": "Go"
+        case "rs": "Rust"
+        case "php": "PHP"
+        case "rb": "Ruby"
+        case "kt": "Kotlin"
+        case "cs": "C#"
+        case "json": "JSON"
+        case "xml": "XML"
+        case "yaml", "yml": "YAML"
+        default: "Text"
         }
     }
-    
+
     private func analyzeSelectedFiles() {
         isAnalyzing = true
         showingResults = true
         analysisResults.removeAll()
-        
+
         let filesToAnalyze = uploadedFiles.filter { selectedFiles.contains($0.id) }
-        
+
         // Simulate analysis with progress
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             var results: [FileAnalysisResult] = []
-            
+
             for file in filesToAnalyze {
                 let issues = generateAnalysisIssues(for: file)
                 let result = FileAnalysisResult(
@@ -302,18 +327,18 @@ struct EnhancedFileUploadView: View {
                 )
                 results.append(result)
             }
-            
+
             analysisResults = results
             isAnalyzing = false
         }
     }
-    
+
     private func generateAnalysisIssues(for file: UploadedFile) -> [AnalysisIssue] {
         var issues: [AnalysisIssue] = []
-        
+
         // Simulate realistic analysis based on file content
         let lines = file.content.components(separatedBy: .newlines)
-        
+
         for (lineIndex, line) in lines.enumerated() {
             // Check for common issues
             if line.contains("TODO") || line.contains("FIXME") {
@@ -325,7 +350,7 @@ struct EnhancedFileUploadView: View {
                     line: line.trimmingCharacters(in: .whitespaces)
                 ))
             }
-            
+
             if line.contains("console.log") || line.contains("print(") {
                 issues.append(AnalysisIssue(
                     type: "Code Quality",
@@ -335,8 +360,8 @@ struct EnhancedFileUploadView: View {
                     line: line.trimmingCharacters(in: .whitespaces)
                 ))
             }
-            
-            if line.contains("password") && !line.contains("//") {
+
+            if line.contains("password"), !line.contains("//") {
                 issues.append(AnalysisIssue(
                     type: "Security",
                     severity: "High",
@@ -346,7 +371,7 @@ struct EnhancedFileUploadView: View {
                 ))
             }
         }
-        
+
         // Add some random issues for demo
         if issues.isEmpty {
             issues.append(AnalysisIssue(
@@ -357,42 +382,42 @@ struct EnhancedFileUploadView: View {
                 line: ""
             ))
         }
-        
+
         return issues
     }
-    
+
     private func exportAnalysisReport() {
         let panel = NSSavePanel()
         panel.allowsOtherFileTypes = false
         panel.allowedContentTypes = [.plainText]
         panel.nameFieldStringValue = "analysis_report.txt"
-        
+
         if panel.runModal() == .OK {
             if let url = panel.url {
                 exportReport(to: url)
             }
         }
     }
-    
+
     private func exportReport(to url: URL) {
         var reportContent = "Code Analysis Report\n"
         reportContent += "Generated: \(Date())\n"
         reportContent += "=================================\n\n"
-        
+
         for result in analysisResults {
             reportContent += "File: \(result.fileName)\n"
             reportContent += "Type: \(result.fileType)\n"
             reportContent += "Issues Found: \(result.issuesFound)\n"
             reportContent += "---------------------------------\n"
-            
+
             for issue in result.issues {
                 reportContent += "• \(issue.type) (\(issue.severity)): \(issue.message)\n"
                 reportContent += "  Line \(issue.lineNumber): \(issue.line)\n\n"
             }
-            
+
             reportContent += "\n"
         }
-        
+
         do {
             try reportContent.write(to: url, atomically: true, encoding: .utf8)
         } catch {
@@ -406,34 +431,34 @@ struct EnhancedFileUploadView: View {
 struct DropZoneView: View {
     @Binding var isDragOver: Bool
     let onDrop: ([NSItemProvider]) -> Void
-    
+
     var body: some View {
         VStack(spacing: 24) {
             Image(systemName: isDragOver ? "folder.fill.badge.plus" : "folder.badge.plus")
                 .font(.system(size: 64))
                 .foregroundColor(isDragOver ? .blue : .gray)
-            
+
             VStack(spacing: 8) {
                 Text(isDragOver ? "Drop files here!" : "Drag & Drop Files")
                     .font(.title2)
                     .fontWeight(.semibold)
                     .foregroundColor(isDragOver ? .blue : .primary)
-                
+
                 Text("Support for Swift, Python, JavaScript, and more")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
-            
+
             VStack(spacing: 12) {
                 Button("Choose Files") {
                     // This will be handled by the parent view
                 }
                 .buttonStyle(.borderedProminent)
-                
+
                 Text("or")
                     .font(.caption)
                     .foregroundColor(.secondary)
-                
+
                 Button("Choose Folder") {
                     // This will be handled by the parent view
                 }
@@ -464,22 +489,22 @@ struct FileRowView: View {
     let file: UploadedFile
     let isSelected: Bool
     let onToggle: () -> Void
-    
+
     private var fileIcon: String {
         switch file.type.lowercased() {
-        case "swift": return "swift"
-        case "python": return "doc.text"
-        case "javascript", "typescript": return "doc.text"
-        case "json": return "doc.badge.gearshape"
-        case "xml": return "doc.text.below.ecg"
-        default: return "doc.text"
+        case "swift": "swift"
+        case "python": "doc.text"
+        case "javascript", "typescript": "doc.text"
+        case "json": "doc.badge.gearshape"
+        case "xml": "doc.text.below.ecg"
+        default: "doc.text"
         }
     }
-    
+
     private var fileSizeString: String {
         ByteCountFormatter.string(fromByteCount: Int64(file.size), countStyle: .file)
     }
-    
+
     var body: some View {
         HStack(spacing: 12) {
             // Selection checkbox
@@ -489,37 +514,37 @@ struct FileRowView: View {
                     .font(.title3)
             }
             .buttonStyle(PlainButtonStyle())
-            
+
             // File icon
             Image(systemName: fileIcon)
                 .font(.title3)
                 .foregroundColor(.blue)
                 .frame(width: 20)
-            
+
             // File info
             VStack(alignment: .leading, spacing: 2) {
                 Text(file.name)
                     .font(.body)
                     .fontWeight(.medium)
                     .lineLimit(1)
-                
+
                 HStack {
                     Text(file.type)
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     Text("•")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     Text(fileSizeString)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
-            
+
             Spacer()
-            
+
             // Upload date
             Text(file.uploadDate, style: .relative)
                 .font(.caption)
@@ -538,16 +563,16 @@ struct FileRowView: View {
 struct FileAnalysisCard: View {
     let result: FileAnalysisResult
     @State private var isExpanded = false
-    
+
     private var severityColor: Color {
-        let highSeverityCount = result.issues.filter { $0.severity == "High" }.count
-        let mediumSeverityCount = result.issues.filter { $0.severity == "Medium" }.count
-        
+        let highSeverityCount = result.issues.count(where: { $0.severity == "High" })
+        let mediumSeverityCount = result.issues.count(where: { $0.severity == "Medium" })
+
         if highSeverityCount > 0 { return .red }
         if mediumSeverityCount > 0 { return .orange }
         return .green
     }
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             // Header
@@ -556,7 +581,7 @@ struct FileAnalysisCard: View {
                     Text(result.fileName)
                         .font(.headline)
                         .fontWeight(.semibold)
-                    
+
                     HStack {
                         Text(result.fileType)
                             .font(.caption)
@@ -564,21 +589,21 @@ struct FileAnalysisCard: View {
                             .padding(.vertical, 2)
                             .background(Color.blue.opacity(0.2))
                             .cornerRadius(4)
-                        
+
                         Text("\(result.issuesFound) issue\(result.issuesFound == 1 ? "" : "s")")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
                 }
-                
+
                 Spacer()
-                
+
                 // Overall status indicator
                 Circle()
                     .fill(severityColor)
                     .frame(width: 12, height: 12)
             }
-            
+
             // Issue summary
             if !result.issues.isEmpty {
                 Button(action: { isExpanded.toggle() }) {
@@ -586,17 +611,17 @@ struct FileAnalysisCard: View {
                         Text(isExpanded ? "Hide Details" : "Show Details")
                             .font(.caption)
                             .fontWeight(.medium)
-                        
+
                         Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                             .font(.caption)
                     }
                     .foregroundColor(.blue)
                 }
                 .buttonStyle(PlainButtonStyle())
-                
+
                 if isExpanded {
                     VStack(alignment: .leading, spacing: 8) {
-                        ForEach(Array(result.issues.enumerated()), id: \.offset) { index, issue in
+                        ForEach(Array(result.issues.enumerated()), id: \.offset) { _, issue in
                             IssueRowView(issue: issue)
                         }
                     }
@@ -612,40 +637,40 @@ struct FileAnalysisCard: View {
 
 struct IssueRowView: View {
     let issue: AnalysisIssue
-    
+
     private var severityColor: Color {
         switch issue.severity.lowercased() {
-        case "high": return .red
-        case "medium": return .orange
-        case "low": return .yellow
-        default: return .blue
+        case "high": .red
+        case "medium": .orange
+        case "low": .yellow
+        default: .blue
         }
     }
-    
+
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
             Circle()
                 .fill(severityColor)
                 .frame(width: 6, height: 6)
                 .padding(.top, 6)
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 HStack {
                     Text(issue.type)
                         .font(.caption)
                         .fontWeight(.semibold)
-                    
+
                     Spacer()
-                    
+
                     Text("Line \(issue.lineNumber)")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
-                
+
                 Text(issue.message)
                     .font(.caption)
                     .foregroundColor(.primary)
-                
+
                 if !issue.line.isEmpty {
                     Text(issue.line)
                         .font(.system(.caption, design: .monospaced))
@@ -666,17 +691,17 @@ struct IssueRowView: View {
 struct AnalysisProgressView: View {
     @State private var progress: Double = 0.0
     @State private var currentFile = "Analyzing files..."
-    
+
     var body: some View {
         VStack(spacing: 24) {
             ProgressView(value: progress, total: 1.0)
                 .progressViewStyle(LinearProgressViewStyle())
                 .frame(width: 200)
-            
+
             VStack(spacing: 8) {
                 Text("Analyzing Code")
                     .font(.headline)
-                
+
                 Text(currentFile)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
@@ -686,10 +711,10 @@ struct AnalysisProgressView: View {
             startProgressAnimation()
         }
     }
-    
+
     private func startProgressAnimation() {
         let files = ["Checking syntax...", "Analyzing security...", "Reviewing patterns...", "Generating report..."]
-        
+
         Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
             if progress < 1.0 {
                 progress += 0.25

@@ -5,7 +5,8 @@
 //
 // Creat// MARK: - AI Service Protocol extensions for additional functionality
 
-// Additional protocol extensions and utilities can be added hereervice Protocol extensions for additional functionality2025.
+// Additional protocol extensions and utilities can be added hereervice Protocol extensions for additional
+// functionality2025.
 //
 
 import Foundation
@@ -16,7 +17,7 @@ import Foundation
 // MARK: - AI Analysis Request
 
 /// AI Service Protocol and Data Models
-/// 
+///
 /// This file defines the protocol and data structures for AI-powered code analysis.
 /// All error handling follows Swift best practices with proper error propagation
 /// and optional handling throughout the service implementations.
@@ -58,10 +59,10 @@ extension AISuggestion {
 
         var color: String {
             switch self {
-            case .info: return "blue"
-            case .warning: return "orange"
-            case .error: return "red"
-            case .critical: return "purple"
+            case .info: "blue"
+            case .warning: "orange"
+            case .error: "red"
+            case .critical: "purple"
             }
         }
     }
@@ -86,26 +87,26 @@ protocol AIServiceProtocol {
 extension CodeLanguage {
     var aiPromptName: String {
         switch self {
-        case .swift: return "Swift"
-        case .python: return "Python"
-        case .javascript: return "JavaScript"
-        case .typescript: return "TypeScript"
-        case .kotlin: return "Kotlin"
-        case .java: return "Java"
-        case .csharp: return "C#"
-        case .cpp: return "C++"
-        case .c: return "C"
-        case .go: return "Go"
-        case .rust: return "Rust"
-        case .php: return "PHP"
-        case .ruby: return "Ruby"
-        case .html: return "HTML"
-        case .css: return "CSS"
-        case .xml: return "XML"
-        case .json: return "JSON"
-        case .yaml: return "YAML"
-        case .markdown: return "Markdown"
-        case .unknown: return "Unknown"
+        case .swift: "Swift"
+        case .python: "Python"
+        case .javascript: "JavaScript"
+        case .typescript: "TypeScript"
+        case .kotlin: "Kotlin"
+        case .java: "Java"
+        case .csharp: "C#"
+        case .cpp: "C++"
+        case .c: "C"
+        case .go: "Go"
+        case .rust: "Rust"
+        case .php: "PHP"
+        case .ruby: "Ruby"
+        case .html: "HTML"
+        case .css: "CSS"
+        case .xml: "XML"
+        case .json: "JSON"
+        case .yaml: "YAML"
+        case .markdown: "Markdown"
+        case .unknown: "Unknown"
         }
     }
 }
@@ -121,12 +122,12 @@ struct APIUsageStats: @preconcurrency Codable, Sendable {
     let monthlyLimit: Int
 
     init() {
-        self.tokensUsed = 0
-        self.requestsCount = 0
-        self.totalCost = 0.0
-        self.lastResetDate = Date()
-        self.dailyLimit = 10000
-        self.monthlyLimit = 100000
+        tokensUsed = 0
+        requestsCount = 0
+        totalCost = 0.0
+        lastResetDate = Date()
+        dailyLimit = 10000
+        monthlyLimit = 100_000
     }
 }
 

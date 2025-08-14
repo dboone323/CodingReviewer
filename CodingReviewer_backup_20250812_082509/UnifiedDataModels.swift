@@ -1,6 +1,7 @@
 import Foundation
 
 // MARK: - Unified Analysis Data Models
+
 // This file contains the single source of truth for all analysis-related data structures
 
 /// Represents a single analysis result from code examination
@@ -12,7 +13,14 @@ public struct AnalysisResult: Identifiable, Sendable, @preconcurrency Codable, H
     public let lineNumber: Int
     public let suggestion: String
 
-    public init(id: UUID = UUID(), type: String, severity: String, message: String, lineNumber: Int, suggestion: String = "") {
+    public init(
+        id: UUID = UUID(),
+        type: String,
+        severity: String,
+        message: String,
+        lineNumber: Int,
+        suggestion: String = ""
+    ) {
         self.id = id
         self.type = type
         self.severity = severity
@@ -30,19 +38,19 @@ public struct AnalysisResult: Identifiable, Sendable, @preconcurrency Codable, H
 
         var priority: Int {
             switch self {
-            case .critical: return 4
-            case .high: return 3
-            case .medium: return 2
-            case .low: return 1
+            case .critical: 4
+            case .high: 3
+            case .medium: 2
+            case .low: 1
             }
         }
 
         var color: String {
             switch self {
-            case .critical: return "red"
-            case .high: return "red"
-            case .medium: return "orange"
-            case .low: return "yellow"
+            case .critical: "red"
+            case .high: "red"
+            case .medium: "orange"
+            case .low: "yellow"
             }
         }
     }
@@ -62,7 +70,15 @@ struct FileAnalysisResult: Identifiable, Sendable, @preconcurrency Codable {
     let issues: [AnalysisIssue]
     let analysisDate: Date
 
-    init(id: UUID = UUID(), fileName: String, filePath: String, fileType: String, issuesFound: Int, issues: [AnalysisIssue], analysisDate: Date = Date()) {
+    init(
+        id: UUID = UUID(),
+        fileName: String,
+        filePath: String,
+        fileType: String,
+        issuesFound: Int,
+        issues: [AnalysisIssue],
+        analysisDate: Date = Date()
+    ) {
         self.id = id
         self.fileName = fileName
         self.filePath = filePath
@@ -102,7 +118,15 @@ struct UploadedFile: Identifiable, Sendable, @preconcurrency Codable {
     let type: String
     let uploadDate: Date
 
-    init(id: UUID = UUID(), name: String, path: String, size: Int, content: String, type: String, uploadDate: Date = Date()) {
+    init(
+        id: UUID = UUID(),
+        name: String,
+        path: String,
+        size: Int,
+        content: String,
+        type: String,
+        uploadDate: Date = Date()
+    ) {
         self.id = id
         self.name = name
         self.path = path
@@ -114,17 +138,18 @@ struct UploadedFile: Identifiable, Sendable, @preconcurrency Codable {
 }
 
 // MARK: - Legacy Support
+
 // These extensions provide compatibility with existing code
 
 extension AnalysisResult {
     /// Legacy support for old AnalysisResult structure
     init(type: ResultType, message: String, line: Int?, severity: Severity) {
-        self.id = UUID()
+        id = UUID()
         self.type = type.displayName
         self.severity = severity.displayName
         self.message = message
-        self.lineNumber = line ?? 0
-        self.suggestion = ""
+        lineNumber = line ?? 0
+        suggestion = ""
     }
 
     enum ResultType {
@@ -135,10 +160,10 @@ extension AnalysisResult {
 
         var displayName: String {
             switch self {
-            case .quality: return "Quality"
-            case .security: return "Security"
-            case .suggestion: return "Suggestion"
-            case .performance: return "Performance"
+            case .quality: "Quality"
+            case .security: "Security"
+            case .suggestion: "Suggestion"
+            case .performance: "Performance"
             }
         }
     }
@@ -151,34 +176,38 @@ extension AnalysisResult {
 
         var displayName: String {
             switch self {
-            case .low: return "Low"
-            case .medium: return "Medium"
-            case .high: return "High"
-            case .critical: return "Critical"
+            case .low: "Low"
+            case .medium: "Medium"
+            case .high: "High"
+            case .critical: "Critical"
             }
         }
     }
 }
 
 // MARK: - Analysis Protocols
+
 protocol CodeAnalyzer {
     func analyze(_ code: String) async -> [AnalysisResult]
 }
 
 // MARK: - Helper Extensions
-extension Array where Element == AnalysisResult {
+
+extension [AnalysisResult] {
     var highSeverityCount: Int {
-        filter { $0.severityLevel == .high || $0.severityLevel == .critical }.count
+        count(where: { $0.severityLevel == .high || $0.severityLevel == .critical })
     }
 
     var mediumSeverityCount: Int {
-        filter { $0.severityLevel == .medium }.count
+        count(where: { $0.severityLevel == .medium })
     }
 
     var lowSeverityCount: Int {
-        filter { $0.severityLevel == .low }.count
+        count(where: { $0.severityLevel == .low })
     }
 
+    /// <#Description#>
+    /// - Returns: <#description#>
     func sortedBySeverity() -> [AnalysisResult] {
         sorted { $0.severityLevel.priority > $1.severityLevel.priority }
     }

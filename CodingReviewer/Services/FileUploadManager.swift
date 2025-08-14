@@ -1,4 +1,9 @@
+import Foundation
+import Combine
 import OSLog
+import SwiftUI
+import UniformTypeIdentifiers
+
 //
 // FileUploadManager.swift
 // CodingReviewer
@@ -6,11 +11,6 @@ import OSLog
 // Extracted from FileManagerService - Focused file upload operations
 // Created on July 27, 2025
 //
-
-import Foundation
-import SwiftUI
-import UniformTypeIdentifiers
-import Combine
 
 // MARK: - File Upload Error Types
 
@@ -62,7 +62,7 @@ struct FileUploadConfiguration {
             "swift", "py", "js", "ts", "java", "cpp", "c", "h", "hpp",
             "go", "rs", "php", "rb", "cs", "kt", "scala", "m", "mm",
             "html", "css", "scss", "less", "xml", "json", "yaml", "yml",
-            "md", "txt", "sh", "bash", "zsh", "fish", "ps1", "bat"
+            "md", "txt", "sh", "bash", "zsh", "fish", "ps1", "bat",
         ]
     )
 }
@@ -80,8 +80,8 @@ struct FileData {
         self.name = name
         self.path = path
         self.content = content
-        self.fileExtension = URL(fileURLWithPath: name).pathExtension.lowercased()
-        self.size = content.utf8.count
+        fileExtension = URL(fileURLWithPath: name).pathExtension.lowercased()
+        size = content.utf8.count
     }
 
     var displaySize: String {
@@ -102,8 +102,8 @@ struct SimpleUploadResult {
 
 @MainActor
 public class FileUploadManager: ObservableObject {
-    @Published var isUploading: Bool = false;
-    @Published var uploadProgress: Double = 0.0;
+    @Published var isUploading: Bool = false
+    @Published var uploadProgress: Double = 0.0
     @Published var errorMessage: String?
 
     private let configuration: FileUploadConfiguration
@@ -115,6 +115,8 @@ public class FileUploadManager: ObservableObject {
 
     // MARK: - Main Upload Methods
 
+            /// Function description
+            /// - Returns: Return value description
     func uploadFiles(from urls: [URL]) async throws -> SimpleUploadResult {
         await logger.log("📁 Starting file upload for \(urls.count) items")
 
@@ -131,9 +133,9 @@ public class FileUploadManager: ObservableObject {
             }
         }
 
-        var successfulFiles: [FileData] = [];
-        var failedFiles: [(String, Error)] = [];
-        var warnings: [String] = [];
+        var successfulFiles: [FileData] = []
+        var failedFiles: [(String, Error)] = []
+        var warnings: [String] = []
 
         let totalFiles = urls.count
 
@@ -206,9 +208,9 @@ public class FileUploadManager: ObservableObject {
     private func uploadDirectory(at url: URL) async throws -> SimpleUploadResult {
         await logger.log("📁 Scanning directory: \(url.lastPathComponent)")
 
-        var successfulFiles: [FileData] = [];
-        var failedFiles: [(String, Error)] = [];
-        var warnings: [String] = [];
+        var successfulFiles: [FileData] = []
+        var failedFiles: [(String, Error)] = []
+        var warnings: [String] = []
 
         let fileManager = Foundation.FileManager.default
 
@@ -233,10 +235,14 @@ public class FileUploadManager: ObservableObject {
             }
         )
 
-        guard let enumerator = enumerator else {
+        guard let enumerator else {
             // Fallback: try direct directory reading
             do {
-                let contents = try fileManager.contentsOfDirectory(at: url, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles])
+                let contents = try fileManager.contentsOfDirectory(
+                    at: url,
+                    includingPropertiesForKeys: [.isRegularFileKey],
+                    options: [.skipsHiddenFiles]
+                )
                 for fileURL in contents {
                     do {
                         let file = try await uploadSingleFile(from: fileURL)
@@ -253,13 +259,16 @@ public class FileUploadManager: ObservableObject {
         }
 
         // Enumerate through directory - convert to array first to avoid async issues
-        var fileCount = 0;
+        var fileCount = 0
         let enumeratorArray = enumerator.allObjects as! [URL]
 
         for fileURL in enumeratorArray {
             // Stop if we exceed max files
             guard fileCount < configuration.maxFilesPerUpload else {
-                warnings.append("Directory contains more than \(configuration.maxFilesPerUpload) files. Some files were skipped.")
+                warnings
+                    .append(
+                        "Directory contains more than \(configuration.maxFilesPerUpload) files. Some files were skipped."
+                    )
                 break
             }
 
@@ -286,7 +295,7 @@ public class FileUploadManager: ObservableObject {
         let resourceValues = try url.resourceValues(forKeys: [
             .isRegularFileKey,
             .fileSizeKey,
-            .isReadableKey
+            .isReadableKey,
         ])
 
         // Check if it's a regular file
@@ -306,7 +315,7 @@ public class FileUploadManager: ObservableObject {
 
         // Check file type (optional - we can be more lenient)
         let fileExtension = url.pathExtension.lowercased()
-        if !fileExtension.isEmpty && !configuration.supportedFileTypes.contains(fileExtension) {
+        if !fileExtension.isEmpty, !configuration.supportedFileTypes.contains(fileExtension) {
             await logger.log("⚠️ Uploading unsupported file type: .\(fileExtension)")
             // Don't throw error, just log warning
         }
@@ -329,8 +338,8 @@ public class FileUploadManager: ObservableObject {
                     // Last resort: read as data and convert what we can
                     let data = try Data(contentsOf: url)
                     let content = String(data: data, encoding: .utf8) ??
-                                 String(data: data, encoding: .ascii) ??
-                                 "// Unable to decode file content"
+                        String(data: data, encoding: .ascii) ??
+                        "// Unable to decode file content"
 
                     if content == "// Unable to decode file content" {
                         throw FileUploadError.encodingError(url.lastPathComponent)
@@ -344,14 +353,20 @@ public class FileUploadManager: ObservableObject {
 
     // MARK: - Utility Methods
 
+            /// Function description
+            /// - Returns: Return value description
     func getSupportedFileTypes() -> Set<String> {
         configuration.supportedFileTypes
     }
 
+            /// Function description
+            /// - Returns: Return value description
     func getMaxFileSize() -> Int {
         configuration.maxFileSize
     }
 
+            /// Function description
+            /// - Returns: Return value description
     func validateFileTypeSupported(extension fileExtension: String) -> Bool {
         configuration.supportedFileTypes.contains(fileExtension.lowercased())
     }
@@ -360,6 +375,8 @@ public class FileUploadManager: ObservableObject {
 // MARK: - File Upload Logger
 
 private class FileUploadLogger {
+            /// Function description
+            /// - Returns: Return value description
     func log(_ message: String, file: String = #file, line: Int = #line) async {
         let fileName = (file as NSString).lastPathComponent
         let timestamp = DateFormatter.uploadLogFormatter.string(from: Date())
@@ -367,8 +384,8 @@ private class FileUploadLogger {
     }
 }
 
-extension DateFormatter {
-    fileprivate static let uploadLogFormatter: DateFormatter = {
+private extension DateFormatter {
+    static let uploadLogFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm:ss.SSS"
         return formatter

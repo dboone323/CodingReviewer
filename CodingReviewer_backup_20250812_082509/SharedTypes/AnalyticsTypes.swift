@@ -1,6 +1,7 @@
 import Foundation
 
 // MARK: - Analytics & Reporting Types
+
 // Pure analytics and reporting data models - NO SwiftUI imports, NO Codable
 
 public struct AnalyticsData: Identifiable, Sendable {
@@ -10,7 +11,7 @@ public struct AnalyticsData: Identifiable, Sendable {
     public let data: [String: String] // Using String values only to avoid Codable issues
     public let userID: String?
     public let sessionID: String
-    
+
     // Additional properties for enterprise analytics
     public let totalAnalyses: Int
     public let uniqueUsers: Int
@@ -21,8 +22,24 @@ public struct AnalyticsData: Identifiable, Sendable {
     public let averageQualityScore: Double
     public let issueResolutionRate: Double
     public let codeReviewEfficiency: Double
-    
-    public init(id: UUID = UUID(), timestamp: Date, eventType: String, data: [String: String], userID: String? = nil, sessionID: String, totalAnalyses: Int = 0, uniqueUsers: Int = 0, averageAnalysisTime: Double = 0.0, topIssueTypes: [String] = [], languageDistribution: [String: Int] = [:], qualityTrends: [String: Double] = [:], averageQualityScore: Double = 0.0, issueResolutionRate: Double = 0.0, codeReviewEfficiency: Double = 0.0) {
+
+    public init(
+        id: UUID = UUID(),
+        timestamp: Date,
+        eventType: String,
+        data: [String: String],
+        userID: String? = nil,
+        sessionID: String,
+        totalAnalyses: Int = 0,
+        uniqueUsers: Int = 0,
+        averageAnalysisTime: Double = 0.0,
+        topIssueTypes: [String] = [],
+        languageDistribution: [String: Int] = [:],
+        qualityTrends: [String: Double] = [:],
+        averageQualityScore: Double = 0.0,
+        issueResolutionRate: Double = 0.0,
+        codeReviewEfficiency: Double = 0.0
+    ) {
         self.id = id
         self.timestamp = timestamp
         self.eventType = eventType
@@ -49,8 +66,16 @@ public struct ReportData: Identifiable, Sendable {
     public let summary: String
     public let details: [String]
     public let metrics: [String: String] // Using String values to avoid Codable issues
-    
-    public init(id: UUID = UUID(), title: String, reportType: ReportType, generatedAt: Date, summary: String, details: [String], metrics: [String: String]) {
+
+    public init(
+        id: UUID = UUID(),
+        title: String,
+        reportType: ReportType,
+        generatedAt: Date,
+        summary: String,
+        details: [String],
+        metrics: [String: String]
+    ) {
         self.id = id
         self.title = title
         self.reportType = reportType
@@ -63,20 +88,20 @@ public struct ReportData: Identifiable, Sendable {
 
 public enum ReportType: String, CaseIterable, Sendable {
     case codeQuality = "code_quality"
-    case performance = "performance"
-    case security = "security"
-    case testing = "testing"
-    case documentation = "documentation"
-    case analytics = "analytics"
-    
+    case performance
+    case security
+    case testing
+    case documentation
+    case analytics
+
     public var displayName: String {
         switch self {
-        case .codeQuality: return "Code Quality"
-        case .performance: return "Performance"
-        case .security: return "Security"
-        case .testing: return "Testing"
-        case .documentation: return "Documentation"
-        case .analytics: return "Analytics"
+        case .codeQuality: "Code Quality"
+        case .performance: "Performance"
+        case .security: "Security"
+        case .testing: "Testing"
+        case .documentation: "Documentation"
+        case .analytics: "Analytics"
         }
     }
 }
@@ -87,8 +112,14 @@ public struct AnalyticsMetric: Sendable {
     public let unit: String
     public let category: String
     public let trend: TrendDirection
-    
-    public init(name: String, value: Double, unit: String = "", category: String = "General", trend: TrendDirection = .stable) {
+
+    public init(
+        name: String,
+        value: Double,
+        unit: String = "",
+        category: String = "General",
+        trend: TrendDirection = .stable
+    ) {
         self.name = name
         self.value = value
         self.unit = unit
@@ -111,8 +142,14 @@ public struct ExportOptions: Sendable {
     public let includeSummary: Bool
     public let includeMetrics: Bool
     public let fileName: String?
-    
-    public init(format: ExportFormat, includeDetails: Bool, includeSummary: Bool, includeMetrics: Bool, fileName: String? = nil) {
+
+    public init(
+        format: ExportFormat,
+        includeDetails: Bool,
+        includeSummary: Bool,
+        includeMetrics: Bool,
+        fileName: String? = nil
+    ) {
         self.format = format
         self.includeDetails = includeDetails
         self.includeSummary = includeSummary
@@ -128,8 +165,15 @@ public struct TeamMetrics: Sendable {
     public let averageCompletionTime: TimeInterval
     public let productivityScore: Double
     public let collaborationScore: Double
-    
-    public init(activeMembers: Int, completedTasks: Int, pendingTasks: Int, averageCompletionTime: TimeInterval, productivityScore: Double, collaborationScore: Double) {
+
+    public init(
+        activeMembers: Int,
+        completedTasks: Int,
+        pendingTasks: Int,
+        averageCompletionTime: TimeInterval,
+        productivityScore: Double,
+        collaborationScore: Double
+    ) {
         self.activeMembers = activeMembers
         self.completedTasks = completedTasks
         self.pendingTasks = pendingTasks
@@ -146,8 +190,15 @@ public struct ProjectInsights: Sendable {
     public let maintainabilityIndex: Double
     public let securityScore: Double
     public let documentationCoverage: Double
-    
-    public init(codebaseSize: Int, testCoverage: Double, technicalDebt: Double, maintainabilityIndex: Double, securityScore: Double, documentationCoverage: Double) {
+
+    public init(
+        codebaseSize: Int,
+        testCoverage: Double,
+        technicalDebt: Double,
+        maintainabilityIndex: Double,
+        securityScore: Double,
+        documentationCoverage: Double
+    ) {
         self.codebaseSize = codebaseSize
         self.testCoverage = testCoverage
         self.technicalDebt = technicalDebt
@@ -163,8 +214,14 @@ public struct DashboardData: Sendable {
     public let recentReports: [ReportData]
     public let trends: [AnalyticsData]
     public let lastUpdated: Date
-    
-    public init(summary: ProjectInsights, teamMetrics: TeamMetrics, recentReports: [ReportData], trends: [AnalyticsData], lastUpdated: Date) {
+
+    public init(
+        summary: ProjectInsights,
+        teamMetrics: TeamMetrics,
+        recentReports: [ReportData],
+        trends: [AnalyticsData],
+        lastUpdated: Date
+    ) {
         self.summary = summary
         self.teamMetrics = teamMetrics
         self.recentReports = recentReports
@@ -180,8 +237,15 @@ public struct ChartData: Sendable {
     public let title: String
     public let xAxisLabel: String
     public let yAxisLabel: String
-    
-    public init(labels: [String], values: [Double], chartType: ChartType, title: String, xAxisLabel: String, yAxisLabel: String) {
+
+    public init(
+        labels: [String],
+        values: [Double],
+        chartType: ChartType,
+        title: String,
+        xAxisLabel: String,
+        yAxisLabel: String
+    ) {
         self.labels = labels
         self.values = values
         self.chartType = chartType
@@ -192,19 +256,19 @@ public struct ChartData: Sendable {
 }
 
 public enum ChartType: String, CaseIterable, Sendable {
-    case line = "line"
-    case bar = "bar"
-    case pie = "pie"
-    case scatter = "scatter"
-    case area = "area"
-    
+    case line
+    case bar
+    case pie
+    case scatter
+    case area
+
     public var displayName: String {
         switch self {
-        case .line: return "Line Chart"
-        case .bar: return "Bar Chart"
-        case .pie: return "Pie Chart"
-        case .scatter: return "Scatter Plot"
-        case .area: return "Area Chart"
+        case .line: "Line Chart"
+        case .bar: "Bar Chart"
+        case .pie: "Pie Chart"
+        case .scatter: "Scatter Plot"
+        case .area: "Area Chart"
         }
     }
 }
@@ -213,7 +277,7 @@ public struct TimeSeriesData: Sendable {
     public let timestamp: Date
     public let value: Double
     public let metric: String
-    
+
     public init(timestamp: Date, value: Double, metric: String) {
         self.timestamp = timestamp
         self.value = value
@@ -227,8 +291,14 @@ public struct TrendAnalysis: Sendable {
     public let changePercentage: Double
     public let confidence: Double
     public let dataPoints: [TimeSeriesData]
-    
-    public init(metric: String, direction: TrendDirection, changePercentage: Double, confidence: Double, dataPoints: [TimeSeriesData]) {
+
+    public init(
+        metric: String,
+        direction: TrendDirection,
+        changePercentage: Double,
+        confidence: Double,
+        dataPoints: [TimeSeriesData]
+    ) {
         self.metric = metric
         self.direction = direction
         self.changePercentage = changePercentage
@@ -247,20 +317,30 @@ public struct AnalyticsReport: Sendable {
     public let trends: [TrendAnalysis]
     public let generatedAt: Date
     public let timeframe: AnalyticsTimeframe
-    
+
     // Additional properties for enterprise reporting
     public let totalAnalyses: Int
     public let uniqueUsers: Int
     public let averageAnalysisTime: Double
     public let averageActionsPerDay: Double
-    
-    public init(title: String, summary: String, metrics: [AnalyticsMetric], trends: [TrendAnalysis], timeframe: AnalyticsTimeframe, totalAnalyses: Int = 0, uniqueUsers: Int = 0, averageAnalysisTime: Double = 0.0, averageActionsPerDay: Double = 0.0) {
-        self.id = UUID()
+
+    public init(
+        title: String,
+        summary: String,
+        metrics: [AnalyticsMetric],
+        trends: [TrendAnalysis],
+        timeframe: AnalyticsTimeframe,
+        totalAnalyses: Int = 0,
+        uniqueUsers: Int = 0,
+        averageAnalysisTime: Double = 0.0,
+        averageActionsPerDay: Double = 0.0
+    ) {
+        id = UUID()
         self.title = title
         self.summary = summary
         self.metrics = metrics
         self.trends = trends
-        self.generatedAt = Date()
+        generatedAt = Date()
         self.timeframe = timeframe
         self.totalAnalyses = totalAnalyses
         self.uniqueUsers = uniqueUsers
@@ -275,12 +355,12 @@ public struct UserActivity: Sendable {
     public let action: String
     public let timestamp: Date
     public let metadata: [String: String]
-    
+
     public init(userId: String, action: String, metadata: [String: String] = [:]) {
-        self.id = UUID()
+        id = UUID()
         self.userId = userId
         self.action = action
-        self.timestamp = Date()
+        timestamp = Date()
         self.metadata = metadata
     }
 }
@@ -292,35 +372,43 @@ public struct SystemStatus: Sendable {
     public let activeUsers: Int
     public let errorRate: Double
     public let lastUpdate: Date
-    
+
     // Additional properties for enterprise dashboard
     public let activeJobsCount: Int
     public let status: String
-    
-    public init(isHealthy: Bool = true, uptime: TimeInterval = 0, systemLoad: SystemLoad = SystemLoad(), activeUsers: Int = 0, errorRate: Double = 0.0, activeJobsCount: Int = 0, status: String = "healthy") {
+
+    public init(
+        isHealthy: Bool = true,
+        uptime: TimeInterval = 0,
+        systemLoad: SystemLoad = SystemLoad(),
+        activeUsers: Int = 0,
+        errorRate: Double = 0.0,
+        activeJobsCount: Int = 0,
+        status: String = "healthy"
+    ) {
         self.isHealthy = isHealthy
         self.uptime = uptime
         self.systemLoad = systemLoad
         self.activeUsers = activeUsers
         self.errorRate = errorRate
-        self.lastUpdate = Date()
+        lastUpdate = Date()
         self.activeJobsCount = activeJobsCount
         self.status = status
     }
 }
 
 public enum TrendDirection: String, CaseIterable, Sendable {
-    case increasing = "increasing"
-    case decreasing = "decreasing"
-    case stable = "stable"
-    case volatile = "volatile"
-    
+    case increasing
+    case decreasing
+    case stable
+    case volatile
+
     public var displayName: String {
         switch self {
-        case .increasing: return "Increasing"
-        case .decreasing: return "Decreasing"
-        case .stable: return "Stable"
-        case .volatile: return "Volatile"
+        case .increasing: "Increasing"
+        case .decreasing: "Decreasing"
+        case .stable: "Stable"
+        case .volatile: "Volatile"
         }
     }
 }

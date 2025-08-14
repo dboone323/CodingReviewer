@@ -1,6 +1,6 @@
 import Foundation
-import SwiftUI
 import Combine
+import SwiftUI
 
 /// Enhanced Performance Dashboard with real-time monitoring and analytics
 struct EnhancedPerformanceDashboard: View {
@@ -8,27 +8,27 @@ struct EnhancedPerformanceDashboard: View {
     @EnvironmentObject var responseTracker: ResponseTimeTracker
     @EnvironmentObject var backgroundManager: BackgroundProcessingManager
     @StateObject private var performanceAnalyzer = EnhancedPerformanceAnalyzer()
-    
+
     @State private var selectedTimeRange: TimeRange = .last1Hour
     @State private var showDetailedView = false
     @State private var selectedMetric: MetricType? = nil
-    
+
     enum TimeRange: String, CaseIterable {
         case last5Min = "5m"
-        case last1Hour = "1h" 
+        case last1Hour = "1h"
         case last24Hours = "24h"
         case last7Days = "7d"
-        
+
         var displayName: String {
             switch self {
-            case .last5Min: return "Last 5 minutes"
-            case .last1Hour: return "Last hour"
-            case .last24Hours: return "Last 24 hours"
-            case .last7Days: return "Last 7 days"
+            case .last5Min: "Last 5 minutes"
+            case .last1Hour: "Last hour"
+            case .last24Hours: "Last 24 hours"
+            case .last7Days: "Last 7 days"
             }
         }
     }
-    
+
     enum MetricType: String, CaseIterable {
         case memory = "Memory Usage"
         case cpu = "CPU Usage"
@@ -37,7 +37,7 @@ struct EnhancedPerformanceDashboard: View {
         case diskIO = "Disk I/O"
         case networkActivity = "Network Activity"
     }
-    
+
     var body: some View {
         VStack(spacing: 20) {
             // Header with time range selector
@@ -46,14 +46,14 @@ struct EnhancedPerformanceDashboard: View {
                     Text("Performance Dashboard")
                         .font(.title2)
                         .fontWeight(.bold)
-                    
+
                     Text("Real-time system monitoring and analytics")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
-                
+
                 Spacer()
-                
+
                 Picker("Time Range", selection: $selectedTimeRange) {
                     ForEach(TimeRange.allCases, id: \.self) { range in
                         Text(range.displayName).tag(range)
@@ -62,12 +62,12 @@ struct EnhancedPerformanceDashboard: View {
                 .pickerStyle(SegmentedPickerStyle())
                 .frame(width: 200)
             }
-            
+
             // Real-time metrics overview
             LazyVGrid(columns: [
                 GridItem(.flexible()),
                 GridItem(.flexible()),
-                GridItem(.flexible())
+                GridItem(.flexible()),
             ], spacing: 16) {
                 // Memory Usage Card
                 PerformanceMetricCard(
@@ -80,7 +80,7 @@ struct EnhancedPerformanceDashboard: View {
                     isSelected: selectedMetric == .memory,
                     onTap: { selectedMetric = .memory }
                 )
-                
+
                 // Response Time Card
                 PerformanceMetricCard(
                     title: "Avg Response",
@@ -92,7 +92,7 @@ struct EnhancedPerformanceDashboard: View {
                     isSelected: selectedMetric == .responseTime,
                     onTap: { selectedMetric = .responseTime }
                 )
-                
+
                 // Background Jobs Card
                 PerformanceMetricCard(
                     title: "Active Jobs",
@@ -104,7 +104,7 @@ struct EnhancedPerformanceDashboard: View {
                     isSelected: selectedMetric == .backgroundJobs,
                     onTap: { selectedMetric = .backgroundJobs }
                 )
-                
+
                 // CPU Usage Card (Estimated)
                 PerformanceMetricCard(
                     title: "CPU Usage",
@@ -116,7 +116,7 @@ struct EnhancedPerformanceDashboard: View {
                     isSelected: selectedMetric == .cpu,
                     onTap: { selectedMetric = .cpu }
                 )
-                
+
                 // System Health Score
                 PerformanceMetricCard(
                     title: "Health Score",
@@ -128,22 +128,22 @@ struct EnhancedPerformanceDashboard: View {
                     isSelected: selectedMetric == .diskIO,
                     onTap: { selectedMetric = .diskIO }
                 )
-                
+
                 // Quick Actions Card
                 QuickActionsCard()
             }
-            
+
             // Detailed View Section
-            if let selectedMetric = selectedMetric {
+            if let selectedMetric {
                 DetailedMetricView(metric: selectedMetric, timeRange: selectedTimeRange)
                     .transition(.opacity.combined(with: .slide))
             }
-            
+
             // Performance Recommendations
             if !performanceAnalyzer.recommendations.isEmpty {
                 RecommendationsCard(recommendations: performanceAnalyzer.recommendations)
             }
-            
+
             // System Status Timeline
             SystemStatusTimeline(analyzer: performanceAnalyzer)
         }
@@ -155,32 +155,32 @@ struct EnhancedPerformanceDashboard: View {
             performanceAnalyzer.stopMonitoring()
         }
     }
-    
+
     private var responseTimeColor: Color {
         let time = responseTracker.averageResponseTime
         if time < 1.0 { return .green }
         if time < 3.0 { return .orange }
         return .red
     }
-    
+
     private var backgroundJobsProgress: Double {
         let total = max(backgroundManager.activeJobs.count + backgroundManager.totalJobsProcessed, 1)
         return Double(backgroundManager.totalJobsProcessed) / Double(total)
     }
-    
+
     private var backgroundJobsColor: Color {
         if backgroundManager.activeJobs.count > 5 { return .red }
         if backgroundManager.activeJobs.count > 2 { return .orange }
         return .green
     }
-    
+
     private var cpuUsageColor: Color {
         let usage = performanceAnalyzer.estimatedCPUUsage
         if usage > 0.8 { return .red }
         if usage > 0.6 { return .orange }
         return .green
     }
-    
+
     private var healthScoreColor: Color {
         let score = performanceAnalyzer.overallHealthScore
         if score > 0.8 { return .green }
@@ -199,7 +199,7 @@ struct PerformanceMetricCard: View {
     let trend: EnhancedPerformanceAnalyzer.Trend
     let isSelected: Bool
     let onTap: () -> Void
-    
+
     var body: some View {
         Button(action: onTap) {
             VStack(alignment: .leading, spacing: 8) {
@@ -207,21 +207,21 @@ struct PerformanceMetricCard: View {
                     Text(title)
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     Spacer()
-                    
+
                     TrendIndicator(trend: trend)
                 }
-                
+
                 Text(value)
                     .font(.title3)
                     .fontWeight(.bold)
                     .foregroundColor(color)
-                
+
                 Text(subtitle)
                     .font(.caption2)
                     .foregroundColor(.secondary)
-                
+
                 ProgressView(value: progress, total: 1.0)
                     .progressViewStyle(LinearProgressViewStyle(tint: color))
             }
@@ -245,13 +245,13 @@ struct PerformanceMetricCard: View {
 /// Trend Indicator Component
 struct TrendIndicator: View {
     let trend: EnhancedPerformanceAnalyzer.Trend
-    
+
     var body: some View {
         HStack(spacing: 2) {
             Image(systemName: trend.icon)
                 .foregroundColor(trend.color)
                 .font(.caption2)
-            
+
             switch trend {
             case .up(let percent), .down(let percent):
                 Text(String(format: "%.1f%%", abs(percent)))
@@ -271,7 +271,7 @@ struct QuickActionsCard: View {
             Text("Quick Actions")
                 .font(.caption)
                 .foregroundColor(.secondary)
-            
+
             VStack(spacing: 6) {
                 QuickActionButton(
                     title: "Clear Cache",
@@ -280,7 +280,7 @@ struct QuickActionsCard: View {
                 ) {
                     // Implement cache clearing
                 }
-                
+
                 QuickActionButton(
                     title: "Optimize Memory",
                     icon: "arrow.clockwise",
@@ -288,7 +288,7 @@ struct QuickActionsCard: View {
                 ) {
                     // Implement memory optimization
                 }
-                
+
                 QuickActionButton(
                     title: "Export Report",
                     icon: "square.and.arrow.up",
@@ -309,18 +309,18 @@ struct QuickActionButton: View {
     let icon: String
     let color: Color
     let action: () -> Void
-    
+
     var body: some View {
         Button(action: action) {
             HStack(spacing: 8) {
                 Image(systemName: icon)
                     .foregroundColor(color)
                     .font(.caption)
-                
+
                 Text(title)
                     .font(.caption2)
                     .foregroundColor(.primary)
-                
+
                 Spacer()
             }
             .padding(.horizontal, 8)
@@ -336,7 +336,7 @@ struct QuickActionButton: View {
 struct DetailedMetricView: View {
     let metric: EnhancedPerformanceDashboard.MetricType
     let timeRange: EnhancedPerformanceDashboard.TimeRange
-    
+
     var body: some View {
         EnhancedCard(
             title: metric.rawValue,
@@ -347,7 +347,11 @@ struct DetailedMetricView: View {
             VStack(alignment: .leading, spacing: 12) {
                 // Mini chart placeholder
                 Rectangle()
-                    .fill(LinearGradient(colors: [.blue.opacity(0.3), .blue.opacity(0.1)], startPoint: .top, endPoint: .bottom))
+                    .fill(LinearGradient(
+                        colors: [.blue.opacity(0.3), .blue.opacity(0.1)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    ))
                     .frame(height: 80)
                     .cornerRadius(8)
                     .overlay(
@@ -356,7 +360,7 @@ struct DetailedMetricView: View {
                             .foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
                     )
-                
+
                 // Statistics
                 HStack {
                     StatisticView(title: "Average", value: getAverageValue(), color: .blue)
@@ -368,37 +372,37 @@ struct DetailedMetricView: View {
             }
         }
     }
-    
+
     private func getAverageValue() -> String {
         switch metric {
-        case .memory: return "2.1 GB"
-        case .cpu: return "45%"
-        case .responseTime: return "1.2s"
-        case .backgroundJobs: return "3"
-        case .diskIO: return "15 MB/s"
-        case .networkActivity: return "5 MB/s"
+        case .memory: "2.1 GB"
+        case .cpu: "45%"
+        case .responseTime: "1.2s"
+        case .backgroundJobs: "3"
+        case .diskIO: "15 MB/s"
+        case .networkActivity: "5 MB/s"
         }
     }
-    
+
     private func getPeakValue() -> String {
         switch metric {
-        case .memory: return "3.8 GB"
-        case .cpu: return "85%"
-        case .responseTime: return "4.1s"
-        case .backgroundJobs: return "8"
-        case .diskIO: return "45 MB/s"
-        case .networkActivity: return "25 MB/s"
+        case .memory: "3.8 GB"
+        case .cpu: "85%"
+        case .responseTime: "4.1s"
+        case .backgroundJobs: "8"
+        case .diskIO: "45 MB/s"
+        case .networkActivity: "25 MB/s"
         }
     }
-    
+
     private func getMinValue() -> String {
         switch metric {
-        case .memory: return "1.2 GB"
-        case .cpu: return "12%"
-        case .responseTime: return "0.3s"
-        case .backgroundJobs: return "0"
-        case .diskIO: return "2 MB/s"
-        case .networkActivity: return "0.5 MB/s"
+        case .memory: "1.2 GB"
+        case .cpu: "12%"
+        case .responseTime: "0.3s"
+        case .backgroundJobs: "0"
+        case .diskIO: "2 MB/s"
+        case .networkActivity: "0.5 MB/s"
         }
     }
 }
@@ -407,13 +411,13 @@ struct StatisticView: View {
     let title: String
     let value: String
     let color: Color
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(title)
                 .font(.caption2)
                 .foregroundColor(.secondary)
-            
+
             Text(value)
                 .font(.caption)
                 .fontWeight(.semibold)
@@ -426,7 +430,7 @@ struct StatisticView: View {
 struct RecommendationsCard: View {
     let recommendations: [PerformanceRecommendation]
     @State private var isExpanded = false
-    
+
     var body: some View {
         EnhancedCard(
             title: "Performance Recommendations",
@@ -438,16 +442,16 @@ struct RecommendationsCard: View {
                 ForEach(recommendations.prefix(isExpanded ? recommendations.count : 3), id: \.id) { recommendation in
                     RecommendationRow(recommendation: recommendation)
                 }
-                
+
                 if recommendations.count > 3 {
                     Button(action: { isExpanded.toggle() }) {
                         HStack {
                             Text(isExpanded ? "Show Less" : "Show \(recommendations.count - 3) More")
                                 .font(.caption)
                                 .foregroundColor(.blue)
-                            
+
                             Spacer()
-                            
+
                             Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                                 .font(.caption2)
                                 .foregroundColor(.blue)
@@ -462,25 +466,25 @@ struct RecommendationsCard: View {
 
 struct RecommendationRow: View {
     let recommendation: PerformanceRecommendation
-    
+
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
             Image(systemName: recommendation.priority.icon)
                 .foregroundColor(recommendation.priority.color)
                 .font(.caption)
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(recommendation.title)
                     .font(.caption)
                     .fontWeight(.medium)
-                
+
                 Text(recommendation.description)
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
-            
+
             Spacer()
-            
+
             if let impact = recommendation.estimatedImprovement {
                 Text("+\(Int(impact * 100))%")
                     .font(.caption2)
@@ -495,7 +499,7 @@ struct RecommendationRow: View {
 /// System Status Timeline
 struct SystemStatusTimeline: View {
     let analyzer: EnhancedPerformanceAnalyzer
-    
+
     var body: some View {
         EnhancedCard(
             title: "System Status Timeline",
@@ -508,19 +512,19 @@ struct SystemStatusTimeline: View {
                         Circle()
                             .fill(event.severity.color)
                             .frame(width: 6, height: 6)
-                        
+
                         VStack(alignment: .leading, spacing: 2) {
                             Text(event.title)
                                 .font(.caption)
                                 .fontWeight(.medium)
-                            
+
                             Text(event.timestamp, style: .relative)
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
                         }
-                        
+
                         Spacer()
-                        
+
                         if event.hasAction {
                             Button("View") {
                                 // Handle event action
@@ -530,7 +534,7 @@ struct SystemStatusTimeline: View {
                         }
                     }
                 }
-                
+
                 if analyzer.recentEvents.isEmpty {
                     Text("No recent events")
                         .font(.caption)

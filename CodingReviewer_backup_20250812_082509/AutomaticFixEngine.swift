@@ -14,6 +14,8 @@ class AutomaticFixEngine {
     // MARK: - Fix Application Methods
 
     /// Performs operation with error handling and validation
+    /// <#Description#>
+    /// - Returns: <#description#>
     func applyAutomaticFixes(to filePath: String) async throws -> FixApplicationResult {
         os_log("Starting automatic fixes for %@", log: logger, type: .debug, filePath)
 
@@ -39,7 +41,11 @@ class AutomaticFixEngine {
         }
 
         for failedFix in result.failedFixes {
-            learningCoordinator.recordFailure(fix: failedFix.fix.description, error: failedFix.error.localizedDescription, context: filePath)
+            learningCoordinator.recordFailure(
+                fix: failedFix.fix.description,
+                error: failedFix.error.localizedDescription,
+                context: filePath
+            )
         }
 
         os_log("Applied %d automatic fixes to %@", log: logger, type: .info, result.appliedFixes.count, filePath)
@@ -47,8 +53,10 @@ class AutomaticFixEngine {
     }
 
     /// Performs operation with error handling and validation
-    func detectIssues(in content: String, filePath: String) async throws -> [FixEngineIssue] {
-        var issues: [FixEngineIssue] = [];
+    /// <#Description#>
+    /// - Returns: <#description#>
+    func detectIssues(in content: String, filePath _: String) async throws -> [FixEngineIssue] {
+        var issues: [FixEngineIssue] = []
         let lines = content.components(separatedBy: .newlines)
 
         for (index, line) in lines.enumerated() {
@@ -67,28 +75,28 @@ class AutomaticFixEngine {
 
     /// Creates and configures components with proper initialization
     private func generateFixes(for issues: [FixEngineIssue]) -> [AutomaticFix] {
-        return issues.compactMap { issue in
+        issues.compactMap { issue in
             switch issue.type {
             case .concurrencyWarning:
-                return createConcurrencyFix(for: issue)
+                createConcurrencyFix(for: issue)
             case .unusedVariable:
-                return createUnusedVariableFix(for: issue)
+                createUnusedVariableFix(for: issue)
             case .forceUnwrapping:
-                return createSafeUnwrappingFix(for: issue)
+                createSafeUnwrappingFix(for: issue)
             case .stringInterpolation:
-                return createStringInterpolationFix(for: issue)
+                createStringInterpolationFix(for: issue)
             case .weakSelfUsage:
-                return createWeakSelfFix(for: issue)
+                createWeakSelfFix(for: issue)
             case .optionalChaining:
-                return createOptionalChainingFix(for: issue)
+                createOptionalChainingFix(for: issue)
             case .immutableVariable:
-                return createImmutableVariableFix(for: issue)
+                createImmutableVariableFix(for: issue)
             case .redundantReturn:
-                return createRedundantReturnFix(for: issue)
+                createRedundantReturnFix(for: issue)
             case .magicNumber:
-                return createMagicNumberFix(for: issue)
+                createMagicNumberFix(for: issue)
             case .longFunction:
-                return createFunctionRefactoringFix(for: issue)
+                createFunctionRefactoringFix(for: issue)
             }
         }
     }
@@ -96,32 +104,34 @@ class AutomaticFixEngine {
     // Commented out for simplified AI learning system
     // Will be re-enabled when full AI features are activated
     /*
+     /// Performs operation with error handling and validation
+     private func prioritizeFixes(recommended: [RecommendedFix], traditional: [AutomaticFix]) -> [AutomaticFix] {
+         var prioritizedFixes: [AutomaticFix] = []
+
+         // Add high-confidence AI recommendations first
+         let highConfidenceRecommended = recommended.filter { $0.confidence > 0.8 }
+         prioritizedFixes.append(contentsOf: highConfidenceRecommended.map { $0.suggestedFix })
+
+         // Add traditional fixes not covered by AI recommendations
+         let coveredTypes = Set(highConfidenceRecommended.map { $0.issue.type })
+         let uncoveredTraditionalFixes = traditional.filter { !coveredTypes.contains($0.type) }
+         prioritizedFixes.append(contentsOf: uncoveredTraditionalFixes)
+
+         // Add medium-confidence AI recommendations
+         let mediumConfidenceRecommended = recommended.filter { $0.confidence > 0.5 && $0.confidence <= 0.8 }
+         prioritizedFixes.append(contentsOf: mediumConfidenceRecommended.map { $0.suggestedFix })
+
+         return prioritizedFixes
+     }
+     */
+
     /// Performs operation with error handling and validation
-    private func prioritizeFixes(recommended: [RecommendedFix], traditional: [AutomaticFix]) -> [AutomaticFix] {
-        var prioritizedFixes: [AutomaticFix] = []
-
-        // Add high-confidence AI recommendations first
-        let highConfidenceRecommended = recommended.filter { $0.confidence > 0.8 }
-        prioritizedFixes.append(contentsOf: highConfidenceRecommended.map { $0.suggestedFix })
-
-        // Add traditional fixes not covered by AI recommendations
-        let coveredTypes = Set(highConfidenceRecommended.map { $0.issue.type })
-        let uncoveredTraditionalFixes = traditional.filter { !coveredTypes.contains($0.type) }
-        prioritizedFixes.append(contentsOf: uncoveredTraditionalFixes)
-
-        // Add medium-confidence AI recommendations
-        let mediumConfidenceRecommended = recommended.filter { $0.confidence > 0.5 && $0.confidence <= 0.8 }
-        prioritizedFixes.append(contentsOf: mediumConfidenceRecommended.map { $0.suggestedFix })
-
-        return prioritizedFixes
-    }
-    */
-
-    /// Performs operation with error handling and validation
-    private func applyFixes(_ fixes: [AutomaticFix], to content: String, filePath: String) async throws -> FixApplicationResult {
-        var modifiedContent = content;
-        var appliedFixes: [AutomaticFix] = [];
-        var failedFixes: [FixFailure] = [];
+    private func applyFixes(_ fixes: [AutomaticFix], to content: String,
+                            filePath: String) async throws -> FixApplicationResult
+    {
+        var modifiedContent = content
+        var appliedFixes: [AutomaticFix] = []
+        var failedFixes: [FixFailure] = []
 
         // Sort fixes by line number (descending) to avoid line number shifts
         let sortedFixes = fixes.sorted { $0.lineNumber > $1.lineNumber }
@@ -134,7 +144,13 @@ class AutomaticFixEngine {
             } catch {
                 let failure = FixFailure(fix: fix, error: error)
                 failedFixes.append(failure)
-                os_log("Failed to apply fix: %@ - %@", log: logger, type: .error, fix.description, error.localizedDescription)
+                os_log(
+                    "Failed to apply fix: %@ - %@",
+                    log: logger,
+                    type: .error,
+                    fix.description,
+                    error.localizedDescription
+                )
             }
         }
 
@@ -153,9 +169,9 @@ class AutomaticFixEngine {
 
     /// Performs operation with error handling and validation
     private func applyFix(_ fix: AutomaticFix, to content: String) throws -> String {
-        var lines = content.components(separatedBy: .newlines);
+        var lines = content.components(separatedBy: .newlines)
 
-        guard fix.lineNumber > 0 && fix.lineNumber <= lines.count else {
+        guard fix.lineNumber > 0, fix.lineNumber <= lines.count else {
             throw FixEngineError.invalidLineNumber(fix.lineNumber)
         }
 
@@ -176,7 +192,7 @@ class AutomaticFixEngine {
         case .multiLineReplace(let startLine, let endLine, let newLines):
             let startIndex = startLine - 1
             let endIndex = min(endLine - 1, lines.count - 1)
-            lines.replaceSubrange(startIndex...endIndex, with: newLines)
+            lines.replaceSubrange(startIndex ... endIndex, with: newLines)
         }
 
         return lines.joined(separator: "\n")
@@ -186,13 +202,12 @@ class AutomaticFixEngine {
 // MARK: - Issue Detection Methods
 
 extension AutomaticFixEngine {
-
     /// Performs operation with error handling and validation
     private func detectSwiftConcurrencyIssues(line: String, lineNumber: Int) -> [FixEngineIssue] {
-        var issues: [FixEngineIssue] = [];
+        var issues: [FixEngineIssue] = []
 
         // Detect main actor isolation warnings
-        if line.contains("call to main actor-isolated") && line.contains("in a synchronous") {
+        if line.contains("call to main actor-isolated"), line.contains("in a synchronous") {
             issues.append(FixEngineIssue(
                 type: .concurrencyWarning,
                 lineNumber: lineNumber,
@@ -207,10 +222,10 @@ extension AutomaticFixEngine {
 
     /// Performs operation with error handling and validation
     private func detectPerformanceIssues(line: String, lineNumber: Int) -> [FixEngineIssue] {
-        var issues: [FixEngineIssue] = [];
+        var issues: [FixEngineIssue] = []
 
         // Detect unused variables
-        if line.contains("initialization of immutable value") && line.contains("was never used") {
+        if line.contains("initialization of immutable value"), line.contains("was never used") {
             issues.append(FixEngineIssue(
                 type: .unusedVariable,
                 lineNumber: lineNumber,
@@ -225,10 +240,10 @@ extension AutomaticFixEngine {
 
     /// Performs operation with error handling and validation
     private func detectSecurityIssues(line: String, lineNumber: Int) -> [FixEngineIssue] {
-        var issues: [FixEngineIssue] = [];
+        var issues: [FixEngineIssue] = []
 
         // Detect force unwrapping
-        if line.contains("!") && !line.contains("//") && !line.contains("\"") {
+        if line.contains("!"), !line.contains("//"), !line.contains("\"") {
             let pattern = #"[a-zA-Z_][a-zA-Z0-9_]*!"#
             if line.range(of: pattern, options: .regularExpression) != nil {
                 issues.append(FixEngineIssue(
@@ -246,10 +261,10 @@ extension AutomaticFixEngine {
 
     /// Performs operation with error handling and validation
     private func detectCodeQualityIssues(line: String, lineNumber: Int) -> [FixEngineIssue] {
-        var issues: [FixEngineIssue] = [];
+        var issues: [FixEngineIssue] = []
 
         // Detect mutable variables that should be immutable
-        if line.contains("variable") && line.contains("was never mutated") && line.contains("consider changing to 'let'") {
+        if line.contains("variable"), line.contains("was never mutated"), line.contains("consider changing to 'let'") {
             issues.append(FixEngineIssue(
                 type: .immutableVariable,
                 lineNumber: lineNumber,
@@ -264,10 +279,10 @@ extension AutomaticFixEngine {
 
     /// Performs operation with error handling and validation
     private func detectSwiftBestPractices(line: String, lineNumber: Int) -> [FixEngineIssue] {
-        var issues: [FixEngineIssue] = [];
+        var issues: [FixEngineIssue] = []
 
         // Detect redundant returns
-        if line.trimmed.hasPrefix("return ") && line.contains("single expression") {
+        if line.trimmed.hasPrefix("return "), line.contains("single expression") {
             issues.append(FixEngineIssue(
                 type: .redundantReturn,
                 lineNumber: lineNumber,
@@ -279,8 +294,9 @@ extension AutomaticFixEngine {
 
         // Detect magic numbers
         let magicNumberPattern = #"\b([2-9]|[1-9][0-9]+)\b"#
-        if line.range(of: magicNumberPattern, options: .regularExpression) != nil &&
-           !line.contains("//") && !line.contains("case") {
+        if line.range(of: magicNumberPattern, options: .regularExpression) != nil,
+           !line.contains("//"), !line.contains("case")
+        {
             issues.append(FixEngineIssue(
                 type: .magicNumber,
                 lineNumber: lineNumber,
@@ -297,7 +313,6 @@ extension AutomaticFixEngine {
 // MARK: - Fix Generation Methods
 
 extension AutomaticFixEngine {
-
     /// Creates and configures components with proper initialization
     private func createConcurrencyFix(for issue: FixEngineIssue) -> AutomaticFix? {
         let pattern = #"([a-zA-Z_][a-zA-Z0-9_]*\.shared\.[a-zA-Z_][a-zA-Z0-9_]*\()"#
@@ -414,7 +429,7 @@ extension AutomaticFixEngine {
     /// Creates and configures components with proper initialization
     private func createMagicNumberFix(for issue: FixEngineIssue) -> AutomaticFix? {
         // This would require more context to generate meaningful constant names
-        return AutomaticFix(
+        AutomaticFix(
             type: .magicNumber,
             fixType: .replace(pattern: "", replacement: ""),
             lineNumber: issue.lineNumber,
@@ -425,7 +440,7 @@ extension AutomaticFixEngine {
 
     /// Creates and configures components with proper initialization
     private func createFunctionRefactoringFix(for issue: FixEngineIssue) -> AutomaticFix? {
-        return AutomaticFix(
+        AutomaticFix(
             type: .longFunction,
             fixType: .insert(newLine: "    // TODO: Consider breaking this function into smaller methods"),
             lineNumber: issue.lineNumber,
@@ -438,6 +453,7 @@ extension AutomaticFixEngine {
 // MARK: - Supporting Types
 
 // MARK: - Fix Engine Specific Types
+
 struct FixEngineIssue {
     let type: IssueType
     let lineNumber: Int
@@ -509,11 +525,11 @@ enum FixEngineError: LocalizedError {
     nonisolated var errorDescription: String? {
         switch self {
         case .invalidLineNumber(let line):
-            return "Invalid line number: \(line)"
+            "Invalid line number: \(line)"
         case .patternNotFound(let pattern):
-            return "Pattern not found: \(pattern)"
+            "Pattern not found: \(pattern)"
         case .fileNotWritable(let path):
-            return "File not writable: \(path)"
+            "File not writable: \(path)"
         }
     }
 }
@@ -522,6 +538,6 @@ enum FixEngineError: LocalizedError {
 
 extension String {
     var trimmed: String {
-        return self.trimmingCharacters(in: .whitespacesAndNewlines)
+        trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

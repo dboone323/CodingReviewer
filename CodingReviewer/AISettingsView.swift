@@ -1,14 +1,14 @@
-import OSLog
-// SECURITY: API key handling - ensure proper encryption and keychain storage
-import SwiftUI
 import Foundation
+import OSLog
+import SwiftUI
 
+// SECURITY: API key handling - ensure proper encryption and keychain storage
 struct AISettingsView: View {
-    @State private var openAIKey = "";
-    @State private var geminiKey = "";
-    @State private var selectedProvider: AIProvider = .openai;
-    @State private var showAlert = false;
-    @State private var alertMessage = "";
+    @State private var openAIKey = ""
+    @State private var geminiKey = ""
+    @State private var selectedProvider: AIProvider = .openai
+    @State private var showAlert = false
+    @State private var alertMessage = ""
 
     enum AIProvider: String, CaseIterable {
         case openai = "OpenAI"
@@ -49,7 +49,7 @@ struct AISettingsView: View {
             loadAPIKeys()
         }
         .alert("Settings", isPresented: $showAlert) {
-            Button("OK") { }
+            Button("OK") {}
         } message: {
             Text(alertMessage)
         }
@@ -73,7 +73,8 @@ struct AISettingsView: View {
         geminiKey = UserDefaults.standard.string(forKey: "gemini_key") ?? ""
 
         if let provider = UserDefaults.standard.string(forKey: "selected_provider"),
-           let aiProvider = AIProvider(rawValue: provider) {
+           let aiProvider = AIProvider(rawValue: provider)
+        {
             selectedProvider = aiProvider
             Logger().info("Loaded provider from UserDefaults: \(provider)")
         } else {

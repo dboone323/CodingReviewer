@@ -1,8 +1,9 @@
 import Foundation
-import SwiftUI
 import Combine
+import SwiftUI
 
 // MARK: - Shared Data Manager
+
 // This class ensures that file data is shared across all views in the app
 
 @MainActor
@@ -13,15 +14,19 @@ final class SharedDataManager: ObservableObject {
     @Published var fileManager: FileManagerService
 
     private init() {
-        self.fileManager = FileManagerService()
+        fileManager = FileManagerService()
     }
 
     // Method to get the shared file manager
+    /// <#Description#>
+    /// - Returns: <#description#>
     func getFileManager() -> FileManagerService {
         fileManager
     }
 
     // Method to explicitly refresh all views
+    /// <#Description#>
+    /// - Returns: <#description#>
     func refreshAllViews() {
         objectWillChange.send()
         fileManager.objectWillChange.send()

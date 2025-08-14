@@ -1,6 +1,6 @@
 import Foundation
-import SwiftUI
 import Combine
+import SwiftUI
 
 @MainActor
 class IssueDetector: ObservableObject {
@@ -13,6 +13,8 @@ class IssueDetector: ObservableObject {
     static let shared = IssueDetector()
 
     /// Performs operation with error handling and validation
+    /// <#Description#>
+    /// - Returns: <#description#>
     func scanFiles(_ files: [CodeFile]) async {
         await MainActor.run {
             isScanning = true
@@ -88,7 +90,7 @@ class IssueDetector: ObservableObject {
         }
 
         // Insecure HTTP
-        if line.contains("https://") && !line.contains("localhost") {
+        if line.contains("https://"), !line.contains("localhost") {
             issues.append(DetectedIssue(
                 id: UUID(),
                 type: .security,
@@ -163,7 +165,7 @@ class IssueDetector: ObservableObject {
             ))
         }
 
-        // TODO comments
+        // TODO: comments
         if line.localizedCaseInsensitiveContains("TODO") {
             issues.append(DetectedIssue(
                 id: UUID(),
@@ -182,17 +184,19 @@ class IssueDetector: ObservableObject {
     }
 
     /// Creates and configures components with proper initialization
+    /// <#Description#>
+    /// - Returns: <#description#>
     func generateAutoFixes(for issues: [DetectedIssue]) -> [AutoFix] {
-        return issues.compactMap { issue in
+        issues.compactMap { issue in
             switch issue.type {
             case .security:
-                return generateSecurityFix(for: issue)
+                generateSecurityFix(for: issue)
             case .performance:
-                return generatePerformanceFix(for: issue)
+                generatePerformanceFix(for: issue)
             case .codeQuality:
-                return generateQualityFix(for: issue)
+                generateQualityFix(for: issue)
             default:
-                return nil
+                nil
             }
         }
     }
@@ -201,7 +205,7 @@ class IssueDetector: ObservableObject {
     private func generateSecurityFix(for issue: DetectedIssue) -> AutoFix? {
         switch issue.title {
         case "Insecure HTTP":
-            return AutoFix(
+            AutoFix(
                 id: UUID(),
                 issueId: issue.id,
                 title: "Replace HTTP with HTTPS",
@@ -209,20 +213,20 @@ class IssueDetector: ObservableObject {
                 confidence: 0.9
             )
         default:
-            return nil
+            nil
         }
     }
 
     /// Creates and configures components with proper initialization
-    private func generatePerformanceFix(for issue: DetectedIssue) -> AutoFix? {
+    private func generatePerformanceFix(for _: DetectedIssue) -> AutoFix? {
         // Implementation for performance fixes
-        return nil
+        nil
     }
 
     /// Creates and configures components with proper initialization
-    private func generateQualityFix(for issue: DetectedIssue) -> AutoFix? {
+    private func generateQualityFix(for _: DetectedIssue) -> AutoFix? {
         // Implementation for quality fixes
-        return nil
+        nil
     }
 }
 
@@ -257,11 +261,11 @@ struct DetectedIssue: Identifiable, Sendable, @preconcurrency Codable {
 
         var color: Color {
             switch self {
-            case .critical: return .red
-            case .high: return .orange
-            case .medium: return .yellow
-            case .low: return .blue
-            case .info: return .gray
+            case .critical: .red
+            case .high: .orange
+            case .medium: .yellow
+            case .low: .blue
+            case .info: .gray
             }
         }
     }
@@ -283,7 +287,7 @@ struct SmartEnhancementView: View {
     @State private var selectedType: DetectedIssue.IssueType?
 
     var filteredIssues: [DetectedIssue] {
-        if let selectedType = selectedType {
+        if let selectedType {
             return issueDetector.detectedIssues.filter { $0.type == selectedType }
         }
         return issueDetector.detectedIssues

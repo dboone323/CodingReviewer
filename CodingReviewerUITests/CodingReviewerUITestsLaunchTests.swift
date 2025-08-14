@@ -8,7 +8,6 @@
 import XCTest
 
 final class CodingReviewerUITestsLaunchTests: XCTestCase {
-
     override static var runsForEachTargetApplicationUIConfiguration: Bool {
         true
     }
@@ -18,6 +17,8 @@ final class CodingReviewerUITestsLaunchTests: XCTestCase {
     }
 
     @MainActor
+    /// <#Description#>
+    /// - Returns: <#description#>
     func testLaunch() throws {
         let app = XCUIApplication()
         app.launch()

@@ -2,6 +2,7 @@
 import Foundation
 
 // MARK: - Bug Prediction Models
+
 // / BugPredictor class
 // / TODO: Add detailed documentation
 /// BugPredictor class
@@ -26,7 +27,7 @@ public class BugPredictor {
         let complexity = features.complexityScore
         let probability = min(1.0, complexity / 20.0) // Simplified calculation
 
-        var riskFactors: [BugRiskFactor] = [];
+        var riskFactors: [BugRiskFactor] = []
         if complexity > 10 { riskFactors.append(.highComplexity) }
         if features.functionCount > 50 { riskFactors.append(.lackOfTests) }
 
@@ -82,8 +83,8 @@ public class MLComplexityAnalyzer {
     private func calculateCognitiveComplexity(_ code: String) -> Double {
         // Cognitive complexity considers nesting levels
         let lines = code.components(separatedBy: .newlines)
-        var complexity = 0.0;
-        var nestingLevel = 0;
+        var complexity = 0.0
+        var nestingLevel = 0
 
         for line in lines {
             let trimmed = line.trimmingCharacters(in: .whitespaces)
@@ -109,6 +110,7 @@ public class MLComplexityAnalyzer {
 }
 
 // MARK: - Supporting Types
+
 public struct BugPredictionResult {
     public let probability: Double
     public let confidence: Double
@@ -135,10 +137,16 @@ public struct CodeFeatures {
     public let complexityScore: Double
     public let dependencyCount: Int
 
-    public init(linesOfCode: Int, functionCount: Int, variableCount: Int, complexityScore: Double, dependencyCount: Int) {
+    public init(
+        linesOfCode: Int,
+        functionCount: Int,
+        variableCount: Int,
+        complexityScore: Double,
+        dependencyCount: Int
+    ) {
         self.linesOfCode = linesOfCode
         self.functionCount = functionCount
-        self.variableCount = variableCount;
+        self.variableCount = variableCount
         self.complexityScore = complexityScore
         self.dependencyCount = dependencyCount
     }
@@ -177,6 +185,7 @@ public enum ComplexityReductionSuggestion {
 }
 
 // MARK: - Performance Prediction Models
+
 public struct PerformanceImpactPrediction {
     public let expectedImpact: Double
     public let confidence: Double
@@ -193,7 +202,15 @@ public struct CodeChange {
     public let fileName: String
     public let isPublicAPI: Bool
 
-    public init(type: ChangeType, linesAdded: Int, linesRemoved: Int, functionsModified: Int, complexityDelta: Double, fileName: String, isPublicAPI: Bool) {
+    public init(
+        type: ChangeType,
+        linesAdded: Int,
+        linesRemoved: Int,
+        functionsModified: Int,
+        complexityDelta: Double,
+        fileName: String,
+        isPublicAPI: Bool
+    ) {
         self.type = type
         self.linesAdded = linesAdded
         self.linesRemoved = linesRemoved
@@ -254,6 +271,7 @@ public enum ImplementationEffort {
 }
 
 // MARK: - Pattern Analysis Models
+
 // / CodePatternAnalyzer class
 // / TODO: Add detailed documentation
 /// CodePatternAnalyzer class
@@ -274,7 +292,7 @@ public class CodePatternAnalyzer {
     /// analyzePatterns function
     /// TODO: Add detailed documentation
     public func analyzePatterns(_ code: String) async -> CodePatterns {
-        return CodePatterns(
+        CodePatterns(
             complexity: calculateComplexity(code),
             coupling: calculateCoupling(code),
             cohesion: calculateCohesion(code),
@@ -330,6 +348,7 @@ public struct CodePatterns {
 }
 
 // MARK: - Performance Impact Predictor
+
 // / PerformanceImpactPredictor class
 // / TODO: Add detailed documentation
 /// PerformanceImpactPredictor class
@@ -363,7 +382,7 @@ public class PerformanceImpactPredictor {
 
     /// Performs operation with error handling and validation
     private func extractPerformanceFeatures(_ change: CodeChange) -> PerformanceFeatures {
-        return PerformanceFeatures(
+        PerformanceFeatures(
             changeType: change.type,
             linesAdded: change.linesAdded,
             linesRemoved: change.linesRemoved,
@@ -374,7 +393,7 @@ public class PerformanceImpactPredictor {
 
     /// Performs operation with error handling and validation
     private func aggregateFeatures(_ features: [PerformanceFeatures]) -> AggregatedPerformanceFeatures {
-        return AggregatedPerformanceFeatures(
+        AggregatedPerformanceFeatures(
             totalLinesAdded: features.reduce(0) { $0 + $1.linesAdded },
             totalLinesRemoved: features.reduce(0) { $0 + $1.linesRemoved },
             totalComplexityDelta: features.reduce(0) { $0 + $1.complexityDelta },
@@ -393,12 +412,12 @@ public class PerformanceImpactPredictor {
     /// Analyzes and processes data with comprehensive validation
     private func calculatePredictionConfidence(_ features: AggregatedPerformanceFeatures) -> Double {
         // Simplified confidence calculation
-        return min(1.0, max(0.5, 1.0 - (abs(features.totalComplexityDelta) * 0.1)))
+        min(1.0, max(0.5, 1.0 - (abs(features.totalComplexityDelta) * 0.1)))
     }
 
     /// Performs operation with error handling and validation
     private func identifyCriticalChanges(_ changes: [CodeChange]) -> [CriticalChange] {
-        return changes.compactMap { change in
+        changes.compactMap { change in
             if change.complexityDelta > 5 {
                 return CriticalChange(change: change, reason: .highComplexityIncrease)
             }
@@ -408,7 +427,7 @@ public class PerformanceImpactPredictor {
 
     /// Performs operation with error handling and validation
     private func findOptimizationOpportunities(_ changes: [CodeChange]) -> [OptimizationOpportunity] {
-        return changes.compactMap { change in
+        changes.compactMap { change in
             if change.type == .algorithmImprovement {
                 return OptimizationOpportunity(
                     change: change,
@@ -423,9 +442,9 @@ public class PerformanceImpactPredictor {
     /// Analyzes and processes data with comprehensive validation
     private func calculateChangeDistribution(_ features: [PerformanceFeatures]) -> ChangeDistribution {
         let total = features.count
-        let additions = features.filter { $0.changeType == .addition }.count
-        let modifications = features.filter { $0.changeType == .modification }.count
-        let deletions = features.filter { $0.changeType == .deletion }.count
+        let additions = features.count(where: { $0.changeType == .addition })
+        let modifications = features.count(where: { $0.changeType == .modification })
+        let deletions = features.count(where: { $0.changeType == .deletion })
 
         return ChangeDistribution(
             additions: Double(additions) / Double(total),
@@ -437,18 +456,19 @@ public class PerformanceImpactPredictor {
     /// Performs operation with error handling and validation
     private func estimatePerformanceGain(_ change: CodeChange) -> Double {
         // Simplified performance gain estimation
-        return max(0, Double(change.complexityDelta) * -0.1)
+        max(0, Double(change.complexityDelta) * -0.1)
     }
 
     /// Performs operation with error handling and validation
     private func estimateImplementationEffort(_ change: CodeChange) -> ImplementationEffort {
         if change.linesAdded + change.linesRemoved > 100 {
-            return .high
+            .high
         } else if change.linesAdded + change.linesRemoved > 50 {
-            return .medium
+            .medium
         } else {
-            return .low
+            .low
         }
     }
 }
+
 import Security

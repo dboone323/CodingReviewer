@@ -27,10 +27,26 @@ struct PatternAnalysisView: View {
             }
 
             VStack(alignment: .leading, spacing: 12) {
-                AnalysisFeatureItem(icon: "magnifyingglass", title: "Code Smell Detection", description: "Identify code smells automatically")
-                AnalysisFeatureItem(icon: "arrow.triangle.2.circlepath", title: "Refactoring Suggestions", description: "Smart refactoring recommendations")
-                AnalysisFeatureItem(icon: "chart.bar", title: "Complexity Analysis", description: "Measure code complexity metrics")
-                AnalysisFeatureItem(icon: "link", title: "Dependency Analysis", description: "Analyze code dependencies")
+                AnalysisFeatureItem(
+                    icon: "magnifyingglass",
+                    title: "Code Smell Detection",
+                    description: "Identify code smells automatically"
+                )
+                AnalysisFeatureItem(
+                    icon: "arrow.triangle.2.circlepath",
+                    title: "Refactoring Suggestions",
+                    description: "Smart refactoring recommendations"
+                )
+                AnalysisFeatureItem(
+                    icon: "chart.bar",
+                    title: "Complexity Analysis",
+                    description: "Measure code complexity metrics"
+                )
+                AnalysisFeatureItem(
+                    icon: "link",
+                    title: "Dependency Analysis",
+                    description: "Analyze code dependencies"
+                )
             }
             .padding()
             .background(Color.gray.opacity(0.1))

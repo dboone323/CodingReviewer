@@ -1,3 +1,7 @@
+import Foundation
+import Combine
+import SwiftUI
+
 //
 //  ConsolidatedTestFiles.swift
 //  Consolidated Test File System
@@ -5,33 +9,32 @@
 //  Created by Code Deduplication System
 //
 
-import Foundation
-import SwiftUI
-
 // MARK: - Test File Generator
+
 class TestFileManager: ObservableObject {
     @Published var testFiles: [TestFile] = []
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func generateTestFile(id: Int, type: TestFileType = .basic) -> TestFile {
-        return TestFile(
+        TestFile(
             id: id,
             name: "TestFile\(id)",
             type: type,
             content: generateContent(for: type, id: id)
         )
     }
-    
+
     private func generateContent(for type: TestFileType, id: Int) -> String {
         switch type {
         case .basic:
-            return """
-            import Foundation
-            import SwiftUI
-            
+            """
             class TestClass\(id): ObservableObject {
                 @Published var data: [String] = []
                 @Published var isLoading: Bool = false
-                
+
+    /// <#Description#>
+    /// - Returns: <#description#>
                 func loadData() {
                     isLoading = true
                     // Simulate data loading
@@ -43,21 +46,19 @@ class TestFileManager: ObservableObject {
             }
             """
         case .advanced:
-            return """
-            import Foundation
-            import SwiftUI
-            import Combine
-            
+            """
             class AdvancedTestClass\(id): ObservableObject {
                 @Published var items: [TestItem] = []
                 @Published var selectedItem: TestItem?
                 private var cancellables = Set<AnyCancellable>()
-                
+
+    /// <#Description#>
+    /// - Returns: <#description#>
                 func performAdvancedOperation() {
                     // Advanced test operations
                 }
             }
-            
+
             struct TestItem: Identifiable {
                 let id = UUID()
                 let name: String
@@ -65,17 +66,15 @@ class TestFileManager: ObservableObject {
             }
             """
         case .ui:
-            return """
-            import SwiftUI
-            
+            """
             struct TestView\(id): View {
                 @StateObject private var testClass = TestClass\(id)()
-                
+
                 var body: some View {
                     VStack {
                         Text("Test View \(id)")
                             .font(.title)
-                        
+
                         if testClass.isLoading {
                             ProgressView()
                         } else {
@@ -83,7 +82,7 @@ class TestFileManager: ObservableObject {
                                 Text(item)
                             }
                         }
-                        
+
                         Button("Load Data") {
                             testClass.loadData()
                         }
@@ -97,6 +96,7 @@ class TestFileManager: ObservableObject {
 }
 
 // MARK: - Test File Models
+
 struct TestFile: Identifiable {
     let id: Int
     let name: String
@@ -108,20 +108,21 @@ enum TestFileType: CaseIterable {
     case basic
     case advanced
     case ui
-    
+
     var description: String {
         switch self {
-        case .basic: return "Basic Test Class"
-        case .advanced: return "Advanced Test Class"
-        case .ui: return "UI Test View"
+        case .basic: "Basic Test Class"
+        case .advanced: "Advanced Test Class"
+        case .ui: "UI Test View"
         }
     }
 }
 
 // MARK: - Test File Preview
+
 struct TestFilePreview: View {
     let testFile: TestFile
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -134,7 +135,7 @@ struct TestFilePreview: View {
                     .background(Color.blue.opacity(0.2))
                     .cornerRadius(4)
             }
-            
+
             ScrollView {
                 Text(testFile.content)
                     .font(.system(.body, design: .monospaced))
@@ -148,10 +149,11 @@ struct TestFilePreview: View {
 }
 
 // MARK: - Test File Browser
+
 struct TestFileBrowser: View {
     @StateObject private var testManager = TestFileManager()
     @State private var selectedType: TestFileType = .basic
-    
+
     var body: some View {
         NavigationView {
             VStack {
@@ -162,14 +164,14 @@ struct TestFileBrowser: View {
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding()
-                
+
                 Button("Generate Test Files (1-20)") {
-                    testManager.testFiles = (1...20).map { id in
+                    testManager.testFiles = (1 ... 20).map { id in
                         testManager.generateTestFile(id: id, type: selectedType)
                     }
                 }
                 .buttonStyle(.borderedProminent)
-                
+
                 List(testManager.testFiles) { testFile in
                     NavigationLink(destination: TestFilePreview(testFile: testFile)) {
                         VStack(alignment: .leading) {
@@ -188,6 +190,7 @@ struct TestFileBrowser: View {
 }
 
 // MARK: - Preview
+
 struct TestFileBrowser_Previews: PreviewProvider {
     static var previews: some View {
         TestFileBrowser()

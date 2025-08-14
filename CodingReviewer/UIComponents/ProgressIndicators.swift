@@ -9,7 +9,7 @@ import SwiftUI
 struct CircularProgressView: View {
     let progress: Double
     let color: Color
-    
+
     var body: some View {
         Circle()
             .stroke(color.opacity(0.3), lineWidth: 4)
@@ -25,14 +25,14 @@ struct CircularProgressView: View {
 struct LinearProgressView: View {
     let progress: Double
     let color: Color
-    
+
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 Rectangle()
                     .fill(color.opacity(0.3))
                     .frame(height: 4)
-                
+
                 Rectangle()
                     .fill(color)
                     .frame(width: geometry.size.width * progress, height: 4)

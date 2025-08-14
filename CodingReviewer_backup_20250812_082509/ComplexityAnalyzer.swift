@@ -6,22 +6,25 @@ class ComplexityAnalyzer {
     private init() {}
 
     /// Analyzes and processes data with comprehensive validation
-    func analyzeFunction(_ content: String, in file: String) -> FunctionComplexity {
+    /// <#Description#>
+    /// - Returns: <#description#>
+    func analyzeFunction(_ content: String, in _: String) -> FunctionComplexity {
         let lines = content.components(separatedBy: .newlines)
 
         var cyclomaticComplexity = 1 // Base complexity;
-        var cognitiveComplexity = 0;
-        var nestingLevel = 0;
-        var maxNesting = 0;
+        var cognitiveComplexity = 0
+        var nestingLevel = 0
+        var maxNesting = 0
 
         for line in lines {
             let trimmedLine = line.trimmingCharacters(in: .whitespaces)
 
             // Count decision points for cyclomatic complexity
             if trimmedLine.contains("if ") || trimmedLine.contains("else") ||
-               trimmedLine.contains("for ") || trimmedLine.contains("while ") ||
-               trimmedLine.contains("switch ") || trimmedLine.contains("case ") ||
-               trimmedLine.contains("catch ") || trimmedLine.contains("guard ") {
+                trimmedLine.contains("for ") || trimmedLine.contains("while ") ||
+                trimmedLine.contains("switch ") || trimmedLine.contains("case ") ||
+                trimmedLine.contains("catch ") || trimmedLine.contains("guard ")
+            {
                 cyclomaticComplexity += 1
             }
 
@@ -53,8 +56,10 @@ class ComplexityAnalyzer {
     }
 
     /// Creates and configures components with proper initialization
+    /// <#Description#>
+    /// - Returns: <#description#>
     func generateRefactoringSuggestions(for complexity: FunctionComplexity) -> [RefactoringSuggestion] {
-        var suggestions: [RefactoringSuggestion] = [];
+        var suggestions: [RefactoringSuggestion] = []
 
         if complexity.cyclomaticComplexity > 10 {
             suggestions.append(RefactoringSuggestion(
@@ -106,9 +111,9 @@ struct FunctionComplexity {
         let score = cyclomaticComplexity + cognitiveComplexity + maxNestingLevel
 
         switch score {
-        case 0...10: return .low
-        case 11...20: return .medium
-        case 21...30: return .high
+        case 0 ... 10: return .low
+        case 11 ... 20: return .medium
+        case 21 ... 30: return .high
         default: return .critical
         }
     }
@@ -118,10 +123,10 @@ struct FunctionComplexity {
 
         var description: String {
             switch self {
-            case .low: return "Low complexity - maintainable"
-            case .medium: return "Medium complexity - monitor"
-            case .high: return "High complexity - refactor recommended"
-            case .critical: return "Critical complexity - refactor required"
+            case .low: "Low complexity - maintainable"
+            case .medium: "Medium complexity - monitor"
+            case .high: "High complexity - refactor recommended"
+            case .critical: "Critical complexity - refactor required"
             }
         }
     }

@@ -8,6 +8,7 @@
 import Foundation
 
 // MARK: - Export Template Types
+
 public struct ExportTemplate {
     let id: String
     let name: String
@@ -16,7 +17,7 @@ public struct ExportTemplate {
     let dataTypes: [String]
     let isDefault: Bool
     let createdAt: Date
-    
+
     public enum ExportFormat: String, Codable, CaseIterable {
         case json = "JSON"
         case csv = "CSV"
@@ -24,42 +25,42 @@ public struct ExportTemplate {
         case pdf = "PDF"
         case html = "HTML"
         case markdown = "Markdown"
-        
+
         var fileExtension: String {
             switch self {
-            case .json: return "json"
-            case .csv: return "csv"
-            case .xml: return "xml"
-            case .pdf: return "pdf"
-            case .html: return "html"
-            case .markdown: return "md"
+            case .json: "json"
+            case .csv: "csv"
+            case .xml: "xml"
+            case .pdf: "pdf"
+            case .html: "html"
+            case .markdown: "md"
             }
         }
-        
+
         var mimeType: String {
             switch self {
-            case .json: return "application/json"
-            case .csv: return "text/csv"
-            case .xml: return "application/xml"
-            case .pdf: return "application/pdf"
-            case .html: return "text/html"
-            case .markdown: return "text/markdown"
+            case .json: "application/json"
+            case .csv: "text/csv"
+            case .xml: "application/xml"
+            case .pdf: "application/pdf"
+            case .html: "text/html"
+            case .markdown: "text/markdown"
             }
         }
-        
+
         var iconName: String {
             switch self {
-            case .json: return "doc.text"
-            case .csv: return "tablecells"
-            case .xml: return "doc.richtext"
-            case .pdf: return "doc.fill"
-            case .html: return "globe"
-            case .markdown: return "textformat"
+            case .json: "doc.text"
+            case .csv: "tablecells"
+            case .xml: "doc.richtext"
+            case .pdf: "doc.fill"
+            case .html: "globe"
+            case .markdown: "textformat"
             }
         }
-        
+
         var icon: String {
-            return iconName
+            iconName
         }
     }
 }

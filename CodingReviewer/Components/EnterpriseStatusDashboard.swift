@@ -1,12 +1,12 @@
+import Foundation
+import SwiftUI
+
 //
 //  EnterpriseStatusDashboard.swift
 //  CodingReviewer
 //
 //  Created by Phase 4 Enterprise Features on 8/5/25.
 //
-
-import SwiftUI
-import Foundation
 
 // Note: SystemStatus and related types are defined in BackgroundProcessingTypes.swift
 
@@ -18,14 +18,14 @@ struct EnterpriseStatusDashboard: View {
     @State private var systemStatus: SystemStatus?
     @State private var analyticsReport: AnalyticsReport?
     @State private var isGeneratingReport = false
-    
+
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
                     // System Health Overview
                     SystemHealthCard(systemStatus: systemStatus)
-                    
+
                     // Quick Stats Grid
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
                         EnterpriseQuickStatCard(
@@ -34,21 +34,21 @@ struct EnterpriseStatusDashboard: View {
                             icon: "gearshape.2",
                             color: .blue
                         )
-                        
+
                         EnterpriseQuickStatCard(
                             title: "Success Rate",
                             value: String(format: "%.1f%%", (systemStatus?.successRate ?? 0) * 100),
                             icon: "checkmark.circle",
                             color: .green
                         )
-                        
+
                         EnterpriseQuickStatCard(
                             title: "Total Processed",
                             value: "\(systemStatus?.totalJobsProcessed ?? 0)",
                             icon: "chart.bar",
                             color: .orange
                         )
-                        
+
                         EnterpriseQuickStatCard(
                             title: "System Health",
                             value: systemStatus?.status ?? "Unknown",
@@ -56,17 +56,17 @@ struct EnterpriseStatusDashboard: View {
                             color: healthColor
                         )
                     }
-                    
+
                     // Performance Metrics
                     if let report = analyticsReport {
                         PerformanceMetricsCard(report: report)
                     }
-                    
+
                     // System Insights
                     if let report = analyticsReport, !report.insights.isEmpty {
                         InsightsCard(insights: report.insights)
                     }
-                    
+
                     // Action Buttons
                     HStack(spacing: 16) {
                         Button(action: refreshData) {
@@ -80,7 +80,7 @@ struct EnterpriseStatusDashboard: View {
                             .foregroundColor(.blue)
                             .cornerRadius(10)
                         }
-                        
+
                         Button(action: generateReport) {
                             HStack {
                                 if isGeneratingReport {
@@ -109,7 +109,7 @@ struct EnterpriseStatusDashboard: View {
             }
         }
     }
-    
+
     private var healthColor: Color {
         guard let status = systemStatus else { return .gray }
         switch status.status {
@@ -121,23 +121,23 @@ struct EnterpriseStatusDashboard: View {
         default: return .gray
         }
     }
-    
+
     private func refreshData() {
         systemStatus = backgroundProcessing.getSystemStatus()
         analyticsReport = EnterpriseAnalyticsDashboard().generateComprehensiveReport()
     }
-    
+
     private func refreshDataAsync() async {
         refreshData()
     }
-    
+
     private func generateReport() {
         isGeneratingReport = true
-        
+
         Task {
             // Simulate report generation
             try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
-            
+
             await MainActor.run {
                 isGeneratingReport = false
                 // Here you would typically save or export the report
@@ -154,7 +154,7 @@ struct EnterpriseStatusDashboard: View {
 
 struct SystemHealthCard: View {
     let systemStatus: SystemStatus?
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
@@ -170,13 +170,13 @@ struct SystemHealthCard: View {
                         .foregroundColor(statusColor)
                 }
             }
-            
+
             if let status = systemStatus {
                 VStack(spacing: 8) {
                     ProgressView(value: status.healthScore)
                         .progressViewStyle(LinearProgressViewStyle())
                         .scaleEffect(y: 2)
-                    
+
                     HStack {
                         Text("Health Score")
                             .font(.caption)
@@ -186,7 +186,7 @@ struct SystemHealthCard: View {
                             .font(.caption)
                             .fontWeight(.medium)
                     }
-                    
+
                     HStack {
                         VStack(alignment: .leading) {
                             Text("CPU: \(String(format: "%.1f%%", status.currentLoad.cpuUsage * 100))")
@@ -194,9 +194,9 @@ struct SystemHealthCard: View {
                             Text("Memory: \(String(format: "%.1f%%", status.currentLoad.memoryUsage * 100))")
                                 .font(.caption)
                         }
-                        
+
                         Spacer()
-                        
+
                         VStack(alignment: .trailing) {
                             Text("Uptime: \(formatUptime(status.uptime))")
                                 .font(.caption)
@@ -214,7 +214,7 @@ struct SystemHealthCard: View {
         .cornerRadius(12)
         .shadow(radius: 2)
     }
-    
+
     private var statusColor: Color {
         guard let status = systemStatus else { return .gray }
         switch status.status {
@@ -226,7 +226,7 @@ struct SystemHealthCard: View {
         default: return .gray
         }
     }
-    
+
     private func formatUptime(_ uptime: TimeInterval) -> String {
         let hours = Int(uptime) / 3600
         let minutes = (Int(uptime) % 3600) / 60
@@ -239,7 +239,7 @@ struct EnterpriseQuickStatCard: View {
     let value: String
     let icon: String
     let color: Color
-    
+
     var body: some View {
         VStack(spacing: 8) {
             HStack {
@@ -247,7 +247,7 @@ struct EnterpriseQuickStatCard: View {
                     .foregroundColor(color)
                 Spacer()
             }
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(value)
                     .font(.title2)
@@ -267,7 +267,7 @@ struct EnterpriseQuickStatCard: View {
 
 struct PerformanceMetricsCard: View {
     let report: AnalyticsReport
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
@@ -277,7 +277,7 @@ struct PerformanceMetricsCard: View {
                     .font(.headline)
                 Spacer()
             }
-            
+
             VStack(spacing: 8) {
                 MetricRow(
                     title: "Avg Actions/Day",
@@ -303,7 +303,7 @@ struct PerformanceMetricsCard: View {
 struct MetricRow: View {
     let title: String
     let value: String
-    
+
     var body: some View {
         HStack {
             Text(title)
@@ -319,7 +319,7 @@ struct MetricRow: View {
 
 struct InsightsCard: View {
     let insights: [String]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
@@ -329,7 +329,7 @@ struct InsightsCard: View {
                     .font(.headline)
                 Spacer()
             }
-            
+
             VStack(alignment: .leading, spacing: 8) {
                 ForEach(insights, id: \.self) { insight in
                     HStack(alignment: .top) {

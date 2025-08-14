@@ -1,3 +1,7 @@
+import Foundation
+import Combine
+import SwiftUI
+
 //
 // MLIntegrationService.swift
 // CodingReviewer
@@ -6,19 +10,15 @@
 // Created on July 29, 2025
 //
 
-import Foundation
-import SwiftUI
-import Combine
-
 // MARK: - ML Integration Service
 
 @MainActor
 final class MLIntegrationService: ObservableObject {
-    @Published var isAnalyzing = false;
-    @Published var mlInsights: [MLInsight] = [];
+    @Published var isAnalyzing = false
+    @Published var mlInsights: [MLInsight] = []
     @Published var predictiveData: PredictiveAnalysis?
-    @Published var crossProjectLearnings: [CrossProjectLearning] = [];
-    @Published var analysisProgress: Double = 0.0;
+    @Published var crossProjectLearnings: [CrossProjectLearning] = []
+    @Published var analysisProgress: Double = 0.0
     @Published var lastUpdate: Date?
 
     /// Performs logger operation with proper error handling
@@ -28,7 +28,7 @@ final class MLIntegrationService: ObservableObject {
     /// Performs cancellables operation with proper error handling
     /// Performs cancellables operation with proper error handling
     /// Performs cancellables operation with proper error handling
-    private var cancellables = Set<AnyCancellable>();
+    private var cancellables = Set<AnyCancellable>()
 
     init() {
         logger.log("🧠 ML Integration Service initialized", level: .info, category: .ai)
@@ -41,6 +41,8 @@ final class MLIntegrationService: ObservableObject {
     /// Processes and analyzes data for analyzeProjectWithML
     /// Processes and analyzes data for analyzeProjectWithML
     /// Processes and analyzes data for analyzeProjectWithML
+            /// Function description
+            /// - Returns: Return value description
     func analyzeProjectWithML(fileData: [CodeFile] = []) async {
         isAnalyzing = true
         analysisProgress = 0.0
@@ -75,6 +77,8 @@ final class MLIntegrationService: ObservableObject {
     /// Performs runMLPatternRecognition operation with proper error handling
     /// Performs runMLPatternRecognition operation with proper error handling
     /// Performs runMLPatternRecognition operation with proper error handling
+            /// Function description
+            /// - Returns: Return value description
     func runMLPatternRecognition(fileData: [CodeFile] = []) async {
         logger.log("🔍 Running ML pattern recognition on \(fileData.count) files", level: .info, category: .ai)
 
@@ -83,7 +87,10 @@ final class MLIntegrationService: ObservableObject {
         /// Performs task operation with proper error handling
         let task = Process()
         task.executableURL = URL(fileURLWithPath: "/bin/bash")
-        task.arguments = ["-c", "cd '\(ProcessInfo.processInfo.environment["HOME"] ?? "")/Desktop/CodingReviewer' && ./ml_pattern_recognition.sh"]
+        task.arguments = [
+            "-c",
+            "cd '\(ProcessInfo.processInfo.environment["HOME"] ?? "")/Desktop/CodingReviewer' && ./ml_pattern_recognition.sh",
+        ]
 
         // Create temp file list for ML processing
         if !fileData.isEmpty {
@@ -105,6 +112,8 @@ final class MLIntegrationService: ObservableObject {
     /// Performs runPredictiveAnalytics operation with proper error handling
     /// Performs runPredictiveAnalytics operation with proper error handling
     /// Performs runPredictiveAnalytics operation with proper error handling
+            /// Function description
+            /// - Returns: Return value description
     func runPredictiveAnalytics(fileData: [CodeFile] = []) async {
         logger.log("📈 Running predictive analytics on \(fileData.count) files", level: .info, category: .ai)
 
@@ -113,7 +122,10 @@ final class MLIntegrationService: ObservableObject {
         /// Performs task operation with proper error handling
         let task = Process()
         task.executableURL = URL(fileURLWithPath: "/bin/bash")
-        task.arguments = ["-c", "cd '\(ProcessInfo.processInfo.environment["HOME"] ?? "")/Desktop/CodingReviewer' && ./predictive_analytics.sh"]
+        task.arguments = [
+            "-c",
+            "cd '\(ProcessInfo.processInfo.environment["HOME"] ?? "")/Desktop/CodingReviewer' && ./predictive_analytics.sh",
+        ]
 
         // Create temp file list for predictive processing
         if !fileData.isEmpty {
@@ -135,6 +147,8 @@ final class MLIntegrationService: ObservableObject {
     /// Performs runAdvancedAIIntegration operation with proper error handling
     /// Performs runAdvancedAIIntegration operation with proper error handling
     /// Performs runAdvancedAIIntegration operation with proper error handling
+            /// Function description
+            /// - Returns: Return value description
     func runAdvancedAIIntegration(fileData: [CodeFile] = []) async {
         logger.log("🤖 Running advanced AI integration on \(fileData.count) files", level: .info, category: .ai)
 
@@ -143,7 +157,10 @@ final class MLIntegrationService: ObservableObject {
         /// Performs task operation with proper error handling
         let task = Process()
         task.executableURL = URL(fileURLWithPath: "/bin/bash")
-        task.arguments = ["-c", "cd '\(ProcessInfo.processInfo.environment["HOME"] ?? "")/Desktop/CodingReviewer' && ./advanced_ai_integration.sh"]
+        task.arguments = [
+            "-c",
+            "cd '\(ProcessInfo.processInfo.environment["HOME"] ?? "")/Desktop/CodingReviewer' && ./advanced_ai_integration.sh",
+        ]
 
         // Create temp file list for AI processing
         if !fileData.isEmpty {
@@ -236,7 +253,7 @@ final class MLIntegrationService: ObservableObject {
                     "path": file.path,
                     "language": file.language.rawValue,
                     "size": "\(file.size)",
-                    "content_preview": String(file.content.prefix(1000))
+                    "content_preview": String(file.content.prefix(1000)),
                 ]
             }
 
@@ -246,7 +263,11 @@ final class MLIntegrationService: ObservableObject {
             let jsonData = try JSONSerialization.data(withJSONObject: fileInfo, options: .prettyPrinted)
             try jsonData.write(to: fileListURL)
 
-            logger.log("📝 Created temp file list with \(fileData.count) files for ML processing", level: .info, category: .ai)
+            logger.log(
+                "📝 Created temp file list with \(fileData.count) files for ML processing",
+                level: .info,
+                category: .ai
+            )
         } catch {
             logger.log("❌ Failed to create temp file list: \(error)", level: .error, category: .ai)
         }
@@ -398,7 +419,7 @@ final class MLIntegrationService: ObservableObject {
         /// Performs insights operation with proper error handling
         /// Performs insights operation with proper error handling
         /// Performs insights operation with proper error handling
-        var insights: [MLInsight] = [];
+        var insights: [MLInsight] = []
 
         // Parse code quality patterns
         if content.contains("High Complexity Files") {
@@ -466,7 +487,7 @@ final class MLIntegrationService: ObservableObject {
 
     /// Performs specific functionality
     private func parseCrossProjectInsights(_ content: String) -> [CrossProjectLearning] {
-        var learnings: [CrossProjectLearning] = [];
+        var learnings: [CrossProjectLearning] = []
 
         // Parse MVVM+SwiftUI patterns
         if content.contains("MVVM + SwiftUI") {
@@ -503,7 +524,8 @@ final class MLIntegrationService: ObservableObject {
         let range = NSRange(text.startIndex..., in: text)
 
         if let match = regex?.firstMatch(in: text, options: [], range: range),
-           let matchRange = Range(match.range(at: 1), in: text) {
+           let matchRange = Range(match.range(at: 1), in: text)
+        {
             return Int(text[matchRange])
         }
         return nil
@@ -531,7 +553,8 @@ final class MLIntegrationService: ObservableObject {
             if file.contains(pattern) {
                 let fullPath = "\(directory)/\(file)"
                 if let attributes = try? fileManager.attributesOfItem(atPath: fullPath),
-                   let modDate = attributes[.modificationDate] as? Date {
+                   let modDate = attributes[.modificationDate] as? Date
+                {
                     if latestDate == nil || modDate > latestDate! {
                         latestDate = modDate
                         latestFile = fullPath
@@ -549,11 +572,10 @@ final class MLIntegrationService: ObservableObject {
 
         // Parse JSON data from ML automation
         if let data = jsonContent.data(using: .utf8),
-           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
-
+           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any]
+        {
             // Extract insights from JSON structure
             if let analysisResults = json["analysis_results"] as? [String: Any] {
-
                 // Code quality insights
                 if let qualityScore = analysisResults["code_quality_score"] as? Double, qualityScore < 0.8 {
                     insights.append(MLInsight(
@@ -568,7 +590,8 @@ final class MLIntegrationService: ObservableObject {
 
                 // Performance insights
                 if let perfMetrics = analysisResults["performance_metrics"] as? [String: Any],
-                   let buildTime = perfMetrics["estimated_build_time"] as? Double, buildTime > 30 {
+                   let buildTime = perfMetrics["estimated_build_time"] as? Double, buildTime > 30
+                {
                     insights.append(MLInsight(
                         type: .performance,
                         title: "Build Performance",
@@ -610,6 +633,8 @@ final class MLIntegrationService: ObservableObject {
     }
 
     /// Performs specific functionality
+            /// Function description
+            /// - Returns: Return value description
     func refreshMLData() async {
         if !isAnalyzing {
             await loadMLInsights()
@@ -640,21 +665,21 @@ struct MLInsight: Identifiable, Sendable {
 
         var icon: String {
             switch self {
-            case .codeQuality: return "checkmark.seal"
-            case .automation: return "gear.badge.checkmark"
-            case .learning: return "brain.head.profile"
-            case .performance: return "speedometer"
-            case .security: return "lock.shield"
+            case .codeQuality: "checkmark.seal"
+            case .automation: "gear.badge.checkmark"
+            case .learning: "brain.head.profile"
+            case .performance: "speedometer"
+            case .security: "lock.shield"
             }
         }
 
         var color: Color {
             switch self {
-            case .codeQuality: return .blue
-            case .automation: return .green
-            case .learning: return .purple
-            case .performance: return .orange
-            case .security: return .red
+            case .codeQuality: .blue
+            case .automation: .green
+            case .learning: .purple
+            case .performance: .orange
+            case .security: .red
             }
         }
     }
@@ -664,9 +689,9 @@ struct MLInsight: Identifiable, Sendable {
 
         var description: String {
             switch self {
-            case .low: return "Low Impact"
-            case .medium: return "Medium Impact"
-            case .high: return "High Impact"
+            case .low: "Low Impact"
+            case .medium: "Medium Impact"
+            case .high: "High Impact"
             }
         }
     }

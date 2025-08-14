@@ -7,23 +7,28 @@
 import Foundation
 
 extension PatternRecognitionEngine {
-    
     /// Security pattern detection utilities
-    func detectSecurityPatterns(in code: String) -> [SecurityPattern] {
+            /// Function description
+            /// - Returns: Return value description
+    func detectSecurityPatterns(in _: String) -> [SecurityPattern] {
         // Security pattern detection implementation
-        return []
+        []
     }
-    
+
     /// Performance pattern detection
-    func detectPerformancePatterns(in code: String) -> [PerformancePattern] {
+            /// Function description
+            /// - Returns: Return value description
+    func detectPerformancePatterns(in _: String) -> [PerformancePattern] {
         // Performance pattern detection implementation
-        return []
+        []
     }
-    
+
     /// Architecture pattern detection
-    func detectArchitecturePatterns(in code: String) -> [ArchitecturePattern] {
+            /// Function description
+            /// - Returns: Return value description
+    func detectArchitecturePatterns(in _: String) -> [ArchitecturePattern] {
         // Architecture pattern detection implementation
-        return []
+        []
     }
 }
 

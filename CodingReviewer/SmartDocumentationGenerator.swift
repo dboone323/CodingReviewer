@@ -1,3 +1,7 @@
+import Foundation
+import Combine
+import OSLog
+
 //
 // SmartDocumentationGenerator.swift
 // CodingReviewer
@@ -5,10 +9,6 @@
 // Phase 4: Smart Code Documentation Generator
 // Created on July 25, 2025
 //
-
-import Foundation
-import OSLog
-import Combine
 
 // MARK: - Simple Documentation Types
 
@@ -20,11 +20,11 @@ struct GeneratedDocumentation: @preconcurrency Codable, Sendable {
     let generatedAt: Date
 
     init(title: String, overview: String, sections: [DocumentationSection]) {
-        self.id = UUID()
+        id = UUID()
         self.title = title
         self.overview = overview
         self.sections = sections
-        self.generatedAt = Date()
+        generatedAt = Date()
     }
 }
 
@@ -35,7 +35,7 @@ struct DocumentationSection: @preconcurrency Codable, Sendable {
     let type: DocumentationType
 
     init(title: String, content: String, type: DocumentationType) {
-        self.id = UUID()
+        id = UUID()
         self.title = title
         self.content = content
         self.type = type
@@ -54,7 +54,7 @@ struct DocumentationSuggestion: @preconcurrency Codable, Sendable, Identifiable 
     let location: String?
 
     init(type: SuggestionType, message: String, priority: Priority, location: String? = nil) {
-        self.id = UUID()
+        id = UUID()
         self.type = type
         self.message = message
         self.priority = priority
@@ -74,18 +74,20 @@ struct DocumentationSuggestion: @preconcurrency Codable, Sendable, Identifiable 
 
 @MainActor
 final class SmartDocumentationGenerator: ObservableObject {
-    @Published var isGenerating = false;
-    @Published var generationProgress: Double = 0.0;
+    @Published var isGenerating = false
+    @Published var generationProgress: Double = 0.0
     @Published var generatedDocumentation: GeneratedDocumentation?
-    @Published var documentationSuggestions: [DocumentationSuggestion] = [];
+    @Published var documentationSuggestions: [DocumentationSuggestion] = []
 
     init() {
         Logger().info("📚 Smart Documentation Generator initialized")
     }
 
-// / Function description needed
-/// Creates and configures components with proper initialization
-func generateDocumentation(for content: String, fileName: String) async -> GeneratedDocumentation {
+    // / Function description needed
+    /// Creates and configures components with proper initialization
+            /// Function description
+            /// - Returns: Return value description
+    func generateDocumentation(for _: String, fileName: String) async -> GeneratedDocumentation {
         await MainActor.run {
             isGenerating = true
             generationProgress = 0.0
@@ -100,7 +102,7 @@ func generateDocumentation(for content: String, fileName: String) async -> Gener
                 title: "Overview",
                 content: "This file contains Swift code for the CodingReviewer application.",
                 type: .overview
-            )
+            ),
         ]
 
         let documentation = GeneratedDocumentation(

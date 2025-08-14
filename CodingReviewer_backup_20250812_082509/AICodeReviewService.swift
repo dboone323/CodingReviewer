@@ -1,4 +1,7 @@
+import Foundation
+import Combine
 import OSLog
+
 //
 // AICodeReviewService.swift
 // CodingReviewer
@@ -6,9 +9,6 @@ import OSLog
 // Phase 3: Full AI Integration - Working Version
 // Created on July 17, 2025, Enhanced July 23, 2025
 //
-
-import Foundation
-import Combine
 
 // MARK: - Phase 3: Enhanced AI Code Review Service
 // Consider wrapping force unwraps and try statements in proper error handling
@@ -826,11 +826,15 @@ final class EnhancedAICodeReviewService: ObservableObject {
     // MARK: - Simplified Methods for Compatibility
 
     /// Performs specific functionality
+    /// <#Description#>
+    /// - Returns: <#description#>
     func generateFixesForIssues(_ issues: [String]) async throws -> [AIGeneratedFix] {
         []
     }
 
     /// Performs specific functionality
+    /// <#Description#>
+    /// - Returns: <#description#>
     func analyzeCodeQuality(_ code: String) async throws -> Double {
         let lines = code.components(separatedBy: CharacterSet.newlines)
         let nonEmptyLines = lines.filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
@@ -839,16 +843,22 @@ final class EnhancedAICodeReviewService: ObservableObject {
     }
 
     /// Performs specific functionality
+    /// <#Description#>
+    /// - Returns: <#description#>
     func explainCode(_ code: String, language: String) async throws -> String {
         "🤖 Enhanced AI code explanation will be available in the next update"
     }
 
     /// Performs specific functionality
+    /// <#Description#>
+    /// - Returns: <#description#>
     func generateDocumentation(for code: String, language: String) async throws -> String {
         "📚 AI-powered documentation generation coming soon"
     }
 
     /// Performs specific functionality
+    /// <#Description#>
+    /// - Returns: <#description#>
     func suggestRefactoring(for code: String, language: String) async throws -> [String] {
         ["🔄 Advanced refactoring suggestions will be available with full AI integration"]
     }

@@ -1,22 +1,35 @@
 import Foundation
 
 // MARK: - Processing & System Types
+
 // Pure processing and system data models - NO SwiftUI imports, NO Codable
 
 public struct ProcessingJob: Identifiable, Sendable {
     public let id: UUID
     public let name: String
     public let type: JobType
-    public var status: JobStatus  // Mutable for status updates
+    public var status: JobStatus // Mutable for status updates
     public let priority: JobPriority
-    public var progress: Double  // Mutable for progress updates
-    public var startTime: Date  // Mutable for actual start time
-    public var result: String?  // Mutable for result updates
-    public var endTime: Date?  // Mutable for completion time
-    public var duration: TimeInterval?  // Mutable for calculated duration
-    public var errorMessage: String?  // Mutable for error details
-    
-    public init(id: UUID = UUID(), name: String, type: JobType = .codeAnalysis, status: JobStatus = .pending, priority: JobPriority = .normal, progress: Double = 0.0, startTime: Date = Date(), result: String? = nil, endTime: Date? = nil, duration: TimeInterval? = nil, errorMessage: String? = nil) {
+    public var progress: Double // Mutable for progress updates
+    public var startTime: Date // Mutable for actual start time
+    public var result: String? // Mutable for result updates
+    public var endTime: Date? // Mutable for completion time
+    public var duration: TimeInterval? // Mutable for calculated duration
+    public var errorMessage: String? // Mutable for error details
+
+    public init(
+        id: UUID = UUID(),
+        name: String,
+        type: JobType = .codeAnalysis,
+        status: JobStatus = .pending,
+        priority: JobPriority = .normal,
+        progress: Double = 0.0,
+        startTime: Date = Date(),
+        result: String? = nil,
+        endTime: Date? = nil,
+        duration: TimeInterval? = nil,
+        errorMessage: String? = nil
+    ) {
         self.id = id
         self.name = name
         self.type = type
@@ -29,35 +42,35 @@ public struct ProcessingJob: Identifiable, Sendable {
         self.duration = duration
         self.errorMessage = errorMessage
     }
-    
+
     public enum JobType: String, CaseIterable, Sendable {
         case codeAnalysis = "Code Analysis"
         case documentation = "Documentation"
         case testing = "Testing"
         case refactoring = "Refactoring"
         case optimization = "Optimization"
-        
+
         public var icon: String {
             switch self {
-            case .codeAnalysis: return "doc.text.magnifyingglass"
-            case .documentation: return "doc.text"
-            case .testing: return "checkmark.seal"
-            case .refactoring: return "wand.and.rays"
-            case .optimization: return "speedometer"
+            case .codeAnalysis: "doc.text.magnifyingglass"
+            case .documentation: "doc.text"
+            case .testing: "checkmark.seal"
+            case .refactoring: "wand.and.rays"
+            case .optimization: "speedometer"
             }
         }
-        
+
         public var estimatedDuration: TimeInterval {
             switch self {
-            case .codeAnalysis: return 30.0  // 30 seconds
-            case .documentation: return 45.0  // 45 seconds
-            case .testing: return 60.0  // 60 seconds
-            case .refactoring: return 90.0  // 90 seconds
-            case .optimization: return 120.0  // 120 seconds
+            case .codeAnalysis: 30.0 // 30 seconds
+            case .documentation: 45.0 // 45 seconds
+            case .testing: 60.0 // 60 seconds
+            case .refactoring: 90.0 // 90 seconds
+            case .optimization: 120.0 // 120 seconds
             }
         }
     }
-    
+
     public enum JobStatus: String, CaseIterable, Sendable {
         case pending = "Pending"
         case queued = "Queued"
@@ -67,36 +80,36 @@ public struct ProcessingJob: Identifiable, Sendable {
         case failed = "Failed"
         case cancelled = "Cancelled"
     }
-    
+
     public enum JobPriority: String, CaseIterable, Sendable, Comparable {
         case low = "Low"
         case normal = "Normal"
         case high = "High"
         case critical = "Critical"
-        
+
         public var displayName: String {
-            return self.rawValue
+            rawValue
         }
-        
+
         public var numericValue: Int {
             switch self {
-            case .low: return 0
-            case .normal: return 1
-            case .high: return 2
-            case .critical: return 3
+            case .low: 0
+            case .normal: 1
+            case .high: 2
+            case .critical: 3
             }
         }
-        
+
         public static func < (lhs: JobPriority, rhs: JobPriority) -> Bool {
-            return lhs.numericValue < rhs.numericValue
+            lhs.numericValue < rhs.numericValue
         }
-        
+
         public var colorIdentifier: String {
             switch self {
-            case .low: return "gray"
-            case .normal: return "blue"
-            case .high: return "orange"
-            case .critical: return "red"
+            case .low: "gray"
+            case .normal: "blue"
+            case .high: "orange"
+            case .critical: "red"
             }
         }
     }
@@ -107,33 +120,46 @@ public struct SystemLoad: Sendable {
     public let memory: Double
     public let disk: Double
     public let level: LoadLevel
-    
+
     // Additional properties for enterprise monitoring
-    public var queueLength: Int  // Mutable for runtime updates
-    public var currentConcurrentJobs: Int  // Mutable for runtime updates
-    public let loadLevel: LoadLevel  // Alternative accessor for load level
-    public var lastUpdated: Date  // Mutable for runtime updates
-    public var averageJobDuration: TimeInterval  // Mutable for runtime updates
-    
+    public var queueLength: Int // Mutable for runtime updates
+    public var currentConcurrentJobs: Int // Mutable for runtime updates
+    public let loadLevel: LoadLevel // Alternative accessor for load level
+    public var lastUpdated: Date // Mutable for runtime updates
+    public var averageJobDuration: TimeInterval // Mutable for runtime updates
+
     // Additional properties for complete system monitoring
-    public var activeJobs: Int  // Mutable for runtime updates
-    public var queuedJobs: Int  // Mutable for runtime updates
-    public var diskUsage: Double  // Mutable for runtime updates
-    public var networkActivity: Double  // Mutable for runtime updates
-    public var isOverloaded: Bool  // Mutable for runtime updates
-    
+    public var activeJobs: Int // Mutable for runtime updates
+    public var queuedJobs: Int // Mutable for runtime updates
+    public var diskUsage: Double // Mutable for runtime updates
+    public var networkActivity: Double // Mutable for runtime updates
+    public var isOverloaded: Bool // Mutable for runtime updates
+
     // Computed properties for compatibility
-    public var cpuUsage: Double { return cpu }
-    public var memoryUsage: Double { return memory }
-    
-    public init(cpu: Double = 0.0, memory: Double = 0.0, disk: Double = 0.0, queueLength: Int = 0, currentConcurrentJobs: Int = 0, lastUpdated: Date = Date(), averageJobDuration: TimeInterval = 0.0, activeJobs: Int = 0, queuedJobs: Int = 0, diskUsage: Double = 0.0, networkActivity: Double = 0.0, isOverloaded: Bool = false) {
+    public var cpuUsage: Double { cpu }
+    public var memoryUsage: Double { memory }
+
+    public init(
+        cpu: Double = 0.0,
+        memory: Double = 0.0,
+        disk: Double = 0.0,
+        queueLength: Int = 0,
+        currentConcurrentJobs: Int = 0,
+        lastUpdated: Date = Date(),
+        averageJobDuration: TimeInterval = 0.0,
+        activeJobs: Int = 0,
+        queuedJobs: Int = 0,
+        diskUsage: Double = 0.0,
+        networkActivity: Double = 0.0,
+        isOverloaded: Bool = false
+    ) {
         self.cpu = cpu
         self.memory = memory
         self.disk = disk
-        self.level = LoadLevel.from(cpu: cpu, memory: memory, disk: disk)
+        level = LoadLevel.from(cpu: cpu, memory: memory, disk: disk)
         self.queueLength = queueLength
         self.currentConcurrentJobs = currentConcurrentJobs
-        self.loadLevel = self.level  // Alias for compatibility
+        loadLevel = level // Alias for compatibility
         self.lastUpdated = lastUpdated
         self.averageJobDuration = averageJobDuration
         self.activeJobs = activeJobs
@@ -142,13 +168,13 @@ public struct SystemLoad: Sendable {
         self.networkActivity = networkActivity
         self.isOverloaded = isOverloaded
     }
-    
+
     public enum LoadLevel: String, CaseIterable, Sendable {
         case low = "Low"
         case medium = "Medium"
         case high = "High"
         case critical = "Critical"
-        
+
         static func from(cpu: Double, memory: Double, disk: Double) -> LoadLevel {
             let maxLoad = max(cpu, memory, disk)
             if maxLoad < 0.3 { return .low }
@@ -160,10 +186,10 @@ public struct SystemLoad: Sendable {
 }
 
 public struct ProcessingLimits: Sendable {
-    public var maxConcurrentJobs: Int  // Changed to var for mutability
+    public var maxConcurrentJobs: Int // Changed to var for mutability
     public var maxMemoryUsage: Int
     public var timeoutSeconds: Int
-    
+
     // Additional properties for enterprise settings
     public var maxQueueSize: Int
     public var maxJobDuration: TimeInterval
@@ -171,8 +197,18 @@ public struct ProcessingLimits: Sendable {
     public var pauseOnHighLoad: Bool
     public var cpuThreshold: Double
     public var memoryThreshold: Double
-    
-    public init(maxConcurrentJobs: Int = 5, maxMemoryUsage: Int = 1024, timeoutSeconds: Int = 300, maxQueueSize: Int = 100, maxJobDuration: TimeInterval = 3600, enableThrottling: Bool = true, pauseOnHighLoad: Bool = true, cpuThreshold: Double = 0.8, memoryThreshold: Double = 0.8) {
+
+    public init(
+        maxConcurrentJobs: Int = 5,
+        maxMemoryUsage: Int = 1024,
+        timeoutSeconds: Int = 300,
+        maxQueueSize: Int = 100,
+        maxJobDuration: TimeInterval = 3600,
+        enableThrottling: Bool = true,
+        pauseOnHighLoad: Bool = true,
+        cpuThreshold: Double = 0.8,
+        memoryThreshold: Double = 0.8
+    ) {
         self.maxConcurrentJobs = maxConcurrentJobs
         self.maxMemoryUsage = maxMemoryUsage
         self.timeoutSeconds = timeoutSeconds
@@ -183,7 +219,7 @@ public struct ProcessingLimits: Sendable {
         self.cpuThreshold = cpuThreshold
         self.memoryThreshold = memoryThreshold
     }
-    
+
     public static let `default` = ProcessingLimits()
 }
 
@@ -193,15 +229,26 @@ public struct ProcessingStats: Sendable {
     public let failedJobs: Int
     public let averageProcessingTime: TimeInterval
     public let systemLoad: SystemLoad
-    
+
     // Additional properties for enterprise dashboard
     public let totalJobsProcessed: Int
     public let successRate: Double
     public let currentLoad: SystemLoad.LoadLevel
     public let activeJobs: Int
     public let queueLength: Int
-    
-    public init(totalJobs: Int = 0, completedJobs: Int = 0, failedJobs: Int = 0, averageProcessingTime: TimeInterval = 0, systemLoad: SystemLoad = SystemLoad(), totalJobsProcessed: Int = 0, successRate: Double = 0.0, currentLoad: SystemLoad.LoadLevel = .low, activeJobs: Int = 0, queueLength: Int = 0) {
+
+    public init(
+        totalJobs: Int = 0,
+        completedJobs: Int = 0,
+        failedJobs: Int = 0,
+        averageProcessingTime: TimeInterval = 0,
+        systemLoad: SystemLoad = SystemLoad(),
+        totalJobsProcessed: Int = 0,
+        successRate: Double = 0.0,
+        currentLoad: SystemLoad.LoadLevel = .low,
+        activeJobs: Int = 0,
+        queueLength: Int = 0
+    ) {
         self.totalJobs = totalJobs
         self.completedJobs = completedJobs
         self.failedJobs = failedJobs
@@ -219,7 +266,7 @@ public struct FileUploadProgress: Sendable {
     public let fileName: String
     public let progress: Double
     public let status: String
-    
+
     public init(fileName: String, progress: Double = 0.0, status: String = "uploading") {
         self.fileName = fileName
         self.progress = progress
@@ -231,7 +278,7 @@ public struct UploadResult: Sendable {
     public let success: Bool
     public let message: String
     public let fileId: String?
-    
+
     public init(success: Bool, message: String, fileId: String? = nil) {
         self.success = success
         self.message = message
@@ -243,7 +290,7 @@ public struct SecurityConfig: Sendable {
     public let enableSSL: Bool
     public let apiKeyRequired: Bool
     public let rateLimitPerMinute: Int
-    
+
     public init(enableSSL: Bool = true, apiKeyRequired: Bool = true, rateLimitPerMinute: Int = 60) {
         self.enableSSL = enableSSL
         self.apiKeyRequired = apiKeyRequired
@@ -255,25 +302,25 @@ public struct RiskAssessment: Sendable {
     public let level: String
     public let score: Double
     public let factors: [String]
-    public let overallRisk: Double  // Added for compatibility
-    public let criticalRisks: [String]  // Added for compatibility
-    public let mitigation: String  // Added for compatibility
-    
+    public let overallRisk: Double // Added for compatibility
+    public let criticalRisks: [String] // Added for compatibility
+    public let mitigation: String // Added for compatibility
+
     // Primary initializer
     public init(level: String = "Low", score: Double = 0.0, factors: [String] = []) {
         self.level = level
         self.score = score
         self.factors = factors
-        self.overallRisk = score  // Map score to overallRisk
-        self.criticalRisks = factors  // Map factors to criticalRisks
-        self.mitigation = "No specific mitigation required"  // Default mitigation
+        overallRisk = score // Map score to overallRisk
+        criticalRisks = factors // Map factors to criticalRisks
+        mitigation = "No specific mitigation required" // Default mitigation
     }
-    
+
     // Backward-compatible initializer
     public init(overallRisk: Double, criticalRisks: [String], mitigation: String) {
-        self.level = overallRisk < 0.3 ? "Low" : overallRisk < 0.7 ? "Medium" : "High"
-        self.score = overallRisk
-        self.factors = criticalRisks + [mitigation]
+        level = overallRisk < 0.3 ? "Low" : overallRisk < 0.7 ? "Medium" : "High"
+        score = overallRisk
+        factors = criticalRisks + [mitigation]
         self.overallRisk = overallRisk
         self.criticalRisks = criticalRisks
         self.mitigation = mitigation
@@ -287,8 +334,15 @@ public struct CodeImprovement: Identifiable, Sendable {
     public let suggestedCode: String
     public let priority: String
     public let severity: Severity
-    
-    public init(id: UUID = UUID(), type: String, description: String, suggestedCode: String, priority: String = "Medium", severity: Severity = .info) {
+
+    public init(
+        id: UUID = UUID(),
+        type: String,
+        description: String,
+        suggestedCode: String,
+        priority: String = "Medium",
+        severity: Severity = .info
+    ) {
         self.id = id
         self.type = type
         self.description = description
@@ -296,7 +350,7 @@ public struct CodeImprovement: Identifiable, Sendable {
         self.priority = priority
         self.severity = severity
     }
-    
+
     public enum Severity: String, CaseIterable, Sendable {
         case info = "Info"
         case warning = "Warning"
@@ -310,8 +364,14 @@ public struct CodeFix: Identifiable, Sendable {
     public let originalCode: String
     public let fixedCode: String
     public let confidence: Double
-    
-    public init(id: UUID = UUID(), description: String, originalCode: String, fixedCode: String, confidence: Double = 0.8) {
+
+    public init(
+        id: UUID = UUID(),
+        description: String,
+        originalCode: String,
+        fixedCode: String,
+        confidence: Double = 0.8
+    ) {
         self.id = id
         self.description = description
         self.originalCode = originalCode
@@ -326,15 +386,21 @@ public struct CodeAnalysisReport: Sendable {
     public let timestamp: Date
     public let results: [AnalysisResult]
     public let metrics: CodeMetrics
-    
-    public init(rating: Rating = .good, summary: String = "", timestamp: Date = Date(), results: [AnalysisResult] = [], metrics: CodeMetrics = CodeMetrics()) {
+
+    public init(
+        rating: Rating = .good,
+        summary: String = "",
+        timestamp: Date = Date(),
+        results: [AnalysisResult] = [],
+        metrics: CodeMetrics = CodeMetrics()
+    ) {
         self.rating = rating
         self.summary = summary
         self.timestamp = timestamp
         self.results = results
         self.metrics = metrics
     }
-    
+
     public enum Rating: String, CaseIterable, Sendable {
         case excellent, good, fair, poor
     }
@@ -345,7 +411,7 @@ public struct CodeMetrics: Sendable {
     public let lineCount: Int
     public let functionCount: Int
     public let complexityScore: Double
-    
+
     public init(characterCount: Int = 0, lineCount: Int = 0, functionCount: Int = 0, complexityScore: Double = 0.0) {
         self.characterCount = characterCount
         self.lineCount = lineCount
@@ -360,18 +426,27 @@ public struct EnhancedAnalysisItem: Identifiable, Sendable {
     public let description: String
     public let severity: String
     public let category: String
-    public let message: String  // Added for compatibility
-    public let lineNumber: Int  // Added for compatibility
-    public let type: String  // Added for compatibility
-    
-    public init(id: UUID = UUID(), title: String, description: String, severity: String = "Medium", category: String = "General", message: String? = nil, lineNumber: Int = 0, type: String? = nil) {
+    public let message: String // Added for compatibility
+    public let lineNumber: Int // Added for compatibility
+    public let type: String // Added for compatibility
+
+    public init(
+        id: UUID = UUID(),
+        title: String,
+        description: String,
+        severity: String = "Medium",
+        category: String = "General",
+        message: String? = nil,
+        lineNumber: Int = 0,
+        type: String? = nil
+    ) {
         self.id = id
         self.title = title
         self.description = description
         self.severity = severity
         self.category = category
-        self.message = message ?? description  // Use description as fallback
+        self.message = message ?? description // Use description as fallback
         self.lineNumber = lineNumber
-        self.type = type ?? category  // Use category as fallback
+        self.type = type ?? category // Use category as fallback
     }
 }

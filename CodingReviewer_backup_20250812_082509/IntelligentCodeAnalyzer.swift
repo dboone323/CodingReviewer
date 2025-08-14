@@ -1,7 +1,7 @@
 import Foundation
+import Combine
 import OSLog
 import SwiftUI
-import Combine
 
 // MARK: - Analysis Error Types
 
@@ -14,13 +14,13 @@ enum AnalyzerError: LocalizedError {
     nonisolated var errorDescription: String? {
         switch self {
         case .fileNotFound(let path):
-            return "File not found: \(path)"
+            "File not found: \(path)"
         case .invalidPath(let path):
-            return "Invalid path: \(path)"
+            "Invalid path: \(path)"
         case .analysisTimeout:
-            return "Analysis timed out"
+            "Analysis timed out"
         case .networkError(let error):
-            return "Network error: \(error.localizedDescription)"
+            "Network error: \(error.localizedDescription)"
         }
     }
 }
@@ -82,9 +82,9 @@ struct Recommendation {
 
         var rawValue: Int {
             switch self {
-            case .high: return 3
-            case .medium: return 2
-            case .low: return 1
+            case .high: 3
+            case .medium: 2
+            case .low: 1
             }
         }
     }
@@ -100,13 +100,19 @@ class IntelligentCodeAnalyzer: ObservableObject {
     private let logger = OSLog(subsystem: "CodingReviewer", category: "IntelligentCodeAnalyzer")
 
     /// Analyzes and processes data with comprehensive validation
+    /// <#Description#>
+    /// - Returns: <#description#>
     func analyzeProject(at projectPath: String, completion: @escaping (ProjectAnalysisResult) -> Void) {
         Task {
             isAnalyzing = true
             analysisProgress = 0.0
 
             let startTime = Date()
-            let projectStructure = ProjectStructure(name: URL(fileURLWithPath: projectPath).lastPathComponent, rootPath: projectPath, files: [])
+            let projectStructure = ProjectStructure(
+                name: URL(fileURLWithPath: projectPath).lastPathComponent,
+                rootPath: projectPath,
+                files: []
+            )
 
             let result = ProjectAnalysisResult(
                 project: projectStructure,
@@ -117,7 +123,12 @@ class IntelligentCodeAnalyzer: ObservableObject {
 
             lastAnalysisResult = result
 
-            os_log("Project analysis completed with %d total files", log: logger, type: .info, result.project.files.count)
+            os_log(
+                "Project analysis completed with %d total files",
+                log: logger,
+                type: .info,
+                result.project.files.count
+            )
 
             Task { @MainActor in
                 completion(result)
@@ -128,6 +139,8 @@ class IntelligentCodeAnalyzer: ObservableObject {
     }
 
     /// Analyzes and processes data with comprehensive validation
+    /// <#Description#>
+    /// - Returns: <#description#>
     func analyzeFile(at filePath: String) async throws -> [CodeIssue] {
         guard FileManager.default.fileExists(atPath: filePath) else {
             throw AnalyzerError.fileNotFound(filePath)
@@ -157,8 +170,9 @@ class IntelligentCodeAnalyzer: ObservableObject {
             let lineNumber = index + 1
 
             // Check for main actor isolation issues
-            if line.contains(".shared.") && !line.contains("await") &&
-               (line.contains("AppLogger") || line.contains("PerformanceTracker")) {
+            if line.contains(".shared."), !line.contains("await"),
+               line.contains("AppLogger") || line.contains("PerformanceTracker")
+            {
                 issues.append(CodeIssue(
                     type: .concurrencyIssue,
                     severity: .warning,
@@ -171,7 +185,7 @@ class IntelligentCodeAnalyzer: ObservableObject {
             }
 
             // Check for missing @MainActor annotations
-            if line.contains("@Published") && !lines[max(0, index-1)].contains("@MainActor") {
+            if line.contains("@Published"), !lines[max(0, index - 1)].contains("@MainActor") {
                 issues.append(CodeIssue(
                     type: .missingMainActor,
                     severity: .warning,
@@ -196,14 +210,15 @@ class IntelligentCodeAnalyzer: ObservableObject {
 
             // Check for unused variables
             let regex = try? NSRegularExpression(pattern: "\\b(let|var)\\s+(\\w+)\\s*=")
-            if let regex = regex {
-                let range = NSRange(line.startIndex..<line.endIndex, in: line)
+            if let regex {
+                let range = NSRange(line.startIndex ..< line.endIndex, in: line)
                 if let match = regex.firstMatch(in: line, options: [], range: range),
-                   let matchRange = Range(match.range(at: 2), in: line) {
+                   let matchRange = Range(match.range(at: 2), in: line)
+                {
                     let variableName = String(line[matchRange])
 
                     // Simple heuristic: if variable isn't used elsewhere
-                    let usageCount = lines.filter { $0.contains(variableName) }.count
+                    let usageCount = lines.count(where: { $0.contains(variableName) })
                     if usageCount == 1 { // Only the declaration line
                         issues.append(CodeIssue(
                             type: .unusedVariable,
@@ -219,7 +234,7 @@ class IntelligentCodeAnalyzer: ObservableObject {
             }
 
             // Check for var that should be let
-            if line.contains("var ") && !line.contains(" = ") {
+            if line.contains("var "), !line.contains(" = ") {
                 issues.append(CodeIssue(
                     type: .mutableToImmutable,
                     severity: .info,
@@ -256,7 +271,7 @@ class IntelligentCodeAnalyzer: ObservableObject {
             let lineNumber = index + 1
 
             // Check for inefficient string concatenation
-            if line.contains("+") && line.contains("\"") && !line.contains("\\(") {
+            if line.contains("+"), line.contains("\""), !line.contains("\\(") {
                 issues.append(CodeIssue(
                     type: .inefficientStringConcatenation,
                     severity: .warning,
@@ -269,7 +284,7 @@ class IntelligentCodeAnalyzer: ObservableObject {
             }
 
             // Check for force unwrapping
-            if line.contains("!") && !line.contains("!=") && !line.contains("//") {
+            if line.contains("!"), !line.contains("!="), !line.contains("//") {
                 let forceUnwrapCount = line.components(separatedBy: "!").count - 1
                 if forceUnwrapCount > 0 {
                     issues.append(CodeIssue(
@@ -296,7 +311,7 @@ class IntelligentCodeAnalyzer: ObservableObject {
             let lineNumber = index + 1
 
             // Check for potential logging of sensitive data
-            if line.contains("log") && (line.contains("password") || line.contains("token") || line.contains("key")) {
+            if line.contains("log"), line.contains("password") || line.contains("token") || line.contains("key") {
                 issues.append(CodeIssue(
                     type: .insecureLogging,
                     severity: .warning,
@@ -339,12 +354,12 @@ class IntelligentCodeAnalyzer: ObservableObject {
             // Check for magic numbers
             let numberRegex = try? NSRegularExpression(pattern: "\\b\\d+\\b")
             if let regex = numberRegex {
-                let range = NSRange(line.startIndex..<line.endIndex, in: line)
+                let range = NSRange(line.startIndex ..< line.endIndex, in: line)
                 let matches = regex.matches(in: line, options: [], range: range)
                 for match in matches {
                     guard let matchRange = Range(match.range, in: line) else { continue }
                     let numberString = String(line[matchRange])
-                    if let number = Int(numberString), number > 1 && number != 0 && number != 100 {
+                    if let number = Int(numberString), number > 1, number != 0, number != 100 {
                         issues.append(CodeIssue(
                             type: .magicNumber,
                             severity: .info,
@@ -359,8 +374,9 @@ class IntelligentCodeAnalyzer: ObservableObject {
             }
 
             // Check for missing access control
-            if (line.contains("class ") || line.contains("struct ") || line.contains("func ")) &&
-               !line.contains("private") && !line.contains("public") && !line.contains("internal") {
+            if line.contains("class ") || line.contains("struct ") || line.contains("func "),
+               !line.contains("private"), !line.contains("public"), !line.contains("internal")
+            {
                 issues.append(CodeIssue(
                     type: .missingAccessControl,
                     severity: .info,
@@ -389,7 +405,7 @@ class IntelligentCodeAnalyzer: ObservableObject {
             let trimmedLine = line.trimmingCharacters(in: .whitespaces)
 
             // Detect function start
-            if trimmedLine.contains("func ") && trimmedLine.contains("{") {
+            if trimmedLine.contains("func "), trimmedLine.contains("{") {
                 currentFunctionStart = lineNumber
                 braceCount = 1
             } else if let functionStart = currentFunctionStart {
@@ -427,7 +443,7 @@ class IntelligentCodeAnalyzer: ObservableObject {
 
         for (category, categoryIssues) in groupedIssues {
             let count = categoryIssues.count
-            let highPriorityCount = categoryIssues.filter { $0.severity == .error }.count
+            let highPriorityCount = categoryIssues.count(where: { $0.severity == .error })
 
             recommendations.append(Recommendation(
                 title: "\(category.rawValue) Issues",

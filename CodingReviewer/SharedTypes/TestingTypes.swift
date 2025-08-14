@@ -1,6 +1,7 @@
 import Foundation
 
 // MARK: - Testing Types
+
 // Pure testing-related data models - NO SwiftUI imports, NO Codable
 
 public struct GeneratedTestCase: Identifiable, Sendable {
@@ -12,13 +13,25 @@ public struct GeneratedTestCase: Identifiable, Sendable {
     public let testCode: String
     public let expectedOutcome: String
     public let estimatedExecutionTime: TimeInterval
-    
+
     // Additional properties for compatibility
     public let fileName: String
     public let lineNumber: Int
     public let tags: [String]
-    
-    public init(id: UUID = UUID(), testName: String, targetFunction: String, testType: TestType, priority: TestPriority, testCode: String, expectedOutcome: String, estimatedExecutionTime: TimeInterval = 1.0, fileName: String = "", lineNumber: Int = 0, tags: [String] = []) {
+
+    public init(
+        id: UUID = UUID(),
+        testName: String,
+        targetFunction: String,
+        testType: TestType,
+        priority: TestPriority,
+        testCode: String,
+        expectedOutcome: String,
+        estimatedExecutionTime: TimeInterval = 1.0,
+        fileName: String = "",
+        lineNumber: Int = 0,
+        tags: [String] = []
+    ) {
         self.id = id
         self.testName = testName
         self.targetFunction = targetFunction
@@ -31,71 +44,71 @@ public struct GeneratedTestCase: Identifiable, Sendable {
         self.lineNumber = lineNumber
         self.tags = tags
     }
-    
+
     // Backward compatibility properties
     public var category: TestType {
-        return testType
+        testType
     }
-    
+
     public var name: String {
-        return testName
+        testName
     }
-    
+
     public var description: String {
-        return "Test: \(testName) for \(targetFunction)"
+        "Test: \(testName) for \(targetFunction)"
     }
-    
+
     public var code: String {
-        return testCode
+        testCode
     }
-    
+
     public var expectedResult: String {
-        return expectedOutcome
+        expectedOutcome
     }
 }
 
 public enum TestCategory: String, CaseIterable, Sendable {
-    case function = "function"
-    case initialization = "initialization"
-    case lifecycle = "lifecycle"
-    case concurrency = "concurrency"
+    case function
+    case initialization
+    case lifecycle
+    case concurrency
     case errorHandling = "error_handling"
     case edgeCase = "edge_case"
-    
+
     public var displayName: String {
         switch self {
-        case .function: return "Function Test"
-        case .initialization: return "Initialization Test"
-        case .lifecycle: return "Lifecycle Test"
-        case .concurrency: return "Concurrency Test"
-        case .errorHandling: return "Error Handling Test"
-        case .edgeCase: return "Edge Case Test"
+        case .function: "Function Test"
+        case .initialization: "Initialization Test"
+        case .lifecycle: "Lifecycle Test"
+        case .concurrency: "Concurrency Test"
+        case .errorHandling: "Error Handling Test"
+        case .edgeCase: "Edge Case Test"
         }
     }
 }
 
 public enum TestType: String, CaseIterable, Sendable {
-    case unit = "unit"
-    case integration = "integration"
-    case function = "function"
-    case performance = "performance"
-    case security = "security"
-    case quality = "quality"
-    case syntax = "syntax"
+    case unit
+    case integration
+    case function
+    case performance
+    case security
+    case quality
+    case syntax
     case edgeCase = "edge_case"
-    case coverage = "coverage"
-    
+    case coverage
+
     public var displayName: String {
         switch self {
-        case .unit: return "Unit Test"
-        case .integration: return "Integration Test"
-        case .function: return "Function Test"
-        case .performance: return "Performance Test"
-        case .security: return "Security Test"
-        case .quality: return "Quality Test"
-        case .syntax: return "Syntax Test"
-        case .edgeCase: return "Edge Case Test"
-        case .coverage: return "Coverage Test"
+        case .unit: "Unit Test"
+        case .integration: "Integration Test"
+        case .function: "Function Test"
+        case .performance: "Performance Test"
+        case .security: "Security Test"
+        case .quality: "Quality Test"
+        case .syntax: "Syntax Test"
+        case .edgeCase: "Edge Case Test"
+        case .coverage: "Coverage Test"
         }
     }
 }
@@ -107,8 +120,15 @@ public struct TestExecutionResult: Identifiable, Sendable {
     public let executionTime: TimeInterval
     public let output: String
     public let error: String?
-    
-    public init(id: UUID = UUID(), testCase: GeneratedTestCase, passed: Bool, executionTime: TimeInterval, output: String, error: String? = nil) {
+
+    public init(
+        id: UUID = UUID(),
+        testCase: GeneratedTestCase,
+        passed: Bool,
+        executionTime: TimeInterval,
+        output: String,
+        error: String? = nil
+    ) {
         self.id = id
         self.testCase = testCase
         self.passed = passed
@@ -116,14 +136,14 @@ public struct TestExecutionResult: Identifiable, Sendable {
         self.output = output
         self.error = error
     }
-    
+
     // Backward compatibility properties
     public var success: Bool {
-        return passed
+        passed
     }
-    
+
     public var actualExecutionTime: TimeInterval {
-        return executionTime
+        executionTime
     }
 }
 
@@ -134,8 +154,15 @@ public struct TestExecutionStats: Sendable {
     public let skippedTests: Int
     public let totalExecutionTime: TimeInterval
     public let averageExecutionTime: TimeInterval
-    
-    public init(totalTests: Int, passedTests: Int, failedTests: Int, skippedTests: Int, totalExecutionTime: TimeInterval, averageExecutionTime: TimeInterval) {
+
+    public init(
+        totalTests: Int,
+        passedTests: Int,
+        failedTests: Int,
+        skippedTests: Int,
+        totalExecutionTime: TimeInterval,
+        averageExecutionTime: TimeInterval
+    ) {
         self.totalTests = totalTests
         self.passedTests = passedTests
         self.failedTests = failedTests
@@ -143,7 +170,7 @@ public struct TestExecutionStats: Sendable {
         self.totalExecutionTime = totalExecutionTime
         self.averageExecutionTime = averageExecutionTime
     }
-    
+
     public var passRate: Double {
         guard totalTests > 0 else { return 0.0 }
         return Double(passedTests) / Double(totalTests)
@@ -157,8 +184,15 @@ public struct TestCoverage: Sendable {
     public let totalLines: Int
     public let branchesCovered: Int
     public let totalBranches: Int
-    
-    public init(functionsCovered: Int, totalFunctions: Int, linesCovered: Int, totalLines: Int, branchesCovered: Int, totalBranches: Int) {
+
+    public init(
+        functionsCovered: Int,
+        totalFunctions: Int,
+        linesCovered: Int,
+        totalLines: Int,
+        branchesCovered: Int,
+        totalBranches: Int
+    ) {
         self.functionsCovered = functionsCovered
         self.totalFunctions = totalFunctions
         self.linesCovered = linesCovered
@@ -166,33 +200,33 @@ public struct TestCoverage: Sendable {
         self.branchesCovered = branchesCovered
         self.totalBranches = totalBranches
     }
-    
+
     public var functionCoverage: Double {
         guard totalFunctions > 0 else { return 0.0 }
         return Double(functionsCovered) / Double(totalFunctions)
     }
-    
+
     public var lineCoverage: Double {
         guard totalLines > 0 else { return 0.0 }
         return Double(linesCovered) / Double(totalLines)
     }
-    
+
     public var branchCoverage: Double {
         guard totalBranches > 0 else { return 0.0 }
         return Double(branchesCovered) / Double(totalBranches)
     }
-    
+
     // Backward compatibility properties
     public var functionsTestedPercentage: Double {
-        return functionCoverage * 100.0
+        functionCoverage * 100.0
     }
-    
+
     public var classesTestedPercentage: Double {
-        return functionCoverage * 100.0  // Using function coverage as proxy
+        functionCoverage * 100.0 // Using function coverage as proxy
     }
-    
+
     public var edgeCasesTestedPercentage: Double {
-        return branchCoverage * 100.0  // Using branch coverage as proxy for edge cases
+        branchCoverage * 100.0 // Using branch coverage as proxy for edge cases
     }
 }
 
@@ -201,7 +235,7 @@ public struct ValidationResult: Sendable {
     public let errors: [String]
     public let warnings: [String]
     public let suggestions: [String]
-    
+
     public init(isValid: Bool, errors: [String], warnings: [String], suggestions: [String]) {
         self.isValid = isValid
         self.errors = errors
@@ -216,8 +250,14 @@ public struct TestReport: Sendable {
     public let coverage: TestCoverage
     public let results: [TestExecutionResult]
     public let summary: String
-    
-    public init(timestamp: Date, stats: TestExecutionStats, coverage: TestCoverage, results: [TestExecutionResult], summary: String) {
+
+    public init(
+        timestamp: Date,
+        stats: TestExecutionStats,
+        coverage: TestCoverage,
+        results: [TestExecutionResult],
+        summary: String
+    ) {
         self.timestamp = timestamp
         self.stats = stats
         self.coverage = coverage
@@ -232,8 +272,14 @@ public struct PerformanceSummary: Sendable {
     public let minExecutionTime: TimeInterval
     public let memoryUsage: Int
     public let cpuUsage: Double
-    
-    public init(averageExecutionTime: TimeInterval, maxExecutionTime: TimeInterval, minExecutionTime: TimeInterval, memoryUsage: Int, cpuUsage: Double) {
+
+    public init(
+        averageExecutionTime: TimeInterval,
+        maxExecutionTime: TimeInterval,
+        minExecutionTime: TimeInterval,
+        memoryUsage: Int,
+        cpuUsage: Double
+    ) {
         self.averageExecutionTime = averageExecutionTime
         self.maxExecutionTime = maxExecutionTime
         self.minExecutionTime = minExecutionTime

@@ -7,10 +7,10 @@ import XCTest
 @testable import CodingReviewer
 
 final class MCPGeneratedTests: XCTestCase {
-    
+
     var testingOrchestrator: AITestingOrchestrator!
     var testExecutionEngine: TestExecutionEngine!
-    
+
     override func setUpWithError() throws {
         testExecutionEngine = TestExecutionEngine()
         testingOrchestrator = AITestingOrchestrator(
@@ -18,31 +18,39 @@ final class MCPGeneratedTests: XCTestCase {
             simpleTestingFramework: SimpleTestingFramework()
         )
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func testAITestGeneration() async throws {
         let sampleCode = """
+    /// <#Description#>
+    /// - Returns: <#description#>
         func calculateSum(_ a: Int, _ b: Int) -> Int {
             return a + b
         }
         """
-        
+
         await testingOrchestrator.generateAITests(for: sampleCode)
-        
+
         XCTAssertGreaterThan(testingOrchestrator.aiGeneratedTests.count, 0)
         XCTAssertGreaterThan(testingOrchestrator.testCoverage, 0)
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func testAutomatedExecution() async throws {
         // Setup test cases
         await testingOrchestrator.generateAITests(for: "func test() { return true }")
-        
+
         // Execute tests
         await testingOrchestrator.executeAITests()
-        
+
         // Verify results
         XCTAssertGreaterThan(testingOrchestrator.qualityMetrics.successRate, 0)
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func testIntelligenceLevel() throws {
         XCTAssertGreaterThanOrEqual(testingOrchestrator.intelligenceLevel, 80.0)
         XCTAssertLessThanOrEqual(testingOrchestrator.intelligenceLevel, 100.0)

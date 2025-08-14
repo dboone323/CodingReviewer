@@ -1,3 +1,7 @@
+import Foundation
+import Combine
+import SwiftUI
+
 //
 //  BackgroundProcessingSystem.swift
 //  CodingReviewer
@@ -5,10 +9,6 @@
 //  Created by Phase 4 Enterprise Features on 8/5/25.
 //  Refactored for better code organization - extracted types to separate files
 //
-
-import SwiftUI
-import Foundation
-import Combine
 
 // Note: Background processing types are now defined in BackgroundProcessingTypes.swift
 
@@ -19,10 +19,10 @@ class BackgroundProcessingSystem: ObservableObject {
     @Published var activeJobs: [ProcessingJob] = []
     @Published var completedJobs: [ProcessingJob] = []
     @Published var failedJobs: [ProcessingJob] = []
-    @Published var systemLoad: SystemLoad = SystemLoad()
+    @Published var systemLoad: SystemLoad = .init()
     @Published var processingLimits = ProcessingLimits.default
     @Published var isProcessingEnabled = true
-    
+
     private let jobQueue = DispatchQueue(label: "com.codingreviewer.background", qos: .utility, attributes: .concurrent)
     // Use a non-isolated semaphore that can be accessed from background queues
     private let semaphore: DispatchSemaphore
@@ -30,20 +30,20 @@ class BackgroundProcessingSystem: ObservableObject {
     private var systemMonitorTimer: Timer?
     private let maxJobHistory = 1000
     private let systemStartTime = Date()
-    
+
     // Initialize semaphore in init
     init() {
-        self.semaphore = DispatchSemaphore(value: 5) // Default value
-        
+        semaphore = DispatchSemaphore(value: 5) // Default value
+
         // Defer async setup to avoid MainActor issues in init
         Task { @MainActor in
             self.setupSystemMonitoring()
             self.loadJobHistory()
         }
     }
-    
+
     // MARK: - Job Management
-    
+
     func addJob(
         type: ProcessingJob.JobType,
         title: String,
@@ -60,27 +60,31 @@ class BackgroundProcessingSystem: ObservableObject {
             data: data,
             priority: priority
         )
-        
+
         activeJobs.append(job)
         updateSystemLoad()
         processNextJob()
-        
+
         return job
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func cancelJob(id: UUID) {
         if let index = activeJobs.firstIndex(where: { $0.id == id }) {
             var job = activeJobs[index]
             job.status = .cancelled
             job.endTime = Date()
-            
+
             activeJobs.remove(at: index)
             failedJobs.append(job)
-            
+
             updateSystemLoad()
         }
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func pauseAllJobs() {
         isProcessingEnabled = false
         for index in activeJobs.indices {
@@ -90,7 +94,9 @@ class BackgroundProcessingSystem: ObservableObject {
         }
         updateSystemLoad()
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func resumeAllJobs() {
         isProcessingEnabled = true
         for index in activeJobs.indices {
@@ -101,7 +107,9 @@ class BackgroundProcessingSystem: ObservableObject {
         updateSystemLoad()
         processNextJob()
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func retryFailedJob(id: UUID) {
         if let index = failedJobs.firstIndex(where: { $0.id == id }) {
             var job = failedJobs[index]
@@ -110,17 +118,19 @@ class BackgroundProcessingSystem: ObservableObject {
             job.startTime = Date()
             job.endTime = nil
             job.errorMessage = nil
-            
+
             failedJobs.remove(at: index)
             activeJobs.append(job)
-            
+
             updateSystemLoad()
             processNextJob()
         }
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func addBatchJobs(count: Int, type: ProcessingJob.JobType) {
-        for i in 1...count {
+        for i in 1 ... count {
             _ = addJob(
                 type: type,
                 title: "\(type.rawValue) Job \(i)",
@@ -129,7 +139,9 @@ class BackgroundProcessingSystem: ObservableObject {
             )
         }
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func toggleProcessing() {
         if isProcessingEnabled {
             pauseAllJobs()
@@ -137,14 +149,18 @@ class BackgroundProcessingSystem: ObservableObject {
             resumeAllJobs()
         }
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func pauseJob(id: UUID) {
         if let index = activeJobs.firstIndex(where: { $0.id == id && $0.status == .running }) {
             activeJobs[index].status = .paused
             updateSystemLoad()
         }
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func resumeJob(id: UUID) {
         if let index = activeJobs.firstIndex(where: { $0.id == id && $0.status == .paused }) {
             activeJobs[index].status = .queued
@@ -152,8 +168,10 @@ class BackgroundProcessingSystem: ObservableObject {
             processNextJob()
         }
     }
-    
-    func scheduleRecurringJob(type: ProcessingJob.JobType, interval: TimeInterval, priority: ProcessingJob.JobPriority) {
+
+    func scheduleRecurringJob(type: ProcessingJob.JobType, interval: TimeInterval,
+                              priority: ProcessingJob.JobPriority)
+    {
         // For now, just add a single job - in a real implementation this would schedule recurring jobs
         _ = addJob(
             type: type,
@@ -162,35 +180,43 @@ class BackgroundProcessingSystem: ObservableObject {
             data: ["recurring": true, "interval": interval]
         )
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func updateProcessingLimits(_ newLimits: ProcessingLimits) {
         DispatchQueue.main.async {
             self?.processingLimits = newLimits
             self?.updateSystemLoad()
         }
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func clearCompletedJobs() {
         DispatchQueue.main.async {
             self?.completedJobs.removeAll()
         }
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func clearFailedJobs() {
         DispatchQueue.main.async {
             self?.failedJobs.removeAll()
         }
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func getProcessingStats() -> ProcessingStats {
         let totalProcessed = completedJobs.count + failedJobs.count
         let successCount = completedJobs.count
         let successRate = totalProcessed > 0 ? Double(successCount) / Double(totalProcessed) : 0.0
-        let avgProcessingTime = completedJobs.isEmpty ? 0.0 : 
+        let avgProcessingTime = completedJobs.isEmpty ? 0.0 :
             completedJobs.reduce(0.0) { sum, job in
                 sum + job.duration
             } / Double(completedJobs.count)
-        
+
         return ProcessingStats(
             totalJobsProcessed: totalProcessed,
             successRate: successRate,
@@ -200,26 +226,26 @@ class BackgroundProcessingSystem: ObservableObject {
             queueLength: systemLoad.queueLength
         )
     }
-    
+
     // MARK: - Job Processing
-    
+
     private func processNextJob() {
         guard isProcessingEnabled else { return }
-        
-        let currentRunningJobs = activeJobs.filter { $0.status == .running }.count
+
+        let currentRunningJobs = activeJobs.count(where: { $0.status == .running })
         guard currentRunningJobs < processingLimits.maxConcurrentJobs else { return }
-        
+
         let nextJob = activeJobs
             .filter { $0.status == .queued }
             .sorted { $0.priority > $1.priority }
             .first
-        
+
         guard let job = nextJob,
               let jobIndex = activeJobs.firstIndex(where: { $0.id == job.id }) else { return }
-        
+
         executeJob(at: jobIndex)
     }
-    
+
     private func executeJob(at index: Int) {
         guard index < activeJobs.count else { return }
 
@@ -238,13 +264,14 @@ class BackgroundProcessingSystem: ObservableObject {
             let steps = 20
             let stepDuration = duration / Double(steps)
 
-            for step in 1...steps {
+            for step in 1 ... steps {
                 Thread.sleep(forTimeInterval: stepDuration)
 
                 Task { @MainActor [weak self] in
-                    guard let self = self,
+                    guard let self,
                           let jobIndex = self?.activeJobs.firstIndex(where: { $0.id == jobId }),
-                          self?.activeJobs[jobIndex].status == .running else {
+                          self?.activeJobs[jobIndex].status == .running
+                    else {
                         return
                     }
 
@@ -265,47 +292,47 @@ class BackgroundProcessingSystem: ObservableObject {
             self?.semaphore.signal()
         }
     }
-    
+
     private func completeJob(jobId: UUID, success: Bool) {
         guard let jobIndex = activeJobs.firstIndex(where: { $0.id == jobId }) else { return }
-        
+
         var job = activeJobs[jobIndex]
         job.endTime = Date()
         job.progress = success ? 1.0 : job.progress
         job.status = success ? .completed : .failed
-        
+
         if !success {
             job.errorMessage = "Job processing failed"
         }
-        
+
         activeJobs.remove(at: jobIndex)
-        
+
         if success {
             completedJobs.append(job)
         } else {
             failedJobs.append(job)
         }
-        
+
         // Cleanup old history
         maintainJobHistory()
         updateSystemLoad()
-        
+
         // Process next job in queue
         processNextJob()
     }
-    
+
     private func maintainJobHistory() {
         if completedJobs.count > maxJobHistory {
             completedJobs.removeFirst(completedJobs.count - maxJobHistory)
         }
-        
+
         if failedJobs.count > maxJobHistory {
             failedJobs.removeFirst(failedJobs.count - maxJobHistory)
         }
     }
-    
+
     // MARK: - System Monitoring
-    
+
     private func setupSystemMonitoring() {
         systemMonitorTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
             Task { @MainActor [weak self] in
@@ -313,36 +340,38 @@ class BackgroundProcessingSystem: ObservableObject {
             }
         }
     }
-    
+
     private func updateSystemLoad() {
         let runningJobs = activeJobs.filter { $0.status == .running }
         let queuedJobs = activeJobs.filter { $0.status == .queued }
-        
+
         systemLoad.activeJobs = runningJobs.count
         systemLoad.queuedJobs = queuedJobs.count
         systemLoad.currentConcurrentJobs = runningJobs.count
         systemLoad.queueLength = queuedJobs.count
         systemLoad.lastUpdated = Date()
-        
+
         // Calculate average job duration
         if !completedJobs.isEmpty {
-            systemLoad.averageJobDuration = completedJobs.map { $0.duration }.reduce(0, +) / Double(completedJobs.count)
+            systemLoad.averageJobDuration = completedJobs.map(\.duration).reduce(0, +) / Double(completedJobs.count)
         }
-        
+
         // Simulate system metrics (in a real implementation, these would be actual system readings)
         systemLoad.cpuUsage = min(0.1 + Double(runningJobs.count) * 0.15, 0.95)
         systemLoad.memoryUsage = min(0.2 + Double(activeJobs.count) * 0.05, 0.90)
         systemLoad.diskUsage = 0.3
         systemLoad.networkActivity = runningJobs.isEmpty ? 0.0 : 0.4
-        
+
         // Auto-pause if system is overloaded
-        if processingLimits.pauseOnHighLoad && systemLoad.isOverloaded {
+        if processingLimits.pauseOnHighLoad, systemLoad.isOverloaded {
             pauseAllJobs()
         }
     }
-    
+
     // MARK: - System Status and Statistics
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func getSystemStatus() -> SystemStatus {
         let totalJobs = activeJobs.count + completedJobs.count + failedJobs.count
         let successRate = totalJobs > 0 ? Double(completedJobs.count) / Double(totalJobs) : 1.0
@@ -350,7 +379,7 @@ class BackgroundProcessingSystem: ObservableObject {
         let avgProcessingTime = systemLoad.averageJobDuration
         let isHealthy = !systemLoad.isOverloaded && successRate > 0.8
         let statusText = isHealthy ? "Healthy" : "Needs Attention"
-        
+
         return SystemStatus(
             uptime: uptime,
             totalJobsProcessed: totalJobs,
@@ -364,30 +393,32 @@ class BackgroundProcessingSystem: ObservableObject {
             isProcessingEnabled: isProcessingEnabled
         )
     }
-    
+
     // MARK: - Data Persistence
-    
+
     private func loadJobHistory() {
         // In a real implementation, this would load from persistent storage
         // For now, we'll start with empty history
     }
-    
+
     private func saveJobHistory() {
         // In a real implementation, this would save to persistent storage
     }
-    
+
     // MARK: - Configuration
-    
+
     @MainActor
+    /// <#Description#>
+    /// - Returns: <#description#>
     func cleanup() {
         systemMonitorTimer?.invalidate()
         systemMonitorTimer = nil
         jobTimer?.invalidate()
         jobTimer = nil
     }
-    
+
     // MARK: - Cleanup
-    
+
     deinit {
         // For Swift 6 concurrency, we need to be careful with timer cleanup
         // Since timers are typically created on main thread, we should invalidate them there

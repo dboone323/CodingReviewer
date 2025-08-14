@@ -1,4 +1,7 @@
 import Foundation
+import Accessibility
+import SwiftUI
+
 //
 // FixApplicationView.swift
 // CodingReviewer
@@ -7,20 +10,17 @@ import Foundation
 // Created on July 25, 2025
 //
 
-import SwiftUI
-import Accessibility
-
 // MARK: - Interactive Fix Application View
 
 struct FixApplicationView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false;
-    @StateObject private var fixGenerator = IntelligentFixGenerator();
-    @State private var selectedFixes: Set<UUID> = [];
-    @State private var showingDiffPreview = false;
+    @State private var isLoading = false
+    @StateObject private var fixGenerator = IntelligentFixGenerator()
+    @State private var selectedFixes: Set<UUID> = []
+    @State private var showingDiffPreview = false
     @State private var previewFix: IntelligentFix?
-    @State private var appliedFixes: [UUID] = [];
-    @State private var showingApplyConfirmation = false;
+    @State private var appliedFixes: [UUID] = []
+    @State private var showingApplyConfirmation = false
 
     let analysis: EnhancedAnalysisResult
     let originalCode: String
@@ -73,7 +73,7 @@ struct FixApplicationView: View {
             }
         }
         .alert("Apply Fixes", isPresented: $showingApplyConfirmation) {
-            Button("Cancel", role: .cancel) { }
+            Button("Cancel", role: .cancel) {}
             Button("Apply") {
                 applyConfirmedFixes()
             }
@@ -101,7 +101,7 @@ struct FixApplicationView: View {
 
     /// Performs operation with error handling and validation
     private func selectAllFixes() {
-        selectedFixes = Set(fixGenerator.generatedFixes.map { $0.id })
+        selectedFixes = Set(fixGenerator.generatedFixes.map(\.id))
     }
 
     /// Performs operation with error handling and validation
@@ -125,7 +125,7 @@ struct FixApplicationView: View {
 
     /// Performs operation with error handling and validation
     private func applyConfirmedFixes() {
-        var modifiedCode = originalCode;
+        var modifiedCode = originalCode
         let sortedFixes = fixGenerator.generatedFixes
             .filter { selectedFixes.contains($0.id) }
             .sorted { $0.startLine > $1.startLine } // Apply from bottom to top
@@ -148,7 +148,7 @@ struct FixApplicationView: View {
 
 struct FixApplicationHeader: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false;
+    @State private var isLoading = false
     let totalFixes: Int
     let selectedCount: Int
     let onSelectAll: () -> Void
@@ -195,7 +195,7 @@ struct FixApplicationHeader: View {
 
 struct FixGenerationProgressView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false;
+    @State private var isLoading = false
     let progress: Double
 
     var body: some View {
@@ -216,7 +216,7 @@ struct FixGenerationProgressView: View {
 
 struct EmptyFixesView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false;
+    @State private var isLoading = false
     var body: some View {
         VStack(spacing: 16) {
             Image(systemName: "checkmark.circle.fill")
@@ -241,7 +241,7 @@ struct EmptyFixesView: View {
 
 struct FixesList: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false;
+    @State private var isLoading = false
     let fixes: [IntelligentFix]
     @Binding var selectedFixes: Set<UUID>
     let appliedFixes: [UUID]
@@ -282,7 +282,7 @@ struct FixesList: View {
 
 struct FixRowView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false;
+    @State private var isLoading = false
     let fix: IntelligentFix
     let isSelected: Bool
     let isApplied: Bool
@@ -372,7 +372,7 @@ struct FixRowView: View {
 
 struct ConfidenceBadge: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false;
+    @State private var isLoading = false
     let confidence: Double
 
     var body: some View {
@@ -388,28 +388,28 @@ struct ConfidenceBadge: View {
 
     private var confidenceColor: Color {
         if confidence >= 0.8 {
-            return .green
+            .green
         } else if confidence >= 0.6 {
-            return .orange
+            .orange
         } else {
-            return .red
+            .red
         }
     }
 }
 
 struct ImpactIndicator: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false;
+    @State private var isLoading = false
     let impact: FixImpact
 
     var body: some View {
         HStack(spacing: 2) {
-            ForEach(0..<impact.priority, id: \.self) { _ in
+            ForEach(0 ..< impact.priority, id: \.self) { _ in
                 Circle()
                     .fill(impactColor)
                     .frame(width: 6, height: 6)
             }
-            ForEach(impact.priority..<4, id: \.self) { _ in
+            ForEach(impact.priority ..< 4, id: \.self) { _ in
                 Circle()
                     .fill(Color.gray.opacity(0.3))
                     .frame(width: 6, height: 6)
@@ -419,10 +419,10 @@ struct ImpactIndicator: View {
 
     private var impactColor: Color {
         switch impact {
-        case .low: return .green
-        case .medium: return .yellow
-        case .high: return .orange
-        case .critical: return .red
+        case .low: .green
+        case .medium: .yellow
+        case .high: .orange
+        case .critical: .red
         }
     }
 }
@@ -431,7 +431,7 @@ struct ImpactIndicator: View {
 
 struct FixActionBar: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false;
+    @State private var isLoading = false
     let hasSelectedFixes: Bool
     let onApplySelected: () -> Void
     let onPreviewSelected: () -> Void

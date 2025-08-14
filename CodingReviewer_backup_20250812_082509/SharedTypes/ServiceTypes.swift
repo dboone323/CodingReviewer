@@ -20,15 +20,15 @@ enum AIProvider: String, CaseIterable {
 
     var description: String {
         switch self {
-        case .openAI: return "GPT models for code analysis"
-        case .gemini: return "Google's Gemini AI for code analysis"
+        case .openAI: "GPT models for code analysis"
+        case .gemini: "Google's Gemini AI for code analysis"
         }
     }
 
     var keyPrefix: String {
         switch self {
-        case .openAI: return "sk-"
-        case .gemini: return "AI"
+        case .openAI: "sk-"
+        case .gemini: "AI"
         }
     }
 }
@@ -43,23 +43,23 @@ enum AnalysisType: String, CaseIterable {
 
     var systemImage: String {
         switch self {
-        case .quality: return "checkmark.seal"
-        case .security: return "lock.shield"
-        case .performance: return "speedometer"
-        case .documentation: return "doc.text"
-        case .refactoring: return "arrow.triangle.2.circlepath"
-        case .comprehensive: return "brain.head.profile"
+        case .quality: "checkmark.seal"
+        case .security: "lock.shield"
+        case .performance: "speedometer"
+        case .documentation: "doc.text"
+        case .refactoring: "arrow.triangle.2.circlepath"
+        case .comprehensive: "brain.head.profile"
         }
     }
 
     var description: String {
         switch self {
-        case .quality: return "Analyze code quality and best practices"
-        case .security: return "Identify security vulnerabilities"
-        case .performance: return "Detect performance bottlenecks"
-        case .documentation: return "Generate and improve documentation"
-        case .refactoring: return "Suggest code improvements"
-        case .comprehensive: return "Complete analysis with all checks"
+        case .quality: "Analyze code quality and best practices"
+        case .security: "Identify security vulnerabilities"
+        case .performance: "Detect performance bottlenecks"
+        case .documentation: "Generate and improve documentation"
+        case .refactoring: "Suggest code improvements"
+        case .comprehensive: "Complete analysis with all checks"
         }
     }
 }
@@ -76,14 +76,14 @@ enum SuggestionType: String, CaseIterable {
 
     var systemImage: String {
         switch self {
-        case .codeQuality: return "checkmark.seal"
-        case .security: return "lock.shield"
-        case .performance: return "speedometer"
-        case .bestPractice: return "star"
-        case .refactoring: return "arrow.triangle.2.circlepath"
-        case .documentation: return "doc.text"
-        case .maintainability: return "wrench.and.screwdriver"
-        case .testing: return "testtube.2"
+        case .codeQuality: "checkmark.seal"
+        case .security: "lock.shield"
+        case .performance: "speedometer"
+        case .bestPractice: "star"
+        case .refactoring: "arrow.triangle.2.circlepath"
+        case .documentation: "doc.text"
+        case .maintainability: "wrench.and.screwdriver"
+        case .testing: "testtube.2"
         }
     }
 }
@@ -106,14 +106,14 @@ enum AnalysisResultType: String, CaseIterable {
 
     var systemImage: String {
         switch self {
-        case .quality: return "checkmark.seal"
-        case .security: return "lock.shield"
-        case .suggestion: return "lightbulb"
-        case .performance: return "speedometer"
-        case .style: return "paintbrush"
-        case .logic: return "brain"
-        case .naming: return "textformat"
-        case .architecture: return "building.2"
+        case .quality: "checkmark.seal"
+        case .security: "lock.shield"
+        case .suggestion: "lightbulb"
+        case .performance: "speedometer"
+        case .style: "paintbrush"
+        case .logic: "brain"
+        case .naming: "textformat"
+        case .architecture: "building.2"
         }
     }
 }
@@ -137,15 +137,15 @@ enum ProjectType: String, CaseIterable {
 
     var systemImage: String {
         switch self {
-        case .ios: return "iphone"
-        case .macos: return "desktopcomputer"
-        case .watchos: return "applewatch"
-        case .tvos: return "appletv"
-        case .multiplatform: return "rectangle.3.group"
-        case .web: return "globe"
-        case .backend: return "server.rack"
-        case .library: return "books.vertical"
-        case .unknown: return "questionmark.folder"
+        case .ios: "iphone"
+        case .macos: "desktopcomputer"
+        case .watchos: "applewatch"
+        case .tvos: "appletv"
+        case .multiplatform: "rectangle.3.group"
+        case .web: "globe"
+        case .backend: "server.rack"
+        case .library: "books.vertical"
+        case .unknown: "questionmark.folder"
         }
     }
 }
@@ -160,23 +160,23 @@ enum FileUploadStatus: String, CaseIterable {
 
     var systemImage: String {
         switch self {
-        case .pending: return "clock"
-        case .uploading: return "arrow.up.circle"
-        case .processing: return "gear"
-        case .completed: return "checkmark.circle"
-        case .failed: return "xmark.circle"
-        case .cancelled: return "stop.circle"
+        case .pending: "clock"
+        case .uploading: "arrow.up.circle"
+        case .processing: "gear"
+        case .completed: "checkmark.circle"
+        case .failed: "xmark.circle"
+        case .cancelled: "stop.circle"
         }
     }
 
     var color: String {
         switch self {
-        case .pending: return "gray"
-        case .uploading: return "blue"
-        case .processing: return "orange"
-        case .completed: return "green"
-        case .failed: return "red"
-        case .cancelled: return "gray"
+        case .pending: "gray"
+        case .uploading: "blue"
+        case .processing: "orange"
+        case .completed: "green"
+        case .failed: "red"
+        case .cancelled: "gray"
         }
     }
 }
@@ -191,10 +191,10 @@ enum APIUsageStatus: String, CaseIterable {
 
     var color: String {
         switch self {
-        case .normal: return "green"
-        case .approaching: return "orange"
-        case .exceeded: return "red"
-        case .error: return "purple"
+        case .normal: "green"
+        case .approaching: "orange"
+        case .exceeded: "red"
+        case .error: "purple"
         }
     }
 }

@@ -1,4 +1,5 @@
 import Foundation
+
 //
 //  AccessibilityEnhancements.swift
 //  CodingReviewer
@@ -16,43 +17,49 @@ struct AccessibleButton: View {
     let icon: String?
     let action: () -> Void
     let style: AccessibleButtonStyle
-    
+
     enum AccessibleButtonStyle {
         case primary
         case secondary
         case destructive
         case plain
     }
-    
-    init(_ title: String, subtitle: String? = nil, icon: String? = nil, style: AccessibleButtonStyle = .primary, action: @escaping () -> Void) {
+
+    init(
+        _ title: String,
+        subtitle: String? = nil,
+        icon: String? = nil,
+        style: AccessibleButtonStyle = .primary,
+        action: @escaping () -> Void
+    ) {
         self.title = title
         self.subtitle = subtitle
         self.icon = icon
         self.style = style
         self.action = action
     }
-    
+
     var body: some View {
         Button(action: action) {
             HStack(spacing: 12) {
-                if let icon = icon {
+                if let icon {
                     Image(systemName: icon)
                         .font(.title3)
                         .foregroundColor(iconColor)
                 }
-                
+
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
                         .font(.headline)
                         .foregroundColor(textColor)
-                    
-                    if let subtitle = subtitle {
+
+                    if let subtitle {
                         Text(subtitle)
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
                 }
-                
+
                 if subtitle != nil || icon != nil {
                     Spacer()
                 }
@@ -71,56 +78,56 @@ struct AccessibleButton: View {
         .accessibilityHint(accessibilityHint ?? "Button")
         .accessibilityAddTraits(.isButton)
     }
-    
+
     private var backgroundColor: Color {
         switch style {
-        case .primary: return .accentColor.opacity(0.1)
-        case .secondary: return Color(.controlBackgroundColor)
-        case .destructive: return .red.opacity(0.1)
-        case .plain: return .clear
+        case .primary: .accentColor.opacity(0.1)
+        case .secondary: Color(.controlBackgroundColor)
+        case .destructive: .red.opacity(0.1)
+        case .plain: .clear
         }
     }
-    
+
     private var textColor: Color {
         switch style {
-        case .primary: return .accentColor
-        case .secondary: return .primary
-        case .destructive: return .red
-        case .plain: return .primary
+        case .primary: .accentColor
+        case .secondary: .primary
+        case .destructive: .red
+        case .plain: .primary
         }
     }
-    
+
     private var iconColor: Color {
         switch style {
-        case .primary: return .accentColor
-        case .secondary: return .secondary
-        case .destructive: return .red
-        case .plain: return .secondary
+        case .primary: .accentColor
+        case .secondary: .secondary
+        case .destructive: .red
+        case .plain: .secondary
         }
     }
-    
+
     private var borderColor: Color {
         switch style {
-        case .primary: return .accentColor.opacity(0.3)
-        case .secondary: return Color(.separatorColor)
-        case .destructive: return .red.opacity(0.3)
-        case .plain: return .clear
+        case .primary: .accentColor.opacity(0.3)
+        case .secondary: Color(.separatorColor)
+        case .destructive: .red.opacity(0.3)
+        case .plain: .clear
         }
     }
-    
+
     private var accessibilityLabel: String {
-        if let subtitle = subtitle {
+        if let subtitle {
             return "\(title), \(subtitle)"
         }
         return title
     }
-    
+
     private var accessibilityHint: String? {
         switch style {
-        case .primary: return "Double tap to perform primary action"
-        case .secondary: return "Double tap to perform secondary action"
-        case .destructive: return "Double tap to perform destructive action"
-        case .plain: return nil
+        case .primary: "Double tap to perform primary action"
+        case .secondary: "Double tap to perform secondary action"
+        case .destructive: "Double tap to perform destructive action"
+        case .plain: nil
         }
     }
 }
@@ -134,44 +141,44 @@ struct AccessibleInfoCard: View {
     let icon: String
     let color: Color
     let importance: AccessibilityPriority
-    
+
     enum AccessibilityPriority {
         case low
         case medium
         case high
         case critical
-        
+
         var traits: AccessibilityTraits {
             switch self {
-            case .low: return []
-            case .medium: return [.updatesFrequently]
-            case .high: return [.updatesFrequently, .causesPageTurn]
-            case .critical: return [.updatesFrequently, .causesPageTurn, .playsSound]
+            case .low: []
+            case .medium: [.updatesFrequently]
+            case .high: [.updatesFrequently, .causesPageTurn]
+            case .critical: [.updatesFrequently, .causesPageTurn, .playsSound]
             }
         }
     }
-    
+
     var body: some View {
         VStack(spacing: 8) {
             HStack {
                 Image(systemName: icon)
                     .font(.title2)
                     .foregroundColor(color)
-                
+
                 Spacer()
-                
+
                 Text(value)
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(color)
             }
-            
+
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .font(.headline)
                     .multilineTextAlignment(.leading)
-                
-                if let description = description {
+
+                if let description {
                     Text(description)
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -188,9 +195,9 @@ struct AccessibleInfoCard: View {
         .accessibilityHint(description ?? "Information card")
         .accessibilityAddTraits(importance.traits)
     }
-    
+
     private var accessibilityLabel: String {
-        if let description = description {
+        if let description {
             return "\(title): \(value). \(description)"
         }
         return "\(title): \(value)"
@@ -205,7 +212,7 @@ struct AccessibleProgressView: View {
     let title: String
     let description: String?
     @State private var previousProgress: Double = 0
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -216,12 +223,12 @@ struct AccessibleProgressView: View {
                     .font(.subheadline)
                     .fontWeight(.semibold)
             }
-            
+
             ProgressView(value: progress, total: total)
                 .progressViewStyle(LinearProgressViewStyle())
                 .tint(.accentColor)
-            
-            if let description = description {
+
+            if let description {
                 Text(description)
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -235,7 +242,7 @@ struct AccessibleProgressView: View {
         .accessibilityValue("\(Int(progress * 100)) percent complete")
         .accessibilityHint(description ?? "Progress indicator")
         .accessibilityAddTraits([.updatesFrequently])
-        .onChange(of: progress) { oldValue, newValue in
+        .onChange(of: progress) { _, newValue in
             // Announce significant progress changes
             if newValue - previousProgress >= 0.1 {
                 let announcement = "\(Int(newValue * 100)) percent complete"
@@ -253,14 +260,14 @@ struct AccessibleProgressView: View {
 struct AccessibleTabView: View {
     @Binding var selection: Tab
     let tabs: [Tab]
-    
+
     struct Tab: Identifiable, Hashable {
         let id: String
         let title: String
         let icon: String
         let badge: String?
         let isEnabled: Bool
-        
+
         init(id: String, title: String, icon: String, badge: String? = nil, isEnabled: Bool = true) {
             self.id = id
             self.title = title
@@ -269,7 +276,7 @@ struct AccessibleTabView: View {
             self.isEnabled = isEnabled
         }
     }
-    
+
     var body: some View {
         HStack(spacing: 0) {
             ForEach(tabs) { tab in
@@ -279,7 +286,7 @@ struct AccessibleTabView: View {
                             Image(systemName: tab.icon)
                                 .font(.title3)
                                 .foregroundColor(iconColor(for: tab))
-                            
+
                             if let badge = tab.badge {
                                 Text(badge)
                                     .font(.caption2)
@@ -292,7 +299,7 @@ struct AccessibleTabView: View {
                                     .offset(x: 10, y: -10)
                             }
                         }
-                        
+
                         Text(tab.title)
                             .font(.caption)
                             .foregroundColor(textColor(for: tab))
@@ -314,21 +321,21 @@ struct AccessibleTabView: View {
         .background(Color(.controlBackgroundColor))
         .cornerRadius(12)
     }
-    
+
     private func iconColor(for tab: Tab) -> Color {
         if !tab.isEnabled {
             return Color.gray
         }
         return selection == tab ? .accentColor : .secondary
     }
-    
+
     private func textColor(for tab: Tab) -> Color {
         if !tab.isEnabled {
             return Color.gray
         }
         return selection == tab ? .accentColor : .secondary
     }
-    
+
     private func tabAccessibilityLabel(for tab: Tab) -> String {
         var label = tab.title
         if let badge = tab.badge {
@@ -350,7 +357,9 @@ struct KeyboardNavigable: ViewModifier {
     let onRightArrow: (() -> Void)?
     let onEnter: (() -> Void)?
     let onEscape: (() -> Void)?
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func body(content: Content) -> some View {
         content
             .focusable()
@@ -413,7 +422,7 @@ extension View {
         ) {
             AppLogger.shared.debug("Analyze button tapped in preview")
         }
-        
+
         AccessibleInfoCard(
             title: "Code Quality",
             value: "85%",
@@ -422,22 +431,26 @@ extension View {
             color: .green,
             importance: .medium
         )
-        
+
         AccessibleProgressView(
             progress: 0.65,
             total: 1.0,
             title: "Analysis Progress",
             description: "Processing file 13 of 20"
         )
-        
+
         AccessibleStatusIndicator(.analyzing)
-        
+
         AccessibleTabView(
-            selection: .constant(AccessibleTabView.Tab(id: "analysis", title: "Analysis", icon: "doc.text.magnifyingglass")),
+            selection: .constant(AccessibleTabView.Tab(
+                id: "analysis",
+                title: "Analysis",
+                icon: "doc.text.magnifyingglass"
+            )),
             tabs: [
                 AccessibleTabView.Tab(id: "analysis", title: "Analysis", icon: "doc.text.magnifyingglass"),
                 AccessibleTabView.Tab(id: "files", title: "Files", icon: "folder", badge: "3"),
-                AccessibleTabView.Tab(id: "insights", title: "Insights", icon: "brain.head.profile")
+                AccessibleTabView.Tab(id: "insights", title: "Insights", icon: "brain.head.profile"),
             ]
         )
     }

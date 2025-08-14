@@ -1,10 +1,11 @@
+import Foundation
+import Combine
+import SwiftUI
+
 // MARK: - Simplified AI Learning System
+
 // This is a simplified version for initial compilation and testing
 // Full AI learning features will be activated once the build is stable
-
-import Foundation
-import SwiftUI
-import Combine
 
 @MainActor
 class AILearningCoordinator: ObservableObject {
@@ -18,11 +19,14 @@ class AILearningCoordinator: ObservableObject {
 
     private init() {
         // Initialize with basic learning capabilities
-        self.isLearning = false
-        self.learningProgress = 0.0
+        isLearning = false
+        learningProgress = 0.0
     }
 
     // MARK: - Basic Learning Interface
+
+            /// Function description
+            /// - Returns: Return value description
     func startLearningSession() async {
         await MainActor.run {
             isLearning = true
@@ -30,7 +34,7 @@ class AILearningCoordinator: ObservableObject {
         }
 
         // Simulate basic learning process
-        for i in 1...10 {
+        for i in 1 ... 10 {
             try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
             await MainActor.run {
                 learningProgress = Double(i) / 10.0
@@ -43,24 +47,32 @@ class AILearningCoordinator: ObservableObject {
         }
     }
 
-    func recordSuccess(fix: String, context: String) {
+            /// Function description
+            /// - Returns: Return value description
+    func recordSuccess(fix _: String, context _: String) {
         successfulFixes += 1
         updateAccuracy()
     }
 
-    func recordFailure(fix: String, error: String, context: String) {
+            /// Function description
+            /// - Returns: Return value description
+    func recordFailure(fix _: String, error _: String, context _: String) {
         totalIssuesAnalyzed += 1
         updateAccuracy()
     }
 
-    func predictIssues(in filePath: String) async -> [PredictedIssue] {
+            /// Function description
+            /// - Returns: Return value description
+    func predictIssues(in _: String) async -> [PredictedIssue] {
         // Basic prediction system - will be enhanced with full AI
-        return []
+        []
     }
 
-    func generateRecommendation(for issue: String) async -> String? {
+            /// Function description
+            /// - Returns: Return value description
+    func generateRecommendation(for _: String) async -> String? {
         // Basic recommendation system
-        return "Consider reviewing this issue for potential improvement"
+        "Consider reviewing this issue for potential improvement"
     }
 
     private func updateAccuracy() {
@@ -71,6 +83,7 @@ class AILearningCoordinator: ObservableObject {
 }
 
 // MARK: - Supporting Types
+
 struct PredictedIssue {
     let type: IssueType
     let lineNumber: Int

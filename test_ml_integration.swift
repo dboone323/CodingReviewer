@@ -8,26 +8,28 @@
 import Foundation
 
 // Test ML Integration
+    /// <#Description#>
+    /// - Returns: <#description#>
 func testMLIntegration() {
     print("🧪 Testing ML Integration")
     print("========================")
-    
+
     // Check for ML data files
     let fileManager = FileManager.default
     let mlDirectories = [
         ".ml_automation/data",
         ".predictive_analytics",
-        ".cross_project_learning/insights"
+        ".cross_project_learning/insights",
     ]
-    
+
     for dir in mlDirectories {
         print("\n📂 Checking directory: \(dir)")
-        
+
         if fileManager.fileExists(atPath: dir) {
             do {
                 let files = try fileManager.contentsOfDirectory(atPath: dir)
                 let recentFiles = files.filter { $0.contains("20250803") }
-                
+
                 if recentFiles.isEmpty {
                     print("  ❌ No recent files found")
                 } else {
@@ -43,7 +45,7 @@ func testMLIntegration() {
             print("  ❌ Directory not found")
         }
     }
-    
+
     print("\n🎯 ML Integration Status: Data Available")
 }
 

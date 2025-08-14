@@ -10,6 +10,7 @@
 import Foundation
 
 // MARK: - Background Processing Types
+
 // ProcessingJob, SystemLoad, ProcessingLimits are centralized in ProcessingTypes.swift
 
 // Additional types specific to background processing that extend the core types
@@ -36,13 +37,13 @@ public enum JobStatus: String, CaseIterable, Sendable {
     case failed = "Failed"
     case cancelled = "Cancelled"
     case paused = "Paused"
-    
+
     public var isActive: Bool {
-        return self == .running || self == .pending
+        self == .running || self == .pending
     }
-    
+
     public var isTerminated: Bool {
-        return self == .completed || self == .failed || self == .cancelled
+        self == .completed || self == .failed || self == .cancelled
     }
 }
 
@@ -51,18 +52,18 @@ public enum JobPriority: String, CaseIterable, Sendable {
     case normal = "Normal"
     case high = "High"
     case critical = "Critical"
-    
+
     public var displayName: String {
-        return self.rawValue
+        rawValue
     }
-    
+
     // UI-agnostic color identifier
     public var colorIdentifier: String {
         switch self {
-        case .low: return "gray"
-        case .normal: return "blue"
-        case .high: return "orange"
-        case .critical: return "red"
+        case .low: "gray"
+        case .normal: "blue"
+        case .high: "orange"
+        case .critical: "red"
         }
     }
 }
@@ -73,19 +74,19 @@ public struct JobQueue: Sendable {
     public let maxSize: Int
     public let currentSize: Int
     public let priorityQueues: [JobPriority: Int]
-    
+
     public init(maxSize: Int, currentSize: Int, priorityQueues: [JobPriority: Int]) {
         self.maxSize = maxSize
         self.currentSize = currentSize
         self.priorityQueues = priorityQueues
     }
-    
+
     public var isFull: Bool {
-        return currentSize >= maxSize
+        currentSize >= maxSize
     }
-    
+
     public var fillPercentage: Double {
-        return Double(currentSize) / Double(maxSize)
+        Double(currentSize) / Double(maxSize)
     }
 }
 
@@ -95,8 +96,14 @@ public struct ProcessingMetrics: Sendable {
     public let throughputPerHour: Double
     public let errorRate: Double
     public let queueWaitTime: TimeInterval
-    
-    public init(averageCompletionTime: TimeInterval, successRate: Double, throughputPerHour: Double, errorRate: Double, queueWaitTime: TimeInterval) {
+
+    public init(
+        averageCompletionTime: TimeInterval,
+        successRate: Double,
+        throughputPerHour: Double,
+        errorRate: Double,
+        queueWaitTime: TimeInterval
+    ) {
         self.averageCompletionTime = averageCompletionTime
         self.successRate = successRate
         self.throughputPerHour = throughputPerHour
@@ -113,7 +120,7 @@ public struct ResourceUsage: Sendable {
     public let diskIO: Double
     public let networkIO: Double
     public let timestamp: Date
-    
+
     public init(cpuUsage: Double, memoryUsage: Double, diskIO: Double, networkIO: Double, timestamp: Date = Date()) {
         self.cpuUsage = cpuUsage
         self.memoryUsage = memoryUsage
@@ -121,9 +128,9 @@ public struct ResourceUsage: Sendable {
         self.networkIO = networkIO
         self.timestamp = timestamp
     }
-    
+
     public var overallUsage: Double {
-        return (cpuUsage + memoryUsage) / 2.0
+        (cpuUsage + memoryUsage) / 2.0
     }
 }
 
@@ -133,14 +140,20 @@ public struct BackgroundProcessingConfiguration: Sendable {
     public let queueTimeout: TimeInterval
     public let retryAttempts: Int
     public let processingInterval: TimeInterval
-    
-    public init(enableBackgroundProcessing: Bool = true, maxConcurrentJobs: Int = 3, queueTimeout: TimeInterval = 300, retryAttempts: Int = 3, processingInterval: TimeInterval = 1.0) {
+
+    public init(
+        enableBackgroundProcessing: Bool = true,
+        maxConcurrentJobs: Int = 3,
+        queueTimeout: TimeInterval = 300,
+        retryAttempts: Int = 3,
+        processingInterval: TimeInterval = 1.0
+    ) {
         self.enableBackgroundProcessing = enableBackgroundProcessing
         self.maxConcurrentJobs = maxConcurrentJobs
         self.queueTimeout = queueTimeout
         self.retryAttempts = retryAttempts
         self.processingInterval = processingInterval
     }
-    
+
     public static let `default` = BackgroundProcessingConfiguration()
 }

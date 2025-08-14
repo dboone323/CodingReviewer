@@ -1,3 +1,6 @@
+import Foundation
+import SwiftUI
+
 //
 //  AdvancedTestingDashboardView.swift
 //  CodingReviewer
@@ -6,8 +9,6 @@
 //  Phase 7 - Advanced Testing Integration
 //
 
-import SwiftUI
-
 /// Advanced testing dashboard for test generation and execution monitoring
 struct AdvancedTestingDashboardView: View {
     @StateObject private var testingFramework = SimpleTestingFramework()
@@ -15,7 +16,7 @@ struct AdvancedTestingDashboardView: View {
     @State private var codeToTest: String = ""
     @State private var showingTestCode = false
     @State private var selectedTestCase: GeneratedTestCase?
-    
+
     var body: some View {
         NavigationSplitView {
             // Sidebar - Test Categories
@@ -25,9 +26,9 @@ struct AdvancedTestingDashboardView: View {
             VStack(spacing: 0) {
                 // Header
                 testingHeader
-                
+
                 Divider()
-                
+
                 // Content Area
                 if testingFramework.isGeneratingTests {
                     testGenerationProgress
@@ -36,9 +37,9 @@ struct AdvancedTestingDashboardView: View {
                 } else {
                     testResultsView
                 }
-                
+
                 Spacer()
-                
+
                 // Footer with coverage metrics
                 testCoverageFooter
             }
@@ -50,9 +51,9 @@ struct AdvancedTestingDashboardView: View {
             }
         }
     }
-    
+
     // MARK: - Sidebar
-    
+
     private var testCategoriesSidebar: some View {
         List {
             Section("Test Categories") {
@@ -71,7 +72,7 @@ struct AdvancedTestingDashboardView: View {
                     .padding(.vertical, 2)
                 }
             }
-            
+
             Section("Test Priority") {
                 ForEach(TestPriority.allCases, id: \.rawValue) { priority in
                     HStack {
@@ -93,30 +94,30 @@ struct AdvancedTestingDashboardView: View {
         .listStyle(SidebarListStyle())
         .frame(minWidth: 200)
     }
-    
+
     // MARK: - Header
-    
+
     private var testingHeader: some View {
         HStack {
             VStack(alignment: .leading) {
                 Text("Advanced Testing Framework")
                     .font(.title)
                     .fontWeight(.bold)
-                
+
                 Text("Automated test generation and validation")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
-            
+
             Spacer()
-            
+
             // Action buttons
             HStack(spacing: 12) {
                 Button("Import Code") {
                     // File picker for code import
                 }
                 .buttonStyle(.bordered)
-                
+
                 Button("Generate Tests") {
                     Task {
                         await generateTestsForSampleCode()
@@ -128,39 +129,39 @@ struct AdvancedTestingDashboardView: View {
         }
         .padding()
     }
-    
+
     // MARK: - Content Views
-    
+
     private var testGenerationProgress: some View {
         VStack(spacing: 20) {
             ProgressView("Generating comprehensive test cases...")
                 .progressViewStyle(CircularProgressViewStyle())
                 .scaleEffect(1.5)
-            
+
             Text("Analyzing code patterns and creating test scenarios")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-    
+
     private var testGenerationPrompt: some View {
         VStack(spacing: 30) {
             Image(systemName: "flask.fill")
                 .font(.system(size: 60))
                 .foregroundColor(.blue)
-            
+
             VStack(spacing: 12) {
                 Text("Ready to Generate Tests")
                     .font(.title2)
                     .fontWeight(.semibold)
-                
+
                 Text("Import your Swift code or use the sample to generate comprehensive test cases")
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
             }
-            
+
             VStack(spacing: 16) {
                 Button("Generate Sample Tests") {
                     Task {
@@ -169,7 +170,7 @@ struct AdvancedTestingDashboardView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
-                
+
                 Button("Import Code File") {
                     // File picker implementation
                 }
@@ -180,20 +181,20 @@ struct AdvancedTestingDashboardView: View {
         .frame(maxWidth: 400)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-    
+
     private var testResultsView: some View {
         VStack(spacing: 0) {
             // Test summary cards
             testSummaryCards
                 .padding()
-            
+
             Divider()
-            
+
             // Test cases list
             testCasesList
         }
     }
-    
+
     private var testSummaryCards: some View {
         LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 16) {
             TestMetricCard(
@@ -202,21 +203,25 @@ struct AdvancedTestingDashboardView: View {
                 icon: "list.bullet",
                 color: .blue
             )
-            
+
             TestMetricCard(
                 title: "High Priority",
                 value: "\(testsForPriority(.high).count)",
                 icon: "exclamationmark.triangle.fill",
                 color: .red
             )
-            
+
             TestMetricCard(
                 title: "Coverage",
-                value: String(format: "%.1f%%", (testingFramework.testCoverage.functionCoverage + testingFramework.testCoverage.lineCoverage + testingFramework.testCoverage.branchCoverage) / 3.0 * 100),
+                value: String(
+                    format: "%.1f%%",
+                    (testingFramework.testCoverage.functionCoverage + testingFramework.testCoverage
+                        .lineCoverage + testingFramework.testCoverage.branchCoverage) / 3.0 * 100
+                ),
                 icon: "chart.pie.fill",
                 color: .green
             )
-            
+
             TestMetricCard(
                 title: "Est. Runtime",
                 value: String(format: "%.1fs", totalEstimatedRuntime),
@@ -225,7 +230,7 @@ struct AdvancedTestingDashboardView: View {
             )
         }
     }
-    
+
     private var testCasesList: some View {
         List {
             ForEach(testingFramework.generatedTestCases) { testCase in
@@ -237,9 +242,9 @@ struct AdvancedTestingDashboardView: View {
         }
         .listStyle(PlainListStyle())
     }
-    
+
     // MARK: - Footer
-    
+
     private var testCoverageFooter: some View {
         VStack(spacing: 8) {
             HStack {
@@ -247,20 +252,20 @@ struct AdvancedTestingDashboardView: View {
                     .font(.headline)
                 Spacer()
             }
-            
+
             HStack(spacing: 20) {
                 CoverageBar(
                     title: "Functions",
                     percentage: testingFramework.testCoverage.functionsTestedPercentage,
                     color: .blue
                 )
-                
+
                 CoverageBar(
                     title: "Classes",
                     percentage: testingFramework.testCoverage.classesTestedPercentage,
                     color: .green
                 )
-                
+
                 CoverageBar(
                     title: "Concurrency",
                     percentage: testingFramework.testCoverage.edgeCasesTestedPercentage,
@@ -271,36 +276,40 @@ struct AdvancedTestingDashboardView: View {
         .padding()
         .background(Color(NSColor.controlBackgroundColor))
     }
-    
+
     // MARK: - Helper Methods
-    
+
     /// Creates and configures components with proper initialization
     private func generateTestsForSampleCode() async {
         let sampleCode = """
-        import Foundation
-        
         class UserManager {
             private var users: [User] = []
-            
+
             /// Performs operation with error handling and validation
+            /// Function description
+            /// - Returns: Return value description
             func addUser(_ user: User) throws {
                 guard !user.email.isEmpty else {
                     throw UserError.invalidEmail
                 }
                 users.append(user)
             }
-            
+
             /// Retrieves data with proper error handling and caching
+            /// Function description
+            /// - Returns: Return value description
             func getUser(by id: String) -> User? {
                 return users.first { $0.id == id }
             }
-            
+
             @MainActor
             /// Updates and persists data with validation
+            /// Function description
+            /// - Returns: Return value description
             func updateUserAsync(_ user: User) async throws {
                 // Simulate async operation
                 try await Task.sleep(nanoseconds: 100_000_000)
-                
+
                 if let index = users.firstIndex(where: { $0.id == user.id }) {
                     users[index] = user
                 } else {
@@ -308,84 +317,84 @@ struct AdvancedTestingDashboardView: View {
                 }
             }
         }
-        
+
         struct User {
             let id: String
             let name: String
             let email: String
         }
-        
+
         enum UserError: Error {
             case invalidEmail
             case userNotFound
         }
         """
-        
+
         testingFramework.generateTestCases(for: sampleCode, fileName: "UserManager.swift")
     }
-    
+
     /// Performs operation with error handling and validation
     private func testsForCategory(_ category: TestCategory) -> [GeneratedTestCase] {
-        return testingFramework.generatedTestCases.filter { $0.category.rawValue == category.rawValue }
+        testingFramework.generatedTestCases.filter { $0.category.rawValue == category.rawValue }
     }
-    
+
     /// Performs operation with error handling and validation
     private func testsForPriority(_ priority: TestPriority) -> [GeneratedTestCase] {
-        return testingFramework.generatedTestCases.filter { $0.priority == priority }
+        testingFramework.generatedTestCases.filter { $0.priority == priority }
     }
-    
+
     private var totalEstimatedRuntime: TimeInterval {
-        return testingFramework.generatedTestCases.reduce(into: 0.0) { total, testCase in
+        testingFramework.generatedTestCases.reduce(into: 0.0) { total, testCase in
             total += testCase.estimatedExecutionTime
         }
     }
-    
+
     /// Performs operation with error handling and validation
     private func iconForCategory(_ category: TestCategory) -> String {
         switch category {
-        case .function: return "function"
-        case .initialization: return "play.circle"
-        case .lifecycle: return "arrow.clockwise"
-        case .concurrency: return "arrow.triangle.branch"
-        case .errorHandling: return "exclamationmark.triangle"
-        case .edgeCase: return "questionmark.circle"
+        case .function: "function"
+        case .initialization: "play.circle"
+        case .lifecycle: "arrow.clockwise"
+        case .concurrency: "arrow.triangle.branch"
+        case .errorHandling: "exclamationmark.triangle"
+        case .edgeCase: "questionmark.circle"
         }
     }
-    
+
     /// Performs operation with error handling and validation
     private func colorForCategory(_ category: TestCategory) -> Color {
         switch category {
-        case .function: return .blue
-        case .initialization: return .green
-        case .lifecycle: return .orange
-        case .concurrency: return .purple
-        case .errorHandling: return .red
-        case .edgeCase: return .yellow
+        case .function: .blue
+        case .initialization: .green
+        case .lifecycle: .orange
+        case .concurrency: .purple
+        case .errorHandling: .red
+        case .edgeCase: .yellow
         }
     }
-    
+
     /// Performs operation with error handling and validation
     private func colorForTestType(_ testType: TestType) -> Color {
         switch testType {
-        case .unit: return .blue
-        case .integration: return .green
-        case .function: return .blue
-        case .performance: return .orange
-        case .security: return .red
-        case .quality: return .purple
-        case .syntax: return .gray
-        case .edgeCase: return .yellow
-        case .coverage: return .teal
+        case .unit: .blue
+        case .integration: .green
+        case .function: .blue
+        case .performance: .orange
+        case .security: .red
+        case .quality: .purple
+        case .syntax: .gray
+        case .edgeCase: .yellow
+        case .coverage: .teal
         }
     }
-    
+
     /// Performs operation with error handling and validation
     private func colorForPriority(_ priority: TestPriority) -> Color {
         switch priority {
-        case .critical: return .red
-        case .high: return .red
-        case .medium: return .orange
-        case .low: return .green
+        case .critical: .red
+        case .high: .red
+        case .medium: .orange
+        case .low: .green
         }
     }
 }
@@ -397,7 +406,7 @@ struct TestMetricCard: View {
     let value: String
     let icon: String
     let color: Color
-    
+
     var body: some View {
         VStack(spacing: 8) {
             HStack {
@@ -405,11 +414,11 @@ struct TestMetricCard: View {
                     .foregroundColor(color)
                 Spacer()
             }
-            
+
             Text(value)
                 .font(.title2)
                 .fontWeight(.bold)
-            
+
             Text(title)
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -423,20 +432,20 @@ struct TestMetricCard: View {
 struct TestCaseRow: View {
     let testCase: GeneratedTestCase
     let onTap: () -> Void
-    
+
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text(testCase.testName)
                     .font(.headline)
-                
+
                 Text(testCase.description)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            
+
             Spacer()
-            
+
             VStack(alignment: .trailing, spacing: 4) {
                 HStack {
                     Text(testCase.category.rawValue)
@@ -445,12 +454,12 @@ struct TestCaseRow: View {
                         .padding(.vertical, 2)
                         .background(colorForTestType(testCase.category).opacity(0.2))
                         .cornerRadius(4)
-                    
+
                     Circle()
                         .fill(colorForPriority(testCase.priority))
                         .frame(width: 8, height: 8)
                 }
-                
+
                 Text(String(format: "~%.1fs", testCase.estimatedExecutionTime))
                     .font(.caption2)
                     .foregroundColor(.secondary)
@@ -462,41 +471,41 @@ struct TestCaseRow: View {
             onTap()
         }
     }
-    
+
     /// Performs operation with error handling and validation
     private func colorForTestType(_ testType: TestType) -> Color {
         switch testType {
-        case .unit: return .blue
-        case .integration: return .green
-        case .function: return .blue
-        case .performance: return .orange
-        case .security: return .red
-        case .quality: return .purple
-        case .syntax: return .gray
-        case .edgeCase: return .yellow
-        case .coverage: return .teal
+        case .unit: .blue
+        case .integration: .green
+        case .function: .blue
+        case .performance: .orange
+        case .security: .red
+        case .quality: .purple
+        case .syntax: .gray
+        case .edgeCase: .yellow
+        case .coverage: .teal
         }
     }
-    
+
     /// Performs operation with error handling and validation
     private func colorForCategory(_ category: TestCategory) -> Color {
         switch category {
-        case .function: return .blue
-        case .initialization: return .green
-        case .lifecycle: return .orange
-        case .concurrency: return .purple
-        case .errorHandling: return .red
-        case .edgeCase: return .yellow
+        case .function: .blue
+        case .initialization: .green
+        case .lifecycle: .orange
+        case .concurrency: .purple
+        case .errorHandling: .red
+        case .edgeCase: .yellow
         }
     }
-    
+
     /// Performs operation with error handling and validation
     private func colorForPriority(_ priority: TestPriority) -> Color {
         switch priority {
-        case .critical: return .red
-        case .high: return .red
-        case .medium: return .orange
-        case .low: return .green
+        case .critical: .red
+        case .high: .red
+        case .medium: .orange
+        case .low: .green
         }
     }
 }
@@ -505,7 +514,7 @@ struct CoverageBar: View {
     let title: String
     let percentage: Double
     let color: Color
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
@@ -517,13 +526,13 @@ struct CoverageBar: View {
                     .font(.caption)
                     .fontWeight(.medium)
             }
-            
+
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
                     Rectangle()
                         .fill(Color.secondary.opacity(0.2))
                         .frame(height: 4)
-                    
+
                     Rectangle()
                         .fill(color)
                         .frame(width: geometry.size.width * percentage / 100, height: 4)
@@ -537,7 +546,7 @@ struct CoverageBar: View {
 struct TestCodeDetailView: View {
     let testCase: GeneratedTestCase
     @Environment(\.dismiss) private var dismiss
-    
+
     var body: some View {
         NavigationView {
             ScrollView {
@@ -547,11 +556,11 @@ struct TestCodeDetailView: View {
                         Text(testCase.testName)
                             .font(.title2)
                             .fontWeight(.bold)
-                        
+
                         Text(testCase.description)
                             .font(.body)
                             .foregroundColor(.secondary)
-                        
+
                         HStack {
                             Label(testCase.category.rawValue, systemImage: "tag")
                             Spacer()
@@ -565,12 +574,12 @@ struct TestCodeDetailView: View {
                     .padding()
                     .background(Color(NSColor.controlBackgroundColor))
                     .cornerRadius(8)
-                    
+
                     // Generated code
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Generated Test Code")
                             .font(.headline)
-                        
+
                         ScrollView {
                             Text(testCase.code)
                                 .font(.system(.caption, design: .monospaced))
@@ -591,7 +600,7 @@ struct TestCodeDetailView: View {
                         dismiss()
                     }
                 }
-                
+
                 ToolbarItem(placement: .primaryAction) {
                     Button("Copy Code") {
                         NSPasteboard.general.clearContents()

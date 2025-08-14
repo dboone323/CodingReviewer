@@ -1,4 +1,5 @@
 import Foundation
+
 //
 // EnhancedAnalysisRecordRow.swift
 // CodingReviewer
@@ -10,7 +11,7 @@ import SwiftUI
 
 struct EnhancedAnalysisRecordRow: View {
     let record: FileAnalysisRecord
-    @State private var isExpanded = true  // Start expanded so users can see results immediately;
+    @State private var isExpanded = true // Start expanded so users can see results immediately;
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -86,7 +87,7 @@ struct EnhancedAnalysisRecordRow: View {
     }
 
     @ViewBuilder
-    private func analysisItemView(item: EnhancedAnalysisItem, index: Int) -> some View {
+    private func analysisItemView(item: EnhancedAnalysisItem, index _: Int) -> some View {
         HStack(alignment: .top, spacing: 8) {
             // Severity indicator
             Circle()
@@ -128,23 +129,23 @@ struct EnhancedAnalysisRecordRow: View {
     private func severityColor(for severity: String) -> Color {
         switch severity.lowercased() {
         case "critical":
-            return .red
+            .red
         case "high":
-            return .orange
+            .orange
         case "medium":
-            return .yellow
+            .yellow
         case "low":
-            return .blue
+            .blue
         default:
-            return .gray
+            .gray
         }
     }
 
     private func formatDuration(_ duration: TimeInterval) -> String {
         if duration < 1 {
-            return String(format: "%.0fms", duration * 1000)
+            String(format: "%.0fms", duration * 1000)
         } else {
-            return String(format: "%.1fs", duration)
+            String(format: "%.1fs", duration)
         }
     }
 }
@@ -174,7 +175,7 @@ struct EnhancedAnalysisRecordRow_Previews: PreviewProvider {
                 message: "Force unwrapping may cause runtime crash",
                 lineNumber: 23,
                 type: "security"
-            )
+            ),
         ]
 
         // Create FileAnalysisRecord using the correct initializer

@@ -13,11 +13,11 @@ import SwiftUI
 extension ProcessingJob.JobType {
     var color: Color {
         switch self {
-        case .codeAnalysis: return .blue
-        case .documentation: return .green
-        case .testing: return .red
-        case .refactoring: return .orange
-        case .optimization: return .purple
+        case .codeAnalysis: .blue
+        case .documentation: .green
+        case .testing: .red
+        case .refactoring: .orange
+        case .optimization: .purple
         }
     }
 }
@@ -25,11 +25,11 @@ extension ProcessingJob.JobType {
 extension ProcessingJob.JobStatus {
     var color: Color {
         switch self {
-        case .pending: return .orange
-        case .running: return .blue
-        case .completed: return .green
-        case .failed: return .red
-        case .cancelled: return .gray
+        case .pending: .orange
+        case .running: .blue
+        case .completed: .green
+        case .failed: .red
+        case .cancelled: .gray
         }
     }
 }
@@ -37,10 +37,10 @@ extension ProcessingJob.JobStatus {
 extension ProcessingJob.JobPriority {
     var color: Color {
         switch self {
-        case .low: return .gray
-        case .normal: return .blue
-        case .high: return .orange
-        case .critical: return .red
+        case .low: .gray
+        case .normal: .blue
+        case .high: .orange
+        case .critical: .red
         }
     }
 }
@@ -48,10 +48,10 @@ extension ProcessingJob.JobPriority {
 extension SystemLoad.LoadLevel {
     var color: Color {
         switch self {
-        case .low: return .green
-        case .medium: return .yellow
-        case .high: return .orange
-        case .critical: return .red
+        case .low: .green
+        case .medium: .yellow
+        case .high: .orange
+        case .critical: .red
         }
     }
 }
@@ -61,11 +61,11 @@ extension SystemLoad.LoadLevel {
 extension Severity {
     var color: Color {
         switch colorIdentifier {
-        case "blue": return .blue
-        case "orange": return .orange
-        case "red": return .red
-        case "purple": return .purple
-        default: return .primary
+        case "blue": .blue
+        case "orange": .orange
+        case "red": .red
+        case "purple": .purple
+        default: .primary
         }
     }
 }
@@ -73,12 +73,12 @@ extension Severity {
 extension QualityLevel {
     var color: Color {
         switch colorIdentifier {
-        case "green": return .green
-        case "blue": return .blue
-        case "yellow": return .yellow
-        case "orange": return .orange
-        case "red": return .red
-        default: return .primary
+        case "green": .green
+        case "blue": .blue
+        case "yellow": .yellow
+        case "orange": .orange
+        case "red": .red
+        default: .primary
         }
     }
 }
@@ -86,12 +86,12 @@ extension QualityLevel {
 extension EffortLevel {
     var color: Color {
         switch colorIdentifier {
-        case "green": return .green
-        case "blue": return .blue
-        case "yellow": return .yellow
-        case "orange": return .orange
-        case "red": return .red
-        default: return .primary
+        case "green": .green
+        case "blue": .blue
+        case "yellow": .yellow
+        case "orange": .orange
+        case "red": .red
+        default: .primary
         }
     }
 }
@@ -99,12 +99,12 @@ extension EffortLevel {
 extension ImpactLevel {
     var color: Color {
         switch colorIdentifier {
-        case "gray": return .gray
-        case "blue": return .blue
-        case "yellow": return .yellow
-        case "orange": return .orange
-        case "red": return .red
-        default: return .primary
+        case "gray": .gray
+        case "blue": .blue
+        case "yellow": .yellow
+        case "orange": .orange
+        case "red": .red
+        default: .primary
         }
     }
 }

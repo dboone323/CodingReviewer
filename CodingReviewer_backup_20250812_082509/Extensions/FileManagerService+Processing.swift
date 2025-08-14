@@ -7,20 +7,25 @@
 import Foundation
 
 extension FileManagerService {
-    
     /// Batch file processing utilities
+    /// <#Description#>
+    /// - Returns: <#description#>
     func processBatchFiles(_ files: [String], completion: @escaping (Result<[String], Error>) -> Void) {
         // Batch processing implementation
         completion(.success(files))
     }
-    
+
     /// Asynchronous file operations
+    /// <#Description#>
+    /// - Returns: <#description#>
     func processFileAsync(_ filePath: String) async throws -> String {
         // Async file processing
-        return filePath
+        filePath
     }
-    
+
     /// File backup utilities
+    /// <#Description#>
+    /// - Returns: <#description#>
     func createBackup(for filePath: String) throws -> String {
         let backupPath = filePath + ".backup"
         do {

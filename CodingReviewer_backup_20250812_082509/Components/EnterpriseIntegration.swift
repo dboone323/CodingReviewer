@@ -1,14 +1,14 @@
+import Foundation
+import Combine
+import SwiftUI
+import UniformTypeIdentifiers
+
 //
 //  EnterpriseIntegration.swift
 //  CodingReviewer
 //
 //  Created by Phase 4 Enterprise Features on 8/5/25.
 //
-
-import SwiftUI
-import Foundation
-import UniformTypeIdentifiers
-import Combine
 
 // MARK: - Enterprise Data Export System
 
@@ -19,7 +19,7 @@ class EnterpriseDataExporter: ObservableObject {
     @Published var isExporting = false
     @Published var exportProgress: Double = 0
     @Published var lastExportError: String?
-    
+
     struct ExportTemplate: Identifiable {
         let id = UUID()
         let name: String
@@ -30,7 +30,7 @@ class EnterpriseDataExporter: ObservableObject {
         let isDefault: Bool
         let createdAt: Date
     }
-    
+
     struct ExportRecord: Identifiable {
         let id = UUID()
         let templateName: String
@@ -43,50 +43,50 @@ class EnterpriseDataExporter: ObservableObject {
         let success: Bool
         let errorMessage: String?
         let filePath: String?
-        
+
         var formattedFileSize: String {
             ByteCountFormatter.string(fromByteCount: fileSize, countStyle: .file)
         }
-        
+
         var formattedDuration: String {
             String(format: "%.2fs", duration)
         }
     }
-    
+
     struct ExportConfiguration {
         var includeMetadata: Bool = true
         var compressOutput: Bool = false
         var dateRange: DateRange = .all
-        var maxRecords: Int? = nil
+        var maxRecords: Int?
         var customFilters: [String: Any] = [:]
-        
+
         enum DateRange {
             case all
             case lastDay
             case lastWeek
             case lastMonth
             case custom(from: Date, to: Date)
-            
+
             var displayName: String {
                 switch self {
-                case .all: return "All Time"
-                case .lastDay: return "Last 24 Hours"
-                case .lastWeek: return "Last Week"
-                case .lastMonth: return "Last Month"
-                case .custom(let from, let to): return "Custom (\(from.formatted(date: .abbreviated, time: .omitted)) - \(to.formatted(date: .abbreviated, time: .omitted)))"
+                case .all: "All Time"
+                case .lastDay: "Last 24 Hours"
+                case .lastWeek: "Last Week"
+                case .lastMonth: "Last Month"
+                case .custom(let from, let to): "Custom (\(from.formatted(date: .abbreviated, time: .omitted)) - \(to.formatted(date: .abbreviated, time: .omitted)))"
                 }
             }
         }
     }
-    
+
     init() {
         loadTemplates()
         loadExportHistory()
         createDefaultTemplates()
     }
-    
+
     // MARK: - Template Management
-    
+
     /// Creates and configures components with proper initialization
     func createTemplate(
         name: String,
@@ -104,18 +104,20 @@ class EnterpriseDataExporter: ObservableObject {
             isDefault: false,
             createdAt: Date()
         )
-        
+
         availableExports.append(template)
         saveTemplates()
         return template
     }
-    
+
     /// Removes data and performs cleanup safely
+    /// <#Description#>
+    /// - Returns: <#description#>
     func deleteTemplate(id: UUID) {
         availableExports.removeAll { $0.id == id && !$0.isDefault }
         saveTemplates()
     }
-    
+
     /// Creates and configures components with proper initialization
     private func createDefaultTemplates() {
         if availableExports.isEmpty {
@@ -155,16 +157,16 @@ class EnterpriseDataExporter: ObservableObject {
                     customFields: [],
                     isDefault: true,
                     createdAt: Date()
-                )
+                ),
             ]
-            
+
             availableExports = defaultTemplates
             saveTemplates()
         }
     }
-    
+
     // MARK: - Export Operations
-    
+
     /// Performs operation with error handling and validation
     func exportData(
         template: ExportTemplate,
@@ -173,23 +175,23 @@ class EnterpriseDataExporter: ObservableObject {
         isExporting = true
         exportProgress = 0
         lastExportError = nil
-        
+
         let startTime = Date()
-        
+
         do {
             // Simulate data collection and export process
             let data = try await collectData(for: template, configuration: configuration)
             exportProgress = 0.3
-            
+
             let formattedData = try formatData(data, format: template.format, configuration: configuration)
             exportProgress = 0.6
-            
+
             let (filePath, fileSize) = try await saveExportedData(formattedData, template: template)
             exportProgress = 0.8
-            
+
             let endTime = Date()
             let duration = endTime.timeIntervalSince(startTime)
-            
+
             let record = ExportRecord(
                 templateName: template.name,
                 format: template.format,
@@ -202,19 +204,19 @@ class EnterpriseDataExporter: ObservableObject {
                 errorMessage: nil,
                 filePath: filePath
             )
-            
+
             exportHistory.insert(record, at: 0)
             saveExportHistory()
-            
+
             exportProgress = 1.0
             isExporting = false
-            
+
             return record
-            
+
         } catch {
             let endTime = Date()
             let duration = endTime.timeIntervalSince(startTime)
-            
+
             let record = ExportRecord(
                 templateName: template.name,
                 format: template.format,
@@ -227,43 +229,43 @@ class EnterpriseDataExporter: ObservableObject {
                 errorMessage: error.localizedDescription,
                 filePath: nil
             )
-            
+
             exportHistory.insert(record, at: 0)
             saveExportHistory()
-            
+
             lastExportError = error.localizedDescription
             isExporting = false
             exportProgress = 0
-            
+
             throw error
         }
     }
-    
+
     /// Performs operation with error handling and validation
     private func collectData(
         for template: ExportTemplate,
         configuration: ExportConfiguration
     ) async throws -> [[String: Any]] {
         var allData: [[String: Any]] = []
-        
+
         // Simulate data collection with progress updates
         for (index, dataType) in template.dataTypes.enumerated() {
             let data = try await collectDataForType(dataType, configuration: configuration)
             allData.append(contentsOf: data)
             exportProgress = 0.1 + (0.2 * Double(index + 1) / Double(template.dataTypes.count))
         }
-        
+
         return allData
     }
-    
+
     /// Performs operation with error handling and validation
     private func collectDataForType(
         _ dataType: DataType,
-        configuration: ExportConfiguration
+        configuration _: ExportConfiguration
     ) async throws -> [[String: Any]] {
         // Simulate network delay
         try await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
-        
+
         // Generate mock data based on type
         switch dataType {
         case .codeAnalysis:
@@ -284,7 +286,7 @@ class EnterpriseDataExporter: ObservableObject {
             return generateMockInsightData()
         }
     }
-    
+
     /// Formats and displays data with proper styling
     private func formatData(
         _ data: [[String: Any]],
@@ -293,70 +295,70 @@ class EnterpriseDataExporter: ObservableObject {
     ) throws -> Data {
         switch format {
         case .json:
-            return try formatAsJSON(data, configuration: configuration)
+            try formatAsJSON(data, configuration: configuration)
         case .csv:
-            return try formatAsCSV(data, configuration: configuration)
+            try formatAsCSV(data, configuration: configuration)
         case .xml:
-            return try formatAsXML(data, configuration: configuration)
+            try formatAsXML(data, configuration: configuration)
         case .pdf:
-            return try formatAsPDF(data, configuration: configuration)
+            try formatAsPDF(data, configuration: configuration)
         case .html:
-            return try formatAsHTML(data, configuration: configuration)
+            try formatAsHTML(data, configuration: configuration)
         case .markdown:
-            return try formatAsMarkdown(data, configuration: configuration)
+            try formatAsMarkdown(data, configuration: configuration)
         }
     }
-    
+
     /// Updates and persists data with validation
     private func saveExportedData(_ data: Data, template: ExportTemplate) async throws -> (String, Int64) {
         let fileName = "\(template.name.replacingOccurrences(of: " ", with: "_"))_\(Date().timeIntervalSince1970).\(template.format.fileExtension)"
-        
+
         // Cross-platform document directory handling
         let documentsPath: URL
         #if os(macOS)
-        if let userDocumentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            documentsPath = userDocumentsPath
-        } else {
-            documentsPath = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Documents")
-        }
+            if let userDocumentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+                documentsPath = userDocumentsPath
+            } else {
+                documentsPath = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Documents")
+            }
         #else
-        documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         #endif
-        
+
         let filePath = documentsPath.appendingPathComponent(fileName)
-        
+
         try data.write(to: filePath)
-        
+
         let fileSize = Int64(data.count)
         return (filePath.path, fileSize)
     }
-    
+
     // MARK: - Data Formatting Methods
-    
+
     /// Formats and displays data with proper styling
     private func formatAsJSON(_ data: [[String: Any]], configuration: ExportConfiguration) throws -> Data {
         var output: [String: Any] = [:]
-        
+
         if configuration.includeMetadata {
             output["metadata"] = [
                 "exportedAt": ISO8601DateFormatter().string(from: Date()),
                 "recordCount": data.count,
-                "version": "1.0"
+                "version": "1.0",
             ]
         }
-        
+
         output["data"] = data
-        
+
         return try JSONSerialization.data(withJSONObject: output, options: .prettyPrinted)
     }
-    
+
     /// Formats and displays data with proper styling
-    private func formatAsCSV(_ data: [[String: Any]], configuration: ExportConfiguration) throws -> Data {
+    private func formatAsCSV(_ data: [[String: Any]], configuration _: ExportConfiguration) throws -> Data {
         guard !data.isEmpty else { return Data() }
-        
+
         let headers = Array(data.first!.keys).sorted()
         var csvContent = headers.joined(separator: ",") + "\n"
-        
+
         for record in data {
             let values = headers.map { key in
                 let value = record[key] ?? ""
@@ -364,20 +366,20 @@ class EnterpriseDataExporter: ObservableObject {
             }
             csvContent += values.joined(separator: ",") + "\n"
         }
-        
+
         return csvContent.data(using: .utf8) ?? Data()
     }
-    
+
     private func formatAsXML(_ data: [[String: Any]], configuration: ExportConfiguration) throws -> Data {
         var xmlContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<export>\n"
-        
+
         if configuration.includeMetadata {
             xmlContent += "<metadata>\n"
             xmlContent += "<exportedAt>\(ISO8601DateFormatter().string(from: Date()))</exportedAt>\n"
             xmlContent += "<recordCount>\(data.count)</recordCount>\n"
             xmlContent += "</metadata>\n"
         }
-        
+
         xmlContent += "<data>\n"
         for record in data {
             xmlContent += "<record>\n"
@@ -387,17 +389,17 @@ class EnterpriseDataExporter: ObservableObject {
             xmlContent += "</record>\n"
         }
         xmlContent += "</data>\n</export>"
-        
+
         return xmlContent.data(using: .utf8) ?? Data()
     }
-    
-    private func formatAsPDF(_ data: [[String: Any]], configuration: ExportConfiguration) throws -> Data {
+
+    private func formatAsPDF(_ data: [[String: Any]], configuration _: ExportConfiguration) throws -> Data {
         // In a real implementation, you would use PDFKit or similar
         let content = "PDF Export - \(data.count) records exported at \(Date())"
         return content.data(using: .utf8) ?? Data()
     }
-    
-    private func formatAsHTML(_ data: [[String: Any]], configuration: ExportConfiguration) throws -> Data {
+
+    private func formatAsHTML(_ data: [[String: Any]], configuration _: ExportConfiguration) throws -> Data {
         var htmlContent = """
         <!DOCTYPE html>
         <html>
@@ -416,7 +418,7 @@ class EnterpriseDataExporter: ObservableObject {
             <p>Records: \(data.count)</p>
             <table>
         """
-        
+
         if let firstRecord = data.first {
             let headers = Array(firstRecord.keys).sorted()
             htmlContent += "<tr>"
@@ -424,7 +426,7 @@ class EnterpriseDataExporter: ObservableObject {
                 htmlContent += "<th>\(header)</th>"
             }
             htmlContent += "</tr>"
-            
+
             for record in data {
                 htmlContent += "<tr>"
                 for header in headers {
@@ -433,163 +435,163 @@ class EnterpriseDataExporter: ObservableObject {
                 htmlContent += "</tr>"
             }
         }
-        
+
         htmlContent += """
             </table>
         </body>
         </html>
         """
-        
+
         return htmlContent.data(using: .utf8) ?? Data()
     }
-    
-    private func formatAsMarkdown(_ data: [[String: Any]], configuration: ExportConfiguration) throws -> Data {
+
+    private func formatAsMarkdown(_ data: [[String: Any]], configuration _: ExportConfiguration) throws -> Data {
         var mdContent = "# Export Report\n\n"
         mdContent += "**Exported at:** \(Date())\n"
         mdContent += "**Records:** \(data.count)\n\n"
-        
+
         if let firstRecord = data.first {
             let headers = Array(firstRecord.keys).sorted()
-            
+
             // Table headers
             mdContent += "| " + headers.joined(separator: " | ") + " |\n"
             mdContent += "|" + headers.map { _ in "---" }.joined(separator: "|") + "|\n"
-            
+
             // Table rows
             for record in data {
                 let values = headers.map { key in "\(record[key] ?? "")" }
                 mdContent += "| " + values.joined(separator: " | ") + " |\n"
             }
         }
-        
+
         return mdContent.data(using: .utf8) ?? Data()
     }
-    
+
     // MARK: - Mock Data Generation
-    
+
     private func generateMockCodeAnalysisData() -> [[String: Any]] {
-        (1...Int.random(in: 10...50)).map { i in
+        (1 ... Int.random(in: 10 ... 50)).map { i in
             [
                 "id": i,
                 "file": "file_\(i).swift",
-                "issues": Int.random(in: 0...10),
-                "suggestions": Int.random(in: 5...20),
-                "complexity": Double.random(in: 1.0...10.0),
-                "timestamp": Date().addingTimeInterval(-Double.random(in: 0...86400))
+                "issues": Int.random(in: 0 ... 10),
+                "suggestions": Int.random(in: 5 ... 20),
+                "complexity": Double.random(in: 1.0 ... 10.0),
+                "timestamp": Date().addingTimeInterval(-Double.random(in: 0 ... 86400)),
             ]
         }
     }
-    
+
     private func generateMockUsageAnalyticsData() -> [[String: Any]] {
-        (1...Int.random(in: 20...100)).map { i in
+        (1 ... Int.random(in: 20 ... 100)).map { i in
             [
                 "id": i,
                 "action": ["analysis", "upload", "insight"].randomElement()!,
-                "duration": Double.random(in: 1.0...60.0),
+                "duration": Double.random(in: 1.0 ... 60.0),
                 "success": Bool.random(),
-                "timestamp": Date().addingTimeInterval(-Double.random(in: 0...604800))
+                "timestamp": Date().addingTimeInterval(-Double.random(in: 0 ... 604_800)),
             ]
         }
     }
-    
+
     private func generateMockPerformanceData() -> [[String: Any]] {
-        (1...Int.random(in: 50...200)).map { i in
+        (1 ... Int.random(in: 50 ... 200)).map { i in
             [
                 "id": i,
-                "cpu_usage": Double.random(in: 0.1...0.9),
-                "memory_usage": Double.random(in: 0.2...0.8),
-                "response_time": Double.random(in: 0.1...5.0),
-                "timestamp": Date().addingTimeInterval(-Double.random(in: 0...86400))
+                "cpu_usage": Double.random(in: 0.1 ... 0.9),
+                "memory_usage": Double.random(in: 0.2 ... 0.8),
+                "response_time": Double.random(in: 0.1 ... 5.0),
+                "timestamp": Date().addingTimeInterval(-Double.random(in: 0 ... 86400)),
             ]
         }
     }
-    
+
     private func generateMockErrorLogData() -> [[String: Any]] {
-        (1...Int.random(in: 5...30)).map { i in
+        (1 ... Int.random(in: 5 ... 30)).map { i in
             [
                 "id": i,
                 "level": ["error", "warning", "info"].randomElement()!,
                 "message": "Mock error message \(i)",
                 "component": ["analyzer", "uploader", "processor"].randomElement()!,
-                "timestamp": Date().addingTimeInterval(-Double.random(in: 0...604800))
+                "timestamp": Date().addingTimeInterval(-Double.random(in: 0 ... 604_800)),
             ]
         }
     }
-    
+
     private func generateMockUserActivityData() -> [[String: Any]] {
-        (1...Int.random(in: 30...150)).map { i in
+        (1 ... Int.random(in: 30 ... 150)).map { i in
             [
                 "id": i,
-                "user": "user_\(Int.random(in: 1...10))",
+                "user": "user_\(Int.random(in: 1 ... 10))",
                 "action": ["login", "logout", "analysis", "upload", "export"].randomElement()!,
                 "details": "Action details \(i)",
-                "timestamp": Date().addingTimeInterval(-Double.random(in: 0...2592000))
+                "timestamp": Date().addingTimeInterval(-Double.random(in: 0 ... 2_592_000)),
             ]
         }
     }
-    
+
     private func generateMockConfigurationData() -> [[String: Any]] {
         [
             [
                 "setting": "max_concurrent_jobs",
                 "value": 3,
                 "category": "processing",
-                "updated_at": Date().addingTimeInterval(-86400)
+                "updated_at": Date().addingTimeInterval(-86400),
             ],
             [
                 "setting": "enable_analytics",
                 "value": true,
                 "category": "features",
-                "updated_at": Date().addingTimeInterval(-172800)
+                "updated_at": Date().addingTimeInterval(-172_800),
             ],
             [
                 "setting": "export_format",
                 "value": "json",
                 "category": "export",
-                "updated_at": Date().addingTimeInterval(-259200)
-            ]
+                "updated_at": Date().addingTimeInterval(-259_200),
+            ],
         ]
     }
-    
+
     private func generateMockProcessingJobData() -> [[String: Any]] {
-        (1...Int.random(in: 20...80)).map { i in
+        (1 ... Int.random(in: 20 ... 80)).map { i in
             [
                 "id": i,
                 "type": ["code_analysis", "pattern_detection", "batch_analysis"].randomElement()!,
                 "status": ["completed", "failed", "running"].randomElement()!,
-                "duration": Double.random(in: 1.0...300.0),
-                "timestamp": Date().addingTimeInterval(-Double.random(in: 0...604800))
+                "duration": Double.random(in: 1.0 ... 300.0),
+                "timestamp": Date().addingTimeInterval(-Double.random(in: 0 ... 604_800)),
             ]
         }
     }
-    
+
     private func generateMockInsightData() -> [[String: Any]] {
-        (1...Int.random(in: 10...40)).map { i in
+        (1 ... Int.random(in: 10 ... 40)).map { i in
             [
                 "id": i,
                 "type": "optimization",
-                "confidence": Double.random(in: 0.5...1.0),
+                "confidence": Double.random(in: 0.5 ... 1.0),
                 "recommendation": "Mock recommendation \(i)",
                 "impact": ["low", "medium", "high"].randomElement()!,
-                "timestamp": Date().addingTimeInterval(-Double.random(in: 0...259200))
+                "timestamp": Date().addingTimeInterval(-Double.random(in: 0 ... 259_200)),
             ]
         }
     }
-    
+
     // MARK: - Data Persistence
-    
+
     private func saveTemplates() {
         // Simplified persistence - just store count
         UserDefaults.standard.set(availableExports.count, forKey: "ExportTemplatesCount")
     }
-    
+
     private func loadTemplates() {
         // Templates will be initialized by default
         if availableExports.isEmpty {
             initializeDefaultTemplates()
         }
     }
-    
+
     private func initializeDefaultTemplates() {
         availableExports = [
             ExportTemplate(
@@ -609,20 +611,22 @@ class EnterpriseDataExporter: ObservableObject {
                 customFields: [],
                 isDefault: true,
                 createdAt: Date()
-            )
+            ),
         ]
     }
-    
+
     private func saveExportHistory() {
         // Simplified persistence - just store count
         UserDefaults.standard.set(exportHistory.count, forKey: "ExportHistoryCount")
     }
-    
+
     private func loadExportHistory() {
         // History will be populated by actual exports
         exportHistory = []
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func clearExportHistory() {
         exportHistory.removeAll()
         saveExportHistory()
@@ -638,32 +642,32 @@ class TeamCollaborationManager: ObservableObject {
     @Published var notifications: [CollaborationNotification] = []
     @Published var isConnected = false
     @Published var connectionStatus: ConnectionStatus = .disconnected
-    
+
     enum ConnectionStatus {
         case disconnected
         case connecting
         case connected
         case error(String)
-        
+
         var displayName: String {
             switch self {
-            case .disconnected: return "Disconnected"
-            case .connecting: return "Connecting..."
-            case .connected: return "Connected"
-            case .error(let message): return "Error: \(message)"
+            case .disconnected: "Disconnected"
+            case .connecting: "Connecting..."
+            case .connected: "Connected"
+            case .error(let message): "Error: \(message)"
             }
         }
-        
+
         var color: Color {
             switch self {
-            case .disconnected: return .gray
-            case .connecting: return .yellow
-            case .connected: return .green
-            case .error: return .red
+            case .disconnected: .gray
+            case .connecting: .yellow
+            case .connected: .green
+            case .error: .red
             }
         }
     }
-    
+
     struct TeamMember: Identifiable {
         let id = UUID()
         let name: String
@@ -674,36 +678,36 @@ class TeamCollaborationManager: ObservableObject {
         let isOnline: Bool
         let lastSeen: Date
         let joinedAt: Date
-        
+
         enum Role: String, Codable, CaseIterable {
             case admin = "Admin"
             case developer = "Developer"
             case reviewer = "Reviewer"
             case viewer = "Viewer"
-            
+
             var permissions: [Permission] {
                 switch self {
                 case .admin:
-                    return Permission.allCases
+                    Permission.allCases
                 case .developer:
-                    return [.viewProjects, .createAnalysis, .exportData, .manageOwnProjects]
+                    [.viewProjects, .createAnalysis, .exportData, .manageOwnProjects]
                 case .reviewer:
-                    return [.viewProjects, .createAnalysis, .viewReports]
+                    [.viewProjects, .createAnalysis, .viewReports]
                 case .viewer:
-                    return [.viewProjects, .viewReports]
+                    [.viewProjects, .viewReports]
                 }
             }
-            
+
             var color: Color {
                 switch self {
-                case .admin: return .red
-                case .developer: return .blue
-                case .reviewer: return .orange
-                case .viewer: return .gray
+                case .admin: .red
+                case .developer: .blue
+                case .reviewer: .orange
+                case .viewer: .gray
                 }
             }
         }
-        
+
         enum Permission: String, Codable, CaseIterable {
             case viewProjects = "View Projects"
             case createAnalysis = "Create Analysis"
@@ -715,7 +719,7 @@ class TeamCollaborationManager: ObservableObject {
             case systemSettings = "System Settings"
         }
     }
-    
+
     struct CollaborationProject: Identifiable {
         let id = UUID()
         var name: String
@@ -728,7 +732,7 @@ class TeamCollaborationManager: ObservableObject {
         var updatedAt: Date
         var isPublic: Bool
         var tags: [String]
-        
+
         struct SharedAnalysis: Identifiable {
             let id = UUID()
             let title: String
@@ -739,7 +743,7 @@ class TeamCollaborationManager: ObservableObject {
             var comments: [Comment]
             var likes: Int
             var isPublic: Bool
-            
+
             struct Comment: Identifiable {
                 let id = UUID()
                 let authorId: String
@@ -749,7 +753,7 @@ class TeamCollaborationManager: ObservableObject {
                 var likes: Int
             }
         }
-        
+
         struct Discussion: Identifiable {
             let id = UUID()
             let title: String
@@ -759,7 +763,7 @@ class TeamCollaborationManager: ObservableObject {
             var replies: [DiscussionReply]
             var isResolved: Bool
             var tags: [String]
-            
+
             struct DiscussionReply: Identifiable {
                 let id = UUID()
                 let authorId: String
@@ -769,7 +773,7 @@ class TeamCollaborationManager: ObservableObject {
             }
         }
     }
-    
+
     struct CollaborationNotification: Identifiable {
         let id = UUID()
         let type: NotificationType
@@ -780,7 +784,7 @@ class TeamCollaborationManager: ObservableObject {
         let createdAt: Date
         var isRead: Bool
         var actionRequired: Bool
-        
+
         enum NotificationType: String, Codable {
             case projectInvite = "Project Invite"
             case analysisShared = "Analysis Shared"
@@ -789,46 +793,48 @@ class TeamCollaborationManager: ObservableObject {
             case mentionReceived = "Mention Received"
             case projectUpdated = "Project Updated"
             case systemAlert = "System Alert"
-            
+
             var icon: String {
                 switch self {
-                case .projectInvite: return "person.badge.plus"
-                case .analysisShared: return "square.and.arrow.up"
-                case .commentAdded: return "bubble.left"
-                case .discussionStarted: return "message"
-                case .mentionReceived: return "at.badge.plus"
-                case .projectUpdated: return "folder.badge.gearshape"
-                case .systemAlert: return "bell.badge"
+                case .projectInvite: "person.badge.plus"
+                case .analysisShared: "square.and.arrow.up"
+                case .commentAdded: "bubble.left"
+                case .discussionStarted: "message"
+                case .mentionReceived: "at.badge.plus"
+                case .projectUpdated: "folder.badge.gearshape"
+                case .systemAlert: "bell.badge"
                 }
             }
-            
+
             var color: Color {
                 switch self {
-                case .projectInvite: return .blue
-                case .analysisShared: return .green
-                case .commentAdded: return .orange
-                case .discussionStarted: return .purple
-                case .mentionReceived: return .pink
-                case .projectUpdated: return .cyan
-                case .systemAlert: return .red
+                case .projectInvite: .blue
+                case .analysisShared: .green
+                case .commentAdded: .orange
+                case .discussionStarted: .purple
+                case .mentionReceived: .pink
+                case .projectUpdated: .cyan
+                case .systemAlert: .red
                 }
             }
         }
     }
-    
+
     init() {
         loadTeamData()
         createMockData()
     }
-    
+
     // MARK: - Connection Management
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func connect() async {
         connectionStatus = .connecting
-        
+
         // Simulate connection process
         try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
-        
+
         if Bool.random() {
             connectionStatus = .connected
             isConnected = true
@@ -838,16 +844,18 @@ class TeamCollaborationManager: ObservableObject {
             isConnected = false
         }
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func disconnect() {
         connectionStatus = .disconnected
         isConnected = false
     }
-    
+
     private func syncData() async {
         // Simulate data synchronization
         try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
-        
+
         // Update online status for team members
         for i in teamMembers.indices {
             teamMembers[i] = TeamMember(
@@ -857,14 +865,16 @@ class TeamCollaborationManager: ObservableObject {
                 permissions: teamMembers[i].permissions,
                 avatar: teamMembers[i].avatar,
                 isOnline: Bool.random(),
-                lastSeen: teamMembers[i].isOnline ? Date() : Date().addingTimeInterval(-Double.random(in: 0...86400)),
+                lastSeen: teamMembers[i].isOnline ? Date() : Date().addingTimeInterval(-Double.random(in: 0 ... 86400)),
                 joinedAt: teamMembers[i].joinedAt
             )
         }
     }
-    
+
     // MARK: - Team Management
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func inviteTeamMember(email: String, role: TeamMember.Role) -> TeamMember {
         let member = TeamMember(
             name: email.components(separatedBy: "@").first ?? "User",
@@ -876,9 +886,9 @@ class TeamCollaborationManager: ObservableObject {
             lastSeen: Date(),
             joinedAt: Date()
         )
-        
+
         teamMembers.append(member)
-        
+
         // Create notification for invitation
         let notification = CollaborationNotification(
             type: .projectInvite,
@@ -890,18 +900,22 @@ class TeamCollaborationManager: ObservableObject {
             isRead: false,
             actionRequired: false
         )
-        
+
         notifications.insert(notification, at: 0)
         saveTeamData()
-        
+
         return member
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func removeTeamMember(id: UUID) {
         teamMembers.removeAll { $0.id == id }
         saveTeamData()
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func updateMemberRole(id: UUID, newRole: TeamMember.Role) {
         if let index = teamMembers.firstIndex(where: { $0.id == id }) {
             let member = teamMembers[index]
@@ -918,9 +932,9 @@ class TeamCollaborationManager: ObservableObject {
             saveTeamData()
         }
     }
-    
+
     // MARK: - Project Management
-    
+
     func createProject(
         name: String,
         description: String,
@@ -939,13 +953,13 @@ class TeamCollaborationManager: ObservableObject {
             isPublic: isPublic,
             tags: tags
         )
-        
+
         collaborationProjects.append(project)
         saveTeamData()
-        
+
         return project
     }
-    
+
     func shareAnalysis(
         projectId: UUID,
         title: String,
@@ -963,10 +977,10 @@ class TeamCollaborationManager: ObservableObject {
                 likes: 0,
                 isPublic: collaborationProjects[index].isPublic
             )
-            
+
             collaborationProjects[index].sharedAnalyses.append(analysis)
             collaborationProjects[index].updatedAt = Date()
-            
+
             // Create notification for team members
             let notification = CollaborationNotification(
                 type: .analysisShared,
@@ -978,16 +992,19 @@ class TeamCollaborationManager: ObservableObject {
                 isRead: false,
                 actionRequired: false
             )
-            
+
             notifications.insert(notification, at: 0)
             saveTeamData()
         }
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func addComment(to analysisId: UUID, in projectId: UUID, content: String) {
         if let projectIndex = collaborationProjects.firstIndex(where: { $0.id == projectId }),
-           let analysisIndex = collaborationProjects[projectIndex].sharedAnalyses.firstIndex(where: { $0.id == analysisId }) {
-            
+           let analysisIndex = collaborationProjects[projectIndex].sharedAnalyses
+           .firstIndex(where: { $0.id == analysisId })
+        {
             let comment = CollaborationProject.SharedAnalysis.Comment(
                 authorId: "current_user",
                 content: content,
@@ -995,10 +1012,10 @@ class TeamCollaborationManager: ObservableObject {
                 replies: [],
                 likes: 0
             )
-            
+
             collaborationProjects[projectIndex].sharedAnalyses[analysisIndex].comments.append(comment)
             collaborationProjects[projectIndex].updatedAt = Date()
-            
+
             // Create notification
             let notification = CollaborationNotification(
                 type: .commentAdded,
@@ -1010,12 +1027,14 @@ class TeamCollaborationManager: ObservableObject {
                 isRead: false,
                 actionRequired: false
             )
-            
+
             notifications.insert(notification, at: 0)
             saveTeamData()
         }
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func startDiscussion(in projectId: UUID, title: String, content: String, tags: [String] = []) {
         if let index = collaborationProjects.firstIndex(where: { $0.id == projectId }) {
             let discussion = CollaborationProject.Discussion(
@@ -1027,10 +1046,10 @@ class TeamCollaborationManager: ObservableObject {
                 isResolved: false,
                 tags: tags
             )
-            
+
             collaborationProjects[index].discussions.append(discussion)
             collaborationProjects[index].updatedAt = Date()
-            
+
             // Create notification
             let notification = CollaborationNotification(
                 type: .discussionStarted,
@@ -1042,14 +1061,16 @@ class TeamCollaborationManager: ObservableObject {
                 isRead: false,
                 actionRequired: false
             )
-            
+
             notifications.insert(notification, at: 0)
             saveTeamData()
         }
     }
-    
+
     // MARK: - Notification Management
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func markNotificationAsRead(id: UUID) {
         if let index = notifications.firstIndex(where: { $0.id == id }) {
             notifications[index] = CollaborationNotification(
@@ -1065,30 +1086,32 @@ class TeamCollaborationManager: ObservableObject {
             saveTeamData()
         }
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func clearAllNotifications() {
         notifications.removeAll()
         saveTeamData()
     }
-    
+
     var unreadNotificationCount: Int {
-        notifications.filter { !$0.isRead }.count
+        notifications.count(where: { !$0.isRead })
     }
-    
+
     // MARK: - Data Persistence
-    
+
     private func saveTeamData() {
         // Simplified persistence - just store basic counts and statistics
         let basicData: [String: Any] = [
             "memberCount": teamMembers.count,
             "projectCount": collaborationProjects.count,
             "notificationCount": notifications.count,
-            "lastSaved": Date().timeIntervalSince1970
+            "lastSaved": Date().timeIntervalSince1970,
         ]
-        
+
         UserDefaults.standard.set(basicData, forKey: "teamCollaboration")
     }
-    
+
     private func loadTeamData() {
         if UserDefaults.standard.dictionary(forKey: "teamCollaboration") != nil {
             // Initialize with sample data for demonstration
@@ -1097,7 +1120,7 @@ class TeamCollaborationManager: ObservableObject {
             initializeSampleData()
         }
     }
-    
+
     private func initializeSampleData() {
         if teamMembers.isEmpty {
             teamMembers = [
@@ -1130,11 +1153,11 @@ class TeamCollaborationManager: ObservableObject {
                     isOnline: true,
                     lastSeen: Date(),
                     joinedAt: Calendar.current.date(byAdding: .month, value: -1, to: Date()) ?? Date()
-                )
+                ),
             ]
         }
     }
-    
+
     private func createMockData() {
         if teamMembers.isEmpty {
             teamMembers = [
@@ -1146,7 +1169,7 @@ class TeamCollaborationManager: ObservableObject {
                     avatar: nil,
                     isOnline: true,
                     lastSeen: Date(),
-                    joinedAt: Date().addingTimeInterval(-2592000)
+                    joinedAt: Date().addingTimeInterval(-2_592_000)
                 ),
                 TeamMember(
                     name: "Bob Smith",
@@ -1156,7 +1179,7 @@ class TeamCollaborationManager: ObservableObject {
                     avatar: nil,
                     isOnline: false,
                     lastSeen: Date().addingTimeInterval(-3600),
-                    joinedAt: Date().addingTimeInterval(-1728000)
+                    joinedAt: Date().addingTimeInterval(-1_728_000)
                 ),
                 TeamMember(
                     name: "Carol Williams",
@@ -1166,11 +1189,11 @@ class TeamCollaborationManager: ObservableObject {
                     avatar: nil,
                     isOnline: true,
                     lastSeen: Date(),
-                    joinedAt: Date().addingTimeInterval(-864000)
-                )
+                    joinedAt: Date().addingTimeInterval(-864_000)
+                ),
             ]
         }
-        
+
         if collaborationProjects.isEmpty {
             let project = CollaborationProject(
                 name: "Mobile App Analysis",
@@ -1186,7 +1209,7 @@ class TeamCollaborationManager: ObservableObject {
             )
             collaborationProjects.append(project)
         }
-        
+
         saveTeamData()
     }
 }

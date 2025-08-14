@@ -1,4 +1,5 @@
 import Foundation
+
 //
 // FileUploadComponents.swift
 // CodingReviewer
@@ -12,7 +13,7 @@ import UniformTypeIdentifiers
 struct DragDropUploadView: View {
     @Binding var isTargeted: Bool
     let onFileDrop: ([URL]) -> Void
-    
+
     var body: some View {
         RoundedRectangle(cornerRadius: 12)
             .fill(isTargeted ? Color.blue.opacity(0.3) : Color.gray.opacity(0.1))
@@ -22,11 +23,11 @@ struct DragDropUploadView: View {
                     Image(systemName: "doc.badge.plus")
                         .font(.system(size: 48))
                         .foregroundColor(isTargeted ? .blue : .gray)
-                    
+
                     Text("Drop files here to analyze")
                         .font(.headline)
                         .foregroundColor(isTargeted ? .blue : .gray)
-                    
+
                     Text("Supports Swift, Objective-C, C++, and more")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -37,17 +38,18 @@ struct DragDropUploadView: View {
                 return true
             }
     }
-    
+
     private func handleDrop(providers: [NSItemProvider]) {
         let urlsQueue = DispatchQueue(label: "file-urls", attributes: .concurrent)
         var urls: [URL] = []
         let group = DispatchGroup()
-        
+
         for provider in providers {
             group.enter()
-            provider.loadItem(forTypeIdentifier: "public.file-url", options: nil) { item, error in
+            provider.loadItem(forTypeIdentifier: "public.file-url", options: nil) { item, _ in
                 if let data = item as? Data,
-                   let url = URL(dataRepresentation: data, relativeTo: nil) {
+                   let url = URL(dataRepresentation: data, relativeTo: nil)
+                {
                     urlsQueue.async(flags: .barrier) {
                         urls.append(url)
                     }
@@ -55,7 +57,7 @@ struct DragDropUploadView: View {
                 group.leave()
             }
         }
-        
+
         group.notify(queue: .main) {
             onFileDrop(urls)
         }
@@ -67,7 +69,7 @@ struct FileSelectionButton: View {
     let title: String
     let icon: String
     let action: () -> Void
-    
+
     var body: some View {
         Button(action: action) {
             HStack {
@@ -87,21 +89,21 @@ struct FileSelectionButton: View {
 struct UploadProgressView: View {
     let progress: Double
     let fileName: String
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text(fileName)
                     .font(.caption)
                     .lineLimit(1)
-                
+
                 Spacer()
-                
+
                 Text("\(Int(progress * 100))%")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
-            
+
             ProgressView(value: progress)
                 .progressViewStyle(LinearProgressViewStyle())
         }
@@ -113,7 +115,7 @@ struct UploadProgressView: View {
 struct FileTypeFilterView: View {
     @Binding var selectedTypes: Set<String>
     let availableTypes = ["Swift", "Objective-C", "C++", "JavaScript", "Python", "All"]
-    
+
     var body: some View {
         LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 8) {
             ForEach(availableTypes, id: \.self) { type in
@@ -135,6 +137,8 @@ struct FileTypeFilterView: View {
 
 /// Custom checkbox toggle style
 struct CheckboxToggleStyle: ToggleStyle {
+            /// Function description
+            /// - Returns: Return value description
     func makeBody(configuration: Configuration) -> some View {
         HStack {
             Image(systemName: configuration.isOn ? "checkmark.square.fill" : "square")
@@ -142,7 +146,7 @@ struct CheckboxToggleStyle: ToggleStyle {
                 .onTapGesture {
                     configuration.isOn.toggle()
                 }
-            
+
             configuration.label
                 .font(.caption)
         }

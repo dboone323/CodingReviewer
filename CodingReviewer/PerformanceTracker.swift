@@ -10,12 +10,16 @@ class PerformanceTracker: ObservableObject {
     private init() {}
 
     /// Initiates process with proper setup and monitoring
+            /// Function description
+            /// - Returns: Return value description
     func startTracking(_ operation: String) {
         startTimes[operation] = CFAbsoluteTimeGetCurrent()
         AppLogger.shared.log("Performance tracking started: \(operation)")
     }
 
     /// Completes process and performs cleanup
+            /// Function description
+            /// - Returns: Return value description
     func endTracking(_ operation: String) -> TimeInterval? {
         guard let startTime = startTimes[operation] else {
             AppLogger.shared.logWarning("No start time found for operation: \(operation)")
@@ -41,13 +45,16 @@ class PerformanceTracker: ObservableObject {
 
         // Log warning for slow operations
         if duration > 1.0 {
-            AppLogger.shared.logWarning("Slow operation detected: \(operation) took \(String(format: "%.3f", duration))s")
+            AppLogger.shared
+                .logWarning("Slow operation detected: \(operation) took \(String(format: "%.3f", duration))s")
         }
 
         return duration
     }
 
     /// Performs operation with error handling and validation
+            /// Function description
+            /// - Returns: Return value description
     func refreshMetrics() {
         // Trigger a UI update by notifying observers
         DispatchQueue.main.async {
@@ -57,18 +64,22 @@ class PerformanceTracker: ObservableObject {
     }
 
     var metrics: [PerformanceMetric] {
-        return performanceMetrics
+        performanceMetrics
     }
 
     /// Retrieves data with proper error handling and caching
+            /// Function description
+            /// - Returns: Return value description
     func getMetrics(for operation: String? = nil) -> [PerformanceMetric] {
-        if let operation = operation {
+        if let operation {
             return performanceMetrics.filter { $0.operation == operation }
         }
         return performanceMetrics
     }
 
     /// Retrieves data with proper error handling and caching
+            /// Function description
+            /// - Returns: Return value description
     func getAverageTime(for operation: String) -> TimeInterval? {
         let metrics = getMetrics(for: operation)
         guard !metrics.isEmpty else { return nil }
@@ -78,14 +89,18 @@ class PerformanceTracker: ObservableObject {
     }
 
     /// Retrieves data with proper error handling and caching
+            /// Function description
+            /// - Returns: Return value description
     func getSlowestOperations(limit: Int = 10) -> [PerformanceMetric] {
         performanceMetrics
             .sorted { $0.duration > $1.duration }
             .prefix(limit)
-            .map { $0 }
+            .map(\.self)
     }
 
     /// Removes data and performs cleanup safely
+            /// Function description
+            /// - Returns: Return value description
     func clearMetrics() {
         DispatchQueue.main.async {
             self.performanceMetrics.removeAll()
@@ -96,8 +111,8 @@ class PerformanceTracker: ObservableObject {
 
     /// Retrieves data with proper error handling and caching
     private func getCurrentMemoryUsage() -> UInt64 {
-        var info = mach_task_basic_info();
-        var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4;
+        var info = mach_task_basic_info()
+        var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4
 
         let result = withUnsafeMutablePointer(to: &info) {
             $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
@@ -109,8 +124,10 @@ class PerformanceTracker: ObservableObject {
     }
 
     /// Creates and configures components with proper initialization
+            /// Function description
+            /// - Returns: Return value description
     func generateReport() -> String {
-        var report = "# Performance Report\n\n";
+        var report = "# Performance Report\n\n"
         report += "Generated: \(Date())\n\n"
 
         // Summary statistics
@@ -159,6 +176,8 @@ struct PerformanceMetric {
 
 extension NSObject {
     /// Performs operation with error handling and validation
+            /// Function description
+            /// - Returns: Return value description
     func measurePerformance<T>(of operation: String, block: () throws -> T) rethrows -> T {
         PerformanceTracker.shared.startTracking(operation)
         defer { _ = PerformanceTracker.shared.endTracking(operation) }
@@ -166,6 +185,8 @@ extension NSObject {
     }
 
     /// Performs operation with error handling and validation
+            /// Function description
+            /// - Returns: Return value description
     func measureAsyncPerformance<T>(of operation: String, block: () async throws -> T) async rethrows -> T {
         PerformanceTracker.shared.startTracking(operation)
         defer { _ = PerformanceTracker.shared.endTracking(operation) }

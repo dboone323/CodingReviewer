@@ -9,47 +9,53 @@ import Foundation
 
 class FeatureFlagManager {
     static let shared = FeatureFlagManager()
-    
+
     private var flags: [String: Bool] = [:];
     private var remoteFlags: [String: Any] = [:];
-    
+
     private init() {
         loadDefaultFlags()
         loadRemoteFlags()
     }
-    
+
     // MARK: - Flag Management
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func isEnabled(_ flag: FeatureFlag) -> Bool {
         return flags[flag.rawValue] ?? flag.defaultValue
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func enable(_ flag: FeatureFlag) {
         flags[flag.rawValue] = true
         logFlagChange(flag.rawValue, enabled: true)
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func disable(_ flag: FeatureFlag) {
         flags[flag.rawValue] = false
         logFlagChange(flag.rawValue, enabled: false)
     }
-    
+
     // MARK: - Remote Configuration
-    
+
     private func loadRemoteFlags() {
         // Implementation for remote flag loading
         // Could integrate with Firebase Remote Config, LaunchDarkly, etc.
     }
-    
+
     private func loadDefaultFlags() {
         // Set default values for all feature flags
         for flag in FeatureFlag.allCases {
             flags[flag.rawValue] = flag.defaultValue
         }
     }
-    
+
     // MARK: - Logging & Analytics
-    
+
     private func logFlagChange(_ flagName: String, enabled: Bool) {
         let logEntry = [
             "timestamp": Date().timeIntervalSince1970,
@@ -57,11 +63,11 @@ class FeatureFlagManager {
             "enabled": enabled,
             "user_id": getCurrentUserId()
         ]
-        
+
         // Log to analytics system
         print("Feature flag changed: \(flagName) = \(enabled)")
     }
-    
+
     private func getCurrentUserId() -> String {
         // Return current user identifier
         return "anonymous"
@@ -76,7 +82,7 @@ enum FeatureFlag: String, CaseIterable {
     case realTimeCollaboration = "real_time_collaboration"
     case aiPoweredSuggestions = "ai_powered_suggestions"
     case betaDashboard = "beta_dashboard"
-    
+
     var defaultValue: Bool {
         switch self {
         case .newCodeAnalysisEngine:
@@ -91,7 +97,7 @@ enum FeatureFlag: String, CaseIterable {
             return false // Beta feature
         }
     }
-    
+
     var description: String {
         switch self {
         case .newCodeAnalysisEngine:
@@ -111,6 +117,8 @@ enum FeatureFlag: String, CaseIterable {
 // MARK: - Usage Examples
 
 extension FeatureFlagManager {
+    /// <#Description#>
+    /// - Returns: <#description#>
     func configureForEnvironment(_ environment: BuildEnvironment) {
         switch environment {
         case .development:

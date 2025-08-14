@@ -1,9 +1,10 @@
-// SECURITY: API key handling - ensure proper encryption and keychain storage
-import OSLog
-import SwiftUI
 import Foundation
 import Combine
+import OSLog
+import SwiftUI
 import os
+
+// SECURITY: API key handling - ensure proper encryption and keychain storage
 
 // MARK: - Analysis Debouncer
 
@@ -14,9 +15,11 @@ protocol CodeReviewService {
 
 /// Performance-optimized analysis with debouncing
 actor AnalysisDebouncer {
-    private var lastAnalysisTime: Date = .distantPast;
+    private var lastAnalysisTime: Date = .distantPast
     private let debounceInterval: TimeInterval = 0.5
 
+            /// Function description
+            /// - Returns: Return value description
     func shouldAnalyze() -> Bool {
         let now = Date()
         let timeSinceLastAnalysis = now.timeIntervalSince(lastAnalysisTime)
@@ -32,31 +35,30 @@ actor AnalysisDebouncer {
 // / Enhanced ViewModel with AI integration and better architecture
 @MainActor
 final class CodeReviewViewModel: ObservableObject {
-
     // MARK: - Published Properties
 
-    @Published var codeInput: String = "";
-    @Published var analysisResults: [AnalysisResult] = [];
+    @Published var codeInput: String = ""
+    @Published var analysisResults: [AnalysisResult] = []
     @Published var aiAnalysisResult: AIAnalysisResponse?
-    @Published var aiSuggestions: [AISuggestion] = [];
-    @Published var availableFixes: [CodeFix] = [];
-    @Published var isAnalyzing: Bool = false;
-    @Published var isAIAnalyzing: Bool = false;
+    @Published var aiSuggestions: [AISuggestion] = []
+    @Published var availableFixes: [CodeFix] = []
+    @Published var isAnalyzing: Bool = false
+    @Published var isAIAnalyzing: Bool = false
     @Published var errorMessage: String?
-    @Published var showingResults: Bool = false;
-    @Published var selectedLanguage: CodeLanguage = .swift;
-    @Published var aiEnabled: Bool = false;
+    @Published var showingResults: Bool = false
+    @Published var selectedLanguage: CodeLanguage = .swift
+    @Published var aiEnabled: Bool = false
     @Published var analysisReport: CodeAnalysisReport?
 
     // For legacy support
-    @Published var analysisResult: String = "";
+    @Published var analysisResult: String = ""
 
     // MARK: - Private Properties
 
     private let codeReviewService: CodeReviewService
     private var aiService: EnhancedAICodeReviewService?
     private let keyManager: APIKeyManager
-    private var cancellables = Set<AnyCancellable>();
+    private var cancellables = Set<AnyCancellable>()
     private let debouncer = AnalysisDebouncer()
     private let logger = AppLogger.shared
     private let osLogger = Logger(subsystem: "com.DanielStevens.CodingReviewer", category: "CodeReviewViewModel")
@@ -74,13 +76,15 @@ final class CodeReviewViewModel: ObservableObject {
     // MARK: - Public Methods
 
     // / Performs comprehensive code analysis including AI if enabled
+            /// Function description
+            /// - Returns: Return value description
     func analyzeCode() async {
         guard !codeInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             errorMessage = "No code provided for analysis"
             return
         }
 
-        guard codeInput.count < 100000 else {
+        guard codeInput.count < 100_000 else {
             errorMessage = "Code too large (max 100,000 characters)"
             return
         }
@@ -96,53 +100,55 @@ final class CodeReviewViewModel: ObservableObject {
 
             // Run traditional analysis
             let report = await codeReviewService.analyzeCode(codeInput)
-                analysisResults = report.results
-                analysisReport = report
-                analysisResult = generateReportString(from: report) // Legacy support
+            analysisResults = report.results
+            analysisReport = report
+            analysisResult = generateReportString(from: report) // Legacy support
 
-                // Run enhanced AI analysis if enabled
-                if aiEnabled, aiService != nil {
-                    isAIAnalyzing = true
+            // Run enhanced AI analysis if enabled
+            if aiEnabled, aiService != nil {
+                isAIAnalyzing = true
 
-                    // Use enhanced AI service for real functionality
-                    let enhancedAI = EnhancedAIService(apiKeyManager: keyManager)
-                    await enhancedAI.analyzeCodeWithEnhancedAI(codeInput, language: selectedLanguage.rawValue)
+                // Use enhanced AI service for real functionality
+                let enhancedAI = EnhancedAIService(apiKeyManager: keyManager)
+                await enhancedAI.analyzeCodeWithEnhancedAI(codeInput, language: selectedLanguage.rawValue)
 
-                    // Merge the enhanced results with existing analysis
-                    let enhancedResult = enhancedAI.analysisResult
-                    if !enhancedResult.isEmpty {
-                        analysisResult += "\n\n" + enhancedResult
-                    }
-
-                    // Create comprehensive AI response  
-                    let qualityScore = extractQualityScore(from: enhancedResult)
-                    aiAnalysisResult = AIAnalysisResponse(
-                        suggestions: [],
-                        complexityScore: Double(qualityScore) / 100.0,
-                        maintainabilityScore: Double(qualityScore) / 100.0,
-                        confidence: 0.8
-                    )
-
-                    isAIAnalyzing = false
+                // Merge the enhanced results with existing analysis
+                let enhancedResult = enhancedAI.analysisResult
+                if !enhancedResult.isEmpty {
+                    analysisResult += "\n\n" + enhancedResult
                 }
 
-                showingResults = true
-                let duration = Date().timeIntervalSince(startTime)
-                logger.logAnalysisComplete(resultsCount: report.results.count, duration: duration)
+                // Create comprehensive AI response
+                let qualityScore = extractQualityScore(from: enhancedResult)
+                aiAnalysisResult = AIAnalysisResponse(
+                    suggestions: [],
+                    complexityScore: Double(qualityScore) / 100.0,
+                    maintainabilityScore: Double(qualityScore) / 100.0,
+                    confidence: 0.8
+                )
+
+                isAIAnalyzing = false
+            }
+
+            showingResults = true
+            let duration = Date().timeIntervalSince(startTime)
+            logger.logAnalysisComplete(resultsCount: report.results.count, duration: duration)
 
             isAnalyzing = false
         }
     }
 
     // / Legacy analyze method for backward compatibility
+    /// analyze function
+    /// TODO: Add detailed documentation
+    /// analyze function
+    /// TODO: Add detailed documentation
     @MainActor
     // / analyze function
     // / TODO: Add detailed documentation
-    /// analyze function
-    /// TODO: Add detailed documentation
-    /// analyze function
-    /// TODO: Add detailed documentation
-    public func analyze(_ code: String) {
+            /// Function description
+            /// - Returns: Return value description
+    func analyze(_ code: String) {
         codeInput = code
         Task {
             await analyzeCode()
@@ -150,6 +156,8 @@ final class CodeReviewViewModel: ObservableObject {
     }
 
     // / Applies an AI-generated fix to the code
+            /// Function description
+            /// - Returns: Return value description
     func applyFix(_ fix: CodeFix) {
         // For now, replace the original code with the fixed code
         // In a more sophisticated implementation, you'd locate the exact position
@@ -167,8 +175,10 @@ final class CodeReviewViewModel: ObservableObject {
     }
 
     // / Explains a specific issue using AI
+            /// Function description
+            /// - Returns: Return value description
     func explainIssue(_ issue: AnalysisResult) async {
-        guard let aiService = aiService else { return }
+        guard let aiService else { return }
 
         do {
             // Use explainCode method with the relevant code snippet
@@ -186,12 +196,14 @@ final class CodeReviewViewModel: ObservableObject {
         let lines = codeInput.components(separatedBy: .newlines)
         let startLine = max(0, issue.lineNumber - 3)
         let endLine = min(lines.count - 1, issue.lineNumber + 3)
-        return lines[startLine...endLine].joined(separator: "\n")
+        return lines[startLine ... endLine].joined(separator: "\n")
     }
 
     // / Generates documentation for the current code
+            /// Function description
+            /// - Returns: Return value description
     func generateDocumentation() async {
-        guard let aiService = aiService, !codeInput.isEmpty else { return }
+        guard let aiService, !codeInput.isEmpty else { return }
 
         do {
             _ = try await aiService.generateDocumentation(for: codeInput, language: selectedLanguage.rawValue)
@@ -203,6 +215,8 @@ final class CodeReviewViewModel: ObservableObject {
     }
 
     // / Shows the API key setup screen
+            /// Function description
+            /// - Returns: Return value description
     func showAPIKeySetup() {
         Task {
             AppLogger.shared.log("🧠 [DEBUG] CodeReviewViewModel.showAPIKeySetup() called", level: .debug)
@@ -223,7 +237,9 @@ final class CodeReviewViewModel: ObservableObject {
     /// TODO: Add detailed documentation
     /// clearResults function
     /// TODO: Add detailed documentation
-    public func clearResults() {
+            /// Function description
+            /// - Returns: Return value description
+    func clearResults() {
         analysisResult = ""
         analysisResults.removeAll()
         aiAnalysisResult = nil
@@ -258,7 +274,7 @@ final class CodeReviewViewModel: ObservableObject {
     }
 
     private func updateAIStatus(hasKey: Bool) {
-        if hasKey && aiService == nil {
+        if hasKey, aiService == nil {
             setupAIService()
         } else if !hasKey {
             aiService = nil
@@ -267,7 +283,7 @@ final class CodeReviewViewModel: ObservableObject {
     }
 
     private func generateReportString(from report: CodeAnalysisReport) -> String {
-        var reportString = "📊 Code Analysis Report\n";
+        var reportString = "📊 Code Analysis Report\n"
         reportString += String(repeating: "=", count: 50) + "\n\n"
 
         // Basic metrics
@@ -356,16 +372,16 @@ final class CodeReviewViewModel: ObservableObject {
         return 75 // Default score
     }
 
-    private func generateFixesFromSuggestions(_ suggestions: [AISuggestion]) -> [CodeFix] {
-        return [] // Simplified for now
+    private func generateFixesFromSuggestions(_: [AISuggestion]) -> [CodeFix] {
+        [] // Simplified for now
     }
 
-    private func extractRelevantCode(for suggestion: AISuggestion) -> String {
-        return ""
+    private func extractRelevantCode(for _: AISuggestion) -> String {
+        ""
     }
 
-    private func generateFixedCode(for suggestion: AISuggestion) -> String {
-        return ""
+    private func generateFixedCode(for _: AISuggestion) -> String {
+        ""
     }
 
     private func calculateCyclomaticComplexity(_ code: String) -> Double {
@@ -376,119 +392,120 @@ final class CodeReviewViewModel: ObservableObject {
         }
     }
 
-    private func extractSecurityRelatedCode(_ title: String) -> String {
-        return ""
+    private func extractSecurityRelatedCode(_: String) -> String {
+        ""
     }
 
-    private func extractQualityRelatedCode(_ title: String) -> String {
-        return ""
+    private func extractQualityRelatedCode(_: String) -> String {
+        ""
     }
 
     private func extractGenericCodeSnippet() -> String {
-        return ""
+        ""
     }
 
     private func extractLongFunction() -> String {
-        return ""
+        ""
     }
 
     private func breakLongLines(_ code: String) -> String {
-        return code
+        code
     }
 
-// MARK: - Default Implementation
+    // MARK: - Default Implementation
 
-// / Default implementation of CodeReviewService
-final class DefaultCodeReviewService: CodeReviewService {
+    // / Default implementation of CodeReviewService
+    final class DefaultCodeReviewService: CodeReviewService {
+            /// Function description
+            /// - Returns: Return value description
+        func analyzeCode(_ code: String) async -> CodeAnalysisReport {
+            let startTime = CFAbsoluteTimeGetCurrent()
 
-    func analyzeCode(_ code: String) async -> CodeAnalysisReport {
-        let startTime = CFAbsoluteTimeGetCurrent()
+            // Create analyzers on background queue to avoid main actor isolation
+            return await withTaskGroup(of: [AnalysisResult].self) { group in
+                var allResults: [AnalysisResult] = []
 
-        // Create analyzers on background queue to avoid main actor isolation
-        return await withTaskGroup(of: [AnalysisResult].self) { group in
-            var allResults: [AnalysisResult] = []
+                // Add analysis tasks to group - create analyzers inside tasks to avoid data races
+                group.addTask {
+                    let analyzer = await MainActor.run { QualityAnalyzer() }
+                    return await analyzer.analyze(code)
+                }
 
-            // Add analysis tasks to group - create analyzers inside tasks to avoid data races
-            group.addTask {
-                let analyzer = await MainActor.run { QualityAnalyzer() }
-                return await analyzer.analyze(code)
+                group.addTask {
+                    let analyzer = await MainActor.run { SecurityAnalyzer() }
+                    return await analyzer.analyze(code)
+                }
+
+                group.addTask {
+                    let analyzer = await MainActor.run { PerformanceAnalyzer() }
+                    return await analyzer.analyze(code)
+                }
+
+                // Collect results
+                for await results in group {
+                    allResults.append(contentsOf: results)
+                }
+
+                let endTime = CFAbsoluteTimeGetCurrent()
+                _ = endTime - startTime // Track analysis time for potential future use
+
+                // Calculate metrics
+                let metrics = CodeMetrics(
+                    characterCount: code.count,
+                    lineCount: code.components(separatedBy: .newlines).count,
+                    functionCount: 0, // Could be calculated
+                    complexityScore: Double(calculateComplexity(code))
+                )
+
+                // Determine overall rating
+                let rating = determineRating(from: allResults)
+
+                return CodeAnalysisReport(
+                    rating: rating,
+                    summary: "Analysis completed with \(allResults.count) results",
+                    timestamp: Date(),
+                    results: allResults,
+                    metrics: metrics
+                )
             }
-            
-            group.addTask {
-                let analyzer = await MainActor.run { SecurityAnalyzer() }
-                return await analyzer.analyze(code)
-            }
-            
-            group.addTask {
-                let analyzer = await MainActor.run { PerformanceAnalyzer() }
-                return await analyzer.analyze(code)
-            }
-
-            // Collect results
-            for await results in group {
-                allResults.append(contentsOf: results)
-            }
-
-            let endTime = CFAbsoluteTimeGetCurrent()
-            _ = endTime - startTime  // Track analysis time for potential future use
-
-            // Calculate metrics
-            let metrics = CodeMetrics(
-                characterCount: code.count,
-                lineCount: code.components(separatedBy: .newlines).count,
-                functionCount: 0, // Could be calculated
-                complexityScore: Double(calculateComplexity(code))
-            )
-
-            // Determine overall rating
-            let rating = determineRating(from: allResults)
-
-            return CodeAnalysisReport(
-                rating: rating,
-                summary: "Analysis completed with \(allResults.count) results",
-                timestamp: Date(),
-                results: allResults,
-                metrics: metrics
-            )
-        }
-    }
-
-    private func calculateComplexity(_ code: String) -> Int {
-        let complexityKeywords = ["if", "else", "for", "while", "switch", "case", "catch", "&&", "||"]
-        var complexity = 1 // Base complexity;
-
-        for keyword in complexityKeywords {
-            complexity += code.components(separatedBy: keyword).count - 1
         }
 
-        return complexity
-    }
+        private func calculateComplexity(_ code: String) -> Int {
+            let complexityKeywords = ["if", "else", "for", "while", "switch", "case", "catch", "&&", "||"]
+            var complexity = 1 // Base complexity;
 
-    private func determineRating(from results: [AnalysisResult]) -> CodeAnalysisReport.Rating {
-        let criticalCount = results.filter { $0.severity == "Critical" }.count
-        let highCount = results.filter { $0.severity == "High" }.count
-        let mediumCount = results.filter { $0.severity == "Medium" }.count
-        let totalIssues = criticalCount + highCount + mediumCount
+            for keyword in complexityKeywords {
+                complexity += code.components(separatedBy: keyword).count - 1
+            }
 
-        switch totalIssues {
-        case 0: return .excellent
-        case 1...2: return .good
-        case 3...5: return .fair
-        default: return .poor
+            return complexity
+        }
+
+        private func determineRating(from results: [AnalysisResult]) -> CodeAnalysisReport.Rating {
+            let criticalCount = results.count(where: { $0.severity == "Critical" })
+            let highCount = results.count(where: { $0.severity == "High" })
+            let mediumCount = results.count(where: { $0.severity == "Medium" })
+            let totalIssues = criticalCount + highCount + mediumCount
+
+            switch totalIssues {
+            case 0: return .excellent
+            case 1 ... 2: return .good
+            case 3 ... 5: return .fair
+            default: return .poor
+            }
+        }
+
+        // MARK: - Helper Methods
+
+        private func convertToEnhancedAnalysisItems(_ results: [AnalysisResult]) -> [EnhancedAnalysisItem] {
+            results.map { result in
+                EnhancedAnalysisItem(
+                    title: "\(result.type) Issue",
+                    description: "\(result.message) (Line \(result.lineNumber))",
+                    severity: result.severity,
+                    category: result.type
+                )
+            }
         }
     }
-
-    // MARK: - Helper Methods
-
-    private func convertToEnhancedAnalysisItems(_ results: [AnalysisResult]) -> [EnhancedAnalysisItem] {
-        results.map { result in
-            EnhancedAnalysisItem(
-                title: "\(result.type) Issue",
-                description: "\(result.message) (Line \(result.lineNumber))",
-                severity: result.severity,
-                category: result.type
-            )
-        }
-    }
-}
 }

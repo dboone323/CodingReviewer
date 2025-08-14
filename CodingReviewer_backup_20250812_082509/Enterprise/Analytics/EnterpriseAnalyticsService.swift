@@ -5,20 +5,22 @@
 // Enterprise-level analytics and reporting
 
 import Foundation
+
 // AnalyticsTypes is automatically available in the same target
 
 /// Manages enterprise analytics and reporting capabilities
 class EnterpriseAnalyticsService {
-    
     static let shared = EnterpriseAnalyticsService()
     private let dataStore = AnalyticsDataStore()
-    
+
     private init() {}
-    
+
     /// Generates comprehensive analytics report
+    /// <#Description#>
+    /// - Returns: <#description#>
     func generateAnalyticsReport(for timeframe: AnalyticsTimeframe) -> AnalyticsReport {
         let data = dataStore.getData(for: timeframe)
-        
+
         return AnalyticsReport(
             timeframe: timeframe,
             totalAnalyses: data.totalAnalyses,
@@ -31,26 +33,30 @@ class EnterpriseAnalyticsService {
             generatedAt: Date()
         )
     }
-    
+
     /// Tracks user activity and performance
+    /// <#Description#>
+    /// - Returns: <#description#>
     func trackUserActivity(userId: String, activity: UserActivity) {
         dataStore.recordActivity(userId: userId, activity: activity)
     }
-    
+
     /// Calculates team productivity metrics
     private func calculateTeamProductivity(_ data: AnalyticsData) -> TeamProductivity {
-        return TeamProductivity(
+        TeamProductivity(
             analysesPerUser: Double(data.totalAnalyses) / Double(max(data.uniqueUsers, 1)),
             averageQualityScore: data.averageQualityScore,
             issueResolutionRate: data.issueResolutionRate,
             codeReviewEfficiency: data.codeReviewEfficiency
         )
     }
-    
+
     /// Exports analytics data in various formats
+    /// <#Description#>
+    /// - Returns: <#description#>
     func exportAnalytics(format: ExportFormat, timeframe: AnalyticsTimeframe) -> Data? {
         let report = generateAnalyticsReport(for: timeframe)
-        
+
         switch format {
         case .json:
             return try? JSONEncoder().encode(report)
@@ -60,17 +66,17 @@ class EnterpriseAnalyticsService {
             return generatePDFData(from: report)
         }
     }
-    
+
     /// Generates CSV data from analytics report
     private func generateCSVData(from report: AnalyticsReport) -> Data? {
         var csvContent = "Metric,Value\n"
         csvContent += "Total Analyses,\(report.totalAnalyses)\n"
         csvContent += "Unique Users,\(report.uniqueUsers)\n"
         csvContent += "Average Analysis Time,\(report.averageAnalysisTime)\n"
-        
+
         return csvContent.data(using: .utf8)
     }
-    
+
     /// Generates PDF data from analytics report
     private func generatePDFData(from report: AnalyticsReport) -> Data? {
         // Simplified PDF generation - would use proper PDF library in production
@@ -81,10 +87,11 @@ class EnterpriseAnalyticsService {
 
 /// Analytics data storage
 private class AnalyticsDataStore {
-    
-    func getData(for timeframe: AnalyticsTimeframe) -> AnalyticsData {
+    /// <#Description#>
+    /// - Returns: <#description#>
+    func getData(for _: AnalyticsTimeframe) -> AnalyticsData {
         // Simulated data - would connect to actual data source
-        return AnalyticsData(
+        AnalyticsData(
             totalAnalyses: 1250,
             uniqueUsers: 45,
             averageAnalysisTime: 3.2,
@@ -96,8 +103,10 @@ private class AnalyticsDataStore {
             codeReviewEfficiency: 0.91
         )
     }
-    
-    func recordActivity(userId: String, activity: UserActivity) {
+
+    /// <#Description#>
+    /// - Returns: <#description#>
+    func recordActivity(userId _: String, activity _: UserActivity) {
         // Implementation for recording user activity
     }
 }

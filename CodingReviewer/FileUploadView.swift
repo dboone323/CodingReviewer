@@ -1,4 +1,5 @@
 import Foundation
+
 //
 //  FileUploadView.swift
 //  CodingReviewer
@@ -10,16 +11,16 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct FileUploadView: View {
-    @StateObject private var fileManager = FileManagerService();
-    @State private var showingFileImporter = false;
-    @State private var showingFolderPicker = false;
-    @State private var isTargeted = false;
+    @StateObject private var fileManager = FileManagerService()
+    @State private var showingFileImporter = false
+    @State private var showingFolderPicker = false
+    @State private var isTargeted = false
     @State private var uploadResult: FileUploadResult?
-    @State private var showingUploadResults = false;
-    @State private var selectedFiles: Set<CodeFile.ID> = [];
-    @State private var showingAnalysisResults = false;
-    @State private var analysisRecords: [FileAnalysisRecord] = [];
-    @State private var sheetAnalysisRecords: [FileAnalysisRecord] = [];
+    @State private var showingUploadResults = false
+    @State private var selectedFiles: Set<CodeFile.ID> = []
+    @State private var showingAnalysisResults = false
+    @State private var analysisRecords: [FileAnalysisRecord] = []
+    @State private var sheetAnalysisRecords: [FileAnalysisRecord] = []
 
     var body: some View {
         VStack(spacing: 0) {
@@ -29,7 +30,7 @@ struct FileUploadView: View {
             Divider()
 
             // Main content
-            if fileManager.uploadedFiles.isEmpty && fileManager.projects.isEmpty {
+            if fileManager.uploadedFiles.isEmpty, fileManager.projects.isEmpty {
                 emptyStateView
             } else {
                 contentView
@@ -403,8 +404,8 @@ struct FileUploadView: View {
                 do {
                     let result = try await fileManager.uploadFiles(from: urls)
                     await MainActor.run {
-                        self.uploadResult = result
-                        self.showingUploadResults = true
+                        uploadResult = result
+                        showingUploadResults = true
                     }
                 } catch {
                     await MainActor.run {
@@ -430,8 +431,8 @@ struct FileUploadView: View {
                 do {
                     let result = try await fileManager.uploadFiles(from: [url])
                     await MainActor.run {
-                        self.uploadResult = result
-                        self.showingUploadResults = true
+                        uploadResult = result
+                        showingUploadResults = true
                     }
                 } catch {
                     await MainActor.run {
@@ -449,23 +450,26 @@ struct FileUploadView: View {
         }
         return !providers.isEmpty
     }
-    
-    @MainActor
+
     /// Analyzes and processes data with comprehensive validation
+    @MainActor
     private func processDroppedProviders(_ providers: [NSItemProvider]) async {
         var collectedURLs: [URL] = []
-        
+
         // Process providers sequentially to avoid concurrency issues
         for provider in providers {
             if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
                 do {
-                    let url = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<URL, Error>) in
+                    let url = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<
+                        URL,
+                        Error
+                    >) in
                         provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, error in
-                            if let error = error {
+                            if let error {
                                 continuation.resume(throwing: error)
                                 return
                             }
-                            
+
                             if let data = item as? Data, let url = URL(dataRepresentation: data, relativeTo: nil) {
                                 continuation.resume(returning: url)
                             } else {
@@ -479,13 +483,13 @@ struct FileUploadView: View {
                 }
             }
         }
-        
+
         // Upload the collected URLs
         if !collectedURLs.isEmpty {
             do {
                 let result = try await fileManager.uploadFiles(from: collectedURLs)
-                self.uploadResult = result
-                self.showingUploadResults = true
+                uploadResult = result
+                showingUploadResults = true
             } catch {
                 fileManager.errorMessage = error.localizedDescription
             }
@@ -518,14 +522,14 @@ struct FileUploadView: View {
                     AppLogger.shared.debug("✅ Selected files analysis completed. Found \(records.count) records")
 
                     // Clear any previous state first
-                    self.showingAnalysisResults = false
+                    showingAnalysisResults = false
 
                     // Set the records
-                    self.analysisRecords = records
+                    analysisRecords = records
 
                     // Force state update and show sheet immediately
                     Task { @MainActor in
-                        self.showingAnalysisResults = true
+                        showingAnalysisResults = true
                         AppLogger.shared.debug("🔍 Sheet should now be presented with \(records.count) records")
                     }
                 }
@@ -549,12 +553,12 @@ struct FileUploadView: View {
                 let records = try await fileManager.analyzeMultipleFiles(fileManager.uploadedFiles, withAI: true)
                 await MainActor.run {
                     // Set both record properties to ensure consistency
-                    self.analysisRecords = records
-                    self.sheetAnalysisRecords = records
+                    analysisRecords = records
+                    sheetAnalysisRecords = records
 
                     // Small delay to ensure records are properly set before showing sheet
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        self.showingAnalysisResults = true
+                        showingAnalysisResults = true
                     }
                 }
             } catch {
@@ -604,7 +608,7 @@ struct FileUploadView: View {
 
     /// Retrieves data with proper error handling and caching
     private func uploadResultMessage(_ result: FileUploadResult) -> String {
-        var message = "";
+        var message = ""
 
         if !result.successfulFiles.isEmpty {
             message += "Successfully uploaded \(result.successfulFiles.count) files.\n"
@@ -909,19 +913,19 @@ struct AnalysisResultsView: View {
     }
 
     private var criticalIssues: Int {
-        records.flatMap(\.analysisResults).filter { $0.severity == "critical" }.count
+        records.flatMap(\.analysisResults).count(where: { $0.severity == "critical" })
     }
 
     private var highIssues: Int {
-        records.flatMap(\.analysisResults).filter { $0.severity == "high" }.count
+        records.flatMap(\.analysisResults).count(where: { $0.severity == "high" })
     }
 
     private var mediumIssues: Int {
-        records.flatMap(\.analysisResults).filter { $0.severity == "medium" }.count
+        records.flatMap(\.analysisResults).count(where: { $0.severity == "medium" })
     }
 
     private var lowIssues: Int {
-        records.flatMap(\.analysisResults).filter { $0.severity == "low" }.count
+        records.flatMap(\.analysisResults).count(where: { $0.severity == "low" })
     }
 
     var body: some View {

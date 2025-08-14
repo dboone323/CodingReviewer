@@ -1,3 +1,7 @@
+import Foundation
+import SwiftUI
+import UniformTypeIdentifiers
+
 //
 //  EnterpriseIntegrationDashboard.swift
 //  CodingReviewer
@@ -5,16 +9,13 @@
 //  Created by Phase 4 Enterprise Features on 8/5/25.
 //
 
-import SwiftUI
-import Foundation
-import UniformTypeIdentifiers
-
 // MARK: - Simple MetricCard Component
+
 struct MetricCard: View {
     let title: String
     let value: String
     let color: Color
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
@@ -39,23 +40,23 @@ struct EnterpriseIntegrationDashboard: View {
     @StateObject private var collaborationManager = TeamCollaborationManager()
     @StateObject private var usageTracker = UsageTracker()
     @State private var selectedTab: IntegrationTab = .export
-    
+
     enum IntegrationTab: String, CaseIterable {
         case export = "Export"
         case collaboration = "Collaboration"
         case team = "Team"
         case notifications = "Notifications"
-        
+
         var icon: String {
             switch self {
-            case .export: return "square.and.arrow.up"
-            case .collaboration: return "person.2"
-            case .team: return "person.3"
-            case .notifications: return "bell"
+            case .export: "square.and.arrow.up"
+            case .collaboration: "person.2"
+            case .team: "person.3"
+            case .notifications: "bell"
             }
         }
     }
-    
+
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -67,18 +68,18 @@ struct EnterpriseIntegrationDashboard: View {
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding()
-                
+
                 // Content
                 TabView(selection: $selectedTab) {
                     DataExportTab(dataExporter: dataExporter, usageTracker: usageTracker)
                         .tag(IntegrationTab.export)
-                    
+
                     CollaborationTab(collaborationManager: collaborationManager)
                         .tag(IntegrationTab.collaboration)
-                    
+
                     TeamManagementTab(collaborationManager: collaborationManager)
                         .tag(IntegrationTab.team)
-                    
+
                     NotificationsTab(collaborationManager: collaborationManager)
                         .tag(IntegrationTab.notifications)
                 }
@@ -94,14 +95,14 @@ struct EnterpriseIntegrationDashboard: View {
                             }
                         }
                         .disabled(collaborationManager.isConnected)
-                        
+
                         Button("Disconnect") {
                             collaborationManager.disconnect()
                         }
                         .disabled(!collaborationManager.isConnected)
-                        
+
                         Divider()
-                        
+
                         Button("Export All Data") {
                             if let template = dataExporter.availableExports.first {
                                 Task {
@@ -109,7 +110,7 @@ struct EnterpriseIntegrationDashboard: View {
                                 }
                             }
                         }
-                        
+
                         Button("Sync Team Data") {
                             // Sync functionality
                         }
@@ -131,7 +132,7 @@ struct DataExportTab: View {
     @State private var showingExportConfiguration = false
     @State private var selectedTemplate: EnterpriseDataExporter.ExportTemplate?
     @State private var exportConfiguration = EnterpriseDataExporter.ExportConfiguration()
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
@@ -140,10 +141,10 @@ struct DataExportTab: View {
                     VStack(spacing: 12) {
                         Text("Exporting Data...")
                             .font(.headline)
-                        
+
                         ProgressView(value: dataExporter.exportProgress)
                             .progressViewStyle(LinearProgressViewStyle())
-                        
+
                         Text("\(Int(dataExporter.exportProgress * 100))% Complete")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -153,15 +154,15 @@ struct DataExportTab: View {
                     .cornerRadius(12)
                     .padding(.horizontal)
                 }
-                
+
                 // Quick Export Actions
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Quick Export")
                         .font(.headline)
                         .padding(.horizontal)
-                    
+
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 12) {
-                        ForEach(dataExporter.availableExports.filter { $0.isDefault }) { template in
+                        ForEach(dataExporter.availableExports.filter(\.isDefault)) { template in
                             QuickExportCard(
                                 template: template,
                                 onExport: {
@@ -173,7 +174,11 @@ struct DataExportTab: View {
                                         do {
                                             _ = try await dataExporter.exportData(template: template)
                                         } catch {
-                                            AppLogger.shared.log("Export failed: \(error)", level: .error, category: .general)
+                                            AppLogger.shared.log(
+                                                "Export failed: \(error)",
+                                                level: .error,
+                                                category: .general
+                                            )
                                         }
                                     }
                                 }
@@ -182,22 +187,22 @@ struct DataExportTab: View {
                     }
                     .padding(.horizontal)
                 }
-                
+
                 // Export Templates
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
                         Text("Export Templates")
                             .font(.headline)
-                        
+
                         Spacer()
-                        
+
                         Button("Create Template") {
                             showingTemplateCreator = true
                         }
                         .font(.caption)
                     }
                     .padding(.horizontal)
-                    
+
                     LazyVStack(spacing: 8) {
                         ForEach(dataExporter.availableExports) { template in
                             ExportTemplateRow(
@@ -214,15 +219,15 @@ struct DataExportTab: View {
                     }
                     .padding(.horizontal)
                 }
-                
+
                 // Export History
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
                         Text("Recent Exports")
                             .font(.headline)
-                        
+
                         Spacer()
-                        
+
                         Button("Clear History") {
                             dataExporter.clearExportHistory()
                         }
@@ -230,7 +235,7 @@ struct DataExportTab: View {
                         .foregroundColor(.red)
                     }
                     .padding(.horizontal)
-                    
+
                     if dataExporter.exportHistory.isEmpty {
                         Text("No export history")
                             .foregroundColor(.secondary)
@@ -281,7 +286,7 @@ struct CollaborationTab: View {
     @State private var showingProjectCreator = false
     @State private var showingAnalysisSharing = false
     @State private var selectedProject: TeamCollaborationManager.CollaborationProject?
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
@@ -290,13 +295,13 @@ struct CollaborationTab: View {
                     Image(systemName: "circle.fill")
                         .foregroundColor(collaborationManager.connectionStatus.color)
                         .font(.caption)
-                    
+
                     Text(collaborationManager.connectionStatus.displayName)
                         .font(.subheadline)
                         .foregroundColor(collaborationManager.connectionStatus.color)
-                    
+
                     Spacer()
-                    
+
                     if !collaborationManager.isConnected {
                         Button("Connect") {
                             Task {
@@ -310,7 +315,7 @@ struct CollaborationTab: View {
                 .background(Color(.controlBackgroundColor))
                 .cornerRadius(12)
                 .padding(.horizontal)
-                
+
                 // Quick Actions
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 12) {
                     ActionCard(
@@ -319,7 +324,7 @@ struct CollaborationTab: View {
                         color: .blue,
                         action: { showingProjectCreator = true }
                     )
-                    
+
                     ActionCard(
                         title: "Share Analysis",
                         icon: "square.and.arrow.up",
@@ -328,13 +333,13 @@ struct CollaborationTab: View {
                     )
                 }
                 .padding(.horizontal)
-                
+
                 // Recent Projects
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Recent Projects")
                         .font(.headline)
                         .padding(.horizontal)
-                    
+
                     if collaborationManager.collaborationProjects.isEmpty {
                         Text("No projects yet")
                             .foregroundColor(.secondary)
@@ -352,13 +357,13 @@ struct CollaborationTab: View {
                         .padding(.horizontal)
                     }
                 }
-                
+
                 // Recent Activity
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Recent Activity")
                         .font(.headline)
                         .padding(.horizontal)
-                    
+
                     LazyVStack(spacing: 8) {
                         ForEach(Array(collaborationManager.notifications.prefix(5))) { notification in
                             ActivityRow(notification: notification)
@@ -387,7 +392,7 @@ struct TeamManagementTab: View {
     @State private var showingMemberInvite = false
     @State private var newMemberEmail = ""
     @State private var newMemberRole: TeamCollaborationManager.TeamMember.Role = .developer
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
@@ -396,37 +401,37 @@ struct TeamManagementTab: View {
                     HStack {
                         Text("Team Overview")
                             .font(.headline)
-                        
+
                         Spacer()
-                        
+
                         Button("Invite Member") {
                             showingMemberInvite = true
                         }
                         .font(.caption)
                     }
-                    
+
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 12) {
                         MetricCard(
                             title: "Total Members",
                             value: "\(collaborationManager.teamMembers.count)",
                             color: .blue
                         )
-                        
+
                         MetricCard(
                             title: "Online Now",
-                            value: "\(collaborationManager.teamMembers.filter { $0.isOnline }.count)",
+                            value: "\(collaborationManager.teamMembers.count(where: { $0.isOnline }))",
                             color: .green
                         )
                     }
                 }
                 .padding(.horizontal)
-                
+
                 // Team Members
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Team Members")
                         .font(.headline)
                         .padding(.horizontal)
-                    
+
                     LazyVStack(spacing: 8) {
                         ForEach(collaborationManager.teamMembers) { member in
                             TeamMemberRow(
@@ -442,29 +447,29 @@ struct TeamManagementTab: View {
                     }
                     .padding(.horizontal)
                 }
-                
+
                 // Role Distribution
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Role Distribution")
                         .font(.headline)
                         .padding(.horizontal)
-                    
+
                     let roleDistribution = Dictionary(grouping: collaborationManager.teamMembers, by: { $0.role })
-                    
+
                     VStack(spacing: 8) {
                         ForEach(TeamCollaborationManager.TeamMember.Role.allCases, id: \.self) { role in
                             let count = roleDistribution[role]?.count ?? 0
-                            
+
                             HStack {
                                 Text(role.rawValue)
                                     .font(.subheadline)
-                                
+
                                 Spacer()
-                                
+
                                 Text("\(count)")
                                     .font(.subheadline)
                                     .fontWeight(.semibold)
-                                
+
                                 Rectangle()
                                     .fill(role.color)
                                     .frame(width: CGFloat(count * 20), height: 8)
@@ -485,7 +490,7 @@ struct TeamManagementTab: View {
                     Section("Member Details") {
                         TextField("Email Address", text: $newMemberEmail)
                             .textContentType(.emailAddress)
-                        
+
                         Picker("Role", selection: $newMemberRole) {
                             ForEach(TeamCollaborationManager.TeamMember.Role.allCases, id: \.self) { role in
                                 Text(role.rawValue)
@@ -494,7 +499,7 @@ struct TeamManagementTab: View {
                             }
                         }
                     }
-                    
+
                     Section("Permissions") {
                         ForEach(newMemberRole.permissions, id: \.self) { permission in
                             HStack {
@@ -513,7 +518,7 @@ struct TeamManagementTab: View {
                             newMemberEmail = ""
                         }
                     }
-                    
+
                     ToolbarItem(placement: .primaryAction) {
                         Button("Invite") {
                             _ = collaborationManager.inviteTeamMember(email: newMemberEmail, role: newMemberRole)
@@ -533,13 +538,13 @@ struct TeamManagementTab: View {
 struct NotificationsTab: View {
     @ObservedObject var collaborationManager: TeamCollaborationManager
     @State private var selectedFilter: NotificationFilter = .all
-    
+
     enum NotificationFilter: String, CaseIterable {
         case all = "All"
         case unread = "Unread"
         case actionRequired = "Action Required"
     }
-    
+
     var body: some View {
         VStack(spacing: 0) {
             // Filter Controls
@@ -550,16 +555,16 @@ struct NotificationsTab: View {
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
-                
+
                 Spacer()
-                
+
                 Menu {
                     Button("Mark All as Read") {
                         for notification in collaborationManager.notifications where !notification.isRead {
                             collaborationManager.markNotificationAsRead(id: notification.id)
                         }
                     }
-                    
+
                     Button("Clear All", role: .destructive) {
                         collaborationManager.clearAllNotifications()
                     }
@@ -568,18 +573,18 @@ struct NotificationsTab: View {
                 }
             }
             .padding()
-            
+
             // Notifications List
             if filteredNotifications().isEmpty {
                 VStack(spacing: 16) {
                     Image(systemName: "bell.slash")
                         .font(.largeTitle)
                         .foregroundColor(.secondary)
-                    
+
                     Text("No Notifications")
                         .font(.headline)
                         .foregroundColor(.secondary)
-                    
+
                     Text("You're all caught up!")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
@@ -599,16 +604,16 @@ struct NotificationsTab: View {
             }
         }
     }
-    
+
     /// Performs operation with error handling and validation
     private func filteredNotifications() -> [TeamCollaborationManager.CollaborationNotification] {
         switch selectedFilter {
         case .all:
-            return collaborationManager.notifications
+            collaborationManager.notifications
         case .unread:
-            return collaborationManager.notifications.filter { !$0.isRead }
+            collaborationManager.notifications.filter { !$0.isRead }
         case .actionRequired:
-            return collaborationManager.notifications.filter { $0.actionRequired }
+            collaborationManager.notifications.filter(\.actionRequired)
         }
     }
 }
@@ -618,16 +623,16 @@ struct NotificationsTab: View {
 struct QuickExportCard: View {
     let template: EnterpriseDataExporter.ExportTemplate
     let onExport: () -> Void
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: template.format.icon)
                     .foregroundColor(.blue)
                     .font(.title2)
-                
+
                 Spacer()
-                
+
                 Text(template.format.rawValue)
                     .font(.caption)
                     .padding(.horizontal, 8)
@@ -636,17 +641,17 @@ struct QuickExportCard: View {
                     .foregroundColor(.blue)
                     .cornerRadius(8)
             }
-            
+
             Text(template.name)
                 .font(.subheadline)
                 .fontWeight(.medium)
                 .lineLimit(1)
-            
+
             Text(template.description)
                 .font(.caption)
                 .foregroundColor(.secondary)
                 .lineLimit(2)
-            
+
             Button("Export") {
                 onExport()
             }
@@ -664,24 +669,24 @@ struct ExportTemplateRow: View {
     let template: EnterpriseDataExporter.ExportTemplate
     let onExport: () -> Void
     let onDelete: (() -> Void)?
-    
+
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: template.format.icon)
                 .foregroundColor(.blue)
                 .font(.title3)
                 .frame(width: 24)
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(template.name)
                     .font(.subheadline)
                     .fontWeight(.medium)
-                
+
                 Text(template.description)
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .lineLimit(1)
-                
+
                 HStack(spacing: 8) {
                     Text(template.format.rawValue)
                         .font(.caption2)
@@ -690,11 +695,11 @@ struct ExportTemplateRow: View {
                         .background(.blue.opacity(0.2))
                         .foregroundColor(.blue)
                         .cornerRadius(4)
-                    
+
                     Text("\(template.dataTypes.count) data types")
                         .font(.caption2)
                         .foregroundColor(.secondary)
-                    
+
                     if template.isDefault {
                         Text("Default")
                             .font(.caption2)
@@ -706,15 +711,15 @@ struct ExportTemplateRow: View {
                     }
                 }
             }
-            
+
             Spacer()
-            
+
             Menu {
                 Button("Export") {
                     onExport()
                 }
-                
-                if let onDelete = onDelete {
+
+                if let onDelete {
                     Button("Delete", role: .destructive) {
                         onDelete()
                     }
@@ -729,48 +734,48 @@ struct ExportTemplateRow: View {
 
 struct ExportHistoryRow: View {
     let record: EnterpriseDataExporter.ExportRecord
-    
+
     var body: some View {
         HStack(spacing: 12) {
             Circle()
                 .fill(record.success ? .green : .red)
                 .frame(width: 8, height: 8)
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(record.templateName)
                     .font(.subheadline)
                     .fontWeight(.medium)
-                
+
                 HStack(spacing: 8) {
                     Text(record.format.rawValue)
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     Text("•")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     Text(record.formattedFileSize)
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     Text("•")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     Text("\(record.recordCount) records")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
-            
+
             Spacer()
-            
+
             VStack(alignment: .trailing, spacing: 2) {
                 Text(record.exportedAt, format: .dateTime.hour().minute())
                     .font(.caption)
                     .foregroundColor(.secondary)
-                
+
                 Text(record.formattedDuration)
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -785,14 +790,14 @@ struct ActionCard: View {
     let icon: String
     let color: Color
     let action: () -> Void
-    
+
     var body: some View {
         Button(action: action) {
             VStack(spacing: 8) {
                 Image(systemName: icon)
                     .font(.title2)
                     .foregroundColor(color)
-                
+
                 Text(title)
                     .font(.subheadline)
                     .fontWeight(.medium)
@@ -810,50 +815,50 @@ struct ActionCard: View {
 struct ProjectRow: View {
     let project: TeamCollaborationManager.CollaborationProject
     let onSelect: () -> Void
-    
+
     var body: some View {
         Button(action: onSelect) {
             HStack(spacing: 12) {
                 Image(systemName: project.isPublic ? "globe" : "lock")
                     .foregroundColor(project.isPublic ? .green : .gray)
                     .font(.title3)
-                
+
                 VStack(alignment: .leading, spacing: 2) {
                     Text(project.name)
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor(.primary)
-                    
+
                     Text(project.description)
                         .font(.caption)
                         .foregroundColor(.secondary)
                         .lineLimit(1)
-                    
+
                     HStack(spacing: 8) {
                         Text("\(project.members.count) members")
                             .font(.caption2)
                             .foregroundColor(.secondary)
-                        
+
                         Text("•")
                             .font(.caption2)
                             .foregroundColor(.secondary)
-                        
+
                         Text("\(project.sharedAnalyses.count) analyses")
                             .font(.caption2)
                             .foregroundColor(.secondary)
-                        
+
                         Text("•")
                             .font(.caption2)
                             .foregroundColor(.secondary)
-                        
+
                         Text("Updated \(project.updatedAt, format: .relative(presentation: .named))")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }
                 }
-                
+
                 Spacer()
-                
+
                 Image(systemName: "chevron.right")
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -866,27 +871,27 @@ struct ProjectRow: View {
 
 struct ActivityRow: View {
     let notification: TeamCollaborationManager.CollaborationNotification
-    
+
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: notification.type.icon)
                 .foregroundColor(notification.type.color)
                 .font(.title3)
                 .frame(width: 24)
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(notification.title)
                     .font(.subheadline)
                     .fontWeight(.medium)
-                
+
                 Text(notification.message)
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .lineLimit(2)
             }
-            
+
             Spacer()
-            
+
             Text(notification.createdAt, format: .relative(presentation: .numeric))
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -899,22 +904,22 @@ struct TeamMemberRow: View {
     let member: TeamCollaborationManager.TeamMember
     let onRoleChange: (TeamCollaborationManager.TeamMember.Role) -> Void
     let onRemove: () -> Void
-    
+
     var body: some View {
         HStack(spacing: 12) {
             Circle()
                 .fill(member.isOnline ? .green : .gray)
                 .frame(width: 12, height: 12)
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(member.name)
                     .font(.subheadline)
                     .fontWeight(.medium)
-                
+
                 Text(member.email)
                     .font(.caption)
                     .foregroundColor(.secondary)
-                
+
                 HStack(spacing: 8) {
                     Text(member.role.rawValue)
                         .font(.caption2)
@@ -923,7 +928,7 @@ struct TeamMemberRow: View {
                         .background(member.role.color.opacity(0.2))
                         .foregroundColor(member.role.color)
                         .cornerRadius(4)
-                    
+
                     if member.isOnline {
                         Text("Online")
                             .font(.caption2)
@@ -935,9 +940,9 @@ struct TeamMemberRow: View {
                     }
                 }
             }
-            
+
             Spacer()
-            
+
             Menu {
                 ForEach(TeamCollaborationManager.TeamMember.Role.allCases, id: \.self) { role in
                     Button(role.rawValue) {
@@ -945,9 +950,9 @@ struct TeamMemberRow: View {
                     }
                     .disabled(role == member.role)
                 }
-                
+
                 Divider()
-                
+
                 Button("Remove", role: .destructive) {
                     onRemove()
                 }
@@ -962,39 +967,39 @@ struct TeamMemberRow: View {
 struct NotificationRow: View {
     let notification: TeamCollaborationManager.CollaborationNotification
     let onMarkAsRead: () -> Void
-    
+
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: notification.type.icon)
                 .foregroundColor(notification.type.color)
                 .font(.title3)
                 .frame(width: 24)
-            
+
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Text(notification.title)
                         .font(.subheadline)
                         .fontWeight(.medium)
-                    
+
                     if !notification.isRead {
                         Circle()
                             .fill(.blue)
                             .frame(width: 6, height: 6)
                     }
-                    
+
                     Spacer()
                 }
-                
+
                 Text(notification.message)
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .lineLimit(3)
-                
+
                 Text(notification.createdAt, format: .relative(presentation: .named))
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
-            
+
             if !notification.isRead {
                 Button("Mark Read") {
                     onMarkAsRead()
@@ -1013,7 +1018,7 @@ struct NotificationRow: View {
 struct ExportTemplateCreator: View {
     @ObservedObject var dataExporter: EnterpriseDataExporter
     @Environment(\.dismiss) private var dismiss
-    
+
     var body: some View {
         NavigationView {
             Text("Export Template Creator")
@@ -1035,7 +1040,7 @@ struct ExportConfigurationView: View {
     @Binding var configuration: EnterpriseDataExporter.ExportConfiguration
     let onExport: (EnterpriseDataExporter.ExportConfiguration) -> Void
     @Environment(\.dismiss) private var dismiss
-    
+
     var body: some View {
         NavigationView {
             Text("Export Configuration")
@@ -1058,7 +1063,7 @@ struct ExportConfigurationView: View {
 struct ProjectCreatorView: View {
     @ObservedObject var collaborationManager: TeamCollaborationManager
     @Environment(\.dismiss) private var dismiss
-    
+
     var body: some View {
         NavigationView {
             Text("Project Creator")
@@ -1078,7 +1083,7 @@ struct ProjectCreatorView: View {
 struct AnalysisSharingView: View {
     @ObservedObject var collaborationManager: TeamCollaborationManager
     @Environment(\.dismiss) private var dismiss
-    
+
     var body: some View {
         NavigationView {
             Text("Analysis Sharing")
@@ -1099,7 +1104,7 @@ struct ProjectDetailView: View {
     let project: TeamCollaborationManager.CollaborationProject
     @ObservedObject var collaborationManager: TeamCollaborationManager
     @Environment(\.dismiss) private var dismiss
-    
+
     var body: some View {
         NavigationView {
             VStack {

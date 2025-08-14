@@ -1,9 +1,10 @@
 
-import XCTest
 @testable import CodingReviewer
+import XCTest
 
 class ArchitectureTests: XCTestCase {
-
+    /// <#Description#>
+    /// - Returns: <#description#>
     func testNoSwiftUIImportsInDataModels() throws {
         let sharedTypesPath = "/Users/danielstevens/Desktop/CodingReviewer/CodingReviewer/SharedTypes"
         let fileManager = FileManager.default
@@ -13,7 +14,10 @@ class ArchitectureTests: XCTestCase {
             if element.hasSuffix(".swift") {
                 let filePath = sharedTypesPath + "/" + element
                 let content = try String(contentsOfFile: filePath)
-                XCTAssertFalse(content.contains("import SwiftUI"), "File \(element) in SharedTypes should not import SwiftUI")
+                XCTAssertFalse(
+                    content.contains("import SwiftUI"),
+                    "File \(element) in SharedTypes should not import SwiftUI"
+                )
             }
         }
     }

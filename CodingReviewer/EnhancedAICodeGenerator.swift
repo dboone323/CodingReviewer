@@ -1,8 +1,10 @@
 import Foundation
-import OSLog
 import Combine
+import OSLog
+// Removed XCTest import - not needed for main app code
 
 // MARK: - Enhanced AI Code Generator
+
 // Learns patterns from codebase and generates intelligent code suggestions
 
 @MainActor
@@ -13,22 +15,24 @@ class EnhancedAICodeGenerator: ObservableObject {
     private let learningCoordinator = AILearningCoordinator.shared
 
     // MARK: - Published Properties
+
     @Published var isGenerating: Bool = false
     @Published var generationProgress: Double = 0.0
     @Published var suggestionsCount: Int = 0
     @Published var generatedLines: Int = 0
 
     // MARK: - AI Models
+
     private var patternLibrary: PatternLibrary
     private var contextAnalyzer: ContextAnalyzer
     private var codeTemplate: CodeTemplateEngine
     private var qualityAssessment: QualityAssessmentEngine
 
     private init() {
-        self.patternLibrary = PatternLibrary()
-        self.contextAnalyzer = ContextAnalyzer()
-        self.codeTemplate = CodeTemplateEngine()
-        self.qualityAssessment = QualityAssessmentEngine()
+        patternLibrary = PatternLibrary()
+        contextAnalyzer = ContextAnalyzer()
+        codeTemplate = CodeTemplateEngine()
+        qualityAssessment = QualityAssessmentEngine()
 
         Task {
             await initializeGenerator()
@@ -38,6 +42,8 @@ class EnhancedAICodeGenerator: ObservableObject {
     // MARK: - Public Interface
 
     /// Creates and configures components with proper initialization
+            /// Function description
+            /// - Returns: Return value description
     func generateCode(for request: CodeGenerationRequest) async -> CodeGenerationResult {
         isGenerating = true
         generationProgress = 0.0
@@ -53,38 +59,40 @@ class EnhancedAICodeGenerator: ObservableObject {
         let patterns = await patternLibrary.selectPatterns(for: context)
 
         // Phase 3: Generate code
-            generationProgress = 0.6
-            let generatedCode = await codeTemplate.generateCode(using: patterns, context: context)
+        generationProgress = 0.6
+        let generatedCode = await codeTemplate.generateCode(using: patterns, context: context)
 
-            // Phase 4: Assess and refine quality
-            generationProgress = 0.8
-            let refinedCode = await qualityAssessment.refineCode(generatedCode, context: context)
+        // Phase 4: Assess and refine quality
+        generationProgress = 0.8
+        let refinedCode = await qualityAssessment.refineCode(generatedCode, context: context)
 
-            // Phase 5: Learn from generation
-            generationProgress = 1.0
-            await recordGenerationSuccess(request: request, result: refinedCode)
+        // Phase 5: Learn from generation
+        generationProgress = 1.0
+        await recordGenerationSuccess(request: request, result: refinedCode)
 
-            let result = CodeGenerationResult(
-                success: true,
-                generatedCode: refinedCode,
-                confidence: calculateConfidence(for: refinedCode, patterns: patterns),
-                suggestions: generateImprovementSuggestionsFor(refinedCode),
-                metadata: GenerationMetadata(
-                    patternsUsed: patterns.count,
-                    linesGenerated: refinedCode.components(separatedBy: .newlines).count,
-                    generationTime: 0.5 // Would be actual timing
-                )
+        let result = CodeGenerationResult(
+            success: true,
+            generatedCode: refinedCode,
+            confidence: calculateConfidence(for: refinedCode, patterns: patterns),
+            suggestions: generateImprovementSuggestionsFor(refinedCode),
+            metadata: GenerationMetadata(
+                patternsUsed: patterns.count,
+                linesGenerated: refinedCode.components(separatedBy: .newlines).count,
+                generationTime: 0.5 // Would be actual timing
             )
+        )
 
-            generatedLines += result.metadata.linesGenerated
-            suggestionsCount += result.suggestions.count
+        generatedLines += result.metadata.linesGenerated
+        suggestionsCount += result.suggestions.count
 
-            isGenerating = false
-            return result
+        isGenerating = false
+        return result
     }
 
     /// Creates and configures components with proper initialization
-    func generateFunction(name: String, parameters: [Parameter], returnType: String?, context: GenerationContext) async -> String {
+    func generateFunction(name: String, parameters: [Parameter], returnType: String?,
+                          context: GenerationContext) async -> String
+    {
         let request = CodeGenerationRequest(
             type: .function(name: name, parameters: parameters, returnType: returnType),
             context: context,
@@ -96,7 +104,9 @@ class EnhancedAICodeGenerator: ObservableObject {
     }
 
     /// Creates and configures components with proper initialization
-    func generateClass(name: String, superclass: String?, protocols: [String], context: GenerationContext) async -> String {
+    func generateClass(name: String, superclass: String?, protocols: [String],
+                       context: GenerationContext) async -> String
+    {
         let request = CodeGenerationRequest(
             type: .class(name: name, superclass: superclass, protocols: protocols),
             context: context,
@@ -108,6 +118,8 @@ class EnhancedAICodeGenerator: ObservableObject {
     }
 
     /// Creates and configures components with proper initialization
+            /// Function description
+            /// - Returns: Return value description
     func generateSwiftUIView(name: String, properties: [Property], context: GenerationContext) async -> String {
         let request = CodeGenerationRequest(
             type: .swiftUIView(name: name, properties: properties),
@@ -120,6 +132,8 @@ class EnhancedAICodeGenerator: ObservableObject {
     }
 
     /// Creates and configures components with proper initialization
+            /// Function description
+            /// - Returns: Return value description
     func generateTests(for targetClass: String, methods: [String], context: GenerationContext) async -> String {
         let request = CodeGenerationRequest(
             type: .testClass(targetClass: targetClass, methods: methods),
@@ -132,8 +146,10 @@ class EnhancedAICodeGenerator: ObservableObject {
     }
 
     /// Performs operation with error handling and validation
+            /// Function description
+            /// - Returns: Return value description
     func suggestImprovements(for code: String, filePath: String) async -> [CodeImprovement] {
-                let context = GenerationContext(
+        let context = GenerationContext(
             filePath: filePath,
             projectType: .swiftUI,
             targetVersion: .swift5,
@@ -145,6 +161,8 @@ class EnhancedAICodeGenerator: ObservableObject {
     }
 
     /// Creates and configures components with proper initialization
+            /// Function description
+            /// - Returns: Return value description
     func generateDocumentation(for code: String, style: DocumentationStyle) async -> String {
         let request = CodeGenerationRequest(
             type: .documentation(code: code, style: style),
@@ -201,7 +219,7 @@ class EnhancedAICodeGenerator: ObservableObject {
 
         for (index, line) in lines.enumerated() {
             // Suggest improvements based on patterns
-            if line.contains("var ") && !line.contains("@") {
+            if line.contains("var "), !line.contains("@") {
                 suggestions.append(ImprovementSuggestion(
                     type: .variableImmutability,
                     lineNumber: index + 1,
@@ -219,7 +237,7 @@ class EnhancedAICodeGenerator: ObservableObject {
                 ))
             }
 
-            if !line.contains("//") && line.count > 120 {
+            if !line.contains("//"), line.count > 120 {
                 suggestions.append(ImprovementSuggestion(
                     type: .lineLength,
                     lineNumber: index + 1,
@@ -245,12 +263,16 @@ class PatternLibrary {
     private var patterns: [String: GenerationPattern] = [:]
 
     /// Retrieves data with proper error handling and caching
+            /// Function description
+            /// - Returns: Return value description
     func loadPatterns() async {
         // Load patterns from codebase analysis
         patterns = await loadSwiftPatterns()
     }
 
     /// Performs operation with error handling and validation
+            /// Function description
+            /// - Returns: Return value description
     func selectPatterns(for context: GenerationContext) async -> [GenerationPattern] {
         var selectedPatterns: [GenerationPattern] = []
 
@@ -300,6 +322,7 @@ class PatternLibrary {
             name: "Async Function",
             template: """
             /// Performs operation with error handling and validation
+            /// - Returns: Return value description
             func {name}({parameters}) async throws -> {return_type} {
                 {implementation}
             }
@@ -315,7 +338,6 @@ class PatternLibrary {
             id: "test_class",
             name: "XCTest Class",
             template: """
-            import XCTest
             @testable import {module_name}
 
             final class {name}Tests: XCTestCase {
@@ -345,17 +367,17 @@ class PatternLibrary {
 
     /// Retrieves data with proper error handling and caching
     private func getSwiftUIPatterns() -> [GenerationPattern] {
-        return patterns.values.filter { $0.requirements.contains(.swiftUI) }
+        patterns.values.filter { $0.requirements.contains(.swiftUI) }
     }
 
     /// Retrieves data with proper error handling and caching
     private func getUIKitPatterns() -> [GenerationPattern] {
-        return patterns.values.filter { $0.requirements.contains(.uiKit) }
+        patterns.values.filter { $0.requirements.contains(.uiKit) }
     }
 
     /// Retrieves data with proper error handling and caching
     private func getCommandLinePatterns() -> [GenerationPattern] {
-        return patterns.values.filter { $0.requirements.contains(.commandLine) }
+        patterns.values.filter { $0.requirements.contains(.commandLine) }
     }
 }
 
@@ -363,10 +385,14 @@ class PatternLibrary {
 
 class ContextAnalyzer {
     /// Performs operation with error handling and validation
+            /// Function description
+            /// - Returns: Return value description
     func initialize() async {
         // Initialize context analysis
     }
 
+            /// Function description
+            /// - Returns: Return value description
     func analyzeContext(_ request: CodeGenerationRequest) async -> GenerationContext {
         var context = request.context
 
@@ -390,10 +416,14 @@ class ContextAnalyzer {
 // MARK: - Code Template Engine
 
 class CodeTemplateEngine {
+            /// Function description
+            /// - Returns: Return value description
     func initialize() async {
         // Initialize template engine
     }
 
+            /// Function description
+            /// - Returns: Return value description
     func generateCode(using patterns: [GenerationPattern], context: GenerationContext) async -> String {
         guard let primaryPattern = patterns.first else {
             return "// No suitable pattern found"
@@ -412,7 +442,7 @@ class CodeTemplateEngine {
         return generatedCode
     }
 
-    private func replacePlaceholders(in template: String, context: GenerationContext) -> String {
+    private func replacePlaceholders(in template: String, context _: GenerationContext) -> String {
         var result = template
 
         // Replace common placeholders
@@ -422,19 +452,25 @@ class CodeTemplateEngine {
         return result
     }
 
-    private func enhanceWithPattern(_ code: String, pattern: GenerationPattern, context: GenerationContext) -> String {
+    private func enhanceWithPattern(_ code: String, pattern _: GenerationPattern,
+                                    context _: GenerationContext) -> String
+    {
         // Apply pattern enhancements
-        return code
+        code
     }
 }
 
 // MARK: - Quality Assessment Engine
 
 class QualityAssessmentEngine {
+            /// Function description
+            /// - Returns: Return value description
     func initialize() async {
         // Initialize quality assessment
     }
 
+            /// Function description
+            /// - Returns: Return value description
     func refineCode(_ code: String, context: GenerationContext) async -> String {
         var refinedCode = code
 
@@ -447,7 +483,9 @@ class QualityAssessmentEngine {
         return refinedCode
     }
 
-    func analyzeAndSuggest(code: String, context: GenerationContext) async -> [CodeImprovement] {
+            /// Function description
+            /// - Returns: Return value description
+    func analyzeAndSuggest(code: String, context _: GenerationContext) async -> [CodeImprovement] {
         var improvements: [CodeImprovement] = []
 
         let lines = code.components(separatedBy: .newlines)
@@ -501,25 +539,25 @@ class QualityAssessmentEngine {
 
     private func addDocumentation(_ code: String) -> String {
         // Add basic documentation comments
-        return code
+        code
     }
 
     private func ensureSwift6Compliance(_ code: String) -> String {
         var compliantCode = code
 
         // Add @MainActor where needed
-        if code.contains("@Published") && !code.contains("@MainActor") {
+        if code.contains("@Published"), !code.contains("@MainActor") {
             compliantCode = "@MainActor\n" + compliantCode
         }
 
         return compliantCode
     }
 
-    private func analyzeLineForImprovements(_ line: String, lineNumber: Int) -> [CodeImprovement] {
+    private func analyzeLineForImprovements(_ line: String, lineNumber _: Int) -> [CodeImprovement] {
         var improvements: [CodeImprovement] = []
 
         // Check for force unwrapping
-        if line.contains("!") && !line.contains("//") {
+        if line.contains("!"), !line.contains("//") {
             improvements.append(CodeImprovement(
                 type: "forceUnwrapping",
                 description: "Consider using safe unwrapping instead of force unwrapping",
@@ -529,7 +567,7 @@ class QualityAssessmentEngine {
         }
 
         // Check for var that could be let
-        if line.contains("var ") && !line.contains("@") {
+        if line.contains("var "), !line.contains("@") {
             improvements.append(CodeImprovement(
                 type: "variableImmutability",
                 description: "Consider using 'let' if this variable is not mutated",
@@ -552,15 +590,15 @@ struct CodeGenerationRequest {
     var description: String {
         switch type {
         case .function(let name, _, _):
-            return "Function: \(name)"
+            "Function: \(name)"
         case .class(let name, _, _):
-            return "Class: \(name)"
+            "Class: \(name)"
         case .swiftUIView(let name, _):
-            return "SwiftUI View: \(name)"
+            "SwiftUI View: \(name)"
         case .testClass(let targetClass, _):
-            return "Test Class for: \(targetClass)"
+            "Test Class for: \(targetClass)"
         case .documentation(_, let style):
-            return "Documentation: \(style)"
+            "Documentation: \(style)"
         }
     }
 }
@@ -640,9 +678,9 @@ extension GenerationType: Equatable {
         switch (lhs, rhs) {
         case (.function, .function), (.class, .class), (.swiftUIView, .swiftUIView),
              (.testClass, .testClass), (.documentation, .documentation):
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 }
@@ -655,7 +693,14 @@ struct CodeGenerationResult {
     let metadata: GenerationMetadata
     let error: Error?
 
-    init(success: Bool, generatedCode: String, confidence: Double, suggestions: [ImprovementSuggestion], metadata: GenerationMetadata, error: Error? = nil) {
+    init(
+        success: Bool,
+        generatedCode: String,
+        confidence: Double,
+        suggestions: [ImprovementSuggestion],
+        metadata: GenerationMetadata,
+        error: Error? = nil
+    ) {
         self.success = success
         self.generatedCode = generatedCode
         self.confidence = confidence
@@ -691,7 +736,9 @@ struct ImprovementSuggestion {
 // MARK: - Extensions
 
 extension AILearningCoordinator {
-    func recordGenerationSuccess(_ request: CodeGenerationRequest, _ result: String) async {
+            /// Function description
+            /// - Returns: Return value description
+    func recordGenerationSuccess(_: CodeGenerationRequest, _: String) async {
         // Record successful generation for learning
         os_log("Recording successful code generation", log: OSLog(subsystem: "CodingReviewer", category: "AILearning"))
         // Implementation would store generation patterns for future learning

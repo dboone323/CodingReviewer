@@ -1,12 +1,12 @@
+import Foundation
+import SwiftUI
+
 //
 //  BackgroundProcessingDashboard.swift
 //  CodingReviewer
 //
 //  Created by Phase 4 Enterprise Features on 8/5/25.
 //
-
-import SwiftUI
-import Foundation
 
 // Note: ProcessingJob and related types are defined in BackgroundProcessingTypes.swift
 
@@ -18,23 +18,23 @@ struct BackgroundProcessingDashboard: View {
     @State private var showingJobCreator = false
     @State private var showingSettings = false
     @State private var refreshTimer: Timer?
-    
+
     enum DashboardTab: String, CaseIterable {
         case overview = "Overview"
         case activeJobs = "Active Jobs"
         case history = "History"
         case monitoring = "Monitoring"
-        
+
         var icon: String {
             switch self {
-            case .overview: return "chart.bar.fill"
-            case .activeJobs: return "play.circle.fill"
-            case .history: return "clock.fill"
-            case .monitoring: return "gauge"
+            case .overview: "chart.bar.fill"
+            case .activeJobs: "play.circle.fill"
+            case .history: "clock.fill"
+            case .monitoring: "gauge"
             }
         }
     }
-    
+
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -46,18 +46,18 @@ struct BackgroundProcessingDashboard: View {
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding()
-                
+
                 // Content
                 TabView(selection: $selectedTab) {
                     OverviewTab(processingSystem: processingSystem)
                         .tag(DashboardTab.overview)
-                    
+
                     ActiveJobsTab(processingSystem: processingSystem)
                         .tag(DashboardTab.activeJobs)
-                    
+
                     HistoryTab(processingSystem: processingSystem)
                         .tag(DashboardTab.history)
-                    
+
                     MonitoringTab(processingSystem: processingSystem)
                         .tag(DashboardTab.monitoring)
                 }
@@ -70,24 +70,24 @@ struct BackgroundProcessingDashboard: View {
                         Button("Create Job") {
                             showingJobCreator = true
                         }
-                        
+
                         Button("Batch Jobs") {
                             processingSystem.addBatchJobs(count: 5, type: .codeAnalysis)
                         }
-                        
+
                         Divider()
-                        
+
                         Button(processingSystem.isProcessingEnabled ? "Pause Processing" : "Resume Processing") {
                             processingSystem.toggleProcessing()
                         }
-                        
+
                         Button("Settings") {
                             showingSettings = true
                         }
                     } label: {
                         Image(systemName: "plus.circle")
                     }
-                    
+
                     Button(action: {
                         // Manual refresh trigger
                     }) {
@@ -109,14 +109,14 @@ struct BackgroundProcessingDashboard: View {
             stopAutoRefresh()
         }
     }
-    
+
     /// Initiates process with proper setup and monitoring
     private func startAutoRefresh() {
         refreshTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             // Auto-refresh trigger - the system already updates itself
         }
     }
-    
+
     /// Completes process and performs cleanup
     private func stopAutoRefresh() {
         refreshTimer?.invalidate()
@@ -128,7 +128,7 @@ struct BackgroundProcessingDashboard: View {
 
 struct OverviewTab: View {
     @ObservedObject var processingSystem: BackgroundProcessingSystem
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
@@ -136,7 +136,7 @@ struct OverviewTab: View {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("System Status")
                         .font(.headline)
-                    
+
                     HStack(spacing: 16) {
                         StatusCard(
                             title: "Processing",
@@ -144,7 +144,7 @@ struct OverviewTab: View {
                             color: processingSystem.isProcessingEnabled ? .green : .red,
                             icon: processingSystem.isProcessingEnabled ? "play.fill" : "pause.fill"
                         )
-                        
+
                         StatusCard(
                             title: "System Load",
                             value: processingSystem.systemLoad.loadLevel.rawValue,
@@ -153,7 +153,7 @@ struct OverviewTab: View {
                         )
                     }
                 }
-                
+
                 // Job Statistics
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 16) {
                     ProcessingMetricCard(
@@ -162,21 +162,21 @@ struct OverviewTab: View {
                         icon: "play.circle",
                         color: .blue
                     )
-                    
+
                     ProcessingMetricCard(
                         title: "Completed",
                         value: "\(processingSystem.completedJobs.count)",
                         icon: "checkmark.circle",
                         color: .green
                     )
-                    
+
                     ProcessingMetricCard(
                         title: "Failed",
                         value: "\(processingSystem.failedJobs.count)",
                         icon: "xmark.circle",
                         color: .red
                     )
-                    
+
                     ProcessingMetricCard(
                         title: "Queue Length",
                         value: "\(processingSystem.systemLoad.queueLength)",
@@ -184,31 +184,31 @@ struct OverviewTab: View {
                         color: .orange
                     )
                 }
-                
+
                 // Performance Metrics
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Performance Metrics")
                         .font(.headline)
-                    
+
                     VStack(spacing: 8) {
                         ProgressMetric(
                             title: "CPU Usage",
                             value: processingSystem.systemLoad.cpuUsage,
                             color: .blue
                         )
-                        
+
                         ProgressMetric(
                             title: "Memory Usage",
                             value: processingSystem.systemLoad.memoryUsage,
                             color: .green
                         )
-                        
+
                         HStack {
                             Text("Average Job Duration")
                                 .font(.subheadline)
-                            
+
                             Spacer()
-                            
+
                             Text(formatDuration(processingSystem.systemLoad.averageJobDuration))
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
@@ -218,26 +218,26 @@ struct OverviewTab: View {
                     .background(Color(.controlBackgroundColor))
                     .cornerRadius(12)
                 }
-                
+
                 // Recent Activity Preview
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
                         Text("Recent Activity")
                             .font(.headline)
-                        
+
                         Spacer()
-                        
+
                         Text("View All")
                             .font(.caption)
                             .foregroundColor(.blue)
                     }
-                    
+
                     VStack(spacing: 8) {
                         ForEach(Array(processingSystem.completedJobs.prefix(3))) { job in
                             JobSummaryRow(job: job)
                         }
-                        
-                        if processingSystem.completedJobs.isEmpty && processingSystem.activeJobs.isEmpty {
+
+                        if processingSystem.completedJobs.isEmpty, processingSystem.activeJobs.isEmpty {
                             Text("No recent activity")
                                 .foregroundColor(.secondary)
                                 .frame(maxWidth: .infinity)
@@ -252,13 +252,13 @@ struct OverviewTab: View {
             .padding()
         }
     }
-    
+
     /// Formats and displays data with proper styling
     private func formatDuration(_ duration: TimeInterval) -> String {
         if duration < 60 {
-            return String(format: "%.1fs", duration)
+            String(format: "%.1fs", duration)
         } else {
-            return String(format: "%.1fm", duration / 60)
+            String(format: "%.1fm", duration / 60)
         }
     }
 }
@@ -268,14 +268,14 @@ struct OverviewTab: View {
 struct ActiveJobsTab: View {
     @ObservedObject var processingSystem: BackgroundProcessingSystem
     @State private var sortBy: SortOption = .priority
-    
+
     enum SortOption: String, CaseIterable {
         case priority = "Priority"
         case created = "Created"
         case type = "Type"
         case status = "Status"
     }
-    
+
     var body: some View {
         VStack(spacing: 0) {
             // Controls
@@ -286,26 +286,26 @@ struct ActiveJobsTab: View {
                     }
                 }
                 .pickerStyle(MenuPickerStyle())
-                
+
                 Spacer()
-                
+
                 Text("\(processingSystem.activeJobs.count) active jobs")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
             .padding()
-            
+
             // Jobs List
             if processingSystem.activeJobs.isEmpty {
                 VStack(spacing: 16) {
                     Image(systemName: "tray")
                         .font(.largeTitle)
                         .foregroundColor(.secondary)
-                    
+
                     Text("No Active Jobs")
                         .font(.headline)
                         .foregroundColor(.secondary)
-                    
+
                     Text("All background processing jobs will appear here")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
@@ -321,18 +321,18 @@ struct ActiveJobsTab: View {
             }
         }
     }
-    
+
     /// Performs operation with error handling and validation
     private func sortedActiveJobs() -> [ProcessingJob] {
         switch sortBy {
         case .priority:
-            return processingSystem.activeJobs.sorted(by: { $0.priority.rawValue > $1.priority.rawValue })
+            processingSystem.activeJobs.sorted(by: { $0.priority.rawValue > $1.priority.rawValue })
         case .created:
-            return processingSystem.activeJobs.sorted(by: { $0.startTime > $1.startTime })
+            processingSystem.activeJobs.sorted(by: { $0.startTime > $1.startTime })
         case .type:
-            return processingSystem.activeJobs.sorted(by: { $0.type.rawValue < $1.type.rawValue })
+            processingSystem.activeJobs.sorted(by: { $0.type.rawValue < $1.type.rawValue })
         case .status:
-            return processingSystem.activeJobs.sorted(by: { $0.status.rawValue < $1.status.rawValue })
+            processingSystem.activeJobs.sorted(by: { $0.status.rawValue < $1.status.rawValue })
         }
     }
 }
@@ -342,13 +342,13 @@ struct ActiveJobsTab: View {
 struct HistoryTab: View {
     @ObservedObject var processingSystem: BackgroundProcessingSystem
     @State private var selectedFilter: HistoryFilter = .all
-    
+
     enum HistoryFilter: String, CaseIterable {
         case all = "All"
         case completed = "Completed"
         case failed = "Failed"
     }
-    
+
     var body: some View {
         VStack(spacing: 0) {
             // Filter Controls
@@ -359,14 +359,14 @@ struct HistoryTab: View {
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
-                
+
                 Spacer()
-                
+
                 Menu {
                     Button("Clear Completed") {
                         processingSystem.clearCompletedJobs()
                     }
-                    
+
                     Button("Clear Failed", role: .destructive) {
                         processingSystem.clearFailedJobs()
                     }
@@ -375,7 +375,7 @@ struct HistoryTab: View {
                 }
             }
             .padding()
-            
+
             // History List
             List {
                 ForEach(filteredJobs()) { job in
@@ -384,17 +384,17 @@ struct HistoryTab: View {
             }
         }
     }
-    
+
     /// Performs operation with error handling and validation
     private func filteredJobs() -> [ProcessingJob] {
         switch selectedFilter {
         case .all:
-            return (processingSystem.completedJobs + processingSystem.failedJobs)
+            (processingSystem.completedJobs + processingSystem.failedJobs)
                 .sorted { $0.endTime ?? Date.distantPast > $1.endTime ?? Date.distantPast }
         case .completed:
-            return processingSystem.completedJobs
+            processingSystem.completedJobs
         case .failed:
-            return processingSystem.failedJobs
+            processingSystem.failedJobs
         }
     }
 }
@@ -403,7 +403,7 @@ struct HistoryTab: View {
 
 struct MonitoringTab: View {
     @ObservedObject var processingSystem: BackgroundProcessingSystem
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
@@ -411,7 +411,7 @@ struct MonitoringTab: View {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Real-time Monitoring")
                         .font(.headline)
-                    
+
                     VStack(spacing: 16) {
                         SystemLoadGauge(
                             title: "CPU Usage",
@@ -419,27 +419,30 @@ struct MonitoringTab: View {
                             threshold: processingSystem.processingLimits.cpuThreshold,
                             color: .blue
                         )
-                        
+
                         SystemLoadGauge(
                             title: "Memory Usage",
                             value: processingSystem.systemLoad.memoryUsage,
                             threshold: processingSystem.processingLimits.memoryThreshold,
                             color: .green
                         )
-                        
+
                         HStack {
                             VStack(alignment: .leading) {
                                 Text("Concurrent Jobs")
                                     .font(.subheadline)
-                                Text("\(processingSystem.systemLoad.currentConcurrentJobs) / \(processingSystem.processingLimits.maxConcurrentJobs)")
-                                    .font(.title2)
-                                    .fontWeight(.bold)
+                                Text(
+                                    "\(processingSystem.systemLoad.currentConcurrentJobs) / \(processingSystem.processingLimits.maxConcurrentJobs)"
+                                )
+                                .font(.title2)
+                                .fontWeight(.bold)
                             }
-                            
+
                             Spacer()
-                            
+
                             BackgroundCircularProgressView(
-                                progress: Double(processingSystem.systemLoad.currentConcurrentJobs) / Double(processingSystem.processingLimits.maxConcurrentJobs),
+                                progress: Double(processingSystem.systemLoad.currentConcurrentJobs) /
+                                    Double(processingSystem.processingLimits.maxConcurrentJobs),
                                 color: .orange
                             )
                             .frame(width: 60, height: 60)
@@ -449,31 +452,43 @@ struct MonitoringTab: View {
                         .cornerRadius(12)
                     }
                 }
-                
+
                 // System Configuration
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Current Configuration")
                         .font(.headline)
-                    
+
                     VStack(spacing: 8) {
-                        ConfigRow(title: "Max Concurrent Jobs", value: "\(processingSystem.processingLimits.maxConcurrentJobs)")
+                        ConfigRow(
+                            title: "Max Concurrent Jobs",
+                            value: "\(processingSystem.processingLimits.maxConcurrentJobs)"
+                        )
                         ConfigRow(title: "Max Queue Size", value: "\(processingSystem.processingLimits.maxQueueSize)")
-                        ConfigRow(title: "Max Job Duration", value: "\(Int(processingSystem.processingLimits.maxJobDuration))s")
-                        ConfigRow(title: "Throttling Enabled", value: processingSystem.processingLimits.enableThrottling ? "Yes" : "No")
-                        ConfigRow(title: "Auto-pause on High Load", value: processingSystem.processingLimits.pauseOnHighLoad ? "Yes" : "No")
+                        ConfigRow(
+                            title: "Max Job Duration",
+                            value: "\(Int(processingSystem.processingLimits.maxJobDuration))s"
+                        )
+                        ConfigRow(
+                            title: "Throttling Enabled",
+                            value: processingSystem.processingLimits.enableThrottling ? "Yes" : "No"
+                        )
+                        ConfigRow(
+                            title: "Auto-pause on High Load",
+                            value: processingSystem.processingLimits.pauseOnHighLoad ? "Yes" : "No"
+                        )
                     }
                     .padding()
                     .background(Color(.controlBackgroundColor))
                     .cornerRadius(12)
                 }
-                
+
                 // Performance Trends
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Performance Statistics")
                         .font(.headline)
-                    
+
                     let stats = processingSystem.getProcessingStats()
-                    
+
                     VStack(spacing: 8) {
                         StatRow(title: "Total Jobs Processed", value: "\(stats.totalJobsProcessed)")
                         StatRow(title: "Success Rate", value: "\(Int(stats.successRate * 100))%")
@@ -488,13 +503,13 @@ struct MonitoringTab: View {
             .padding()
         }
     }
-    
+
     /// Formats and displays data with proper styling
     private func formatDuration(_ duration: TimeInterval) -> String {
         if duration < 60 {
-            return String(format: "%.1fs", duration)
+            String(format: "%.1fs", duration)
         } else {
-            return String(format: "%.1fm", duration / 60)
+            String(format: "%.1fm", duration / 60)
         }
     }
 }
@@ -506,24 +521,24 @@ struct StatusCard: View {
     let value: String
     let color: Color
     let icon: String
-    
+
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .foregroundColor(color)
                 .font(.title2)
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(.caption)
                     .foregroundColor(.secondary)
-                
+
                 Text(value)
                     .font(.subheadline)
                     .fontWeight(.semibold)
                     .foregroundColor(color)
             }
-            
+
             Spacer()
         }
         .padding()
@@ -537,23 +552,23 @@ struct ProcessingMetricCard: View {
     let value: String
     let icon: String
     let color: Color
-    
+
     var body: some View {
         VStack(spacing: 8) {
             HStack {
                 Image(systemName: icon)
                     .foregroundColor(color)
                     .font(.title2)
-                
+
                 Spacer()
             }
-            
+
             VStack(alignment: .leading, spacing: 4) {
                 Text(value)
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(color)
-                
+
                 Text(title)
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -570,20 +585,20 @@ struct ProgressMetric: View {
     let title: String
     let value: Double
     let color: Color
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
                 Text(title)
                     .font(.subheadline)
-                
+
                 Spacer()
-                
+
                 Text("\(Int(value * 100))%")
                     .font(.subheadline)
                     .fontWeight(.semibold)
             }
-            
+
             ProgressView(value: value)
                 .progressViewStyle(LinearProgressViewStyle(tint: color))
         }
@@ -592,19 +607,19 @@ struct ProgressMetric: View {
 
 struct JobSummaryRow: View {
     let job: ProcessingJob
-    
+
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: job.type.icon)
                 .foregroundColor(job.type.color)
                 .font(.title3)
                 .frame(width: 24)
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(job.type.rawValue)
                     .font(.subheadline)
                     .fontWeight(.medium)
-                
+
                 if let result = job.result {
                     Text(result)
                         .font(.caption)
@@ -612,14 +627,14 @@ struct JobSummaryRow: View {
                         .lineLimit(1)
                 }
             }
-            
+
             Spacer()
-            
+
             VStack(alignment: .trailing, spacing: 2) {
                 Circle()
                     .fill(job.status.color)
                     .frame(width: 8, height: 8)
-                
+
                 if job.endTime != nil {
                     Text(formatDuration(job.duration))
                         .font(.caption)
@@ -628,13 +643,13 @@ struct JobSummaryRow: View {
             }
         }
     }
-    
+
     /// Formats and displays data with proper styling
     private func formatDuration(_ duration: TimeInterval) -> String {
         if duration < 60 {
-            return String(format: "%.1fs", duration)
+            String(format: "%.1fs", duration)
         } else {
-            return String(format: "%.1fm", duration / 60)
+            String(format: "%.1fm", duration / 60)
         }
     }
 }
@@ -642,19 +657,19 @@ struct JobSummaryRow: View {
 struct ActiveJobRow: View {
     let job: ProcessingJob
     let processingSystem: BackgroundProcessingSystem
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: job.type.icon)
                     .foregroundColor(job.type.color)
                     .font(.title3)
-                
+
                 VStack(alignment: .leading, spacing: 2) {
                     Text(job.type.rawValue)
                         .font(.subheadline)
                         .fontWeight(.medium)
-                    
+
                     HStack(spacing: 8) {
                         Text(job.status.rawValue)
                             .font(.caption)
@@ -663,7 +678,7 @@ struct ActiveJobRow: View {
                             .background(job.status.color.opacity(0.2))
                             .foregroundColor(job.status.color)
                             .cornerRadius(4)
-                        
+
                         Text(job.priority.displayName)
                             .font(.caption)
                             .padding(.horizontal, 6)
@@ -673,9 +688,9 @@ struct ActiveJobRow: View {
                             .cornerRadius(4)
                     }
                 }
-                
+
                 Spacer()
-                
+
                 Menu {
                     if job.status == .running {
                         Button("Pause") {
@@ -686,7 +701,7 @@ struct ActiveJobRow: View {
                             processingSystem.resumeJob(id: job.id)
                         }
                     }
-                    
+
                     Button("Cancel", role: .destructive) {
                         processingSystem.cancelJob(id: job.id)
                     }
@@ -694,8 +709,8 @@ struct ActiveJobRow: View {
                     Image(systemName: "ellipsis.circle")
                 }
             }
-            
-            if job.status == .running && job.progress > 0 {
+
+            if job.status == .running, job.progress > 0 {
                 ProgressView(value: job.progress)
                     .progressViewStyle(LinearProgressViewStyle(tint: job.type.color))
             }
@@ -706,33 +721,33 @@ struct ActiveJobRow: View {
 
 struct HistoryJobRow: View {
     let job: ProcessingJob
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: job.type.icon)
                     .foregroundColor(job.type.color)
                     .font(.title3)
-                
+
                 VStack(alignment: .leading, spacing: 2) {
                     Text(job.type.rawValue)
                         .font(.subheadline)
                         .fontWeight(.medium)
-                    
+
                     Text(job.status.rawValue)
                         .font(.caption)
                         .foregroundColor(job.status.color)
                 }
-                
+
                 Spacer()
-                
+
                 VStack(alignment: .trailing, spacing: 2) {
                     if let endTime = job.endTime {
                         Text(endTime, format: .dateTime.hour().minute())
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
-                    
+
                     if job.endTime != nil {
                         Text(formatDuration(job.duration))
                             .font(.caption)
@@ -740,7 +755,7 @@ struct HistoryJobRow: View {
                     }
                 }
             }
-            
+
             if let result = job.result {
                 Text(result)
                     .font(.caption)
@@ -755,13 +770,13 @@ struct HistoryJobRow: View {
         }
         .padding(.vertical, 4)
     }
-    
+
     /// Formats and displays data with proper styling
     private func formatDuration(_ duration: TimeInterval) -> String {
         if duration < 60 {
-            return String(format: "%.1fs", duration)
+            String(format: "%.1fs", duration)
         } else {
-            return String(format: "%.1fm", duration / 60)
+            String(format: "%.1fm", duration / 60)
         }
     }
 }
@@ -771,33 +786,33 @@ struct SystemLoadGauge: View {
     let value: Double
     let threshold: Double
     let color: Color
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text(title)
                     .font(.subheadline)
-                
+
                 Spacer()
-                
+
                 Text("\(Int(value * 100))%")
                     .font(.subheadline)
                     .fontWeight(.semibold)
                     .foregroundColor(value > threshold ? .red : color)
             }
-            
+
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
                     Rectangle()
                         .fill(Color(.controlBackgroundColor))
                         .frame(height: 8)
                         .cornerRadius(4)
-                    
+
                     Rectangle()
                         .fill(value > threshold ? .red : color)
                         .frame(width: geometry.size.width * value, height: 8)
                         .cornerRadius(4)
-                    
+
                     // Threshold indicator
                     Rectangle()
                         .fill(.orange)
@@ -816,17 +831,17 @@ struct SystemLoadGauge: View {
 struct BackgroundCircularProgressView: View {
     let progress: Double
     let color: Color
-    
+
     var body: some View {
         ZStack {
             Circle()
                 .stroke(Color(.controlBackgroundColor), lineWidth: 6)
-            
+
             Circle()
                 .trim(from: 0, to: progress)
                 .stroke(color, style: StrokeStyle(lineWidth: 6, lineCap: .round))
                 .rotationEffect(.degrees(-90))
-            
+
             Text("\(Int(progress * 100))%")
                 .font(.caption)
                 .fontWeight(.semibold)
@@ -837,14 +852,14 @@ struct BackgroundCircularProgressView: View {
 struct ConfigRow: View {
     let title: String
     let value: String
-    
+
     var body: some View {
         HStack {
             Text(title)
                 .font(.subheadline)
-            
+
             Spacer()
-            
+
             Text(value)
                 .font(.subheadline)
                 .fontWeight(.semibold)
@@ -856,14 +871,14 @@ struct ConfigRow: View {
 struct StatRow: View {
     let title: String
     let value: String
-    
+
     var body: some View {
         HStack {
             Text(title)
                 .font(.subheadline)
-            
+
             Spacer()
-            
+
             Text(value)
                 .font(.subheadline)
                 .fontWeight(.semibold)

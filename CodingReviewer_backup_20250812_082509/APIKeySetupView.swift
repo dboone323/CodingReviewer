@@ -1,4 +1,7 @@
 import Foundation
+import Accessibility
+import SwiftUI
+
 // SECURITY: API key handling - ensure proper encryption and keychain storage
 //
 // APIKeySetupView.swift
@@ -8,16 +11,13 @@ import Foundation
 // Created on July 25, 2025
 //
 
-import SwiftUI
-import Accessibility
-
 struct APIKeySetupView: View {
     @State private var errorMessage: String?
-    @State private var isLoading = false;
-    @State private var tempKey = "";
-    @State private var isValidating = false;
+    @State private var isLoading = false
+    @State private var tempKey = ""
+    @State private var isValidating = false
     @State private var validationResult: String?
-    @State private var selectedProvider = "OpenAI";
+    @State private var selectedProvider = "OpenAI"
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -127,19 +127,18 @@ struct APIKeySetupView: View {
         validationResult = "Validating..."
 
         // Simple validation - check if key has proper format
-        let isValid: Bool
-        if selectedProvider == "OpenAI" {
-            isValid = tempKey.hasPrefix("sk-") && tempKey.count > 10
+        let isValid: Bool = if selectedProvider == "OpenAI" {
+            tempKey.hasPrefix("sk-") && tempKey.count > 10
         } else {
-            isValid = tempKey.count > 10 // Basic check for Gemini
+            tempKey.count > 10 // Basic check for Gemini
         }
 
         // Simulate API call delay
         try? await Task.sleep(nanoseconds: 1_000_000_000)
 
         await MainActor.run {
-            self.isValidating = false
-            self.validationResult = isValid ? "✅ Valid API key format" : "❌ Invalid API key format"
+            isValidating = false
+            validationResult = isValid ? "✅ Valid API key format" : "❌ Invalid API key format"
         }
     }
 
@@ -158,12 +157,12 @@ struct APIKeySetupView: View {
         }
 
         await MainActor.run {
-            self.isValidating = false
-            self.validationResult = "✅ API key saved successfully"
+            isValidating = false
+            validationResult = "✅ API key saved successfully"
 
             // Auto-dismiss after showing success message
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                self.dismiss()
+                dismiss()
             }
         }
     }

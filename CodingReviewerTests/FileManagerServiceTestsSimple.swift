@@ -5,11 +5,12 @@
 //  Swift 6 Compatible version
 //
 
-import XCTest
 @testable import CodingReviewer
+import XCTest
 
 final class FileManagerServiceTestsSimple: XCTestCase {
-    
+    /// <#Description#>
+    /// - Returns: <#description#>
     func testFileManagerInitialization() async throws {
         let fileManager = await FileManagerService()
         XCTAssertNotNil(fileManager)
@@ -17,13 +18,15 @@ final class FileManagerServiceTestsSimple: XCTestCase {
         let analysisHistory = await fileManager.analysisHistory
         let isUploading = await fileManager.isUploading
         let uploadProgress = await fileManager.uploadProgress
-        
+
         XCTAssertTrue(uploadedFiles.isEmpty)
         XCTAssertTrue(analysisHistory.isEmpty)
         XCTAssertFalse(isUploading)
         XCTAssertEqual(uploadProgress, 0.0)
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func testCodeFileCreation() async throws {
         let testContent = "print('Hello, World!')"
         let codeFile = CodeFile(
@@ -32,7 +35,7 @@ final class FileManagerServiceTestsSimple: XCTestCase {
             content: testContent,
             language: .python
         )
-        
+
         XCTAssertEqual(codeFile.name, "test.py")
         XCTAssertEqual(codeFile.content, testContent)
         XCTAssertEqual(codeFile.language, .python)
@@ -40,7 +43,9 @@ final class FileManagerServiceTestsSimple: XCTestCase {
         XCTAssertEqual(codeFile.fileExtension, "py")
         XCTAssertFalse(codeFile.checksum.isEmpty)
     }
-    
+
+    /// <#Description#>
+    /// - Returns: <#description#>
     func testProjectStructureCreation() async throws {
         let file1 = CodeFile(
             name: "main.swift",
@@ -48,21 +53,21 @@ final class FileManagerServiceTestsSimple: XCTestCase {
             content: "print(\"Hello\")",
             language: .swift
         )
-        
+
         let file2 = CodeFile(
             name: "utils.swift",
             path: "/project/utils.swift",
             content: "func utility() {}",
             language: .swift
         )
-        
+
         let files = [file1, file2]
         let project = ProjectStructure(
             name: "TestProject",
             rootPath: "/project",
             files: files
         )
-        
+
         XCTAssertEqual(project.name, "TestProject")
         XCTAssertEqual(project.rootPath, "/project")
         XCTAssertEqual(project.files.count, 2)

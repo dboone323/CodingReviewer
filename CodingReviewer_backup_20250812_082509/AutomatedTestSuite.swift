@@ -1,3 +1,7 @@
+import Foundation
+import Combine
+import SwiftUI
+
 //
 //  AutomatedTestSuite.swift
 //  CodingReviewer - Automated Testing & Enhancement
@@ -5,9 +9,6 @@
 //  Created by AI Assistant on August 1, 2025
 //
 
-import SwiftUI
-import Foundation
-import Combine
 // TestingTypes is automatically available in the same target
 
 // MARK: - Automated Test Suite
@@ -24,14 +25,22 @@ class AutomatedTestSuite: ObservableObject {
     private var fileManager: FileManagerService
 
     init(manager: FileManagerService) {
-        self.fileManager = manager
+        fileManager = manager
     }
 
     /// Performs operation with error handling and validation
+    /// <#Description#>
+    /// - Returns: <#description#>
     func runAllTests() async {
         // Convert CodeFile to UploadedFile for compatibility
         let files = fileManager.uploadedFiles.map { codeFile in
-            UploadedFile(name: codeFile.name, path: codeFile.path, size: codeFile.size, content: codeFile.content, type: codeFile.language.rawValue)
+            UploadedFile(
+                name: codeFile.name,
+                path: codeFile.path,
+                size: codeFile.size,
+                content: codeFile.content,
+                type: codeFile.language.rawValue
+            )
         }
 
         guard !files.isEmpty else { return }
@@ -167,7 +176,7 @@ class AutomatedTestSuite: ObservableObject {
             issues.append("High percentage of empty lines")
         }
 
-        if !file.content.contains("//") && !file.content.contains("/*") {
+        if !file.content.contains("//"), !file.content.contains("/*") {
             issues.append("No comments found - consider adding documentation")
         }
 
@@ -240,7 +249,7 @@ class AutomatedTestSuite: ObservableObject {
     }
 
     /// Creates and configures components with proper initialization
-    private func generateAutoFix(for issue: String, in fileName: String) -> AutoFix {
+    private func generateAutoFix(for issue: String, in _: String) -> AutoFix {
         let confidence: Double
         let title: String
         let description: String
@@ -282,6 +291,8 @@ class AutomatedTestSuite: ObservableObject {
     }
 
     /// Performs operation with error handling and validation
+    /// <#Description#>
+    /// - Returns: <#description#>
     func applyFix(_ fix: AutoFix) {
         if fixes.contains(where: { $0.id == fix.id }) {
             // Here you would implement the actual fix logic
@@ -309,15 +320,15 @@ struct TestResult: Identifiable, Sendable {
 extension TestType {
     var icon: String {
         switch self {
-        case .unit: return "shield.checkered"
-        case .performance: return "speedometer"
-        case .integration: return "star.circle"
-        case .function: return "chevron.left.forwardslash.chevron.right"
-        case .edgeCase: return "exclamationmark.triangle"
-        case .coverage: return "checkmark.circle"
-        case .security: return "lock.shield"
-        case .quality: return "star.fill"
-        case .syntax: return "text.word.spacing"
+        case .unit: "shield.checkered"
+        case .performance: "speedometer"
+        case .integration: "star.circle"
+        case .function: "chevron.left.forwardslash.chevron.right"
+        case .edgeCase: "exclamationmark.triangle"
+        case .coverage: "checkmark.circle"
+        case .security: "lock.shield"
+        case .quality: "star.fill"
+        case .syntax: "text.word.spacing"
         }
     }
 }
@@ -329,9 +340,9 @@ enum TestStatus: String {
 
     var color: Color {
         switch self {
-        case .passed: return .green
-        case .warning: return .orange
-        case .failed: return .red
+        case .passed: .green
+        case .warning: .orange
+        case .failed: .red
         }
     }
 }
@@ -343,9 +354,9 @@ enum TestSeverity: String {
 
     var color: Color {
         switch self {
-        case .low: return .green
-        case .medium: return .orange
-        case .high: return .red
+        case .low: .green
+        case .medium: .orange
+        case .high: .red
         }
     }
 }
@@ -362,8 +373,8 @@ extension AutoFix {
     }
 
     var confidenceColor: Color {
-        if confidence >= 0.8 { return .green }
-        else if confidence >= 0.6 { return .orange }
-        else { return .red }
+        if confidence >= 0.8 { .green }
+        else if confidence >= 0.6 { .orange }
+        else { .red }
     }
 }

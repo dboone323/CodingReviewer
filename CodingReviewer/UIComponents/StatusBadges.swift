@@ -1,4 +1,5 @@
 import Foundation
+
 //
 // StatusBadges.swift
 // CodingReviewer
@@ -10,7 +11,7 @@ import SwiftUI
 struct StatusBadge: View {
     let status: String
     let color: Color
-    
+
     var body: some View {
         Text(status)
             .font(.caption)
@@ -24,13 +25,13 @@ struct StatusBadge: View {
 
 struct QualityScoreBadge: View {
     let score: Double
-    
+
     var color: Color {
-        if score >= 0.9 { return .green }
-        else if score >= 0.7 { return .orange }
-        else { return .red }
+        if score >= 0.9 { .green }
+        else if score >= 0.7 { .orange }
+        else { .red }
     }
-    
+
     var body: some View {
         StatusBadge(
             status: String(format: "%.1f", score),

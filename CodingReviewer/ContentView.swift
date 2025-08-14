@@ -1,6 +1,6 @@
 import Foundation
-import SwiftUI
 import Combine
+import SwiftUI
 
 struct ContentView: View {
     @State private var selectedTab: Tab = .quickStart
@@ -28,33 +28,33 @@ struct ContentView: View {
 
         var icon: String {
             switch self {
-            case .quickStart: return "bolt.circle.fill"
-            case .files: return "folder.fill"
-            case .aiDashboard: return "brain.head.profile.fill"
-            case .insights: return "brain.head.profile"
-            case .patterns: return "chart.line.uptrend.xyaxis"
-            case .enhancement: return "wand.and.stars"
-            case .analytics: return "chart.bar.fill"
-            case .processing: return "gearshape.2.fill"
-            case .integration: return "building.2.fill"
-            case .testing: return "flask.fill"
-            case .settings: return "gearshape.fill"
+            case .quickStart: "bolt.circle.fill"
+            case .files: "folder.fill"
+            case .aiDashboard: "brain.head.profile.fill"
+            case .insights: "brain.head.profile"
+            case .patterns: "chart.line.uptrend.xyaxis"
+            case .enhancement: "wand.and.stars"
+            case .analytics: "chart.bar.fill"
+            case .processing: "gearshape.2.fill"
+            case .integration: "building.2.fill"
+            case .testing: "flask.fill"
+            case .settings: "gearshape.fill"
             }
         }
 
         var color: Color {
             switch self {
-            case .quickStart: return .blue
-            case .files: return .green
-            case .aiDashboard: return .cyan
-            case .insights: return .purple
-            case .patterns: return .orange
-            case .enhancement: return .pink
-            case .analytics: return .indigo
-            case .processing: return .teal
-            case .integration: return .brown
-            case .testing: return .mint
-            case .settings: return .gray
+            case .quickStart: .blue
+            case .files: .green
+            case .aiDashboard: .cyan
+            case .insights: .purple
+            case .patterns: .orange
+            case .enhancement: .pink
+            case .analytics: .indigo
+            case .processing: .teal
+            case .integration: .brown
+            case .testing: .mint
+            case .settings: .gray
             }
         }
     }
@@ -120,33 +120,33 @@ struct ContentView: View {
 
                         Spacer()
                     }
-                    
+
                     // Memory Usage Indicator
                     HStack {
                         Text("Memory")
                             .font(.caption2)
                             .foregroundColor(.secondary)
-                        
+
                         Spacer()
-                        
+
                         Circle()
                             .fill(memoryMonitor.memoryPressure.color)
                             .frame(width: 6, height: 6)
-                        
+
                         Text(memoryMonitor.formatBytes(memoryMonitor.currentUsage))
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }
-                    
+
                     // Background Jobs Indicator
                     if !backgroundManager.activeJobs.isEmpty {
                         HStack {
                             Text("Jobs")
                                 .font(.caption2)
                                 .foregroundColor(.secondary)
-                            
+
                             Spacer()
-                            
+
                             Text("\(backgroundManager.activeJobs.count)")
                                 .font(.caption2)
                                 .foregroundColor(.orange)
@@ -197,12 +197,12 @@ struct ContentView: View {
                     case .settings:
                         VStack(spacing: 20) {
                             SettingsView()
-                            
+
                             // Performance Dashboard
                             VStack(alignment: .leading, spacing: 12) {
                                 Text("Performance Monitor")
                                     .font(.headline)
-                                
+
                                 EnhancedPerformanceDashboard()
                                     .environmentObject(memoryMonitor)
                                     .environmentObject(responseTracker)
@@ -303,7 +303,7 @@ struct ContentView: View {
                     message: "Inefficient loop detected",
                     lineNumber: 18,
                     suggestion: "Consider using built-in collection methods"
-                )
+                ),
             ]
             isAnalyzing = false
         }
@@ -536,6 +536,8 @@ struct QuickStartView: View {
                             SampleCodeButton(title: "Swift Example") {
                                 codeInput = """
                                 /// Analyzes and processes data with comprehensive validation
+                                /// Function description
+                                /// - Returns: Return value description
                                 func processUserData(users: [String]) {
                                     for user in users {
                                         let query = "SELECT * FROM users WHERE name = '" + user + "'"
@@ -566,7 +568,7 @@ struct QuickStartView: View {
                     }
                 }
                 .disabled(codeInput.isEmpty || isAnalyzing)
-                
+
                 // Enhanced Progress Indicator
                 if isAnalyzing {
                     EnhancedProgressView(
@@ -593,7 +595,7 @@ struct QuickStartView: View {
     /// Performs operation with comprehensive error handling and validation
     private func runAnalysis() {
         isAnalyzing = true
-        
+
         // Enqueue background job for comprehensive analysis
         _ = backgroundManager.enqueueJob(
             name: "Code Analysis",
@@ -610,11 +612,11 @@ struct QuickStartView: View {
             do {
                 let results = try await responseTracker.trackOperation("Code Analysis") {
                     try await Task.sleep(nanoseconds: 1_500_000_000) // 1.5 seconds
-                    
+
                     // Generate sample results based on code content
                     var results: [AnalysisResult] = []
 
-                    if codeInput.contains("SELECT") && codeInput.contains("+") {
+                    if codeInput.contains("SELECT"), codeInput.contains("+") {
                         results.append(AnalysisResult(
                             id: UUID(),
                             type: "Security",
@@ -625,7 +627,7 @@ struct QuickStartView: View {
                         ))
                     }
 
-                    if codeInput.contains("for") && codeInput.contains("total") {
+                    if codeInput.contains("for"), codeInput.contains("total") {
                         results.append(AnalysisResult(
                             id: UUID(),
                             type: "Performance",
@@ -646,7 +648,7 @@ struct QuickStartView: View {
                             suggestion: "Consider adding comments for better documentation"
                         ))
                     }
-                    
+
                     return results
                 }
 
@@ -705,19 +707,19 @@ struct AnalysisResultCard: View {
 
     private var severityColor: Color {
         switch result.severity.lowercased() {
-        case "high": return .red
-        case "medium": return .orange
-        case "low": return .yellow
-        default: return .blue
+        case "high": .red
+        case "medium": .orange
+        case "low": .yellow
+        default: .blue
         }
     }
 
     private var severityIcon: String {
         switch result.severity.lowercased() {
-        case "high": return "exclamationmark.triangle.fill"
-        case "medium": return "exclamationmark.circle.fill"
-        case "low": return "info.circle.fill"
-        default: return "checkmark.circle.fill"
+        case "high": "exclamationmark.triangle.fill"
+        case "medium": "exclamationmark.circle.fill"
+        case "low": "info.circle.fill"
+        default: "checkmark.circle.fill"
         }
     }
 
@@ -783,7 +785,7 @@ struct SettingsView: View {
 
                 VStack(alignment: .leading) {
                     Text("Analysis Depth")
-                    Slider(value: $analysisDepth, in: 1...5, step: 1) {
+                    Slider(value: $analysisDepth, in: 1 ... 5, step: 1) {
                         Text("Depth")
                     } minimumValueLabel: {
                         Text("Fast")

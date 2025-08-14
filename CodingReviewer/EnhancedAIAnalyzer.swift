@@ -1,11 +1,10 @@
-// Enhanced AI Integration with Real Functionality
 import Foundation
-import SwiftUI
 import Combine
+import SwiftUI
 
-@MainActor
+// Enhanced AI Integration with Real Functionality
 /// Enhanced AI service that provides advanced code analysis capabilities
-/// 
+///
 /// This service integrates with external AI APIs to provide sophisticated code analysis,
 /// including quality assessment, security scanning, and performance optimization suggestions.
 /// It manages API key authentication and handles async communication with AI services.
@@ -13,26 +12,27 @@ import Combine
 /// TODO: Add detailed documentation
 /// EnhancedAIService class
 /// TODO: Add detailed documentation
+@MainActor
 public class EnhancedAIService: ObservableObject {
-    @Published public var isAnalyzing: Bool = false;
-    @Published public var analysisResult: String = "";
+    @Published public var isAnalyzing: Bool = false
+    @Published public var analysisResult: String = ""
     @Published public var errorMessage: String?
 
     private let apiKeyManager: APIKeyManager
     private let session: URLSession
-    
+
     init(apiKeyManager: APIKeyManager) {
         self.apiKeyManager = apiKeyManager
-        self.session = URLSession.shared
-    }    /// Analyzes code using enhanced AI capabilities with comprehensive analysis
-    /// 
+        session = URLSession.shared
+    } /// Analyzes code using enhanced AI capabilities with comprehensive analysis
+    ///
     /// This method performs deep code analysis including quality assessment, security scanning,
     /// performance optimization suggestions, and best practice recommendations.
-    /// 
+    ///
     /// - Parameters:
     ///   - code: The source code to analyze
     ///   - language: The programming language of the code (default: "swift")
-    /// 
+    ///
     /// - Note: This method updates the `analysisResult` and `errorMessage` published properties
     /// analyzeCodeWithEnhancedAI function
     /// TODO: Add detailed documentation
@@ -61,7 +61,7 @@ public class EnhancedAIService: ObservableObject {
 
     /// Performs operation with error handling and validation
     private func performLocalAnalysis(_ code: String, language: String) -> String {
-        var analysis = "🔍 Enhanced Local Code Analysis\n";
+        var analysis = "🔍 Enhanced Local Code Analysis\n"
         analysis += String(repeating: "=", count: 40) + "\n\n"
 
         // Basic metrics
@@ -75,16 +75,16 @@ public class EnhancedAIService: ObservableObject {
         analysis += "• Functions: \(functionCount)\n\n"
 
         // Quality checks
-        var issues: [String] = [];
-        var suggestions: [String] = [];
+        var issues: [String] = []
+        var suggestions: [String] = []
 
         // Swift-specific analysis
         if language.lowercased() == "swift" {
-            if code.contains("!") && !code.contains("// ") {
+            if code.contains("!"), !code.contains("// ") {
                 issues.append("⚠️ Force unwrapping detected - consider using optional binding")
             }
 
-            if code.contains("self?.") && code.contains("{") {
+            if code.contains("self?."), code.contains("{") {
                 suggestions.append("💡 Consider using [weak self] or [unowned self] in closures")
             }
 
@@ -161,7 +161,7 @@ public class EnhancedAIService: ObservableObject {
 
     /// Creates and configures components with proper initialization
     private func createAnalysisPrompt(code: String, language: String) -> String {
-        return """
+        """
         Analyze this \(language) code and provide actionable insights:
 
         ```\(language)
@@ -189,7 +189,7 @@ public class EnhancedAIService: ObservableObject {
         guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else {
             throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
         }
-        var request = URLRequest(url: url);
+        var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -197,10 +197,10 @@ public class EnhancedAIService: ObservableObject {
         let payload: [String: Any] = [
             "model": "gpt-3.5-turbo",
             "messages": [
-                ["role": "user", "content": prompt]
+                ["role": "user", "content": prompt],
             ],
             "max_tokens": 1000,
-            "temperature": 0.3
+            "temperature": 0.3,
         ]
 
         request.httpBody = try JSONSerialization.data(withJSONObject: payload)
@@ -208,7 +208,8 @@ public class EnhancedAIService: ObservableObject {
         let (data, response) = try await session.data(for: request)
 
         guard let httpResponse = response as? HTTPURLResponse,
-              httpResponse.statusCode == 200 else {
+              httpResponse.statusCode == 200
+        else {
             throw AIAnalysisError.apiError("HTTP \((response as? HTTPURLResponse)?.statusCode ?? 0)")
         }
 
@@ -216,7 +217,8 @@ public class EnhancedAIService: ObservableObject {
         let choices = json?["choices"] as? [[String: Any]]
         guard let firstChoice = choices?.first,
               let message = firstChoice["message"] as? [String: Any],
-              let content = message["content"] as? String else {
+              let content = message["content"] as? String
+        else {
             return "No response received from AI service"
         }
 
@@ -234,15 +236,16 @@ public class EnhancedAIService: ObservableObject {
     /// Performs operation with error handling and validation
     private func complexityLevel(_ complexity: Int) -> String {
         switch complexity {
-        case 1...5: return "Low ✅"
-        case 6...10: return "Moderate ⚠️"
-        case 11...15: return "High ❌"
-        default: return "Very High 🚨"
+        case 1 ... 5: "Low ✅"
+        case 6 ... 10: "Moderate ⚠️"
+        case 11 ... 15: "High ❌"
+        default: "Very High 🚨"
         }
     }
 }
 
 // MARK: - Supporting Types
+
 public enum AIAnalysisError: Error {
     case noAPIKey
     case apiError(String)
@@ -252,13 +255,13 @@ public enum AIAnalysisError: Error {
     public var localizedDescription: String {
         switch self {
         case .noAPIKey:
-            return "No API key found. Please configure your OpenAI API key in settings."
+            "No API key found. Please configure your OpenAI API key in settings."
         case .apiError(let message):
-            return "API Error: \(message)"
+            "API Error: \(message)"
         case .invalidResponse:
-            return "Invalid response from AI service"
+            "Invalid response from AI service"
         case .networkError:
-            return "Network error occurred"
+            "Network error occurred"
         }
     }
 }

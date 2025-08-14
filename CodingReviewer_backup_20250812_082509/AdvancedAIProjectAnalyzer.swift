@@ -1,8 +1,9 @@
 import Foundation
-import OSLog
 import Combine
+import OSLog
 
 // MARK: - Advanced AI Project Analyzer
+
 // Continuously analyzes project health and prevents issues before they occur
 
 @MainActor
@@ -15,13 +16,19 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
     private let fixEngine = AutomaticFixEngine.shared
 
     // MARK: - Published Properties
+
     @Published var isAnalyzing: Bool = false
     @Published var analysisProgress: Double = 0.0
-    @Published var projectHealth: ProjectHealth = ProjectHealth()
-    @Published var riskAssessment: RiskAssessment = RiskAssessment(overallRisk: 0.0, criticalRisks: [], mitigation: "No assessment available")
+    @Published var projectHealth: ProjectHealth = .init()
+    @Published var riskAssessment: RiskAssessment = .init(
+        overallRisk: 0.0,
+        criticalRisks: [],
+        mitigation: "No assessment available"
+    )
     @Published var recommendations: [ProjectRecommendation] = []
 
     // MARK: - Analysis Components
+
     private var dependencyAnalyzer: DependencyAnalyzer
     private var architectureAnalyzer: ArchitectureAnalyzer
     private var performanceAnalyzer: PerformanceAnalyzer
@@ -32,12 +39,12 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
     private var analysisTimer: Timer?
 
     init() {
-        self.dependencyAnalyzer = DependencyAnalyzer()
-        self.architectureAnalyzer = ArchitectureAnalyzer()
-        self.performanceAnalyzer = PerformanceAnalyzer()
-        self.securityAnalyzer = SecurityAnalyzer()
-        self.qualityAnalyzer = QualityAnalyzer()
-        self.predictiveAnalyzer = AdvancedPredictiveAnalyzer()
+        dependencyAnalyzer = DependencyAnalyzer()
+        architectureAnalyzer = ArchitectureAnalyzer()
+        performanceAnalyzer = PerformanceAnalyzer()
+        securityAnalyzer = SecurityAnalyzer()
+        qualityAnalyzer = QualityAnalyzer()
+        predictiveAnalyzer = AdvancedPredictiveAnalyzer()
 
         startContinuousAnalysis()
     }
@@ -45,6 +52,8 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
     // MARK: - Public Interface
 
     /// Performs operation with comprehensive error handling and validation
+    /// <#Description#>
+    /// - Returns: <#description#>
     func performComprehensiveAnalysis() async -> ComprehensiveAnalysisResult {
         isAnalyzing = true
         analysisProgress = 0.0
@@ -66,8 +75,8 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
         let performanceResults = await performanceAnalyzer.analyze("")
         results.performance = PerformanceAnalysisResult(
             score: 0.8,
-            issues: performanceResults.map { $0.message },
-            optimizations: performanceResults.map { $0.suggestion }
+            issues: performanceResults.map(\.message),
+            optimizations: performanceResults.map(\.suggestion)
         )
 
         // Phase 4: Security Analysis
@@ -75,8 +84,8 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
         let securityResults = await securityAnalyzer.analyze("")
         results.security = SecurityAnalysisResult(
             score: 0.9,
-            vulnerabilities: securityResults.map { $0.message },
-            recommendations: securityResults.map { $0.suggestion }
+            vulnerabilities: securityResults.map(\.message),
+            recommendations: securityResults.map(\.suggestion)
         )
 
         // Phase 5: Code Quality Analysis
@@ -85,7 +94,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
         results.quality = QualityAnalysisResult(
             score: 0.85,
             metrics: QualityMetrics(),
-            issues: qualityResults.map { $0.message }
+            issues: qualityResults.map(\.message)
         )
 
         // Phase 6: Predictive Analysis
@@ -107,6 +116,8 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
     }
 
     /// Performs operation with comprehensive error handling and validation
+    /// <#Description#>
+    /// - Returns: <#description#>
     func analyzeFile(_ filePath: String) async -> FileAnalysisResult {
         os_log("Analyzing file: %@", log: logger, type: .debug, filePath)
 
@@ -160,6 +171,8 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
     }
 
     /// Performs operation with comprehensive error handling and validation
+    /// <#Description#>
+    /// - Returns: <#description#>
     func performHealthCheck() async -> HealthCheckResult {
         os_log("Performing project health check", log: logger, type: .debug)
 
@@ -213,6 +226,8 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
     }
 
     /// Performs operation with comprehensive error handling and validation
+    /// <#Description#>
+    /// - Returns: <#description#>
     func preventPotentialIssues() async -> PreventionResult {
         os_log("Running issue prevention analysis", log: logger, type: .info)
 
@@ -269,13 +284,13 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
     /// Performs operation with comprehensive error handling and validation
     private func calculateScore(from results: [AnalysisResult]) -> Double {
         guard !results.isEmpty else { return 1.0 }
-        let highSeverityCount = results.filter { $0.severity == "High" || $0.severity == "Critical" }.count
-        let mediumSeverityCount = results.filter { $0.severity == "Medium" }.count
-        
+        let highSeverityCount = results.count(where: { $0.severity == "High" || $0.severity == "Critical" })
+        let mediumSeverityCount = results.count(where: { $0.severity == "Medium" })
+
         var score = 1.0
         score -= Double(highSeverityCount) * 0.2
         score -= Double(mediumSeverityCount) * 0.1
-        
+
         return max(0.0, score)
     }
 
@@ -414,7 +429,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
             results.architecture.score,
             results.performance.score,
             results.security.score,
-            results.quality.score
+            results.quality.score,
         ]
 
         return scores.reduce(0.0, +) / Double(scores.count)
@@ -436,37 +451,37 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
     /// Performs operation with comprehensive error handling and validation
     private func calculatePreventionScore(_ preventedCount: Int, _ fixesCount: Int) -> Double {
         // Higher score for more prevented issues and applied fixes
-        return min(1.0, (Double(preventedCount) * 0.1) + (Double(fixesCount) * 0.05))
+        min(1.0, (Double(preventedCount) * 0.1) + (Double(fixesCount) * 0.05))
     }
 
     /// Performs operation with comprehensive error handling and validation
     private func mapSeverityToPriority(_ severity: CodeImprovement.Severity) -> FileRecommendation.Priority {
         switch severity {
-        case .error: return .high
-        case .warning: return .medium
-        case .info: return .low
+        case .error: .high
+        case .warning: .medium
+        case .info: .low
         }
     }
 
     /// Performs operation with comprehensive error handling and validation
     private func mapConfidenceToSeverity(_ confidence: Double) -> String {
         if confidence > 0.8 {
-            return "High"
+            "High"
         } else if confidence > 0.5 {
-            return "Medium"
+            "Medium"
         } else {
-            return "Low"
+            "Low"
         }
     }
 
     /// Performs operation with comprehensive error handling and validation
     private func mapConfidenceToSeverityEnum(_ confidence: Double) -> ProjectIssue.Severity {
         if confidence > 0.8 {
-            return .error
+            .error
         } else if confidence > 0.5 {
-            return .warning
+            .warning
         } else {
-            return .info
+            .info
         }
     }
 
@@ -474,13 +489,13 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
     private func mapIssueTypeToString(_ issueType: PredictedIssue.IssueType) -> String {
         switch issueType {
         case .immutableVariable:
-            return "Immutable Variable"
+            "Immutable Variable"
         case .forceUnwrapping:
-            return "Force Unwrapping"
+            "Force Unwrapping"
         case .asyncAddition:
-            return "Async Addition"
+            "Async Addition"
         case .other:
-            return "Other"
+            "Other"
         }
     }
 
@@ -491,7 +506,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
 
         if let enumerator = fileManager.enumerator(atPath: directory) {
             for case let file as String in enumerator {
-                if file.hasSuffix(".swift") && !file.contains("/.") {
+                if file.hasSuffix(".swift"), !file.contains("/.") {
                     swiftFiles.append(directory + "/" + file)
                 }
             }
@@ -502,6 +517,7 @@ class AdvancedAIProjectAnalyzer: ObservableObject {
 }
 
 // MARK: - Analysis Components
+
 // Note: DependencyAnalyzer and ArchitectureAnalyzer are defined in MissingTypes.swift
 
 // MARK: - Data Types
@@ -517,17 +533,26 @@ struct ProjectHealth {
     let lastUpdated: Date
 
     init() {
-        self.overallScore = 0.0
-        self.dependencyHealth = 0.0
-        self.architectureHealth = 0.0
-        self.performanceHealth = 0.0
-        self.securityHealth = 0.0
-        self.qualityHealth = 0.0
-        self.riskLevel = 0.0
-        self.lastUpdated = Date()
+        overallScore = 0.0
+        dependencyHealth = 0.0
+        architectureHealth = 0.0
+        performanceHealth = 0.0
+        securityHealth = 0.0
+        qualityHealth = 0.0
+        riskLevel = 0.0
+        lastUpdated = Date()
     }
-    
-    init(overallScore: Double, dependencyHealth: Double, architectureHealth: Double, performanceHealth: Double, securityHealth: Double, qualityHealth: Double, riskLevel: Double, lastUpdated: Date) {
+
+    init(
+        overallScore: Double,
+        dependencyHealth: Double,
+        architectureHealth: Double,
+        performanceHealth: Double,
+        securityHealth: Double,
+        qualityHealth: Double,
+        riskLevel: Double,
+        lastUpdated: Date
+    ) {
         self.overallScore = overallScore
         self.dependencyHealth = dependencyHealth
         self.architectureHealth = architectureHealth
@@ -537,16 +562,20 @@ struct ProjectHealth {
         self.riskLevel = riskLevel
         self.lastUpdated = lastUpdated
     }
-
 }
 
 struct ComprehensiveAnalysisResult {
-    var dependencies: DependencyAnalysisResult = DependencyAnalysisResult(score: 0.0, outdatedDependencies: [], vulnerableDependencies: [], conflictingDependencies: [])
-    var architecture: ArchitectureAnalysisResult = ArchitectureAnalysisResult(score: 0.0, patterns: [], violations: [], suggestions: [])
-    var performance: PerformanceAnalysisResult = PerformanceAnalysisResult(score: 0.0, issues: [], optimizations: [])
-    var security: SecurityAnalysisResult = SecurityAnalysisResult(score: 0.0, vulnerabilities: [], recommendations: [])
-    var quality: QualityAnalysisResult = QualityAnalysisResult(score: 0.0, metrics: QualityMetrics(), issues: [])
-    var predictions: RiskAssessment = RiskAssessment(overallRisk: 0.0, criticalRisks: [], mitigation: "No assessment available")
+    var dependencies: DependencyAnalysisResult = .init(
+        score: 0.0,
+        outdatedDependencies: [],
+        vulnerableDependencies: [],
+        conflictingDependencies: []
+    )
+    var architecture: ArchitectureAnalysisResult = .init(score: 0.0, patterns: [], violations: [], suggestions: [])
+    var performance: PerformanceAnalysisResult = .init(score: 0.0, issues: [], optimizations: [])
+    var security: SecurityAnalysisResult = .init(score: 0.0, vulnerabilities: [], recommendations: [])
+    var quality: QualityAnalysisResult = .init(score: 0.0, metrics: QualityMetrics(), issues: [])
+    var predictions: RiskAssessment = .init(overallRisk: 0.0, criticalRisks: [], mitigation: "No assessment available")
     var recommendations: [ProjectRecommendation] = []
     var error: Error?
 }
@@ -696,51 +725,57 @@ struct QualityMetrics {
     let duplication: Double = 0.0
 }
 
-    // MARK: - Missing Function Implementations
-    
-    func analyzeProjectStructure(_ projectPath: String) async -> AnalysisResult {
-        return AnalysisResult(
-            type: "structure", 
-            severity: "info", 
-            message: "Project structure analyzed", 
-            lineNumber: 0,
-            suggestion: "Project structure is well organized"
-        )
-    }
-    
-    func generateRecommendations(from analysis: AnalysisResult) -> [ProjectRecommendation] {
-        return [
-            ProjectRecommendation(
-                type: .quality,
-                priority: .medium,
-                title: "Sample Recommendation",
-                description: "This is a sample recommendation",
-                estimatedImpact: .medium,
-                estimatedEffort: .medium
-            )
-        ]
-    }
-    
-    func calculateProjectHealth(from results: [AnalysisResult]) -> ProjectHealth {
-        // Calculate score based on severity distribution
-        let avgScore = results.isEmpty ? 0.0 : results.map { result in
-            switch result.severity.lowercased() {
-            case "critical": return 0.1
-            case "high": return 0.3
-            case "medium": return 0.6
-            case "low": return 0.8
-            default: return 0.5
-            }
-        }.reduce(0, +) / Double(results.count)
-        
-        return ProjectHealth(
-            overallScore: avgScore,
-            dependencyHealth: avgScore, 
-            architectureHealth: avgScore,
-            performanceHealth: avgScore,
-            securityHealth: avgScore,
-            qualityHealth: avgScore,
-            riskLevel: 1.0 - avgScore, // Higher score means lower risk
-            lastUpdated: Date()
-        )
-    }
+// MARK: - Missing Function Implementations
+
+    /// <#Description#>
+    /// - Returns: <#description#>
+func analyzeProjectStructure(_: String) async -> AnalysisResult {
+    AnalysisResult(
+        type: "structure",
+        severity: "info",
+        message: "Project structure analyzed",
+        lineNumber: 0,
+        suggestion: "Project structure is well organized"
+    )
+}
+
+    /// <#Description#>
+    /// - Returns: <#description#>
+func generateRecommendations(from _: AnalysisResult) -> [ProjectRecommendation] {
+    [
+        ProjectRecommendation(
+            type: .quality,
+            priority: .medium,
+            title: "Sample Recommendation",
+            description: "This is a sample recommendation",
+            estimatedImpact: .medium,
+            estimatedEffort: .medium
+        ),
+    ]
+}
+
+    /// <#Description#>
+    /// - Returns: <#description#>
+func calculateProjectHealth(from results: [AnalysisResult]) -> ProjectHealth {
+    // Calculate score based on severity distribution
+    let avgScore = results.isEmpty ? 0.0 : results.map { result in
+        switch result.severity.lowercased() {
+        case "critical": 0.1
+        case "high": 0.3
+        case "medium": 0.6
+        case "low": 0.8
+        default: 0.5
+        }
+    }.reduce(0, +) / Double(results.count)
+
+    return ProjectHealth(
+        overallScore: avgScore,
+        dependencyHealth: avgScore,
+        architectureHealth: avgScore,
+        performanceHealth: avgScore,
+        securityHealth: avgScore,
+        qualityHealth: avgScore,
+        riskLevel: 1.0 - avgScore, // Higher score means lower risk
+        lastUpdated: Date()
+    )
+}

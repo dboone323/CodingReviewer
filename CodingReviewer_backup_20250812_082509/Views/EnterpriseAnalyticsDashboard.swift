@@ -1,6 +1,6 @@
 import Foundation
-import SwiftUI
 import Combine
+import SwiftUI
 import UniformTypeIdentifiers
 
 /// Enhanced Enterprise Analytics Dashboard with advanced business intelligence
@@ -11,7 +11,7 @@ struct EnhancedEnterpriseAnalyticsDashboard: View {
     @State private var showExportOptions = false
     @State private var searchText = ""
     @State private var selectedFilters: Set<AnalyticsFilter> = []
-    
+
     enum AnalyticsTimeframe: String, CaseIterable {
         case last7Days = "Last 7 Days"
         case last30Days = "Last 30 Days"
@@ -19,7 +19,7 @@ struct EnhancedEnterpriseAnalyticsDashboard: View {
         case thisYear = "This Year"
         case custom = "Custom Range"
     }
-    
+
     enum DashboardView: String, CaseIterable {
         case overview = "Overview"
         case codeQuality = "Code Quality"
@@ -27,37 +27,37 @@ struct EnhancedEnterpriseAnalyticsDashboard: View {
         case security = "Security"
         case teamProductivity = "Team Productivity"
         case trends = "Trends & Insights"
-        
+
         var icon: String {
             switch self {
-            case .overview: return "chart.pie.fill"
-            case .codeQuality: return "checkmark.seal.fill"
-            case .performance: return "speedometer"
-            case .security: return "shield.fill"
-            case .teamProductivity: return "person.3.fill"
-            case .trends: return "chart.line.uptrend.xyaxis"
+            case .overview: "chart.pie.fill"
+            case .codeQuality: "checkmark.seal.fill"
+            case .performance: "speedometer"
+            case .security: "shield.fill"
+            case .teamProductivity: "person.3.fill"
+            case .trends: "chart.line.uptrend.xyaxis"
             }
         }
     }
-    
+
     enum AnalyticsFilter: String, CaseIterable {
         case criticalIssues = "Critical Issues"
         case securityVulnerabilities = "Security"
         case performanceBottlenecks = "Performance"
         case codeSmells = "Code Smells"
         case testCoverage = "Test Coverage"
-        
+
         var color: Color {
             switch self {
-            case .criticalIssues: return .red
-            case .securityVulnerabilities: return .orange
-            case .performanceBottlenecks: return .yellow
-            case .codeSmells: return .purple
-            case .testCoverage: return .green
+            case .criticalIssues: .red
+            case .securityVulnerabilities: .orange
+            case .performanceBottlenecks: .yellow
+            case .codeSmells: .purple
+            case .testCoverage: .green
             }
         }
     }
-    
+
     var body: some View {
         NavigationView {
             // Sidebar with view navigation
@@ -67,22 +67,22 @@ struct EnhancedEnterpriseAnalyticsDashboard: View {
                     Text("Enterprise Analytics")
                         .font(.title3)
                         .fontWeight(.bold)
-                    
+
                     Text("Business Intelligence Dashboard")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     Divider()
                 }
                 .padding()
-                
+
                 // Timeframe Selector
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Time Range")
                         .font(.caption)
                         .fontWeight(.medium)
                         .foregroundColor(.secondary)
-                    
+
                     Picker("Timeframe", selection: $selectedTimeframe) {
                         ForEach(AnalyticsTimeframe.allCases, id: \.self) { timeframe in
                             Text(timeframe.rawValue).tag(timeframe)
@@ -92,14 +92,14 @@ struct EnhancedEnterpriseAnalyticsDashboard: View {
                     .frame(maxWidth: .infinity)
                 }
                 .padding(.horizontal)
-                
+
                 // Quick Filters
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Quick Filters")
                         .font(.caption)
                         .fontWeight(.medium)
                         .foregroundColor(.secondary)
-                    
+
                     LazyVStack(alignment: .leading, spacing: 4) {
                         ForEach(AnalyticsFilter.allCases, id: \.self) { filter in
                             FilterToggle(
@@ -116,10 +116,10 @@ struct EnhancedEnterpriseAnalyticsDashboard: View {
                     }
                 }
                 .padding(.horizontal)
-                
+
                 Divider()
                     .padding(.vertical)
-                
+
                 // View Navigation
                 VStack(alignment: .leading, spacing: 4) {
                     ForEach(DashboardView.allCases, id: \.self) { view in
@@ -133,9 +133,9 @@ struct EnhancedEnterpriseAnalyticsDashboard: View {
                     }
                 }
                 .padding(.horizontal)
-                
+
                 Spacer()
-                
+
                 // Export Button
                 Button(action: { showExportOptions = true }) {
                     HStack {
@@ -154,7 +154,7 @@ struct EnhancedEnterpriseAnalyticsDashboard: View {
             }
             .frame(width: 240)
             .background(Color(NSColor.controlBackgroundColor))
-            
+
             // Main Content
             Group {
                 switch selectedView {
@@ -204,37 +204,38 @@ struct EnhancedEnterpriseAnalyticsDashboard: View {
             analyticsEngine.loadData(for: selectedTimeframe)
         }
     }
-    
+
     /// Retrieves data with proper error handling and caching
     private func getBadgeCount(for view: DashboardView) -> Int? {
         switch view {
-        case .overview: return nil
-        case .codeQuality: return analyticsEngine.codeQualityIssues.count
-        case .performance: return analyticsEngine.performanceIssues.count
-        case .security: return analyticsEngine.securityVulnerabilities.count
-        case .teamProductivity: return nil
-        case .trends: return analyticsEngine.trendingInsights.count
+        case .overview: nil
+        case .codeQuality: analyticsEngine.codeQualityIssues.count
+        case .performance: analyticsEngine.performanceIssues.count
+        case .security: analyticsEngine.securityVulnerabilities.count
+        case .teamProductivity: nil
+        case .trends: analyticsEngine.trendingInsights.count
         }
     }
 }
 
 // MARK: - Filter Toggle Component
+
 struct FilterToggle: View {
     let filter: EnhancedEnterpriseAnalyticsDashboard.AnalyticsFilter
     let isSelected: Bool
     let onToggle: () -> Void
-    
+
     var body: some View {
         Button(action: onToggle) {
             HStack(spacing: 8) {
                 Circle()
                     .fill(isSelected ? filter.color : Color.gray.opacity(0.3))
                     .frame(width: 8, height: 8)
-                
+
                 Text(filter.rawValue)
                     .font(.caption2)
                     .foregroundColor(isSelected ? .primary : .secondary)
-                
+
                 Spacer()
             }
             .padding(.vertical, 4)
@@ -247,26 +248,27 @@ struct FilterToggle: View {
 }
 
 // MARK: - Dashboard View Button
+
 struct DashboardViewButton: View {
     let view: EnhancedEnterpriseAnalyticsDashboard.DashboardView
     let isSelected: Bool
     let badgeCount: Int?
     let action: () -> Void
-    
+
     var body: some View {
         Button(action: action) {
             HStack(spacing: 12) {
                 Image(systemName: view.icon)
                     .foregroundColor(isSelected ? .blue : .secondary)
                     .frame(width: 16)
-                
+
                 Text(view.rawValue)
                     .font(.system(size: 14, weight: isSelected ? .semibold : .regular))
                     .foregroundColor(isSelected ? .primary : .secondary)
-                
+
                 Spacer()
-                
-                if let badgeCount = badgeCount, badgeCount > 0 {
+
+                if let badgeCount, badgeCount > 0 {
                     Text("\(badgeCount)")
                         .font(.caption2)
                         .fontWeight(.bold)
@@ -289,11 +291,12 @@ struct DashboardViewButton: View {
 }
 
 // MARK: - Overview Dashboard
+
 struct OverviewDashboard: View {
     let analyticsEngine: EnterpriseAnalyticsEngine
     let timeframe: EnhancedEnterpriseAnalyticsDashboard.AnalyticsTimeframe
     let filters: Set<EnhancedEnterpriseAnalyticsDashboard.AnalyticsFilter>
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
@@ -302,7 +305,7 @@ struct OverviewDashboard: View {
                     GridItem(.flexible()),
                     GridItem(.flexible()),
                     GridItem(.flexible()),
-                    GridItem(.flexible())
+                    GridItem(.flexible()),
                 ], spacing: 16) {
                     EnterpriseMetricCard(
                         title: "Total Issues",
@@ -311,7 +314,7 @@ struct OverviewDashboard: View {
                         color: .red,
                         trend: analyticsEngine.issuesTrend
                     )
-                    
+
                     EnterpriseMetricCard(
                         title: "Code Quality Score",
                         value: "\(Int(analyticsEngine.codeQualityScore * 100))",
@@ -319,7 +322,7 @@ struct OverviewDashboard: View {
                         color: .green,
                         trend: analyticsEngine.qualityTrend
                     )
-                    
+
                     EnterpriseMetricCard(
                         title: "Security Rating",
                         value: analyticsEngine.securityRating.rawValue,
@@ -327,7 +330,7 @@ struct OverviewDashboard: View {
                         color: analyticsEngine.securityRating.color,
                         trend: analyticsEngine.securityTrend
                     )
-                    
+
                     EnterpriseMetricCard(
                         title: "Performance Score",
                         value: "\(Int(analyticsEngine.performanceScore * 100))%",
@@ -336,7 +339,7 @@ struct OverviewDashboard: View {
                         trend: analyticsEngine.performanceTrend
                     )
                 }
-                
+
                 HStack(spacing: 20) {
                     // Issue Distribution Chart
                     EnhancedCard(
@@ -348,7 +351,7 @@ struct OverviewDashboard: View {
                         IssueDistributionChart(analyticsEngine: analyticsEngine)
                     }
                     .frame(maxWidth: .infinity)
-                    
+
                     // Recent Activity
                     EnhancedCard(
                         title: "Recent Activity",
@@ -360,7 +363,7 @@ struct OverviewDashboard: View {
                     }
                     .frame(maxWidth: .infinity)
                 }
-                
+
                 // Trending Issues
                 EnhancedCard(
                     title: "Trending Issues",
@@ -370,7 +373,7 @@ struct OverviewDashboard: View {
                 ) {
                     TrendingIssuesList(issues: analyticsEngine.trendingIssues)
                 }
-                
+
                 // Team Performance Summary
                 EnhancedCard(
                     title: "Team Performance Summary",
@@ -388,10 +391,11 @@ struct OverviewDashboard: View {
 }
 
 // MARK: - Code Quality Dashboard
+
 struct CodeQualityDashboard: View {
     let analyticsEngine: EnterpriseAnalyticsEngine
     let timeframe: EnhancedEnterpriseAnalyticsDashboard.AnalyticsTimeframe
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
@@ -401,7 +405,7 @@ struct CodeQualityDashboard: View {
                         score: analyticsEngine.codeQualityScore,
                         title: "Overall Quality Score"
                     )
-                    
+
                     VStack(alignment: .leading, spacing: 12) {
                         QualityMetricRow(
                             title: "Maintainability",
@@ -428,7 +432,7 @@ struct CodeQualityDashboard: View {
                 .padding()
                 .background(Color(NSColor.controlBackgroundColor))
                 .cornerRadius(12)
-                
+
                 // Detailed Issues List
                 EnhancedCard(
                     title: "Code Quality Issues",
@@ -440,7 +444,7 @@ struct CodeQualityDashboard: View {
                         ForEach(analyticsEngine.codeQualityIssues.prefix(10), id: \.id) { issue in
                             QualityIssueRow(issue: issue)
                         }
-                        
+
                         if analyticsEngine.codeQualityIssues.count > 10 {
                             Button("View All \(analyticsEngine.codeQualityIssues.count) Issues") {
                                 // Handle view all
@@ -458,15 +462,16 @@ struct CodeQualityDashboard: View {
 }
 
 // MARK: - Export Options View
+
 struct ExportOptionsView: View {
     let analyticsEngine: EnterpriseAnalyticsEngine
     @State private var selectedFormat: ExportFormat = .pdf
     @State private var includeCharts = true
     @State private var includeRawData = false
     @State private var customDateRange = false
-    
+
     // ExportFormat now defined in SharedTypes.swift
-    
+
     var body: some View {
         VStack(spacing: 24) {
             // Header
@@ -474,25 +479,25 @@ struct ExportOptionsView: View {
                 Image(systemName: "square.and.arrow.up")
                     .font(.largeTitle)
                     .foregroundColor(.blue)
-                
+
                 Text("Export Analytics Report")
                     .font(.title2)
                     .fontWeight(.bold)
-                
+
                 Text("Generate comprehensive reports for stakeholders")
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
             }
-            
+
             // Export Format Selection
             VStack(alignment: .leading, spacing: 12) {
                 Text("Export Format")
                     .font(.headline)
-                
+
                 LazyVGrid(columns: [
                     GridItem(.flexible()),
-                    GridItem(.flexible())
+                    GridItem(.flexible()),
                 ], spacing: 12) {
                     ForEach(ExportFormat.allCases, id: \.self) { format in
                         ExportFormatButton(
@@ -504,26 +509,26 @@ struct ExportOptionsView: View {
                     }
                 }
             }
-            
+
             // Export Options
             VStack(alignment: .leading, spacing: 12) {
                 Text("Options")
                     .font(.headline)
-                
+
                 Toggle("Include Charts and Graphs", isOn: $includeCharts)
                 Toggle("Include Raw Data", isOn: $includeRawData)
                 Toggle("Custom Date Range", isOn: $customDateRange)
             }
-            
+
             Spacer()
-            
+
             // Export Button
             HStack(spacing: 12) {
                 Button("Cancel") {
                     // Handle cancel
                 }
                 .buttonStyle(PlainButtonStyle())
-                
+
                 AccessibleButton(
                     "Export Report",
                     icon: "arrow.down.circle.fill",
@@ -536,7 +541,7 @@ struct ExportOptionsView: View {
         .padding(24)
         .frame(width: 500, height: 600)
     }
-    
+
     /// Performs operation with error handling and validation
     private func exportReport() {
         // Handle export logic
@@ -548,14 +553,14 @@ struct ExportFormatButton: View {
     let format: ExportFormat
     let isSelected: Bool
     let action: () -> Void
-    
+
     var body: some View {
         Button(action: action) {
             VStack(spacing: 8) {
                 Image(systemName: format.icon)
                     .font(.title2)
                     .foregroundColor(isSelected ? .blue : .secondary)
-                
+
                 Text(format.rawValue)
                     .font(.caption)
                     .fontWeight(.medium)
@@ -583,26 +588,26 @@ struct EnterpriseMetricCard: View {
     let subtitle: String
     let color: Color
     let trend: String
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text(title)
                     .font(.caption)
                     .foregroundColor(.secondary)
-                
+
                 Spacer()
-                
+
                 Text(trend)
                     .font(.caption2)
                     .foregroundColor(.green)
             }
-            
+
             Text(value)
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(color)
-            
+
             Text(subtitle)
                 .font(.caption2)
                 .foregroundColor(.secondary)
@@ -615,7 +620,7 @@ struct EnterpriseMetricCard: View {
 
 struct IssueDistributionChart: View {
     let analyticsEngine: EnterpriseAnalyticsEngine
-    
+
     var body: some View {
         // Simplified chart representation
         VStack(spacing: 12) {
@@ -625,7 +630,7 @@ struct IssueDistributionChart: View {
                 ChartSegment(label: "Medium", count: 25, color: .yellow)
                 ChartSegment(label: "Low", count: 18, color: .green)
             }
-            
+
             Text("60 Total Issues")
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -637,17 +642,17 @@ struct ChartSegment: View {
     let label: String
     let count: Int
     let color: Color
-    
+
     var body: some View {
         VStack(spacing: 4) {
             Circle()
                 .fill(color)
                 .frame(width: 20, height: 20)
-            
+
             Text("\(count)")
                 .font(.caption)
                 .fontWeight(.semibold)
-            
+
             Text(label)
                 .font(.caption2)
                 .foregroundColor(.secondary)
@@ -657,7 +662,7 @@ struct ChartSegment: View {
 
 struct RecentActivityList: View {
     let activities: [String]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             ForEach(activities.prefix(5), id: \.self) { activity in
@@ -665,15 +670,15 @@ struct RecentActivityList: View {
                     Circle()
                         .fill(Color.blue)
                         .frame(width: 4, height: 4)
-                    
+
                     Text(activity)
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    
+
                     Spacer()
                 }
             }
-            
+
             if activities.isEmpty {
                 Text("No recent activity")
                     .font(.caption)
@@ -686,7 +691,7 @@ struct RecentActivityList: View {
 
 struct TrendingIssuesList: View {
     let issues: [String]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             ForEach(issues.prefix(5), id: \.self) { issue in
@@ -694,11 +699,11 @@ struct TrendingIssuesList: View {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .foregroundColor(.orange)
                         .font(.caption)
-                    
+
                     Text(issue)
                         .font(.caption)
                         .foregroundColor(.primary)
-                    
+
                     Spacer()
                 }
             }
@@ -708,7 +713,7 @@ struct TrendingIssuesList: View {
 
 struct TeamPerformanceSummary: View {
     let analyticsEngine: EnterpriseAnalyticsEngine
-    
+
     var body: some View {
         VStack(spacing: 12) {
             HStack {
@@ -724,14 +729,14 @@ struct EnterprisePerformanceMetric: View {
     let title: String
     let value: String
     let color: Color
-    
+
     var body: some View {
         VStack {
             Text(value)
                 .font(.title3)
                 .fontWeight(.bold)
                 .foregroundColor(color)
-            
+
             Text(title)
                 .font(.caption2)
                 .foregroundColor(.secondary)
@@ -743,26 +748,26 @@ struct EnterprisePerformanceMetric: View {
 struct QualityScoreGauge: View {
     let score: Double
     let title: String
-    
+
     var body: some View {
         VStack {
             ZStack {
                 Circle()
                     .stroke(Color.gray.opacity(0.3), lineWidth: 8)
                     .frame(width: 120, height: 120)
-                
+
                 Circle()
                     .trim(from: 0, to: score)
                     .stroke(Color.green, style: StrokeStyle(lineWidth: 8, lineCap: .round))
                     .rotationEffect(.degrees(-90))
                     .frame(width: 120, height: 120)
-                
+
                 Text("\(Int(score * 100))")
                     .font(.title)
                     .fontWeight(.bold)
                     .foregroundColor(.green)
             }
-            
+
             Text(title)
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -774,18 +779,18 @@ struct QualityMetricRow: View {
     let title: String
     let score: Double
     let color: Color
-    
+
     var body: some View {
         HStack {
             Text(title)
                 .font(.caption)
-            
+
             Spacer()
-            
+
             ProgressView(value: score, total: 1.0)
                 .progressViewStyle(LinearProgressViewStyle(tint: color))
                 .frame(width: 80)
-            
+
             Text("\(Int(score * 100))%")
                 .font(.caption)
                 .fontWeight(.semibold)
@@ -797,25 +802,25 @@ struct QualityMetricRow: View {
 
 struct QualityIssueRow: View {
     let issue: QualityIssue
-    
+
     var body: some View {
         HStack {
             Image(systemName: issue.severity.icon)
                 .foregroundColor(issue.severity.color)
                 .font(.caption)
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(issue.title)
                     .font(.caption)
                     .fontWeight(.medium)
-                
+
                 Text(issue.file)
                     .font(.caption2)
                     .foregroundColor(.secondary)
             }
-            
+
             Spacer()
-            
+
             Text("Line \(issue.lineNumber)")
                 .font(.caption2)
                 .foregroundColor(.secondary)
@@ -828,7 +833,7 @@ struct QualityIssueRow: View {
 struct AnalyticsPerformanceDashboard: View {
     let analyticsEngine: EnterpriseAnalyticsEngine
     let timeframe: EnhancedEnterpriseAnalyticsDashboard.AnalyticsTimeframe
-    
+
     var body: some View {
         Text("Performance Dashboard")
             .font(.title)
@@ -839,7 +844,7 @@ struct AnalyticsPerformanceDashboard: View {
 struct SecurityDashboard: View {
     let analyticsEngine: EnterpriseAnalyticsEngine
     let timeframe: EnhancedEnterpriseAnalyticsDashboard.AnalyticsTimeframe
-    
+
     var body: some View {
         Text("Security Dashboard")
             .font(.title)
@@ -850,7 +855,7 @@ struct SecurityDashboard: View {
 struct TeamProductivityDashboard: View {
     let analyticsEngine: EnterpriseAnalyticsEngine
     let timeframe: EnhancedEnterpriseAnalyticsDashboard.AnalyticsTimeframe
-    
+
     var body: some View {
         Text("Team Productivity Dashboard")
             .font(.title)
@@ -861,7 +866,7 @@ struct TeamProductivityDashboard: View {
 struct TrendsAndInsightsDashboard: View {
     let analyticsEngine: EnterpriseAnalyticsEngine
     let timeframe: EnhancedEnterpriseAnalyticsDashboard.AnalyticsTimeframe
-    
+
     var body: some View {
         Text("Trends & Insights Dashboard")
             .font(.title)

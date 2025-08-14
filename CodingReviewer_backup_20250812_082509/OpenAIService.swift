@@ -23,14 +23,16 @@ final class OpenAIService: AIServiceProtocol {
 
     init(apiKey: String) {
         self.apiKey = apiKey
-        self.session = URLSession.shared
-        self.secureManager = SecureNetworkManager.shared
-        self.tokenManager = TokenManager()
+        session = URLSession.shared
+        secureManager = SecureNetworkManager.shared
+        tokenManager = TokenManager()
     }
 
     // MARK: - AI Service Protocol Implementation
 
     /// Analyzes and processes data with comprehensive validation and error handling
+    /// <#Description#>
+    /// - Returns: <#description#>
     func analyzeCode(_ request: AIAnalysisRequest) async throws -> AIAnalysisResponse {
         let startTime = logger.startMeasurement(for: "ai_code_analysis")
         defer { logger.endMeasurement(for: "ai_code_analysis", startTime: startTime) }
@@ -41,12 +43,18 @@ final class OpenAIService: AIServiceProtocol {
         let response = try await sendChatRequest(prompt: prompt)
         let analysisResponse = try parseAnalysisResponse(response)
 
-        logger.log("AI analysis completed with \(analysisResponse.suggestions.count) suggestions", level: .info, category: .ai)
+        logger.log(
+            "AI analysis completed with \(analysisResponse.suggestions.count) suggestions",
+            level: .info,
+            category: .ai
+        )
 
         return analysisResponse
     }
 
     /// Generates comprehensive documentation for the provided code
+    /// <#Description#>
+    /// - Returns: <#description#>
     func generateDocumentation(for code: String, language: CodeLanguage) async throws -> String {
         let startTime = logger.startMeasurement(for: "ai_generate_documentation")
         defer { logger.endMeasurement(for: "ai_generate_documentation", startTime: startTime) }
@@ -57,6 +65,8 @@ final class OpenAIService: AIServiceProtocol {
     }
 
     /// Suggests fixes for the provided code issues
+    /// <#Description#>
+    /// - Returns: <#description#>
     func suggestFixes(for issues: [String]) async throws -> [CodeFix] {
         let startTime = logger.startMeasurement(for: "ai_suggest_fixes")
         defer { logger.endMeasurement(for: "ai_suggest_fixes", startTime: startTime) }
@@ -64,12 +74,12 @@ final class OpenAIService: AIServiceProtocol {
         let issuesText = issues.enumerated().map { [weak self] index, issue in
             "\(index + 1). \(issue)"
         }.joined(separator: "\n")
-        
+
         let prompt = """
         Suggest fixes for these code issues:
-        
+
         \(issuesText)
-        
+
         Please provide a JSON array of fixes with the following format:
         [
             {
@@ -80,12 +90,14 @@ final class OpenAIService: AIServiceProtocol {
             }
         ]
         """
-        
+
         let response = try await sendChatRequest(prompt: prompt)
         return try parseCodeFixes(response)
     }
 
     /// Performs explainCode operation with comprehensive error handling, validation, and logging
+    /// <#Description#>
+    /// - Returns: <#description#>
     func explainCode(_ code: String, language: String) async throws -> String {
         let prompt = "Explain what this \(language) code does:\n\n\(code)"
         let response = try await sendChatRequest(prompt: prompt)
@@ -93,6 +105,8 @@ final class OpenAIService: AIServiceProtocol {
     }
 
     /// Performs suggestRefactoring operation with comprehensive error handling, validation, and logging
+    /// <#Description#>
+    /// - Returns: <#description#>
     func suggestRefactoring(_ code: String, language: String) async throws -> [AISuggestion] {
         let prompt = "Suggest refactoring improvements for this \(language) code:\n\n\(code)"
         let response = try await sendChatRequest(prompt: prompt)
@@ -106,7 +120,7 @@ final class OpenAIService: AIServiceProtocol {
         guard let url = URL(string: "\(baseURL)/chat/completions") else {
             throw AppError.configurationError("Invalid URL: \(baseURL)/chat/completions")
         }
-        var request = URLRequest(url: url);
+        var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -115,7 +129,7 @@ final class OpenAIService: AIServiceProtocol {
             model: model,
             messages: [
                 OpenAIChatMessage(role: "system", content: systemPrompt),
-                OpenAIChatMessage(role: "user", content: prompt)
+                OpenAIChatMessage(role: "user", content: prompt),
             ],
             temperature: 0.1,
             maxTokens: 2000
@@ -134,7 +148,7 @@ final class OpenAIService: AIServiceProtocol {
                     throw AIServiceError.invalidAPIKey
                 case 429:
                     throw AIServiceError.rateLimitExceeded
-                case 500...599:
+                case 500 ... 599:
                     throw AIServiceError.serviceUnavailable
                 default:
                     throw AIServiceError.invalidResponse
@@ -154,7 +168,7 @@ final class OpenAIService: AIServiceProtocol {
     /// Creates and configures components with proper initialization and dependency injection
     private func buildAnalysisPrompt(for request: AIAnalysisRequest) -> String {
         let analysisType = request.analysisType
-        
+
         return """
         Analyze the following \(request.fileType) code for \(analysisType) issues:
 
@@ -287,17 +301,19 @@ final class OpenAIService: AIServiceProtocol {
 
     /// Parses and transforms data with comprehensive validation and error recovery
     private func extractContent(from response: OpenAIChatResponse) -> String {
-        return response.choices.first?.message.content ?? ""
+        response.choices.first?.message.content ?? ""
     }
 
     /// Parses and transforms data with comprehensive validation and error recovery
     private func extractJSON(from content: String) -> String? {
         let lines = content.components(separatedBy: .newlines)
-        var jsonLines: [String] = [];
-        var inJSON = false;
+        var jsonLines: [String] = []
+        var inJSON = false
 
         for line in lines {
-            if line.trimmingCharacters(in: .whitespaces).hasPrefix("{") || line.trimmingCharacters(in: .whitespaces).hasPrefix("[") {
+            if line.trimmingCharacters(in: .whitespaces).hasPrefix("{") || line.trimmingCharacters(in: .whitespaces)
+                .hasPrefix("[")
+            {
                 inJSON = true
             }
 
@@ -305,7 +321,9 @@ final class OpenAIService: AIServiceProtocol {
                 jsonLines.append(line)
             }
 
-            if (line.trimmingCharacters(in: .whitespaces).hasSuffix("}") || line.trimmingCharacters(in: .whitespaces).hasSuffix("]")) && inJSON {
+            if line.trimmingCharacters(in: .whitespaces).hasSuffix("}") || line.trimmingCharacters(in: .whitespaces)
+                .hasSuffix("]"), inJSON
+            {
                 break
             }
         }
@@ -318,51 +336,51 @@ final class OpenAIService: AIServiceProtocol {
     /// Transforms data using functional programming patterns with error propagation
     private func mapSuggestionType(_ type: String) -> AISuggestion.SuggestionType {
         switch type.lowercased() {
-        case "codequality": return .codeQuality
-        case "security": return .security
-        case "performance": return .performance
-        case "bestpractice": return .bestPractice
-        case "refactoring": return .refactoring
-        case "documentation": return .documentation
-        default: return .codeQuality
+        case "codequality": .codeQuality
+        case "security": .security
+        case "performance": .performance
+        case "bestpractice": .bestPractice
+        case "refactoring": .refactoring
+        case "documentation": .documentation
+        default: .codeQuality
         }
     }
 
     /// Transforms data using functional programming patterns with error propagation
     private func mapSeverity(_ severity: String) -> AISuggestion.Severity {
         switch severity.lowercased() {
-        case "info": return .info
-        case "warning": return .warning
-        case "error": return .error
-        case "critical": return .critical
-        default: return .info
+        case "info": .info
+        case "warning": .warning
+        case "error": .error
+        case "critical": .critical
+        default: .info
         }
     }
 
     /// Transforms data using functional programming patterns with error propagation
     private func mapComplexityRating(_ rating: String) -> ComplexityScore.Rating {
         switch rating.lowercased() {
-        case "low": return .low
-        case "medium": return .medium
-        case "high": return .high
-        case "veryhigh", "very high", "critical": return .veryHigh
-        default: return .medium
+        case "low": .low
+        case "medium": .medium
+        case "high": .high
+        case "veryhigh", "very high", "critical": .veryHigh
+        default: .medium
         }
     }
 
     /// Transforms data using functional programming patterns with error propagation
     private func mapMaintainabilityRating(_ rating: String) -> MaintainabilityScore.Rating {
         switch rating.lowercased() {
-        case "excellent": return .excellent
-        case "good": return .good
-        case "fair": return .fair
-        case "poor", "critical": return .poor
-        default: return .fair
+        case "excellent": .excellent
+        case "good": .good
+        case "fair": .fair
+        case "poor", "critical": .poor
+        default: .fair
         }
     }
 
     private var systemPrompt: String {
-        return """
+        """
         You are an expert code reviewer and software architect with deep knowledge of software engineering best practices, security, and performance optimization. Your role is to provide thorough, actionable feedback on code quality, security vulnerabilities, performance issues, and suggest improvements.
 
         Guidelines:
@@ -382,10 +400,12 @@ final class OpenAIService: AIServiceProtocol {
 // MARK: - Token Manager
 
 private class TokenManager {
-    private var tokenUsage: [Date: Int] = [:];
+    private var tokenUsage: [Date: Int] = [:]
     private let maxTokensPerMinute = 1000
 
     /// Performs operation with error handling and validation
+    /// <#Description#>
+    /// - Returns: <#description#>
     func canUseTokens(_ count: Int) -> Bool {
         let now = Date()
         let oneMinuteAgo = now.addingTimeInterval(-60)
@@ -398,6 +418,8 @@ private class TokenManager {
     }
 
     /// Performs operation with error handling and validation
+    /// <#Description#>
+    /// - Returns: <#description#>
     func recordTokenUsage(_ count: Int) {
         tokenUsage[Date()] = count
     }
@@ -489,4 +511,3 @@ private struct CodeFixData: @preconcurrency Codable, Sendable {
     let code: String
     let confidence: Double
 }
-
