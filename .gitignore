@@ -69,3 +69,27 @@ target/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Backup files
+*.backup
+*.bak
+*_backup_*/
+*_old
+*_copy*
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+
+# AI Recovery temporary files
+.ai_recovery_trigger
+
+# Build artifacts
+*.o
+*.pyc
+__pycache__/
+
+# Log files
+*.log
+
