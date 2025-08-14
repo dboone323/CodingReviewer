@@ -7,9 +7,8 @@ DNA-inspired AI systems with evolutionary adaptation
 import asyncio
 import random
 import time
-from datetime import datetime
 from dataclasses import dataclass, field
-from typing import List, Dict, Any, Tuple, Optional
+from typing import List, Any, Tuple, Optional
 
 # DNA Base Pairs
 DNA_BASES = ['A', 'T', 'G', 'C']
