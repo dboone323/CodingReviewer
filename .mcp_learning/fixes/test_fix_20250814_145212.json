@@ -1,0 +1,8 @@
+{
+  "fix_id": "test_fix_20250814_145212",
+  "issue_type": "missing_script",
+  "repository": "CodingReviewer",
+  "fix_type": "automated",
+  "success": true,
+  "timestamp": "2025-08-14T14:52:12.786289"
+}

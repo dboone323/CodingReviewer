@@ -5,15 +5,15 @@
 
 # Project Information
 PROJECT_NAME="CodingReviewer"
-PROJECT_TYPE="iOS_SwiftUI"
+PROJECT_TYPE="macOS_SwiftUI"
 PROJECT_LANGUAGE="Swift"
 PROJECT_FRAMEWORK="SwiftUI"
 
 # Build Configuration
 BUILD_SCHEME="CodingReviewer"
 BUILD_CONFIGURATION="Debug"
-TARGET_DEVICE="iPhone 16"
-TARGET_OS="iOS 18.0"
+TARGET_DEVICE="Mac"
+TARGET_OS="macOS 15.0"
 
 # Source Directories
 SOURCE_DIR="."
@@ -64,4 +64,4 @@ export AI_CODE_ANALYSIS AI_PATTERN_RECOGNITION AI_AUTOMATED_FIXES AI_DOCUMENTATI
 export MIN_COVERAGE_THRESHOLD MAX_BUILD_TIME_MINUTES MAX_TEST_TIME_MINUTES
 export SWIFT_FILES EXCLUDED_PATTERNS
 
-echo "✅ CodingReviewer project configuration loaded"
+echo "✅ CodingReviewer project configuration loaded (macOS Code Review App)"
