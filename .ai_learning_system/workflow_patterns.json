@@ -23,7 +23,15 @@
       "success_rate": 0.85,
       "usage_count": 0,
       "last_used": null
+    },
+    {
+      "pattern_id": "deprecation_warning",
+      "error_signature": "DeprecationWarning|SyntaxWarning|Bitwise inversion.*on bool",
+      "fix_template": "fix_deprecation_warnings",
+      "success_rate": 0.90,
+      "usage_count": 0,
+      "last_used": null
     }
   ],
-  "updated": "$(date -Iseconds)"
+  "updated": "2025-08-14T15:55:00Z"
 }

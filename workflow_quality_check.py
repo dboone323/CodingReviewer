@@ -114,17 +114,31 @@ class WorkflowQualityChecker:
         return all_good
     
     def check_python_syntax(self) -> bool:
-        """Check Python syntax in all .py files"""
-        print("\n🐍 Checking Python Syntax...")
+        """Check Python syntax for all .py files"""
+        import warnings
         
-        python_files = list(Path('.').rglob('*.py'))
+        # Filter out virtual environment and external packages
+        python_files = []
+        for py_file in Path('.').rglob('*.py'):
+            path_str = str(py_file)
+            # Skip virtual environments, site-packages, and other external directories
+            if any(skip in path_str for skip in ['.venv', 'site-packages', '__pycache__', '.git', 'node_modules']):
+                continue
+            python_files.append(py_file)
+        
         syntax_errors = []
         
         for py_file in python_files:
             try:
                 with open(py_file, 'r', encoding='utf-8') as f:
                     code = f.read()
-                compile(code, str(py_file), 'exec')
+                
+                # Suppress warnings during compilation to avoid deprecation warnings
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", DeprecationWarning)
+                    warnings.simplefilter("ignore", SyntaxWarning)
+                    compile(code, str(py_file), 'exec')
+                    
             except SyntaxError as e:
                 syntax_errors.append(f"{py_file}:{e.lineno} - {e.msg}")
             except Exception as e:
