@@ -16,6 +16,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
+    - name: Set up Swift
+      uses: swift-actions/setup-swift@v2
+      with:
+        swift-version: '6.0'
+    
     - name: Select Xcode
       run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
       
@@ -93,6 +98,12 @@ jobs:
     
     - name: Install SwiftLint
       run: brew install swiftlint
+      
+    - name: Install SwiftFormat
+      run: brew install swiftformat
+    
+    - name: Format Swift code
+      run: swiftformat . --config .swiftformat || echo "SwiftFormat config not found, using defaults"
       
     - name: Run SwiftLint
       run: swiftlint lint --reporter github-actions-logging
