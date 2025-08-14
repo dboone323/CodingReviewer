@@ -1,29 +1,24 @@
+name: AI Operations Dashboard CI/CD
+
+on:
+  pull_request:
+    branches:
+    - main
+  push:
+    branches:
+    - main
+    - develop
+
 jobs:
-  deploy:
-    if: github.ref == 'refs/heads/main'
-    needs:
-    - test
-    - quality-gates
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Deploy to production
-      run: python deployment_script.py
-  quality-gates:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    - name: Install dependencies
-      run: pip install -r requirements.txt
-    - name: Run quality gates
-      run: python quality_gates_validator.py
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+        - '3.8'
+        - '3.9'
+        - '3.10'
+        - '3.11'
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python
@@ -40,19 +35,28 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         file: ./coverage.xml
-    strategy:
-      matrix:
-        python-version:
-        - '3.8'
-        - '3.9'
-        - '3.10'
-        - '3.11'
-name: AI Operations Dashboard CI/CD
-'on':
-  pull_request:
-    branches:
-    - main
-  push:
-    branches:
-    - main
-    - develop
+
+  quality-gates:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+    - name: Run quality gates
+      run: python quality_gates_validator.py
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs:
+    - test
+    - quality-gates
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Deploy to production
+      run: python deployment_script.py
