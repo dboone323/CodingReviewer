@@ -246,8 +246,6 @@ class AIWorkflowRecovery:
                 return self._create_missing_file(failure)
             elif failure.suggested_fix == "fix_dependencies":
                 return self._fix_dependencies(failure)
-            elif failure.suggested_fix == "fix_deprecation_warnings":
-                return self._fix_deprecation_warnings(failure)
             else:
                 logger.warning(f"Unknown fix type: {failure.suggested_fix}")
                 return False
@@ -388,79 +386,6 @@ class AIWorkflowRecovery:
             return True
         
         return False
-    
-    def _fix_deprecation_warnings(self, failure: WorkflowFailure) -> bool:
-        """Fix deprecation warnings in Python code"""
-        logger.info("⚠️ Fixing deprecation warnings...")
-        
-        # Common deprecation warning fixes
-        fixes_applied = False
-        
-        # Fix bitwise inversion on boolean values
-        if "Bitwise inversion" in failure.error_message and "on bool" in failure.error_message:
-            python_files = list(self.repo_path.glob('**/*.py'))
-            for py_file in python_files:
-                # Skip virtual environments and external packages
-                if any(skip in str(py_file) for skip in ['.venv', 'site-packages', '__pycache__', '.git']):
-                    continue
-                
-                try:
-                    with open(py_file, 'r', encoding='utf-8') as f:
-                        content = f.read()
-                    
-                    # Replace bitwise inversion on boolean with logical not
-                    original_content = content
-                    
-                    # Common patterns for bitwise inversion on booleans
-                    import re
-                    patterns = [
-                        (r'~(\w+)\s*(?=\s*[,\)\]\}])', r'not \1'),  # ~variable
-                        (r'~\(\s*(\w+)\s*\)', r'not \1'),          # ~(variable)
-                        (r'~([Tt]rue|[Ff]alse)', r'not \1'),       # ~True, ~False
-                    ]
-                    
-                    for pattern, replacement in patterns:
-                        content = re.sub(pattern, replacement, content)
-                    
-                    if content != original_content:
-                        with open(py_file, 'w', encoding='utf-8') as f:
-                            f.write(content)
-                        logger.info(f"✅ Fixed bitwise inversion in {py_file}")
-                        fixes_applied = True
-                        
-                except Exception as e:
-                    logger.warning(f"Could not fix {py_file}: {e}")
-        
-        # Update quality check script to suppress warnings
-        quality_check_file = self.repo_path / 'workflow_quality_check.py'
-        if quality_check_file.exists():
-            try:
-                with open(quality_check_file, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                
-                # Ensure warnings are properly suppressed
-                if 'warnings.catch_warnings()' not in content:
-                    # Add warning suppression if not already present
-                    import_section = 'import warnings'
-                    if import_section not in content:
-                        content = 'import warnings\n' + content
-                        fixes_applied = True
-                
-                # Ensure syntax checking skips external packages
-                if '.venv' not in content and 'site-packages' not in content:
-                    # This indicates the quality check might need updating
-                    logger.info("✅ Quality check file appears to need warning suppression")
-                    fixes_applied = True
-                    
-            except Exception as e:
-                logger.warning(f"Could not update quality check: {e}")
-        
-        if fixes_applied:
-            logger.info("✅ Applied deprecation warning fixes")
-            return True
-        else:
-            logger.info("ℹ️ No deprecation warning fixes needed")
-            return False
     
     def commit_and_push_fixes(self, failure: WorkflowFailure) -> bool:
         """Commit and push the applied fixes"""
