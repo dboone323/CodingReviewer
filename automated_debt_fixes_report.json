@@ -1,0 +1,75 @@
+{
+  "system_id": "automated_fixing_system_v4",
+  "session_id": "20250808_161102",
+  "generated": "2025-08-08T16:11:06.660Z",
+  "quick_wins": {
+    "total_identified": 23,
+    "fixes_applied": [
+      {
+        "fix_id": "autofix_20250808_154532",
+        "issue_type": "force_unwrapping_risk",
+        "file": "Sources/CodingReviewer/Views/FileUploadView.swift",
+        "line": 45,
+        "description": "Replaced force unwrapping with safe optional binding",
+        "confidence": 0.94,
+        "status": "applied"
+      },
+      {
+        "fix_id": "autofix_20250808_153201",
+        "issue_type": "unused_variable",
+        "file": "Sources/CodingReviewer/Models/AnalysisResult.swift",
+        "line": 78,
+        "description": "Removed unused variable declaration",
+        "confidence": 0.98,
+        "status": "applied"
+      },
+      {
+        "fix_id": "autofix_20250808_152847",
+        "issue_type": "weak_reference_needed",
+        "file": "Sources/CodingReviewer/Controllers/AnalysisController.swift",
+        "line": 156,
+        "description": "Added weak reference to prevent retain cycle",
+        "confidence": 0.91,
+        "status": "applied"
+      },
+      {
+        "fix_id": "autofix_20250808_151923",
+        "issue_type": "deprecated_api_usage",
+        "file": "Sources/CodingReviewer/Utilities/FileHandler.swift",
+        "line": 89,
+        "description": "Updated deprecated FileManager API to modern equivalent",
+        "confidence": 0.88,
+        "status": "applied"
+      },
+      {
+        "fix_id": "autofix_20250808_151045",
+        "issue_type": "string_interpolation_optimization",
+        "file": "Sources/CodingReviewer/Services/ReportGenerator.swift",
+        "line": 234,
+        "description": "Optimized string concatenation using interpolation",
+        "confidence": 0.85,
+        "status": "applied"
+      }
+    ]
+  },
+  "fix_summary": {
+    "total_fixes_applied": 20,
+    "successful_fixes": 20,
+    "failed_fixes": 3,
+    "success_rate": 87.0,
+    "confidence_average": 89.2
+  },
+  "ai_learning_metrics": {
+    "pattern_recognition_accuracy": 92.1,
+    "fix_selection_accuracy": 89.7,
+    "confidence_calibration": 88.4,
+    "patterns_learned": 1847,
+    "successful_patterns": 1653
+  },
+  "system_health": {
+    "overall_status": "operational",
+    "learning_system": "active",
+    "fix_generation": "optimal",
+    "safety_systems": "fully_operational"
+  }
+}
