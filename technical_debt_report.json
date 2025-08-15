@@ -1,0 +1,72 @@
+{
+  "overall_debt_score": 25.0,
+  "total_issues": 4,
+  "files_analyzed": 228,
+  "report_generated": "2025-08-08T16:11:06.660Z",
+  "debt_level": "low-moderate",
+  "health_grade": "B+",
+  "debt_categories": {
+    "legacy_code_patterns": {
+      "percentage": 15,
+      "severity": "medium",
+      "files_affected": 12
+    },
+    "missing_tests": {
+      "percentage": 35,
+      "severity": "high",
+      "coverage_current": 70,
+      "coverage_target": 85
+    },
+    "outdated_dependencies": {
+      "percentage": 20,
+      "severity": "low"
+    },
+    "code_duplication": {
+      "percentage": 30,
+      "severity": "medium",
+      "duplication_ratio": 8.3
+    }
+  },
+  "high_complexity_files": [
+    {
+      "file": "QuantumAIEnhancer.swift",
+      "complexity_score": 193.4,
+      "debt_contribution": "high"
+    },
+    {
+      "file": "QuantumEnhancementView.swift", 
+      "complexity_score": 104.5,
+      "debt_contribution": "medium"
+    },
+    {
+      "file": "EnhancedFileUploadView_V2.swift",
+      "complexity_score": 99.5,
+      "debt_contribution": "medium"
+    },
+    {
+      "file": "ContentView_Enhanced.swift",
+      "complexity_score": 81.9,
+      "debt_contribution": "low-medium"
+    }
+  ],
+  "improvement_roadmap": {
+    "immediate_actions": [
+      {
+        "action": "Add unit tests for core functionality",
+        "priority": "high",
+        "debt_reduction": 12
+      },
+      {
+        "action": "Reduce force unwrapping usage",
+        "priority": "high",
+        "debt_reduction": 3
+      }
+    ],
+    "potential_debt_reduction": "35-45%"
+  },
+  "ai_analysis": {
+    "session_id": "20250808_161102",
+    "ai_confidence": 0.89,
+    "model_version": "Phase 4 - Neural Enhanced"
+  }
+}

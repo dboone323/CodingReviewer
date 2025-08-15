@@ -1,16 +1,16 @@
 {
-  "last_updated": "2025-08-12T12:55:29.997063",
-  "total_errors": 35,
+  "last_updated": "2025-08-15T12:51:41.115171",
+  "total_errors": 8,
   "error_counts": {
     "critical": 0,
     "error": 0,
     "warning": 0,
-    "info": 35,
+    "info": 8,
     "debug": 0
   },
   "recent_critical_errors": [],
   "top_error_categories": {
-    "system_integration": 35
+    "system_integration": 8
   },
   "resolution_suggestions": [
     "Review error details and consult documentation"
